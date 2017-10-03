@@ -8,12 +8,20 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
 import seedu.address.model.person.ReadOnlyPerson;
 
+import java.util.HashMap;
+
 /**
  * An UI component that displays information of a {@code Person}.
  */
 public class PersonCard extends UiPart<Region> {
 
     private static final String FXML = "PersonListCard.fxml";
+    private static final String[] COLORS = {"Crimson", "orange", "DarkSalmon", "LightSeaGreen",
+            "RoyalBlue", "MediumPurple", "Teal", "Sienna", "HotPink", "MediumSeaGreen",
+            "DarkSlateBlue"};
+    private static final int NUM_COLORS = COLORS.length;
+    private static int colorIndex = 0;
+    private HashMap<String, String> tagColors = new HashMap<String, String>();
 
     /**
      * Note: Certain keywords such as "location" and "resources" are reserved keywords in JavaFX.
@@ -49,6 +57,30 @@ public class PersonCard extends UiPart<Region> {
     }
 
     /**
+     * Gets a random unused color for the new tagName, or returns the corresponding color of the old tagName
+     * @param tagName
+     * @return the color of the tag
+     */
+    private String getTagColor(String tagName) {
+        if (!tagColors.containsKey(tagName)) {
+            tagColors.put(tagName, COLORS[colorIndex]);
+            updateColorIndex();
+        }
+        return tagColors.get(tagName);
+    }
+
+    /**
+     * Updates the color index to pick a new color for the new tag.
+     */
+    private static void updateColorIndex() {
+        if (colorIndex == NUM_COLORS - 1) {
+            colorIndex = 0;
+        } else {
+            colorIndex++;
+        }
+    }
+
+    /**
      * Binds the individual UI elements to observe their respective {@code Person} properties
      * so that they will be notified of any changes.
      */
@@ -59,12 +91,17 @@ public class PersonCard extends UiPart<Region> {
         email.textProperty().bind(Bindings.convert(person.emailProperty()));
         person.tagProperty().addListener((observable, oldValue, newValue) -> {
             tags.getChildren().clear();
-            person.getTags().forEach(tag -> tags.getChildren().add(new Label(tag.tagName)));
+            initTags(person);
         });
     }
 
     private void initTags(ReadOnlyPerson person) {
-        person.getTags().forEach(tag -> tags.getChildren().add(new Label(tag.tagName)));
+        person.getTags().forEach(tag -> {
+                Label tagLabel = new Label(tag.tagName);
+                tagLabel.setStyle("-fx-background-color: " + getTagColor(tag.tagName));
+                tags.getChildren().add(tagLabel);
+            }
+        );
     }
 
     @Override
