@@ -1,5 +1,7 @@
 package seedu.address.ui;
 
+import java.util.HashMap;
+
 import javafx.beans.binding.Bindings;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
@@ -7,7 +9,7 @@ import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
 import seedu.address.model.person.ReadOnlyPerson;
-import java.util.HashMap;
+
 
 /**
  * An UI component that displays information of a {@code Person}.
@@ -16,12 +18,13 @@ public class PersonCard extends UiPart<Region> {
 
     private static final String FXML = "PersonListCard.fxml";
     private static final String[] COLORS = {"Crimson", "orange", "DarkSalmon", "LightSeaGreen",
-            "RoyalBlue", "MediumPurple", "Teal", "Sienna", "HotPink", "MediumSeaGreen",
-            "DarkSlateBlue"};
+        "RoyalBlue", "MediumPurple", "Teal", "Sienna", "HotPink", "MediumSeaGreen",
+        "DarkSlateBlue"};
     private static final int NUM_COLORS = COLORS.length;
     private static int colorIndex = 0;
-    private HashMap<String, String> tagColors = new HashMap<String, String>();
     public final ReadOnlyPerson person;
+    private HashMap<String, String> tagColors = new HashMap<String, String>();
+
     /**
      * Note: Certain keywords such as "location" and "resources" are reserved keywords in JavaFX.
      * As a consequence, UI elements' variable names cannot be set to such keywords
