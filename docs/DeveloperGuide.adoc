@@ -10,9 +10,9 @@ ifdef::env-github[]
 :note-caption: :information_source:
 endif::[]
 ifdef::env-github,env-browser[:outfilesuffix: .adoc]
-:repoURL: https://github.com/se-edu/addressbook-level4/tree/master
+:repoURL: https://github.com/CS2103T-W09B1/addressbook-level4/tree/master
 
-By: `Team SE-EDU`      Since: `Jun 2016`      Licence: `MIT`
+By: `Team SE-EDU`      Since: `Jun 2016`      Licence: `MIT`
 
 == Setting up
 
@@ -729,12 +729,75 @@ Priorities: High (must have) - `* * \*`, Medium (nice to have) - `* \*`, Low (un
 
 |`* * *` |user |find a person by name |locate details of persons without having to go through the entire list
 
+|`* * *` |user |undo my previous action |reverse what I did previously
+
+|`* * *` |user who has many friends |view different groups of my friends by their tags |manage my contacts well
+
+|`* * *` |user |view an link:#attribute[attribute] called ‘gender’ |see more details of my friends
+
+|`* * *` |user |use multiple synonyms of a command word (example ‘list’, ‘find’, ‘search’) to execute a command |the application will be more intuitive for me
+
+|`* * *` |user |see the total number of contacts in my address book | have a sense of the size of the address book
+
+|`* * *` |user |see the total number of contacts for a given tag |easily keep track of how many contacts in a specific group/type
+
+|`* * *` |user |delete multiple contacts at the same time |not have to key in the delete command multiple times
+
+|`* * *` |user |be informed who I deleted |confirm if I’ve deleted the correct person
+
+|`* *` |user who likes using social media platform |extract the contact data from social media automatically| not need to type and save them manually
+
+|`* *` |impatient user |type my commands in shorthand form | execute command quickly and be more productive
+
+|`* *` |user | see the tags in different colors |identify what tags and contact i have faster
+
+|`* *` |user | be link:#suggested[suggested] a correct command if I type a command incorrectly | not need to always check search to see the list of commands
+
+|`* *` |user | remove a specific tag that exists in some/all my contacts | remove a tag group
+
+|`* *` |user | edit a specific tag’s name for all contacts with this tag | update the all the tag name easily
+
+|`* *` |user | search my contacts using different filters simultaneously, such as tags, keyword, birthday month and gender | find the person faster
+
+|`* *` |forgetful user |save and see the photos of my contacts |recognise them when I click their names
+
+|`* *` |user |access the Google Maps service for a given address |quickly find the directions or the map locations of a contact
+
+|`* *` |user |see which contact live near me | find out who I can conveniently meet nearby
+
+|`* *` |careful user |extract all the contact information into a txt/doc file on desktop |
+
+|`* *` |user who has a limited disk space |delete the contacts who I haven’t viewed for a certain time |
+
+|`* *` |user |be able to see all the existing tag icons in the UI |click one of these tag icons and see all the contacts under this tag
+
+|`* *` |user who likes to celebrate my friends’ birthdays |view different groups of my friends by the month| better plan their celebrations
+
+|`* *` |user |access my address book using a password| ensure my data is secured
+
 |`* *` |user |hide link:#private-contact-detail[private contact details] by default |minimize chance of someone else seeing them by accident
 
+|`* *` |user |have temporary tags for semester-based project groups |can delete my contacts after one semester
+
 |`*` |user with many persons in the address book |sort persons by name |locate a person easily
+
+|`*` |office worker |who needs to liaise with different companies |save my business contacts with their occupation, company name and company address easily find the required information whenever I contact them
+
+|`*` | user who likes different styles | change the theme(color) of the UI |
+
+|`*` | short-sighted user | change the font size of the Address Book |
+
+|`*` |user who is outdoors |have a  link:#bright-coloured-mode[bright coloured mode] in the address book | application will be more visible on the screen outdoors
+
+|`*` |student |save my friends’ timetables |know when my friends are free to meet up
+
+|`*` |user with many friends |combine my friends’ timetables by selecting the contacts one by one or by tags| know when is the common time slot for everyone to meet up
+
+|`*` |user with many friends |find the centre location of a certain group of addresses |find a place that is convenient for everyone to meet up
+
+
 |=======================================================================
 
-{More to be added}
 
 [appendix]
 == Use Cases
@@ -767,7 +830,101 @@ Use case ends.
 +
 Use case resumes at step 2.
 
-{More to be added}
+[discrete]
+=== Use case: Edit a specific tag word
+
+*MSS*
+
+1.  User requests to edit a tag
+2.  AddressBook shows the tag about to be edited
+3.  User requests to a new word to replace the current tag
+4.  AddressBook edits the tag word
++
+Use case ends.
+
+*Extensions*
+
+[none]
+* 3a. The tag does not exist
++
+Use case ends.
+
+* 3b. The new word to replace the given tag is an existing tag
++
+[none]
+** 3b1. AddressBook shows an error message.
++
+Use case resumes at step 2.
+
+[discrete]
+=== Use case: Type an incorrect command
+
+*MSS*
+
+1.  User requests with an incorrect command
+2.  AddressBook shows the suggested command based on user’s misspelling or prompts help if the incorrect command cannot be identified
+3.  User requests with a correct command
++
+Use case ends.
+
+[discrete]
+=== Use case: Edit person
+
+*MSS*
+
+1.  User requests to list persons
+2.  AddressBook shows a list of persons
+3.  User requests to edit the details of the person identified by the index number in the listing
+4.  AddressBook edits the details of the identified person
+
++
+Use case ends.
+
+*Extensions*
+
+* 1a. AddressBook detects an error in the entered command
++
+[none]
+** 1a1. AddressBook requests for the correct command
++
+Use case resumes at step 2
+
+* 3a. AddressBook detects an error in the entered command
++
+[none]
+** 3a1. AddressBook requests for the correct command
++
+[none]
+** 3a2. User enters new command
++
+Use case resumes from step 4.
+
+[discrete]
+=== Use case: Undo
+
+*MSS*
+
+1.  User requests to undo previous action
+2.  AddressBook search for the previous action done
+3. AddressBook undo the previous action
++
+Use case ends.
+
+*Extensions*
+
+[none]
+* 3a. The previous command is undoable.
++
+Use case resume at step 2.
+
+* 3a. All previous commands are undoable.
++
+[none]
+** 3a1. AddressBook shows an error message.
++
+Use case ends.
+
+
 
 [appendix]
 == Non Functional Requirements
@@ -775,8 +932,15 @@ Use case resumes at step 2.
 .  Should work on any link:#mainstream-os[mainstream OS] as long as it has Java `1.8.0_60` or higher installed.
 .  Should be able to hold up to 1000 persons without a noticeable sluggishness in performance for typical usage.
 .  A user with above average typing speed for regular English text (i.e. not code, not system admin commands) should be able to accomplish most of the tasks faster using commands than using the mouse.
+.  Have a user interface that is visible for use indoors as well as outdoors
+.  A user who is not very tech savvy will be able to familiar in using the application within 1 day of use
+.  Only the user himself can access his address book
+.  Should be able to easily find a person within a large amount of contacts in terms of robustness in searching capability (i.e. the use of multiple filters)
+.  Should be able to recover the address book data in case of loss of data
+.  User guide is clear and concise
+.  Should be as responsive as possible (a maximum of 0.3 millisecond)
+.  Should be possible to upgrade to it from any previous version when a new version is released
 
-{More to be added}
 
 [appendix]
 == Glossary
@@ -793,6 +957,26 @@ Private contact detail
 
 ....
 A contact detail that is not meant to be shared with others
+....
+
+[[bright-coloured-mode]]
+Bright coloured mode
+....
+Using brighter colours for the user interface to make the AddressBook more visible under the sun
+....
+
+[[attribute]]
+Attribute
+
+....
+A characteristic of a person that is common across all people (e.g. Relationship/Marital Status, Birthday, Gender, Age)
+....
+
+[[suggested]]
+Suggested (a command)
+
+....
+To be suggested a command based on the detection of a misspelling of a command (e.g. find is suggested when fnid is spelled)
 ....
 
 [appendix]
