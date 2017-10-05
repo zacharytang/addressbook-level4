@@ -725,73 +725,85 @@ Priorities: High (must have) - `* * \*`, Medium (nice to have) - `* \*`, Low (un
 
 |`* * *` |user |add a new person |
 
+|`* * *` |user |edit a person in the address book| correct any outdated information
+
 |`* * *` |user |delete a person |remove entries that I no longer need
+
+|`* * *` |user |clear the entire address book |remove all entries without tedious single deletions
+
+|`* * *` |user |see a history of my commands |retrieve a command to execute again or see my past actions
+
+|`* * *` |user |list all the people in the address book  |see all the contacts I have
+
+|`* * *` |user |select a person from a list by it's index  |easily select a person from a list I have just seen
 
 |`* * *` |user |find a person by name |locate details of persons without having to go through the entire list
 
 |`* * *` |user |undo my previous action |reverse what I did previously
 
-|`* * *` |user who has many friends |view different groups of my friends by their tags |manage my contacts well
+|`* * *` |user |redo my previous action |reverse what an undo command
 
-|`* * *` |user |view an link:#attribute[attribute] called ‘gender’ |see more details of my friends
+|`* * *` |user |exit the program |
+
+|`* * *` |user who has many friends |view different groups of my friends by their tags |manage my large list of contacts well
+
+|`* * *` |user |view an link:#attribute[attribute] called 'matriculation no.' & ‘gender’ |see more details of my friends
+
+|`* * *` |user |view an link:#attribute[attribute] called 'birthday' |see the birthdays of my friends
+
+|`* * *` |user who likes to celebrates my friends' birthdays |view different groups of my friends by the month |better plan their celebrations
 
 |`* * *` |user |use multiple synonyms of a command word (example ‘list’, ‘find’, ‘search’) to execute a command |the application will be more intuitive for me
 
+|`* * *` |user |be link:#suggested[suggested] a correct command if I type a command incorrectly |not need to always check help to see the list of commands
+
+|`* * *` |user with many persons in the address book |sort my contacts by name |locate a contact easily
+
 |`* * *` |user |see the total number of contacts in my address book | have a sense of the size of the address book
 
-|`* * *` |user |see the total number of contacts for a given tag |easily keep track of how many contacts in a specific group/type
+|`* *` |user |see the total number of contacts for a given tag |easily keep track of how many contacts in a specific group/type
 
-|`* * *` |user |delete multiple contacts at the same time |not have to key in the delete command multiple times
+|`* *` |user |delete multiple contacts at the same time |not have to key in the delete command multiple times
 
-|`* * *` |user |be informed who I deleted |confirm if I’ve deleted the correct person
+|`* *` |user |be informed who I deleted |confirm if I have deleted the correct person
 
-|`* *` |user who likes using social media platform |extract the contact data from social media automatically| not need to type and save them manually
+|`* *` |user who likes using social media platform |extract the contact data from social media automatically |not need to type and save them manually
 
-|`* *` |impatient user |type my commands in shorthand form | execute command quickly and be more productive
+|`* *` |impatient user |type my commands in shorthand form |execute commands quickly and be more productive
 
-|`* *` |user | see the tags in different colors |identify what tags and contact i have faster
+|`* *` |user |see the tags in different colors |identify what tags and contacts i have faster
 
-|`* *` |user | be link:#suggested[suggested] a correct command if I type a command incorrectly | not need to always check search to see the list of commands
+|`* *` |user |remove a specific tag that exists in some/all my contacts |remove a tag label that is no longer needed
 
-|`* *` |user | remove a specific tag that exists in some/all my contacts | remove a tag group
+|`* *` |user |edit a specific tag name for all contacts with this tag |update a specific tag common to multiple contacts easily
 
-|`* *` |user | edit a specific tag’s name for all contacts with this tag | update the all the tag name easily
-
-|`* *` |user | search my contacts using different filters simultaneously, such as tags, keyword, birthday month and gender | find the person faster
+|`* *` |user |search my contacts using different filters simultaneously, such as tags, keyword, birthday month and gender | find the person faster
 
 |`* *` |forgetful user |save and see the photos of my contacts |recognise them when I click their names
 
 |`* *` |user |access the Google Maps service for a given address |quickly find the directions or the map locations of a contact
 
-|`* *` |user |see which contact live near me | find out who I can conveniently meet nearby
+|`* *` |user |see which contact live near me |find out who I can conveniently meet nearby
 
-|`* *` |careful user |extract all the contact information into a txt/doc file on desktop |
+|`* *` |user who has a limited disk space |delete the contacts who I haven’t viewed for a certain time |manage the large number of people I meet in University
 
-|`* *` |user who has a limited disk space |delete the contacts who I haven’t viewed for a certain time |
+|`* *` |user |be able to see all the existing tag icons in the UI |see at a glance how many type of groups of people/tags there are
 
-|`* *` |user |be able to see all the existing tag icons in the UI |click one of these tag icons and see all the contacts under this tag
-
-|`* *` |user who likes to celebrate my friends’ birthdays |view different groups of my friends by the month| better plan their celebrations
+|`* *` |user |click one of the tag icons in the UI and see all the contacts under this tag| easily access tag groups of people
 
 |`* *` |user |access my address book using a password| ensure my data is secured
 
-|`* *` |user |hide link:#private-contact-detail[private contact details] by default |minimize chance of someone else seeing them by accident
-
 |`* *` |user |have temporary tags for semester-based project groups |can delete my contacts after one semester
 
-|`*` |user with many persons in the address book |sort persons by name |locate a person easily
+|`* *` |user who likes different styles | change the theme(color) of the UI |
 
-|`*` |office worker |who needs to liaise with different companies |save my business contacts with their occupation, company name and company address easily find the required information whenever I contact them
+|`*` |student with many friends |save my friends’ timetables |know when my friends are free to meet up
 
-|`*` | user who likes different styles | change the theme(color) of the UI |
+|`*` |student with many friends |combine my friends’ timetables by selecting the contacts one by one or by tags| know when is the common time slot for everyone to meet up
 
-|`*` | short-sighted user | change the font size of the Address Book |
+|`*` |short-sighted user | change the font size of the Address Book |
 
-|`*` |user who is outdoors |have a  link:#bright-coloured-mode[bright coloured mode] in the address book | application will be more visible on the screen outdoors
-
-|`*` |student |save my friends’ timetables |know when my friends are free to meet up
-
-|`*` |user with many friends |combine my friends’ timetables by selecting the contacts one by one or by tags| know when is the common time slot for everyone to meet up
+|`*` |student who has many outdoor activities | have a day mode and night mode in the address book| have the application more visible on the screen outdoors
 
 |`*` |user with many friends |find the centre location of a certain group of addresses |find a place that is convenient for everyone to meet up
 
