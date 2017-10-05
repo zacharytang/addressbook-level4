@@ -725,13 +725,25 @@ Priorities: High (must have) - `* * \*`, Medium (nice to have) - `* \*`, Low (un
 
 |`* * *` |user |add a new person |
 
+|`* * *` |user |edit a person in the address book| correct any outdated information
+
 |`* * *` |user |delete a person |remove entries that I no longer need
+
+|`* * *` |user |clear the entire address book |remove all entries without tedious single deletions
+
+|`* * *` |user |see a history of my commands |retrieve a command to execute again or see my past actions
+
+|`* * *` |user |list all the people in the address book  |see all the contacts I have
+
+|`* * *` |user |select a person from a list by it's index  |easily select a person from a list I have just seen
 
 |`* * *` |user |find a person by name |locate details of persons without having to go through the entire list
 
 |`* * *` |user |undo my previous action |reverse what I did previously
 
 |`* * *` |user |redo my previous action |reverse what an undo command
+
+|`* * *` |user |exit the program |
 
 |`* * *` |user who has many friends |view different groups of my friends by their tags |manage my large list of contacts well
 
