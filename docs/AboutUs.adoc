@@ -4,18 +4,18 @@ ifdef::env-github,env-browser[:outfilesuffix: .adoc]
 :imagesDir: images
 :stylesDir: stylesheets
 
-AddressBook - Level 4 was developed by the https://se-edu.github.io/docs/Team.html[se-edu] team. +
-The dummy content given below serves as a placeholder to be used by future forks of the project. +
-{empty} +
+AddressBook - Level 2.0 was developed by the 'https://github.com/orgs/CS2103AUG2017-W09-B1/teams/developers/members' team. +
+
 We are a team based in the http://www.comp.nus.edu.sg[School of Computing, National University of Singapore].
 
 == Project Team
 
-=== John Doe
+=== Fan Yuting
 image::damithc.jpg[width="150", align="left"]
-{empty}[http://www.comp.nus.edu.sg/~damithch[homepage]] [https://github.com/damithc[github]] [<<johndoe#, portfolio>>]
+{empty}[https://github.com/April0616[homepage]] [<<johndoe#, portfolio>>]
 
-Role: Project Advisor
+Role: Developer
+Responsibilities: UI
 
 '''
 
