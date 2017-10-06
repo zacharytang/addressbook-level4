@@ -60,8 +60,8 @@ public class RemarkCommand extends UndoableCommand {
     }
 
     /**
-     * Creates and returns a {@code Person} with the details of {@code personToEdit}
-     * edited with {@code editPersonDescriptor}.
+     * Creates and returns a {@code Person} with the details of {@code personToRemark}
+     * remarked with {@code remarkPersonDescriptor}.
      */
     private static Person createRemarkedPerson(ReadOnlyPerson personToRemark,
                                              RemarkCommand.RemarkPersonDescriptor remarkPersonDescriptor) {
@@ -108,10 +108,10 @@ public class RemarkCommand extends UndoableCommand {
         }
 
         /**
-         * Returns true if the remark is edited.
+         * Returns true if the remark is going to be deleted.
          */
-        public boolean isRemarkEdited() {
-            return CollectionUtil.isAnyNonNull(this.remark);
+        public boolean isRemarkDeleted() {
+            return !CollectionUtil.isAnyNonNull(this.remark);
         }
 
         public void setRemark(Remark remark) {
