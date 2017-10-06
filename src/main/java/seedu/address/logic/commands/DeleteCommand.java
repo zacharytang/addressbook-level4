@@ -92,7 +92,7 @@ public class DeleteCommand extends UndoableCommand {
         } else {
             return other == this // short circuit if same object
                     || (other instanceof DeleteCommand // instanceof handles nulls
-                    && this.targetIndex.equals(((DeleteCommand) other).targetIndex)); // state check
+                    && this.targetTags.equals(((DeleteCommand) other).targetTags)); // state check
         }
     }
 }
