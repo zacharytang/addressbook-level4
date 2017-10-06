@@ -113,7 +113,7 @@ public class DeleteCommandTest {
         assertFalse(deleteFirstCommand.equals(1));
 
         // null -> returns false
-        assertFalse(deleteFirstCommand.equals(null));
+        assertFalse(deleteFirstCommand == null);
 
         // different person -> returns false
         assertFalse(deleteFirstCommand.equals(deleteSecondCommand));
@@ -137,7 +137,7 @@ public class DeleteCommandTest {
         assertFalse(deleteFirstCommandTags.equals(1));
 
         // null -> returns false
-        assertFalse(deleteFirstCommandTags.equals(null));
+        assertFalse(deleteFirstCommandTags == null);
 
         // different tag -> returns false
         assertFalse(deleteFirstCommandTags.equals(deleteSecondCommandTags));
