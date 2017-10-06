@@ -1,4 +1,4 @@
-= AddressBook Level 4 - Developer Guide
+= AddressBook Level 2.0 - Developer Guide
 :toc:
 :toc-title:
 :toc-placement: preamble
@@ -12,7 +12,7 @@ endif::[]
 ifdef::env-github,env-browser[:outfilesuffix: .adoc]
 :repoURL: https://github.com/CS2103T-W09B1/addressbook-level4/tree/master
 
-By: `Team SE-EDU`      Since: `Jun 2016`      Licence: `MIT`
+By: `Team W09-B1`      Since: `Aug 2017`      Licence: `MIT`
 
 == Setting up
 
@@ -725,19 +725,21 @@ Priorities: High (must have) - `* * \*`, Medium (nice to have) - `* \*`, Low (un
 
 |`* * *` |user |add a new person |
 
-|`* * *` |user |edit a person in the address book| correct any outdated information
+|`* * *` |user |edit a person | correct any outdated information
 
 |`* * *` |user |delete a person |remove entries that I no longer need
 
 |`* * *` |user |clear the entire address book |remove all entries without tedious single deletions
 
-|`* * *` |user |see a history of my commands |retrieve a command to execute again or see my past actions
+|`* * *` |user |see a history of commands |retrieve a command to execute again or see past actions
 
 |`* * *` |user |list all the people in the address book  |see all the contacts I have
 
-|`* * *` |user |select a person from a list by it's index  |easily select a person from a list I have just seen
+|`* * *` |user |select a person from a list by the index  |easily select a person from a list I have just seen
 
 |`* * *` |user |find a person by name |locate details of persons without having to go through the entire list
+
+|`* * *` |user with many contacts| sort contacts by name | locate a contact easily
 
 |`* * *` |user |undo my previous action |reverse what I did previously
 
@@ -747,19 +749,17 @@ Priorities: High (must have) - `* * \*`, Medium (nice to have) - `* \*`, Low (un
 
 |`* * *` |user who has many friends |view different groups of my friends by their tags |manage my large list of contacts well
 
-|`* * *` |user |view an link:#attribute[attribute] called 'matriculation no.' & ‘gender’ |see more details of my friends
+|`* * *` |user |view an link:#attribute[attribute] called 'matriculation no.' & ???gender??? |see more details of my friends
 
 |`* * *` |user |view an link:#attribute[attribute] called 'birthday' |see the birthdays of my friends
 
 |`* * *` |user who likes to celebrates my friends' birthdays |view different groups of my friends by the month |better plan their celebrations
 
-|`* * *` |user |use multiple synonyms of a command word (example ‘list’, ‘find’, ‘search’) to execute a command |the application will be more intuitive for me
+|`* * *` |user |use multiple synonyms of a command word (example ???list???, ???find???, ???search???) to execute a command |the application will be more intuitive for me
 
 |`* * *` |user |be link:#suggested[suggested] a correct command if I type a command incorrectly |not need to always check help to see the list of commands
 
-|`* * *` |user with many persons in the address book |sort my contacts by name |locate a contact easily
-
-|`* * *` |user |see the total number of contacts in my address book | have a sense of the size of the address book
+|`* * *` |user |see the total number of contacts | have a sense of the size of the address book
 
 |`* *` |user |see the total number of contacts for a given tag |easily keep track of how many contacts in a specific group/type
 
@@ -783,25 +783,25 @@ Priorities: High (must have) - `* * \*`, Medium (nice to have) - `* \*`, Low (un
 
 |`* *` |user |access the Google Maps service for a given address |quickly find the directions or the map locations of a contact
 
-|`* *` |user |see which contact live near me |find out who I can conveniently meet nearby
+|`* *` |user |see who lives near me |find out who I can conveniently meet nearby
 
-|`* *` |user who has a limited disk space |delete the contacts who I haven’t viewed for a certain time |manage the large number of people I meet in University
+|`* *` |user who has a limited disk space |delete the contacts who I haven???t viewed for a certain time |manage the large number of people I meet in University
 
 |`* *` |user |be able to see all the existing tag icons in the UI |see at a glance how many type of groups of people/tags there are
 
 |`* *` |user |click one of the tag icons in the UI and see all the contacts under this tag| easily access tag groups of people
 
-|`* *` |user |access my address book using a password| ensure my data is secured
+|`* *` |user |access my address book using a password | ensure my data is secured
 
 |`* *` |user |have temporary tags for semester-based project groups |can delete my contacts after one semester
 
 |`* *` |user who likes different styles | change the theme(color) of the UI |
 
-|`*` |student with many friends |save my friends’ timetables |know when my friends are free to meet up
+|`*` |student with many friends |save my friends??? timetables |know when my friends are free to meet up
 
-|`*` |student with many friends |combine my friends’ timetables by selecting the contacts one by one or by tags| know when is the common time slot for everyone to meet up
+|`*` |student with many friends |combine my friends??? timetables by selecting the contacts one by one or by tags| know when is the common time slot for everyone to meet up
 
-|`*` |short-sighted user | change the font size of the Address Book |
+|`*` |near-sighted user | change the font size of the Address Book |
 
 |`*` |student who has many outdoor activities | have a day mode and night mode in the address book| have the application more visible on the screen outdoors
 
@@ -874,7 +874,7 @@ Use case resumes at step 2.
 *MSS*
 
 1.  User requests with an incorrect command
-2.  AddressBook shows the suggested command based on user’s misspelling or prompts help if the incorrect command cannot be identified
+2.  AddressBook shows the suggested command based on user???s misspelling or prompts help if the incorrect command cannot be identified
 3.  User requests with a correct command
 +
 Use case ends.
