@@ -749,13 +749,13 @@ Priorities: High (must have) - `* * \*`, Medium (nice to have) - `* \*`, Low (un
 
 |`* * *` |user who has many friends |view different groups of my friends by their tags |manage my large list of contacts well
 
-|`* * *` |user |view an link:#attribute[attribute] called 'matriculation no.' & ???gender??? |see more details of my friends
+|`* * *` |user |view an link:#attribute[attribute] called 'matriculation no.' & 'gender' |see more details of my friends
 
 |`* * *` |user |view an link:#attribute[attribute] called 'birthday' |see the birthdays of my friends
 
 |`* * *` |user who likes to celebrates my friends' birthdays |view different groups of my friends by the month |better plan their celebrations
 
-|`* * *` |user |use multiple synonyms of a command word (example ???list???, ???find???, ???search???) to execute a command |the application will be more intuitive for me
+|`* * *` |user |use multiple synonyms of a command word (example 'list', 'find', 'search') to execute a command | the application will be more intuitive for me
 
 |`* * *` |user |be link:#suggested[suggested] a correct command if I type a command incorrectly |not need to always check help to see the list of commands
 
@@ -797,9 +797,9 @@ Priorities: High (must have) - `* * \*`, Medium (nice to have) - `* \*`, Low (un
 
 |`* *` |user who likes different styles | change the theme(color) of the UI |
 
-|`*` |student with many friends |save my friends??? timetables |know when my friends are free to meet up
+|`*` |student with many friends |save my friends' timetables |know when my friends are free to meet up
 
-|`*` |student with many friends |combine my friends??? timetables by selecting the contacts one by one or by tags| know when is the common time slot for everyone to meet up
+|`*` |student with many friends |combine my friends' timetables by selecting the contacts one by one or by tags| know when is the common time slot for everyone to meet up
 
 |`*` |near-sighted user | change the font size of the Address Book |
 
@@ -874,7 +874,7 @@ Use case resumes at step 2.
 *MSS*
 
 1.  User requests with an incorrect command
-2.  AddressBook shows the suggested command based on user???s misspelling or prompts help if the incorrect command cannot be identified
+2.  AddressBook shows the suggested command based on user's misspelling or prompts help if the incorrect command cannot be identified
 3.  User requests with a correct command
 +
 Use case ends.
