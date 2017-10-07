@@ -13,11 +13,7 @@ import java.util.List;
 import org.junit.Test;
 
 import seedu.address.commons.core.index.Index;
-import seedu.address.logic.commands.ClearCommand;
-import seedu.address.logic.commands.DeleteCommand;
-import seedu.address.logic.commands.FindCommand;
-import seedu.address.logic.commands.RedoCommand;
-import seedu.address.logic.commands.UndoCommand;
+import seedu.address.logic.commands.*;
 import seedu.address.model.Model;
 import seedu.address.model.tag.Tag;
 
@@ -25,11 +21,31 @@ public class FindCommandSystemTest extends AddressBookSystemTest {
 
     @Test
     public void find() {
-        /* Case: find multiple persons in address book, command with leading spaces and trailing spaces
+        /* Case: find multiple persons in
+         address book, command with leading spaces and trailing spaces
          * -> 2 persons found
          */
         String command = "   " + FindCommand.COMMAND_WORD + " " + KEYWORD_MATCHING_MEIER + "   ";
         Model expectedModel = getModel();
+        ModelHelper.setFilteredList(expectedModel, BENSON, DANIEL); // first names of Benson and Daniel are "Meier"
+        assertCommandSuccess(command, expectedModel);
+
+        /* Case: find multiple persons in address book using alias, command with leading spaces and trailing spaces
+         * -> 2 persons found
+         */
+        executeCommand(ListCommand.COMMAND_WORD);
+        command = "   " + FindCommand.COMMAND_ALIAS + " " + KEYWORD_MATCHING_MEIER + "   ";
+        expectedModel = getModel();
+        ModelHelper.setFilteredList(expectedModel, BENSON, DANIEL); // first names of Benson and Daniel are "Meier"
+        assertCommandSuccess(command, expectedModel);
+        assertSelectedCardUnchanged();
+
+        /* Case: find multiple persons in address book using secondary keyword,
+         * command with leading spaces and trailing spaces -> 2 persons found
+         */
+        executeCommand(ListCommand.COMMAND_WORD);
+        command = "   " + FindCommand.COMMAND_SECONDARY + " " + KEYWORD_MATCHING_MEIER + "   ";
+        expectedModel = getModel();
         ModelHelper.setFilteredList(expectedModel, BENSON, DANIEL); // first names of Benson and Daniel are "Meier"
         assertCommandSuccess(command, expectedModel);
         assertSelectedCardUnchanged();
