@@ -24,7 +24,7 @@ public class DeleteCommand extends UndoableCommand {
 
     public static final String MESSAGE_USAGE = COMMAND_WORD
             + ": Deletes the person identified by the index number used in the last person listing.\n"
-            + "Or the tag specified from all people containing the specific tag"
+            + "  OR the tag specified from all people containing the specific tag\n"
             + "Parameters: INDEX (must be a positive integer)\n"
             + "        OR  " + PREFIX_TAG + "TAG\n"
             + "Example: " + COMMAND_WORD + " 1\n"
