@@ -32,6 +32,7 @@ public class DeleteCommandParser implements Parser<DeleteCommand> {
                 return new DeleteCommand(tagList);
             }
 
+            // if not present then delete command is for a indexed person
             Index index = ParserUtil.parseIndex(args);
             return new DeleteCommand(index);
         } catch (IllegalValueException ive) {
