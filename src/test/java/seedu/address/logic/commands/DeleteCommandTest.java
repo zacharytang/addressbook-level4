@@ -56,7 +56,7 @@ public class DeleteCommandTest {
         ModelManager expectedModel = new ModelManager(model2.getAddressBook(), new UserPrefs());
         expectedModel.deleteTag(new Tag("friends"));
 
-        assertCommandSuccess(deleteCommand, model, expectedMessage, expectedModel);
+        assertCommandSuccess(deleteCommand, model2, expectedMessage, expectedModel);
     }
 
     @Test
@@ -65,6 +65,18 @@ public class DeleteCommandTest {
         DeleteCommand deleteCommand = prepareCommand(outOfBoundIndex);
 
         assertCommandFailure(deleteCommand, model, Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX);
+    }
+
+    @Test
+    public void execute_invalidTagUnfilteredList_throwsCommandException() throws Exception {
+        Set<Tag> wrongTag = Stream.of(new Tag("nonexistent")).collect(Collectors.toSet());
+        DeleteCommand deleteCommand = prepareCommand(wrongTag);
+
+        assertCommandFailure(deleteCommand, model2, Messages.MESSAGE_INVALID_TAG_PROVIDED);
+
+        Set<Tag> someWrongTags = Stream.of(new Tag("wrongtag"), new Tag("friends")).collect(Collectors.toSet());
+        DeleteCommand deleteCommand2 = prepareCommand(someWrongTags);
+        assertCommandFailure(deleteCommand2, model2, Messages.MESSAGE_INVALID_TAG_PROVIDED);
     }
 
     @Test
