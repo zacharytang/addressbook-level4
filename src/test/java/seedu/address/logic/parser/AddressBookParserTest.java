@@ -208,10 +208,19 @@ public class AddressBookParserTest {
     }
 
     @Test
-    public void parseCommandSecondary_edit() throws Exception {
+    public void parseCommandSecondaryOne_edit() throws Exception {
         Person person = new PersonBuilder().build();
         EditPersonDescriptor descriptor = new EditPersonDescriptorBuilder(person).build();
-        EditCommand command = (EditCommand) parser.parseCommand(EditCommand.COMMAND_SECONDARY + " "
+        EditCommand command = (EditCommand) parser.parseCommand(EditCommand.COMMAND_SECONDARY_ONE + " "
+                + INDEX_FIRST_PERSON.getOneBased() + " " + PersonUtil.getPersonDetails(person));
+        assertEquals(new EditCommand(INDEX_FIRST_PERSON, descriptor), command);
+    }
+
+    @Test
+    public void parseCommandSecondaryTwo_edit() throws Exception {
+        Person person = new PersonBuilder().build();
+        EditPersonDescriptor descriptor = new EditPersonDescriptorBuilder(person).build();
+        EditCommand command = (EditCommand) parser.parseCommand(EditCommand.COMMAND_SECONDARY_TWO + " "
                 + INDEX_FIRST_PERSON.getOneBased() + " " + PersonUtil.getPersonDetails(person));
         assertEquals(new EditCommand(INDEX_FIRST_PERSON, descriptor), command);
     }
@@ -244,9 +253,15 @@ public class AddressBookParserTest {
     }
 
     @Test
-    public void parseCommandSecondary_list() throws Exception {
-        assertTrue(parser.parseCommand(ListCommand.COMMAND_SECONDARY) instanceof ListCommand);
-        assertTrue(parser.parseCommand(ListCommand.COMMAND_SECONDARY + " 3") instanceof ListCommand);
+    public void parseCommandSecondaryOne_list() throws Exception {
+        assertTrue(parser.parseCommand(ListCommand.COMMAND_SECONDARY_ONE) instanceof ListCommand);
+        assertTrue(parser.parseCommand(ListCommand.COMMAND_SECONDARY_ONE + " 3") instanceof ListCommand);
+    }
+
+    @Test
+    public void parseCommandSecondaryTwo_list() throws Exception {
+        assertTrue(parser.parseCommand(ListCommand.COMMAND_SECONDARY_TWO) instanceof ListCommand);
+        assertTrue(parser.parseCommand(ListCommand.COMMAND_SECONDARY_TWO + " 3") instanceof ListCommand);
     }
 
     @Test
