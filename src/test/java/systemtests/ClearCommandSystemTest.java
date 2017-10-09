@@ -24,6 +24,20 @@ public class ClearCommandSystemTest extends AddressBookSystemTest {
         assertCommandSuccess("   " + ClearCommand.COMMAND_WORD + " ab12   ");
         assertSelectedCardUnchanged();
 
+        /* Case: clear non-empty address book with alias, command with leading spaces
+         * and trailing alphanumeric characters and spaces -> cleared
+         */
+        executeCommand(UndoCommand.COMMAND_WORD); // restores the original address book
+        assertCommandSuccess("   " + ClearCommand.COMMAND_ALIAS + " ab12   ");
+        assertSelectedCardUnchanged();
+
+        /* Case: clear non-empty address book with secondary keyword, command with leading spaces
+         * and trailing alphanumeric characters and spaces -> cleared
+         */
+        executeCommand(UndoCommand.COMMAND_WORD); // restores the original address book
+        assertCommandSuccess("   " + ClearCommand.COMMAND_SECONDARY + " ab12   ");
+        assertSelectedCardUnchanged();
+
         /* Case: undo clearing address book -> original address book restored */
         String command = UndoCommand.COMMAND_WORD;
         String expectedResultMessage = UndoCommand.MESSAGE_SUCCESS;
@@ -50,6 +64,14 @@ public class ClearCommandSystemTest extends AddressBookSystemTest {
 
         /* Case: clear empty address book -> cleared */
         assertCommandSuccess(ClearCommand.COMMAND_WORD);
+        assertSelectedCardUnchanged();
+
+        /* Case: clear address book with alias -> cleared */
+        assertCommandSuccess(ClearCommand.COMMAND_ALIAS);
+        assertSelectedCardUnchanged();
+
+        /* Case: clear address book with secondary keyword-> cleared */
+        assertCommandSuccess(ClearCommand.COMMAND_SECONDARY);
         assertSelectedCardUnchanged();
 
         /* Case: mixed case command word -> rejected */

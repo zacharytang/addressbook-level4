@@ -50,38 +50,49 @@ public class AddressBookParser {
 
         case AddCommand.COMMAND_WORD:
         case AddCommand.COMMAND_ALIAS:
+        case AddCommand.COMMAND_SECONDARY:
             return new AddCommandParser().parse(arguments);
 
         case EditCommand.COMMAND_WORD:
         case EditCommand.COMMAND_ALIAS:
+        case EditCommand.COMMAND_SECONDARY_ONE:
+        case EditCommand.COMMAND_SECONDARY_TWO:
             return new EditCommandParser().parse(arguments);
 
         case SelectCommand.COMMAND_WORD:
         case SelectCommand.COMMAND_ALIAS:
+        case SelectCommand.COMMAND_SECONDARY:
             return new SelectCommandParser().parse(arguments);
 
         case DeleteCommand.COMMAND_WORD:
         case DeleteCommand.COMMAND_ALIAS:
+        case DeleteCommand.COMMAND_SECONDARY:
             return new DeleteCommandParser().parse(arguments);
 
         case ClearCommand.COMMAND_WORD:
         case ClearCommand.COMMAND_ALIAS:
+        case ClearCommand.COMMAND_SECONDARY:
             return new ClearCommand();
 
         case FindCommand.COMMAND_WORD:
         case FindCommand.COMMAND_ALIAS:
+        case FindCommand.COMMAND_SECONDARY:
             return new FindCommandParser().parse(arguments);
 
         case ListCommand.COMMAND_WORD:
         case ListCommand.COMMAND_ALIAS:
+        case ListCommand.COMMAND_SECONDARY_ONE:
+        case ListCommand.COMMAND_SECONDARY_TWO:
             return new ListCommand();
 
         case HistoryCommand.COMMAND_WORD:
         case HistoryCommand.COMMAND_ALIAS:
+        case HistoryCommand.COMMAND_SECONDARY:
             return new HistoryCommand();
 
         case ExitCommand.COMMAND_WORD:
         case ExitCommand.COMMAND_ALIAS:
+        case ExitCommand.COMMAND_SECONDARY:
             return new ExitCommand();
 
         case HelpCommand.COMMAND_WORD:
