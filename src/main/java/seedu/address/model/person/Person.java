@@ -22,6 +22,8 @@ public class Person implements ReadOnlyPerson {
     private ObjectProperty<Phone> phone;
     private ObjectProperty<Email> email;
     private ObjectProperty<Address> address;
+    private ObjectProperty<Remark> remark;
+    private Remark remarkMsg;
 
     private ObjectProperty<UniqueTagList> tags;
 
@@ -100,6 +102,22 @@ public class Person implements ReadOnlyPerson {
     @Override
     public Address getAddress() {
         return address.get();
+    }
+
+    @Override
+    public ObjectProperty<Remark> remarkProperty() {
+        return remark;
+    }
+
+    @Override
+    public void setRemark(Remark remark) {
+        this.remark = new SimpleObjectProperty<>(remark);
+        this.remarkMsg = remark;
+    }
+
+    @Override
+    public Remark getRemark() {
+        return remarkMsg;
     }
 
     /**
