@@ -28,13 +28,13 @@ public class RemarkCommand extends UndoableCommand {
     public static final String MESSAGE_REMARK_PERSON_SUCCESS = "Remarked Person: %1$s";
 
     private final Index targetIndex;
+    private String remarkMsg = "";
 
-    public RemarkCommand(Index targetIndex, RemarkPersonDescriptor remarkPersonDescriptor) {
+    public RemarkCommand(Index targetIndex, String remarkMsg) {
         requireNonNull(targetIndex);
-        requireNonNull(remarkPersonDescriptor);
 
         this.targetIndex = targetIndex;
-        this.remarkPersonDescriptor = new RemarkPersonDescriptor(remarkPersonDescriptor);
+        this.remarkMsg = remarkMsg;
     }
 
 
