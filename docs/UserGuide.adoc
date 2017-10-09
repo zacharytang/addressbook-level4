@@ -39,7 +39,7 @@ e.g. typing *`help`* and pressing kbd:[Enter] will open the help window.
 
 .  Refer to the link:#features[Features] section below for details of each command.
 
-== Features
+== Command Line Features
 
 ====
 *Command Format*
@@ -69,11 +69,21 @@ Examples:
 * `add n/John Doe p/98765432 e/johnd@example.com a/John street, block 123, #01-01`
 * `add n/Betsy Crowe t/friend e/betsycrowe@example.com a/Newgate Prison p/1234567 t/criminal`
 
-=== Listing all persons : `list`
+=== Listing persons : `list`
 
 Shows a list of all persons in the address book. +
-Format: `list` +
+If a tag, or tags, is/are specified, then it shows a list of all persons containing one of the tags. +
+Format: `list [t/TAG]...` +
 Alternatives: `l` , `showall`, `viewall`
+
+Examples :
+
+* `list` +
+Lists all persons in the address book
+* `list t/jcfriends t/computing` +
+Lists all persons in the address book containing *either* 'JCfriends' or 'computing' (or *both*).
+
+
 
 === Editing a person or a tag: `edit`
 ==== Editing a person
@@ -111,7 +121,11 @@ Alternatives: `e` , `modify`, `change`
 
 Examples: +
 * `edit old/bestfriends new/enemies` +
-* `edit old/CS1010 new/CS1020` (Context: CS1010 is a prerequisite module before CS1020)
+* `edit old/CS1010 new/CS1020`
+
+[TIP]
+This command is very useful to batch edit module tags of classmates when advancing from a prerequisite module! +
+(e.g. CS1010 -> CS1020)
 
 
 === Locating persons by name: `find`
@@ -176,6 +190,83 @@ Selects the 2nd person in the address book.
 * `find Betsy` +
 `select 1` +
 Selects the 1st person in the results of the `find` command.
+
+=== Open a Google Maps view of a selected person's address : `gmaps`
+
+For a person selected with the `select` command, opens a Google Maps view of the person's address locaton.
+Format: `gmaps` +
+Alternatives: `g`, `map`, `maps`
+
+Examples:
+
+* `list` +
+`select 2` +
+`gmaps` +
+Opens the Google Maps view for the address of the 2nd person selected in the address book.
+* `find Betsy` +
+`select 1` +
+`gmaps` +
+Opens the Google Maps view for the address of the 1st person in the results of the `find` command.
+
+=== Location Commands
+[IMPORTANT]
+You must *set a location* `setlocation` first before using some of the location commands +
+
+==== Set location: `setlocation`
+Sets the point of reference/origin for the use of location commands. +
+This location will be the point of reference for the location commands +
+Format: `setlocaton a/ADDRESS` +
+Alternatives: `setloc`
+
+Example:
+
+* `setlocation a/Blk 123 Kent Ridge Drive`
+
+==== Listing persons who live nearby : `nearby`
+Shows a list of persons who's address is nearby the *location* set within a specified radius. +
+Format: `nearby d/DISTANCE` +
+Alternatives: `n`, `nearme`, `closeby`, `neighbours`
+
+****
+* The distance specified is in metres.
+****
+
+Example:
+
+* `setlocation a/Blk 123 Kent Ridge Drive` +
+ `nearby 500` +
+ Shows a list of people with address 500m away from Blk 123 Kent Ridge Drive.
+
+==== Finding a central location among a group of persons : `central`
+After listing persons, shows the central location among the persons most recently listed +
+Including the word 'withme' will include the set location in calculating central location
+If an index, or multiple indexes are specified, shows the central location among the specified people with these indexes
+
+Format: `central [withme] [INDEX]...` +
+Alternatives: `c`, `center`, `wheremeet`
+
+Example:
+
+* `list` +
+`central` +
+Show the central location among the persons most recently listed.
+
+* `setlocation a/Blk 123 Kent Ridge Drive` +
+`list` +
+`central me` +
+Show the central location among the persons most recently listed and Blk 123 Kent Ridge Drive.
+
+* `list` +
+`central 1 5 6` +
+Shows the central location among the persons most recently listed with Index 1, 5 and 6.
+
+* `list t/jcfriends` +
+`central` +
+Shows the central locaton among the persons tagged as 'jcfriends'.
+
+****
+* The index refers to the index number shown in the most recent listing.
+****
 
 === Listing entered commands : `history`
 
@@ -256,6 +347,19 @@ Alternatives: `x` , `quit`
 
 Address book data are saved in the hard disk automatically after any command that changes the data. +
 There is no need to save manually.
+
+== Other features
+Here are some features in the Address Book that are not command line based, but good to know to aid in your productivity
+
+
+=== Tag Bar
+
+=== Footer Bar
+
+=== Google Maps Integration with Address
+Clicking on the address in the address book will open a Google Map map view of the address location.
+
+
 
 == FAQ
 
