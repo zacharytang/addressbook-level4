@@ -27,7 +27,7 @@ public class DeleteCommand extends UndoableCommand {
             + ": Deletes the person identified by the index number used in the last person listing.\n"
             + "  OR the tag specified from all people containing the specific tag\n"
             + "Parameters: INDEX (must be a positive integer)\n"
-            + "        OR  " + PREFIX_TAG + "TAG\n"
+            + "        OR  " + PREFIX_TAG + "TAG (case-sensitive)\n "
             + "Example: " + COMMAND_WORD + " 1\n"
             + "         " + COMMAND_WORD + " " + PREFIX_TAG + "friend\n"
             + "         " + COMMAND_WORD + " " + PREFIX_TAG + "friend " + PREFIX_TAG + "enemy";
