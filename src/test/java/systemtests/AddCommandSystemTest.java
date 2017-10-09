@@ -67,6 +67,22 @@ public class AddCommandSystemTest extends AddressBookSystemTest {
                 + EMAIL_DESC_AMY + "   " + ADDRESS_DESC_AMY + "   " + TAG_DESC_FRIEND + " ";
         assertCommandSuccess(command, toAdd);
 
+        /* Case: add a person without tags to a non-empty address book using alias,
+         * command with leading spaces and trailing spaces -> added
+         */
+        executeCommand(UndoCommand.COMMAND_WORD);
+        command = "   " + AddCommand.COMMAND_ALIAS + "  " + NAME_DESC_AMY + "  " + PHONE_DESC_AMY + " "
+                + EMAIL_DESC_AMY + "   " + ADDRESS_DESC_AMY + "   " + TAG_DESC_FRIEND + " ";
+        assertCommandSuccess(command, toAdd);
+
+        /* Case: add a person without tags to a non-empty address book using secondary keyword,
+         * command with leading spaces and trailing spaces -> added
+         */
+        executeCommand(UndoCommand.COMMAND_WORD);
+        command = "   " + AddCommand.COMMAND_SECONDARY + "  " + NAME_DESC_AMY + "  " + PHONE_DESC_AMY + " "
+                + EMAIL_DESC_AMY + "   " + ADDRESS_DESC_AMY + "   " + TAG_DESC_FRIEND + " ";
+        assertCommandSuccess(command, toAdd);
+
         /* Case: undo adding Amy to the list -> Amy deleted */
         command = UndoCommand.COMMAND_WORD;
         String expectedResultMessage = UndoCommand.MESSAGE_SUCCESS;
@@ -143,6 +159,18 @@ public class AddCommandSystemTest extends AddressBookSystemTest {
 
         /* Case: add a person, missing tags -> added */
         assertCommandSuccess(HOON);
+
+        /* Case: add to address book with shorthand alias -> added */
+        executeCommand(ClearCommand.COMMAND_WORD);
+        command = AddCommand.COMMAND_ALIAS + NAME_DESC_AMY + PHONE_DESC_AMY + EMAIL_DESC_AMY + ADDRESS_DESC_AMY
+                + TAG_DESC_FRIEND;
+        assertCommandSuccess(command, AMY);
+
+        /* Case: add to address book with secondary keyword -> added */
+        executeCommand(ClearCommand.COMMAND_WORD);
+        command = AddCommand.COMMAND_SECONDARY + NAME_DESC_AMY + PHONE_DESC_AMY + EMAIL_DESC_AMY + ADDRESS_DESC_AMY
+                + TAG_DESC_FRIEND;
+        assertCommandSuccess(command, AMY);
 
         /* Case: missing name -> rejected */
         command = AddCommand.COMMAND_WORD + PHONE_DESC_AMY + EMAIL_DESC_AMY + ADDRESS_DESC_AMY;
