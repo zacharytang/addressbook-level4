@@ -41,6 +41,21 @@ public class Person implements ReadOnlyPerson {
     }
 
     /**
+     * Constructor includes a remark field.
+     */
+    public Person(Name name, Phone phone, Email email, Address address, Remark remark, Set<Tag> tags) {
+        requireAllNonNull(name, phone, email, address, tags);
+        this.name = new SimpleObjectProperty<>(name);
+        this.phone = new SimpleObjectProperty<>(phone);
+        this.email = new SimpleObjectProperty<>(email);
+        this.address = new SimpleObjectProperty<>(address);
+        this.remarkMsg = remark;
+        this.remark = new SimpleObjectProperty<>(remark);
+        // protect internal tags from changes in the arg list
+        this.tags = new SimpleObjectProperty<>(new UniqueTagList(tags));
+    }
+
+    /**
      * Creates a copy of the given ReadOnlyPerson.
      */
     public Person(ReadOnlyPerson source) {
