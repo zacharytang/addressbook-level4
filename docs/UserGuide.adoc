@@ -145,6 +145,7 @@ Deletes the specified tag from all people containing the tag in the address book
 Format: `delete [t/TAG]...`
 
 ****
+* The tag specified is case-sensitive.
 * You can delete multiple tags with one delete command.
 * The tag (or all the tags) specified must already exist in the address book.
 ****
