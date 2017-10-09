@@ -37,6 +37,18 @@ public class DeleteCommandSystemTest extends AddressBookSystemTest {
         String expectedResultMessage = String.format(MESSAGE_DELETE_PERSON_SUCCESS, deletedPerson);
         assertCommandSuccess(command, expectedModel, expectedResultMessage);
 
+        /* Case: delete the first person in the list using alias,
+         * command with leading spaces and trailing spaces -> deleted */
+        executeCommand(UndoCommand.COMMAND_WORD); // Restores address book
+        command = "     " + DeleteCommand.COMMAND_ALIAS + "      " + INDEX_FIRST_PERSON.getOneBased() + "       ";
+        assertCommandSuccess(command, expectedModel, expectedResultMessage);
+
+        /* Case: delete the first person in the list using secondary keyword,
+         * command with leading spaces and trailing spaces -> deleted */
+        executeCommand(UndoCommand.COMMAND_WORD); // Restores address book
+        command = "     " + DeleteCommand.COMMAND_SECONDARY + "      " + INDEX_FIRST_PERSON.getOneBased() + "       ";
+        assertCommandSuccess(command, expectedModel, expectedResultMessage);
+
         /* Case: delete the last person in the list -> deleted */
         Model modelBeforeDeletingLast = getModel();
         Index lastPersonIndex = getLastIndex(modelBeforeDeletingLast);
@@ -107,6 +119,56 @@ public class DeleteCommandSystemTest extends AddressBookSystemTest {
 
         /* Case: invalid arguments (extra argument) -> rejected */
         assertCommandFailure(DeleteCommand.COMMAND_WORD + " 1 abc", MESSAGE_INVALID_DELETE_COMMAND_FORMAT);
+
+        /* Case: mixed case command word -> rejected */
+        assertCommandFailure("DelETE 1", MESSAGE_UNKNOWN_COMMAND);
+
+        /* Invalid commands with aliases */
+
+        /* Case: invalid index (0) -> rejected */
+        command = DeleteCommand.COMMAND_ALIAS + " 0";
+        assertCommandFailure(command, MESSAGE_INVALID_DELETE_COMMAND_FORMAT);
+
+        /* Case: invalid index (-1) -> rejected */
+        command = DeleteCommand.COMMAND_ALIAS + " -1";
+        assertCommandFailure(command, MESSAGE_INVALID_DELETE_COMMAND_FORMAT);
+
+        /* Case: invalid index (size + 1) -> rejected */
+        outOfBoundsIndex = Index.fromOneBased(
+                getModel().getAddressBook().getPersonList().size() + 1);
+        command = DeleteCommand.COMMAND_ALIAS + " " + outOfBoundsIndex.getOneBased();
+        assertCommandFailure(command, MESSAGE_INVALID_PERSON_DISPLAYED_INDEX);
+
+        /* Case: invalid arguments (alphabets) -> rejected */
+        assertCommandFailure(DeleteCommand.COMMAND_ALIAS + " abc", MESSAGE_INVALID_DELETE_COMMAND_FORMAT);
+
+        /* Case: invalid arguments (extra argument) -> rejected */
+        assertCommandFailure(DeleteCommand.COMMAND_ALIAS + " 1 abc", MESSAGE_INVALID_DELETE_COMMAND_FORMAT);
+
+        /* Case: mixed case command word -> rejected */
+        assertCommandFailure("DelETE 1", MESSAGE_UNKNOWN_COMMAND);
+
+        /* Invalid commands with secondary keyword */
+
+        /* Case: invalid index (0) -> rejected */
+        command = DeleteCommand.COMMAND_SECONDARY + " 0";
+        assertCommandFailure(command, MESSAGE_INVALID_DELETE_COMMAND_FORMAT);
+
+        /* Case: invalid index (-1) -> rejected */
+        command = DeleteCommand.COMMAND_SECONDARY + " -1";
+        assertCommandFailure(command, MESSAGE_INVALID_DELETE_COMMAND_FORMAT);
+
+        /* Case: invalid index (size + 1) -> rejected */
+        outOfBoundsIndex = Index.fromOneBased(
+                getModel().getAddressBook().getPersonList().size() + 1);
+        command = DeleteCommand.COMMAND_SECONDARY + " " + outOfBoundsIndex.getOneBased();
+        assertCommandFailure(command, MESSAGE_INVALID_PERSON_DISPLAYED_INDEX);
+
+        /* Case: invalid arguments (alphabets) -> rejected */
+        assertCommandFailure(DeleteCommand.COMMAND_SECONDARY + " abc", MESSAGE_INVALID_DELETE_COMMAND_FORMAT);
+
+        /* Case: invalid arguments (extra argument) -> rejected */
+        assertCommandFailure(DeleteCommand.COMMAND_SECONDARY + " 1 abc", MESSAGE_INVALID_DELETE_COMMAND_FORMAT);
 
         /* Case: mixed case command word -> rejected */
         assertCommandFailure("DelETE 1", MESSAGE_UNKNOWN_COMMAND);
