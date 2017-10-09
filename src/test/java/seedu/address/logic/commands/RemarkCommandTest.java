@@ -141,27 +141,24 @@ public class RemarkCommandTest {
 
     @Test
     public void equals() {
-        final RemarkCommand standardCommand = new RemarkCommand(INDEX_FIRST_PERSON, DESC_AMY);
+        RemarkCommand addFirstPersonCoffeeRemark = new RemarkCommand(INDEX_FIRST_PERSON, VALID_REMARK_COFFEE);
+        RemarkCommand addFirstPersonCapRemark = new RemarkCommand(INDEX_FIRST_PERSON, VALID_REMARK_CAP);
+        RemarkCommand addSecondPersonCoffeeRemark = new RemarkCommand(INDEX_SECOND_PERSON, VALID_REMARK_COFFEE);
 
         // same values -> returns true
-        RemarkCommand.RemarkPersonDescriptor copyDescriptor = new RemarkCommand.RemarkPersonDescriptor(DESC_AMY);
-        RemarkCommand commandWithSameValues = new RemarkCommand(INDEX_FIRST_PERSON, copyDescriptor);
-        assertTrue(standardCommand.equals(commandWithSameValues));
+        assertTrue(addFirstPersonCoffeeRemark.equals(addFirstPersonCoffeeRemark));
 
         // same object -> returns true
-        assertTrue(standardCommand.equals(standardCommand));
+        assertTrue(addFirstPersonCapRemark.equals(addFirstPersonCapRemark));
 
         // null -> returns false
-        assertFalse(standardCommand.equals(null));
-
-        // different types -> returns false
-        assertFalse(standardCommand.equals(new ClearCommand()));
+        assertFalse(addFirstPersonCapRemark.equals(null));
 
         // different index -> returns false
-        assertFalse(standardCommand.equals(new RemarkCommand(INDEX_SECOND_PERSON, DESC_AMY)));
+        assertFalse(addFirstPersonCoffeeRemark.equals(addSecondPersonCoffeeRemark));
 
-        // different descriptor -> returns false
-        assertFalse(standardCommand.equals(new RemarkCommand(INDEX_FIRST_PERSON, DESC_BOB)));
+        // different types -> returns false
+        assertFalse(addFirstPersonCoffeeRemark.equals(new ClearCommand()));
     }
 
     /**
