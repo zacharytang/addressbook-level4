@@ -28,13 +28,13 @@ public class RemarkCommand extends UndoableCommand {
     public static final String MESSAGE_REMARK_PERSON_SUCCESS = "Remarked Person: %1$s";
 
     private final Index targetIndex;
-    private String remarkMsg = "";
+    private final Remark remark;
 
-    public RemarkCommand(Index targetIndex, String remarkMsg) {
+    public RemarkCommand(Index targetIndex, Remark remark) {
         requireNonNull(targetIndex);
 
         this.targetIndex = targetIndex;
-        this.remarkMsg = remarkMsg;
+        this.remark = remark;
     }
 
 
@@ -48,7 +48,7 @@ public class RemarkCommand extends UndoableCommand {
         }
 
         ReadOnlyPerson personToRemark = lastShownList.get(targetIndex.getZeroBased());
-        Person remarkedPerson = createRemarkedPerson(personToRemark, remarkPersonDescriptor);
+        Person remarkedPerson = createRemarkedPerson(personToRemark, remark);
 
         try {
             model.remarkPerson(personToRemark, remarkedPerson);
