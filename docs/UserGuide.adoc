@@ -112,7 +112,8 @@ Returns `john` and `John Doe`
 * `find Betsy Tim John` +
 Returns any person having names `Betsy`, `Tim`, or `John`
 
-=== Deleting a person : `delete`
+=== Deleting a person or a tag: `delete`
+==== Deleting a Person
 
 Deletes the specified person from the address book. +
 Format: `delete INDEX`
@@ -131,6 +132,25 @@ Deletes the 2nd person in the address book.
 * `find Betsy` +
 `delete 1` +
 Deletes the 1st person in the results of the `find` command.
+
+==== Deleting a Tag (or multiple Tags)
+
+Deletes the specified tag from all people containing the tag in the address book. +
+Format: `delete [t/TAG]...`
+
+****
+* You can delete multiple tags with one delete command.
+* The tag (or all the tags) specified must already exist in the address book.
+****
+
+Examples:
+
+* `list` +
+`delete t/friends` +
+Deletes the tag 'friends' from all people containing the tag 'friends' in the address book.
+* `find Betsy` +
+`delete t/module1 t/module2` +
+Deletes the tags 'module1' and 'module2' from all people containing one of the tag, or both of the tags in the address book.
 
 === Selecting a person : `select`
 
@@ -234,11 +254,13 @@ There is no need to save manually.
 
 == Command Summary
 
-* *Add* `add n/NAME p/PHONE_NUMBER e/EMAIL a/ADDRESS [t/TAG]...` +
+* *Add* : `add n/NAME p/PHONE_NUMBER e/EMAIL a/ADDRESS [t/TAG]...` +
 e.g. `add n/James Ho p/22224444 e/jamesho@example.com a/123, Clementi Rd, 1234665 t/friend t/colleague`
 * *Clear* : `clear`
-* *Delete* : `delete INDEX` +
+* *Delete (Person)* : `delete INDEX` +
 e.g. `delete 3`
+* *Delete (Tag)* : `delete [t/TAG]...` +
+e.g. `delete t/modulemate t/colleague`
 * *Edit* : `edit INDEX [n/NAME] [p/PHONE_NUMBER] [e/EMAIL] [a/ADDRESS] [t/TAG]...` +
 e.g. `edit 2 n/James Lee e/jameslee@example.com`
 * *Find* : `find KEYWORD [MORE_KEYWORDS]` +
