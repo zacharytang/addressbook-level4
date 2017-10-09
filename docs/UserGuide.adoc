@@ -75,7 +75,8 @@ Shows a list of all persons in the address book. +
 Format: `list` +
 Alternatives: `l` , `showall`, `viewall`
 
-=== Editing a person : `edit`
+=== Editing a person or a tag: `edit`
+==== Editing a person
 
 Edits an existing person in the address book. +
 Format: `edit INDEX [n/NAME] [p/PHONE] [e/EMAIL] [a/ADDRESS] [t/TAG]...` +
@@ -95,6 +96,23 @@ Examples:
 Edits the phone number and email address of the 1st person to be `91234567` and `johndoe@example.com` respectively.
 * `edit 2 n/Betsy Crower t/` +
 Edits the name of the 2nd person to be `Betsy Crower` and clears all existing tags.
+
+==== Editing a tag
+
+Replaces the specified tag word to a specified new word for all people containing the specified tag +
+Format: `edit old/OLDTAG new/NEWTAG` +
+Alternatives: `e` , `modify`, `change`
+
+****
+* The tag that you want to replace has to already exist.
+* Tags are case-sensitive
+* Editing a person's tag only edits the tag(s) for a single person. This command edits one tag name for all people.
+****
+
+Examples: +
+* `edit old/bestfriends new/enemies` +
+* `edit old/CS1010 new/CS1020` (Context: CS1010 is a prerequisite module before CS1020)
+
 
 === Locating persons by name: `find`
 
