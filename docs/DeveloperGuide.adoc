@@ -785,7 +785,7 @@ Priorities: High (must have) - `* * \*`, Medium (nice to have) - `* \*`, Low (un
 
 |`* *` |user |see who lives near me |find out who I can conveniently meet nearby
 
-|`* *` |user who has a limited disk space |delete the contacts who I haven???t viewed for a certain time |manage the large number of people I meet in University
+|`* *` |user who has a limited disk space |delete the contacts who I haven't viewed for a certain time |manage the large number of people I meet in University
 
 |`* *` |user |be able to see all the existing tag icons in the UI |see at a glance how many type of groups of people/tags there are
 
