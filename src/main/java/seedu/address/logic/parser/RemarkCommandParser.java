@@ -21,19 +21,19 @@ public class RemarkCommandParser implements Parser<RemarkCommand>{
      */
     public RemarkCommand parse(String args) throws ParseException {
         requireNonNull(args);
-        ArgumentMultimap argMultimap =
-                ArgumentTokenizer.tokenize(args, PREFIX_NAME, PREFIX_PHONE, PREFIX_EMAIL, PREFIX_ADDRESS, PREFIX_TAG);
+        ArgumentMultimap argMultimap = ArgumentTokenizer.tokenize(args, PREFIX_REMARK);
 
         Index index;
 
         try {
             index = ParserUtil.parseIndex(argMultimap.getPreamble());
+            Remark remark = ParserUtil.parseRemark(argMultimap.getValue(PREFIX_REMARK)).get();
+
         } catch (IllegalValueException ive) {
             throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, RemarkCommand.MESSAGE_USAGE));
         }
-
-        RemarkCommand.RemarkPersonDescriptor remarkPersonDescriptor = new RemarkCommand.RemarkPersonDescriptor();
-        try {
+        
+         try {
             ParserUtil.parseRemark(argMultimap.getValue(PREFIX_REMARK)).ifPresent(remarkPersonDescriptor::setRemark);
 
         } catch (IllegalValueException ive) {
@@ -44,6 +44,6 @@ public class RemarkCommandParser implements Parser<RemarkCommand>{
             //do something
         }
 
-        return new RemarkCommand(index, remarkPersonDescriptor);
+        return new RemarkCommand(index, remarkMsg);
     }
 }
