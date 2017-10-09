@@ -1,4 +1,4 @@
-package seedu.Remark.model.person;
+package seedu.address.model.person;
 
 import org.junit.Test;
 import seedu.address.model.person.NameContainsKeywordsPredicate;
