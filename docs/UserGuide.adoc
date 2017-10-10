@@ -122,20 +122,20 @@ Returns `john` and `John Doe`
 * `find Betsy Tim John` +
 Returns any person having names `Betsy`, `Tim`, or `John`
 
-=== Deleting a person or a tag: `delete`
-==== Deleting a Person
+=== Deleting multiple persons or a tag: `delete`
+==== Deleting multiple persons
 
-Deletes the specified person from the address book. +
-Format: `delete INDEX` +
+Deletes the multiple specified persons from the address book. +
+Format: `delete [INDEX1], [INDEX2], [INDEX3]...` +
 Alternatives: `d` , `remove`
 
-Deletes the contact which you haven't used the 'edit', 'photo' or 'find' command for K months. +
+Deletes the contacts which you haven't used the 'edit', 'photo' or 'find' command for K months. +
 Format: `delete old/K` +
 Alternatives: `d` , `remove`
 
 ****
 * Deletes the person at the specified `INDEX`.
-* The index refers to the index number shown in the most recent listing.
+* The INDEX1, INDEX2, INDEX3... refer to the index numbers shown in the most recent listing.
 * The index *must be a positive integer* 1, 2, 3, ...
 * The K *must be a positive integer* 1, 2, 3, ...
 ****
@@ -145,9 +145,12 @@ Examples:
 * `list` +
 `delete 2` +
 Deletes the 2nd person in the address book.
+* `list` +
+`delete 2, 3, 4` +
+Deletes the 2nd, 3rd, 4th persons in the address book.
 * `find Betsy` +
-`delete 1` +
-Deletes the 1st person in the results of the `find` command.
+`delete 1, 5` +
+Deletes the 1st and 5th persons in the results of the `find` command.
 * `delete old/2` +
 Deletes all the contacts which you haven't used the 'edit', 'photo' or 'find' command for the past 2 months.
 
