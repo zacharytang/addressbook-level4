@@ -217,7 +217,7 @@ Selects the 1st person in the results of the `find` command.
 
 === Open a Google Maps view of a selected person's address : `gmaps`
 
-For a person selected with the `select` command, opens a Google Maps view of the person's address locaton.
+For a person selected with the `select` command, opens a Google Maps view of the person's address locaton. +
 Format: `gmaps` +
 Alternatives: `g`, `map`, `maps`
 
@@ -233,7 +233,7 @@ Opens the Google Maps view for the address of the 2nd person selected in the add
 Opens the Google Maps view for the address of the 1st person in the results of the `find` command.
 
 === Location Commands
-[IMPORTANT]
+[NOTE]
 You must *set a location* `setlocation` first before using some of the location commands +
 
 ==== Set location: `setlocation`
@@ -264,8 +264,7 @@ Example:
 ==== Finding a central location among a group of persons : `central` _(Coming in v2.0)_
 After listing persons, shows the central location among the persons most recently listed +
 Including the word 'withme' will include the set location in calculating central location
-If an index, or multiple indexes are specified, shows the central location among the specified people with these indexes
-
+If an index, or multiple indexes are specified, shows the central location among the specified people with these indexes +
 Format: `central [withme] [INDEX]...` +
 Alternatives: `c`, `center`, `wheremeet`
 
