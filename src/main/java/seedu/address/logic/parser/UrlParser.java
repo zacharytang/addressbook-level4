@@ -9,8 +9,11 @@ import java.net.Proxy;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import seedu.address.logic.parser.exceptions.ParseException;
 import seedu.address.model.person.Module;
@@ -56,8 +59,6 @@ public class UrlParser {
         String hostName = matcher.group()
                                  .substring(2, matcher.group().length() - 1);
 
-        System.out.println(hostName);
-
         if (hostName.equals(NUSMODS_SHORT)) {
             try {
                 url = expandUrl(url);
@@ -74,7 +75,6 @@ public class UrlParser {
 
     /**
      *
-     * @param url
      */
     private static void parseLongUrl(String url) {
         String acadYear;
@@ -88,6 +88,33 @@ public class UrlParser {
         semester = moduleInfo[0].substring(3);
 
         ArrayList<Module> modules = parseModuleInfo(moduleInfo[1]);
+
+        for (Module moduleToGet : modules) {
+            ArrayList<HashMap<String, String>> classInfo = getModuleJson(acadYear, semester,
+                                                                            moduleToGet.getModuleCode());
+
+            // get timings for each class and add to something
+        }
+    }
+
+    /**
+     * Uses NUSMods API to obtain all classes a module has, and returns it in
+     * an arraylist of classes. Each class is represented by a hash map, storing the information about the class
+     */
+    private static ArrayList<HashMap<String, String>> getModuleJson(String acadYear,
+                                                                    String semester, String moduleCode) {
+        String uri = "http://api.nusmods.com/" + acadYear + "/" + semester + "/modules/" + moduleCode + ".json";
+        ObjectMapper mapper = new ObjectMapper();
+
+        try {
+            URL url = new URL(uri);
+            Map<String, Object> mappedJson = mapper.readValue(url, HashMap.class);
+
+            return (ArrayList<HashMap<String, String>>) mappedJson.get("Timetable");
+        } catch (Exception e) {
+            System.out.println(e);
+            return null;
+        }
     }
 
     /**
