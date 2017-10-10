@@ -84,6 +84,7 @@ Format: `add s/SOCIAL_MEDIA_TYPE SOCIAL_MEDIA_ID`
 Examples:
 
 * `add s/facebook John Doe`
+* `add s/Instagram John Doe`
 
 === Listing persons : `list`
 
