@@ -69,7 +69,7 @@ public class RemarkCommand extends UndoableCommand {
      * Creates and returns a {@code Person} with the details of {@code personToRemark}
      * remarked with {@code remarkPersonDescriptor}.
      */
-    private static Person createRemarkedPerson(ReadOnlyPerson personToRemark,
+    public static Person createRemarkedPerson(ReadOnlyPerson personToRemark,
                                                  Remark remark) {
         assert personToRemark != null;
         Person remarkPerson = new Person(personToRemark.getName(), personToRemark.getPhone(),

@@ -56,6 +56,9 @@ public class CommandTestUtil {
     public static final String INVALID_ADDRESS_DESC = " " + PREFIX_ADDRESS; // empty string not allowed for addresses
     public static final String INVALID_TAG_DESC = " " + PREFIX_TAG + "hubby*"; // '*' not allowed in tags
 
+    public static final Remark REMARK_COFFEE = new Remark(VALID_REMARK_COFFEE);
+    public static final Remark REMARK_CAP = new Remark(VALID_REMARK_CAP);
+
     public static final EditCommand.EditPersonDescriptor DESC_AMY;
     public static final EditCommand.EditPersonDescriptor DESC_BOB;
 
