@@ -1,12 +1,6 @@
 package seedu.address.model.person;
 
 import org.junit.Test;
-import seedu.address.model.person.NameContainsKeywordsPredicate;
-import seedu.address.model.person.Remark;
-
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
@@ -21,8 +15,9 @@ public class RemarkTest {
         // same object -> returns true
         assertTrue(likeCoffeeRemark.equals(likeCoffeeRemark));
 
-        // same object -> returns true
-        assertTrue(capFiveRemark.equals(capFiveRemark));
+        // same value -> returns true
+        Remark copy = new Remark(capFiveRemark.value);
+        assertTrue(capFiveRemark.equals(copy));
 
         // different types -> returns false
         assertFalse(capFiveRemark.equals(1));

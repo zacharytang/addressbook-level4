@@ -4,7 +4,10 @@ import static java.util.Objects.requireNonNull;
 
 public class Remark {
 
-    public final String value;
+    public static final String MESSAGE_REMARK_CONSTRAINTS =
+            "Person remarks can take any values, including blank";
+
+    public String value;
 
     public Remark(String remark) {
         requireNonNull(remark);
