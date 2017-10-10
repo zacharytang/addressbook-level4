@@ -59,7 +59,7 @@ Format: `help`
 ==== Adding a person manually
 
 Adds a person to the address book +
-Format: `add n/NAME p/PHONE_NUMBER e/EMAIL a/ADDRESS t/TAG b/BIRTHDAY...` +
+Format: `add [n/NAME] [p/PHONE_NUMBER] [e/EMAIL] [a/ADDRESS] [t/TAG] [b/BIRTHDAY]...` +
 Alternatives: `a` , `insert`
 
 ****
@@ -69,8 +69,9 @@ Alternatives: `a` , `insert`
 
 Examples:
 
-* `add n/John Doe p/98765432 e/johnd@example.com a/John street, block 123, #01-01 b/19980523`
+* `add n/John Doe p/98765432 e/johnd@example.com a/John street, block 123, #01-01`
 * `add n/Betsy Crowe t/friend e/betsycrowe@example.com a/Newgate Prison p/1234567 t/criminal`
+* `add n/Betty p/12345678 e/betty@example.com b/19980523`
 
 ==== Adding a person using the information on social media _(Coming in v2.0)_
 
