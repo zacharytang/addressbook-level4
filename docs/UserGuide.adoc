@@ -56,24 +56,41 @@ e.g. typing *`help`* and pressing kbd:[Enter] will open the help window.
 Format: `help`
 
 === Adding a person: `add`
+==== Adding a person manually
 
 Adds a person to the address book +
-Format: `add n/NAME p/PHONE_NUMBER e/EMAIL a/ADDRESS [t/TAG]...` +
+Format: `add n/NAME p/PHONE_NUMBER e/EMAIL a/ADDRESS t/TAG b/BIRTHDAY...` +
 Alternatives: `a` , `insert`
 
-[TIP]
-A person can have any number of tags (including 0)
+****
+* A person can have any number of tags (including 0).
+* The format for birthday is YYYYMMDD.
+****
 
 Examples:
 
-* `add n/John Doe p/98765432 e/johnd@example.com a/John street, block 123, #01-01`
+* `add n/John Doe p/98765432 e/johnd@example.com a/John street, block 123, #01-01 b/19980523`
 * `add n/Betsy Crowe t/friend e/betsycrowe@example.com a/Newgate Prison p/1234567 t/criminal`
+
+==== Adding a person using the information on social media _(Coming in v2.0)_
+
+Adds a person to address book from the social media accounts +
+Format: `add s/SOCIAL_MEDIA_TYPE SOCIAL_MEDIA_ID`
+
+****
+* The name of social media type is case insensitive.
+****
+
+Examples:
+
+* `add s/facebook John Doe`
 
 === Listing persons : `list`
 
 Shows a list of all persons in the address book. +
 If a tag, or tags, is/are specified, then it shows a list of all persons containing one of the tags. +
-Format: `list [t/TAG]...` +
+If a month, or months, is/are specified, then it shows a list of all persons having birthdays in one of the months. +
+Format: `list t/TAG... b/BIRTHDAY_MONTH` +
 Alternatives: `l` , `showall`, `viewall`
 
 Examples :
@@ -82,14 +99,14 @@ Examples :
 Lists all persons in the address book
 * `list t/jcfriends t/computing` +
 Lists all persons in the address book containing *either* 'JCfriends' or 'computing' (or *both*).
-
-
+* `list b/December` +
+Lists all persons in the address book having birthdays in `December`
 
 === Editing a person or a tag: `edit`
 ==== Editing a person
 
 Edits an existing person in the address book. +
-Format: `edit INDEX [n/NAME] [p/PHONE] [e/EMAIL] [a/ADDRESS] [t/TAG]...` +
+Format: `edit INDEX n/NAME p/PHONE e/EMAIL a/ADDRESS t/TAG...` +
 Alternatives: `e` , `modify`, `change`
 
 ****
@@ -128,10 +145,11 @@ This command is very useful to batch edit module tags of classmates when advanci
 (e.g. CS1010 -> CS1020)
 
 
-=== Locating persons by name: `find`
+=== Locating persons : `find`
+==== Locating persons by name
 
 Finds persons whose names contain any of the given keywords. +
-Format: `find KEYWORD [MORE_KEYWORDS]` +
+Format: `find KEYWORD MORE_KEYWORDS` +
 Alternatives: `f` , `search`
 
 ****
@@ -148,6 +166,26 @@ Examples:
 Returns `john` and `John Doe`
 * `find Betsy Tim John` +
 Returns any person having names `Betsy`, `Tim`, or `John`
+
+==== Locating persons by filters _(Coming in v2.0)_
+
+Finds persons whose information contain any of the given keywords from each category. +
+Format: `find t/Tag p/PHONE...`
+
+****
+* The search is case insensitive. e.g `hans` will match `Hans`
+* The order of the categories does not matter. e.g. `p/` can come before `t/`
+* Mentioned attributes are searched.
+* Only full words will be matched e.g. `Han` will not match `Hans`
+* Persons matching all keyword will be returned.
+****
+
+Examples:
+
+* `find t/friends` +
+Returns any person tagged by `friends`
+* `find t/friends p/1234` +
+Returns any person tagged by `friends`, and having phone numbers containing `1234`
 
 === Deleting a person or a tag: `delete`
 ==== Deleting a Person
@@ -361,6 +399,20 @@ Clears all entries from the address book. +
 Format: `clear` +
 Alternatives: `c`, `wipe`
 
+=== Setting a password for your address book : `password` _(Coming in v2.0)_
+
+Sets or changes the password that allows access to the address book +
+Format: `password PASSWORD` +
+Alternatives: `p` , `code`
+
+****
+* The length of password is limited to 20 characters.
+****
+
+Example:
+
+* `password 123456789`
+
 === Exiting the program : `exit`
 
 Exits the program. +
@@ -375,8 +427,12 @@ There is no need to save manually.
 == Other features
 Here are some features in the Address Book that are not command line based, but good to know to aid in your productivity
 
+=== Command Suggestion
+Typeing the wrong word for a command will trigger the address book to suggest the correct phrasing for that command
 
 === Tag Bar
+All existing tags can be viewed as icons on the UI
+Clicking on the icons will show a list of contacts being tagged with that tag
 
 === Footer Bar
 
