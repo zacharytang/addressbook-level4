@@ -39,7 +39,7 @@ e.g. typing *`help`* and pressing kbd:[Enter] will open the help window.
 
 .  Refer to the link:#features[Features] section below for details of each command.
 
-== Features
+== Command Line Features
 
 ====
 *Command Format*
@@ -73,19 +73,30 @@ Examples:
 * `add n/Betsy Crowe t/friend g/Female e/betsycrowe@example.com a/Newgate Prison p/1234567 t/criminal`
 * `add n/Amy Tan m/A0142323T tt/4/CS2101classmates e/amy_tan@example.com a/PGP p/82974823`
 
-=== Listing all persons : `list`
+=== Listing persons : `list`
 
 Shows a list of all persons in the address book. +
-Format: `list` +
+If a tag, or tags, is/are specified, then it shows a list of all persons containing one of the tags. +
+Format: `list [t/TAG]...` +
 Alternatives: `l` , `showall`, `viewall`
 
 === Sorting all persons : `sort`
 
 Shows a list of all persons in the address book by arranging their names in alphabetical order +
-Format: `sort` +
+Format: `sort` 
 Alternatives: `s` , `sortall`, `arrange`
 
 === Editing a person : `edit`
+=======
+Examples :
+
+* `list` +
+Lists all persons in the address book
+* `list t/jcfriends t/computing` +
+Lists all persons in the address book containing *either* 'JCfriends' or 'computing' (or *both*).
+
+=== Editing a person or a tag: `edit`
+==== Editing a person
 
 Edits an existing person in the address book. +
 Format: `edit INDEX [n/NAME] [p/PHONE] [e/EMAIL] [a/ADDRESS] [t/TAG]...` +
@@ -106,6 +117,27 @@ Edits the phone number and email address of the 1st person to be `91234567` and 
 
 * `edit 2 n/Betsy Crower t/` +
 Edits the name of the 2nd person to be `Betsy Crower` and clears all existing tags.
+
+==== Editing a tag
+
+Replaces the specified tag word to a specified new word for all people containing the specified tag +
+Format: `edit old/OLDTAG new/NEWTAG` +
+Alternatives: `e` , `modify`, `change`
+
+****
+* The tag that you want to replace has to already exist.
+* Tags are case-sensitive
+* Editing a person's tag only edits the tag(s) for a single person. This command edits one tag name for all people.
+****
+
+Examples: +
+* `edit old/bestfriends new/enemies` +
+* `edit old/CS1010 new/CS1020`
+
+[TIP]
+This command is very useful to batch edit module tags of classmates when advancing from a prerequisite module! +
+(e.g. CS1010 -> CS1020)
+
 
 === Locating persons by name: `find`
 
@@ -209,6 +241,84 @@ Selects the 2nd person in the address book.
 * `find Betsy` +
 `select 1` +
 Selects the 1st person in the results of the `find` command.
+
+=======
+=== Open a Google Maps view of a selected person's address : `gmaps`
+
+For a person selected with the `select` command, opens a Google Maps view of the person's address locaton. +
+Format: `gmaps` +
+Alternatives: `g`, `map`, `maps`
+
+Examples:
+
+* `list` +
+`select 2` +
+`gmaps` +
+Opens the Google Maps view for the address of the 2nd person selected in the address book.
+* `find Betsy` +
+`select 1` +
+`gmaps` +
+Opens the Google Maps view for the address of the 1st person in the results of the `find` command.
+
+=== Location Commands : `setlocation`  `nearby`  `central`
+[NOTE]
+You must *set a location* `setlocation` first before using some of the location commands +
+
+==== Set location : `setlocation`
+Sets the point of reference/origin for the use of location commands. +
+This location will be the point of reference for the location commands +
+Format: `setlocaton a/ADDRESS` +
+Alternatives: `sl` `setloc`
+
+Example:
+
+* `setlocation a/Blk 123 Kent Ridge Drive`
+
+==== Listing persons who live nearby : `nearby`
+Shows a list of persons who's address is nearby the *location* set within a specified radius. +
+Format: `nearby d/DISTANCE` +
+Alternatives: `n`, `nearme`, `closeby`, `neighbours` `neighbors`
+
+****
+* The distance specified is in metres.
+****
+
+Example:
+
+* `setlocation a/Blk 123 Kent Ridge Drive` +
+ `nearby 500` +
+ Shows a list of people with address 500m away from Blk 123 Kent Ridge Drive.
+
+==== Finding a central location among a group of persons : `central` _(Coming in v2.0)_
+After listing persons, shows the central location among the persons most recently listed +
+Including the word 'withme' will include the set location in calculating central location
+If an index, or multiple indexes are specified, shows the central location among the specified people with these indexes +
+Format: `central [withme] [INDEX]...` +
+Alternatives: `ct`, `center`, `wheremeet`
+
+Example:
+
+* `list` +
+`central` +
+Show the central location among the persons most recently listed.
+
+* `setlocation a/Blk 123 Kent Ridge Drive` +
+`list` +
+`central me` +
+Show the central location among the persons most recently listed and Blk 123 Kent Ridge Drive.
+
+* `list` +
+`central 1 5 6` +
+Shows the central location among the persons most recently listed with Index 1, 5 and 6.
+
+* `list t/jcfriends` +
+`central` +
+Shows the central locaton among the persons tagged as 'jcfriends'.
+
+****
+* The index refers to the index number shown in the most recent listing.
+****
+
 
 === Editing the photo of the specified person : `photo`
 
@@ -319,6 +429,19 @@ Alternatives: `x` , `quit`
 
 Address book data are saved in the hard disk automatically after any command that changes the data. +
 There is no need to save manually.
+
+== Other features
+Here are some features in the Address Book that are not command line based, but good to know to aid in your productivity
+
+
+=== Tag Bar
+
+=== Footer Bar
+
+=== Google Maps Integration with Address
+Clicking on the address in the address book will open a Google Map map view of the address location.
+
+
 
 == FAQ
 
