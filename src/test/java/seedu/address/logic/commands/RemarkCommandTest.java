@@ -119,7 +119,7 @@ public class RemarkCommandTest {
         assertTrue(addFirstPersonCapRemark.equals(addFirstPersonCapRemark));
 
         // null -> returns false
-        assertFalse(addFirstPersonCapRemark.equals(null));
+        assertFalse(addFirstPersonCapRemark == null);
 
         // different index -> returns false
         assertFalse(addFirstPersonCoffeeRemark.equals(addSecondPersonCoffeeRemark));

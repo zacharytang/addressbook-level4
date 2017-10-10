@@ -23,7 +23,7 @@ public class RemarkTest {
         assertFalse(capFiveRemark.equals(1));
 
         // null -> returns false
-        assertFalse(capFiveRemark.equals(null));
+        assertFalse(capFiveRemark == null);
 
         // different objects -> returns false
         assertFalse(likeCoffeeRemark.equals(capFiveRemark));
