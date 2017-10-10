@@ -217,7 +217,7 @@ Selects the 1st person in the results of the `find` command.
 
 === Open a Google Maps view of a selected person's address : `gmaps`
 
-For a person selected with the `select` command, opens a Google Maps view of the person's address locaton.
+For a person selected with the `select` command, opens a Google Maps view of the person's address locaton. +
 Format: `gmaps` +
 Alternatives: `g`, `map`, `maps`
 
@@ -232,15 +232,15 @@ Opens the Google Maps view for the address of the 2nd person selected in the add
 `gmaps` +
 Opens the Google Maps view for the address of the 1st person in the results of the `find` command.
 
-=== Location Commands
-[IMPORTANT]
+=== Location Commands : `setlocation`  `nearby`  `central`
+[NOTE]
 You must *set a location* `setlocation` first before using some of the location commands +
 
-==== Set location: `setlocation`
+==== Set location : `setlocation`
 Sets the point of reference/origin for the use of location commands. +
 This location will be the point of reference for the location commands +
 Format: `setlocaton a/ADDRESS` +
-Alternatives: `setloc`
+Alternatives: `sl` `setloc`
 
 Example:
 
@@ -249,7 +249,7 @@ Example:
 ==== Listing persons who live nearby : `nearby`
 Shows a list of persons who's address is nearby the *location* set within a specified radius. +
 Format: `nearby d/DISTANCE` +
-Alternatives: `n`, `nearme`, `closeby`, `neighbours`
+Alternatives: `n`, `nearme`, `closeby`, `neighbours` `neighbors`
 
 ****
 * The distance specified is in metres.
@@ -264,10 +264,9 @@ Example:
 ==== Finding a central location among a group of persons : `central` _(Coming in v2.0)_
 After listing persons, shows the central location among the persons most recently listed +
 Including the word 'withme' will include the set location in calculating central location
-If an index, or multiple indexes are specified, shows the central location among the specified people with these indexes
-
+If an index, or multiple indexes are specified, shows the central location among the specified people with these indexes +
 Format: `central [withme] [INDEX]...` +
-Alternatives: `c`, `center`, `wheremeet`
+Alternatives: `ct`, `center`, `wheremeet`
 
 Example:
 
