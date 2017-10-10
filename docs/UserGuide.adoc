@@ -159,6 +159,9 @@ Deletes the tag 'friends' from all people containing the tag 'friends' in the ad
 `delete t/module1 t/module2` +
 Deletes the tags 'module1' and 'module2' from all people containing one of the tag, or both of the tags in the address book.
 
+[TIP]
+This command is most useful for batch deleting Tags. Especially when you've finished a project in a module.
+
 === Selecting a person : `select`
 
 Selects the person identified by the index number used in the last person listing. +
