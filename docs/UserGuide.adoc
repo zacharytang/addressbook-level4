@@ -58,7 +58,7 @@ Format: `help`
 === Adding a person: `add`
 
 Adds a person to the address book +
-Format: `add n/NAME p/PHONE_NUMBER e/EMAIL a/ADDRESS [t/TAG]...` +
+Format: `add n/NAME p/PHONE_NUMBER e/EMAIL a/ADDRESS [tt/TIMETABLE_URL] [t/TAG]...` +
 Alternatives: `a` , `insert`
 
 [TIP]
@@ -66,8 +66,16 @@ A person can have any number of tags (including 0)
 
 Examples:
 
-* `add n/John Doe p/98765432 e/johnd@example.com a/John street, block 123, #01-01`
+* `add n/John Doe p/98765432 e/johnd@example.com a/John street, block 123, #01-01 tt/http://modsn.us/abCdE`
 * `add n/Betsy Crowe t/friend e/betsycrowe@example.com a/Newgate Prison p/1234567 t/criminal`
+
+==== Adding timetables
+
+If you want to save a person's timetable, add their NUSMods link when adding them to the address book.
+Their timetable will be saved and will be available to be viewed at any time
+
+[TIP]
+Address Book accepts both full and shortened NUSMods links!
 
 === Listing persons : `list`
 
@@ -89,7 +97,7 @@ Lists all persons in the address book containing *either* 'JCfriends' or 'comput
 ==== Editing a person
 
 Edits an existing person in the address book. +
-Format: `edit INDEX [n/NAME] [p/PHONE] [e/EMAIL] [a/ADDRESS] [t/TAG]...` +
+Format: `edit INDEX [n/NAME] [p/PHONE] [e/EMAIL] [a/ADDRESS] [tt/TIMETABLE_URL] [t/TAG]...` +
 Alternatives: `e` , `modify`, `change`
 
 ****
@@ -215,6 +223,25 @@ Selects the 2nd person in the address book.
 `select 1` +
 Selects the 1st person in the results of the `find` command.
 
+=== Viewing combined timetables : `whenfree`
+
+Views the combined timetables of a group of persons, selected by indexes. +
+Format: `whenfree [INDEX]...`
+
+Examples:
+
+* `whenfree 1 2` +
+Displays a combined timetable for the 1st and 2nd person in the address book
+
+* `whenfree`
+Displays a combined timetable for all listed users
+
+****
+* Creates a combined timetable representing all the persons chosen
+* If no index is specified, displays the timetable representing all the persons currently listed
+* All persons specified *must have timetables added*
+****
+
 === Open a Google Maps view of a selected person's address : `gmaps`
 
 For a person selected with the `select` command, opens a Google Maps view of the person's address locaton.
@@ -251,15 +278,16 @@ Shows a list of persons who's address is nearby the *location* set within a spec
 Format: `nearby d/DISTANCE` +
 Alternatives: `n`, `nearme`, `closeby`, `neighbours`
 
-****
-* The distance specified is in metres.
-****
 
 Example:
 
 * `setlocation a/Blk 123 Kent Ridge Drive` +
  `nearby 500` +
  Shows a list of people with address 500m away from Blk 123 Kent Ridge Drive.
+
+****
+* The distance specified is in metres.
+****
 
 ==== Finding a central location among a group of persons : `central` _(Coming in v2.0)_
 After listing persons, shows the central location among the persons most recently listed +
@@ -373,14 +401,27 @@ Address book data are saved in the hard disk automatically after any command tha
 There is no need to save manually.
 
 == Other features
+
 Here are some features in the Address Book that are not command line based, but good to know to aid in your productivity
 
+=== Theme Selection
+
+To change the theme of the app, click on *Appearance* -> *Themes*, at the top of the window.
+Several themes are available, such as *Day Mode* and *Night Mode*.
+
+=== Font Size
+
+If you find the font too big or too small, the font size can be changed in *Appearance* -> *Themes*
 
 === Tag Bar
 
 === Footer Bar
 
+Clicking on a tag will display the number of people associated with that tag.
+By default, the footer bar shows the total number of people stored.
+
 === Google Maps Integration with Address
+
 Clicking on the address in the address book will open a Google Map map view of the address location.
 
 
@@ -403,10 +444,16 @@ e.g. `delete t/modulemate t/colleague`
 e.g. `edit 2 n/James Lee e/jameslee@example.com`
 * *Find* : `find KEYWORD [MORE_KEYWORDS]` +
 e.g. `find James Jake`
+* *Google Maps* `gmaps`
+* *Nearby* `nearby` +
+e.g. `nearby d/500`
+* *Central* `central`
 * *List* : `list`
 * *Help* : `help`
 * *Select* : `select INDEX` +
 e.g.`select 2`
+* *Set Location* `setlocation` +
+e.g. `setlocation a/123 Dover Road`
 * *History* : `history`
 * *Undo* : `undo`
 * *Redo* : `redo`
