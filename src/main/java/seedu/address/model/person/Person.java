@@ -23,7 +23,6 @@ public class Person implements ReadOnlyPerson {
     private ObjectProperty<Email> email;
     private ObjectProperty<Address> address;
     private ObjectProperty<Remark> remark;
-
     private ObjectProperty<UniqueTagList> tags;
 
     /**
@@ -114,9 +113,7 @@ public class Person implements ReadOnlyPerson {
     }
 
     @Override
-    public Remark getRemark() {
-        return remark.get();
-    }
+    public Remark getRemark() { return remark.get(); }
 
     /**
      * Returns an immutable tag set, which throws {@code UnsupportedOperationException}
@@ -154,20 +151,6 @@ public class Person implements ReadOnlyPerson {
     @Override
     public String toString() {
         return getAsText();
-    }
-
-    /**
-     * Updates this person with the details of {@code replacement}.
-     */
-    public void resetData(ReadOnlyPerson replacement) {
-        requireNonNull(replacement);
-
-        this.setName(replacement.getName());
-        this.setPhone(replacement.getPhone());
-        this.setEmail(replacement.getEmail());
-        this.setAddress(replacement.getAddress());
-        this.setRemark(replacement.getRemark());
-        this.setTags(replacement.getTags());
     }
 
 }
