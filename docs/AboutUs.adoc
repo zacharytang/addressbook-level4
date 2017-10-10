@@ -29,7 +29,7 @@ Responsibilities: Model
 '''
 
 === Tsai Yu Hsuan
-image::yuHsuan.jpg[width="150", align="left"]
+image::yuhsuan.jpg[width="150", align="left"]
 {empty}[http://github.com/CindyTsai1[github]] [<<CindyTsai1#, portfolio>>]
 
 Role: Developer +
