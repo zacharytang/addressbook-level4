@@ -23,7 +23,7 @@ public class RemarkCommand extends UndoableCommand {
 
     public static final String MESSAGE_USAGE = COMMAND_WORD
             + ": Remarks the person identified by the index number used in the last person listing.\n"
-            + "Parameters: INDEX (must be a positive integer)\n"
+            + "Parameters: INDEX (must be a positive integer)"
             + PREFIX_REMARK + "[REMARK] \n"
             + "Example: " + COMMAND_WORD + " 1" + PREFIX_REMARK + "Likes to drink coffee.";
 
