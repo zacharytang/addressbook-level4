@@ -80,6 +80,12 @@ Shows a list of all persons in the address book. +
 Format: `list` +
 Alternatives: `l` , `showall`, `viewall`
 
+=== Sorting all persons : `sort`
+
+Shows a list of all persons in the address book by arranging their names in alphabetical order +
+Format: `sort` +
+Alternatives: `s` , `sortall`, `arrange`
+
 === Editing a person : `edit`
 
 Edits an existing person in the address book. +
