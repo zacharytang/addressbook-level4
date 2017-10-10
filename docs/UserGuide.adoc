@@ -124,10 +124,15 @@ Deletes the specified person from the address book. +
 Format: `delete INDEX` +
 Alternatives: `d` , `remove`
 
+Deletes the contact which you haven't used the 'edit', 'photo' or 'find' command for K months. +
+Format: `delete old/K` +
+Alternatives: `d` , `remove`
+
 ****
 * Deletes the person at the specified `INDEX`.
 * The index refers to the index number shown in the most recent listing.
 * The index *must be a positive integer* 1, 2, 3, ...
+* The K *must be a positive integer* 1, 2, 3, ...
 ****
 
 Examples:
@@ -138,6 +143,8 @@ Deletes the 2nd person in the address book.
 * `find Betsy` +
 `delete 1` +
 Deletes the 1st person in the results of the `find` command.
+* `delete old/2` +
+Deletes all the contacts which you haven't used the 'edit', 'photo' or 'find' command for the past 2 months.
 
 ==== Deleting a Tag (or multiple Tags)
 
