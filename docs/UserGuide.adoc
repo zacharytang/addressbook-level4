@@ -59,18 +59,21 @@ Format: `help`
 ==== Adding a person manually
 
 Adds a person to the address book +
-Format: `add n/NAME p/PHONE_NUMBER e/EMAIL a/ADDRESS t/TAG b/BIRTHDAY...` +
+Format: `add [n/NAME] [p/PHONE_NUMBER] [e/EMAIL] [a/ADDRESS] [t/TAG] [b/BIRTHDAY]...` +
 Alternatives: `a` , `insert`
 
+[TIP]
+A person can have any number of tags (including 0).
+
 ****
-* A person can have any number of tags (including 0).
 * The format for birthday is YYYYMMDD.
 ****
 
 Examples:
 
-* `add n/John Doe p/98765432 e/johnd@example.com a/John street, block 123, #01-01 b/19980523`
+* `add n/John Doe p/98765432 e/johnd@example.com a/John street, block 123, #01-01`
 * `add n/Betsy Crowe t/friend e/betsycrowe@example.com a/Newgate Prison p/1234567 t/criminal`
+* `add n/Betty p/12345678 e/betty@example.com b/19980523`
 
 ==== Adding a person using the information on social media _(Coming in v2.0)_
 
@@ -90,7 +93,7 @@ Examples:
 Shows a list of all persons in the address book. +
 If a tag, or tags, is/are specified, then it shows a list of all persons containing one of the tags. +
 If a month, or months, is/are specified, then it shows a list of all persons having birthdays in one of the months. +
-Format: `list t/TAG... b/BIRTHDAY_MONTH` +
+Format: `list [t/TAG] [b/BIRTHDAY_MONTH]` +
 Alternatives: `l` , `showall`, `viewall`
 
 Examples :
@@ -106,7 +109,7 @@ Lists all persons in the address book having birthdays in `December`
 ==== Editing a person
 
 Edits an existing person in the address book. +
-Format: `edit INDEX n/NAME p/PHONE e/EMAIL a/ADDRESS t/TAG...` +
+Format: `edit INDEX [n/NAME] [p/PHONE] [e/EMAIL] [a/ADDRESS] [t/TAG]...` +
 Alternatives: `e` , `modify`, `change`
 
 ****
@@ -428,7 +431,10 @@ There is no need to save manually.
 Here are some features in the Address Book that are not command line based, but good to know to aid in your productivity
 
 === Command Suggestion
-Typeing the wrong word for a command will trigger the address book to suggest the correct phrasing for that command
+Typing the wrong word for a command will trigger the address book to suggest the correct phrasing for that command
+
+Example:
+* Typing the command `cancel` will trigger the response `Do you mean DELETE or UNDO?`
 
 === Tag Bar
 All existing tags can be viewed as icons on the UI
