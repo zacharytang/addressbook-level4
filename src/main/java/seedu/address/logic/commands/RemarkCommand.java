@@ -4,18 +4,19 @@ import static java.util.Objects.requireNonNull;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_REMARK;
 
 import java.util.List;
-import java.util.Optional;
 
 import seedu.address.commons.core.Messages;
 import seedu.address.commons.core.index.Index;
-import seedu.address.commons.util.CollectionUtil;
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.model.person.Person;
 import seedu.address.model.person.ReadOnlyPerson;
+import seedu.address.model.person.Remark;
 import seedu.address.model.person.exceptions.DuplicatePersonException;
 import seedu.address.model.person.exceptions.PersonNotFoundException;
-import seedu.address.model.person.*;
 
+/**
+ * Edits the remark of a person to the address book.
+ */
 public class RemarkCommand extends UndoableCommand {
 
     public static final String COMMAND_WORD = "remark";
@@ -71,11 +72,16 @@ public class RemarkCommand extends UndoableCommand {
         return new CommandResult(generateSuccessMsg(remarkedPerson));
     }
 
+    /**
+     * Generate the Successful Message accordingly.
+     * @param personToRemark
+     * @return successful message for adding remark if the remark string is not empty.
+     */
     private String generateSuccessMsg(ReadOnlyPerson personToRemark) {
-        if(!remark.value.isEmpty()) {
-            return String.format(MESSAGE_ADD_REMARK_SUCCESS, personToRemark);
-        } else {
+        if (remark.toString().isEmpty()) {
             return String.format(MESSAGE_DELETE_REMARK_SUCCESS, personToRemark);
+        } else {
+            return String.format(MESSAGE_ADD_REMARK_SUCCESS, personToRemark);
         }
     }
 

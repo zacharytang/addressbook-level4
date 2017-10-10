@@ -2,12 +2,15 @@ package seedu.address.model.person;
 
 import static java.util.Objects.requireNonNull;
 
+/**
+ * Represents the remark of a person in the address book.
+ */
 public class Remark {
 
     public static final String MESSAGE_REMARK_CONSTRAINTS =
             "Person remarks can take any values, including blank";
 
-    public String value;
+    public final String value;
 
     public Remark(String remark) {
         requireNonNull(remark);
