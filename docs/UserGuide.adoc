@@ -58,16 +58,21 @@ Format: `help`
 === Adding a person: `add`
 
 Adds a person to the address book +
-Format: `add n/NAME p/PHONE_NUMBER e/EMAIL a/ADDRESS [t/TAG]...` +
+Format: `add n/NAME p/PHONE_NUMBER e/EMAIL a/ADDRESS [t/TAG] [tt/NUM_OF_MONTHS/TEMPORARY TAG]...` +
 Alternatives: `a` , `insert`
 
 [TIP]
 A person can have any number of tags (including 0)
+A person can add a temporary tag to a person by adding [tt/NUM_OF_MONTHS/TEMPORARY TAG],
+The NUM_OF_MONTHS *must be a positive integer* 1, 2, 3, ...
+the temporary tag will disappear on its own after the certain number of months.
+
 
 Examples:
 
 * `add n/John Doe p/98765432 e/johnd@example.com a/John street, block 123, #01-01`
 * `add n/Betsy Crowe t/friend e/betsycrowe@example.com a/Newgate Prison p/1234567 t/criminal`
+* `add n/Amy Tan tt/4/CS2101classmates e/amy_tan@example.com a/PGP p/82974823`
 
 === Listing all persons : `list`
 
