@@ -3,6 +3,9 @@ package seedu.address.logic.commands;
 import static java.util.Objects.requireNonNull;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_REMARK;
 
+import java.util.List;
+import java.util.Optional;
+
 import seedu.address.commons.core.Messages;
 import seedu.address.commons.core.index.Index;
 import seedu.address.commons.util.CollectionUtil;
@@ -13,9 +16,6 @@ import seedu.address.model.person.exceptions.DuplicatePersonException;
 import seedu.address.model.person.exceptions.PersonNotFoundException;
 import seedu.address.model.person.*;
 
-import java.util.List;
-import java.util.Optional;
-
 public class RemarkCommand extends UndoableCommand {
 
     public static final String COMMAND_WORD = "remark";
@@ -24,17 +24,23 @@ public class RemarkCommand extends UndoableCommand {
     public static final String MESSAGE_USAGE = COMMAND_WORD
             + ": Remarks the person identified by the index number used in the last person listing.\n"
             + "Parameters: INDEX (must be a positive integer)\n"
-            + PREFIX_REMARK + "REMARK \n"
-            + "Example: " + COMMAND_WORD + " 1" + PREFIX_REMARK + "Likes to drink coffee";
+            + PREFIX_REMARK + "[REMARK] \n"
+            + "Example: " + COMMAND_WORD + " 1" + PREFIX_REMARK + "Likes to drink coffee.";
 
-    public static final String MESSAGE_REMARK_PERSON_SUCCESS = "Remarked Person: %1$s";
-    public static final String MESSAGE_SAME_REMARK = "This remark already exists.";
+    public static final String MESSAGE_ADD_REMARK_SUCCESS = "Added Remark to Person: %1$s";
+    public static final String MESSAGE_DELETE_REMARK_SUCCESS = "Removed Remark from Person: %1$s";
+    public static final String MESSAGE_DUPLICATE_PERSON = "This person already exists in the address book.";
 
     private final Index targetIndex;
     private final Remark remark;
 
+    /**
+     * @param targetIndex of the person in the list to edit the remark
+     * @param remark of the person
+     */
     public RemarkCommand(Index targetIndex, Remark remark) {
         requireNonNull(targetIndex);
+        requireNonNull(remark);
 
         this.targetIndex = targetIndex;
         this.remark = remark;
@@ -57,12 +63,20 @@ public class RemarkCommand extends UndoableCommand {
         try {
             model.updatePerson(personToRemark, remarkedPerson);
         } catch (DuplicatePersonException dpe) {
-            throw new CommandException(MESSAGE_SAME_REMARK);
+            throw new CommandException(MESSAGE_DUPLICATE_PERSON);
         } catch (PersonNotFoundException pnfe) {
             throw new AssertionError("The target person cannot be missing");
         }
 
-        return new CommandResult(String.format(MESSAGE_REMARK_PERSON_SUCCESS, personToRemark));
+        return new CommandResult(generateSuccessMsg(remarkedPerson));
+    }
+
+    private String generateSuccessMsg(ReadOnlyPerson personToRemark) {
+        if(!remark.value.isEmpty()) {
+            return String.format(MESSAGE_ADD_REMARK_SUCCESS, personToRemark);
+        } else {
+            return String.format(MESSAGE_DELETE_REMARK_SUCCESS, personToRemark);
+        }
     }
 
     /**
@@ -94,54 +108,5 @@ public class RemarkCommand extends UndoableCommand {
         RemarkCommand r = (RemarkCommand) other;
         return targetIndex.equals(r.targetIndex)
                 && remark.equals(r.remark);
-    }
-
-    /**
-     * Stores the details to remark the person with. New remark value will replace the
-     * old remark value of the person.
-     */
-    public static class RemarkPersonDescriptor {
-
-        private Remark remark;
-
-        public RemarkPersonDescriptor() {
-        }
-
-        public RemarkPersonDescriptor(RemarkCommand.RemarkPersonDescriptor toCopy) {
-            this.remark = toCopy.remark;
-        }
-
-        /**
-         * Returns true if the remark is going to be deleted.
-         */
-        public boolean isRemarkDeleted() {
-            return !CollectionUtil.isAnyNonNull(this.remark);
-        }
-
-        public void setRemark(Remark remark) {
-            this.remark = remark;
-        }
-
-        public Optional<Remark> getRemark() {
-            return Optional.ofNullable(remark);
-        }
-
-        @Override
-        public boolean equals(Object other) {
-            // short circuit if same object
-            if (other == this) {
-                return true;
-            }
-
-            // instanceof handles nulls
-            if (!(other instanceof RemarkCommand.RemarkPersonDescriptor)) {
-                return false;
-            }
-
-            // state check
-            RemarkPersonDescriptor r = (RemarkPersonDescriptor) other;
-
-            return getRemark().equals(r.getRemark());
-        }
     }
 }
