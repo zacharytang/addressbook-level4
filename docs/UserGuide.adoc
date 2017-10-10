@@ -237,7 +237,7 @@ Example:
  `nearby 500` +
  Shows a list of people with address 500m away from Blk 123 Kent Ridge Drive.
 
-==== Finding a central location among a group of persons : `central`
+==== Finding a central location among a group of persons : `central` _(Coming in v2.0)_
 After listing persons, shows the central location among the persons most recently listed +
 Including the word 'withme' will include the set location in calculating central location
 If an index, or multiple indexes are specified, shows the central location among the specified people with these indexes
