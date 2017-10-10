@@ -58,7 +58,7 @@ Format: `help`
 === Adding a person: `add`
 
 Adds a person to the address book +
-Format: `add n/NAME m/MATRIC_NUMBER g/GENDER p/PHONE_NUMBER e/EMAIL a/ADDRESS [t/TAG] [tt/NUM_OF_MONTHS/TEMPORARY TAG]...` +
+Format: `add n/NAME g/GENDER p/PHONE_NUMBER e/EMAIL a/ADDRESS [m/MATRIC_NUMBER] [t/TAG] [tt/NUM_OF_MONTHS/TEMPORARY TAG]...` +
 Alternatives: `a` , `insert`
 
 [TIP]
@@ -165,18 +165,18 @@ Returns any person having names `Betsy`, `Tim`, or `John`
 ==== Deleting multiple persons
 
 Deletes the multiple specified persons from the address book. +
-Format: `delete [INDEX1], [INDEX2], [INDEX3]...` +
+Format: `delete INDEX1, INDEX2, INDEX3...` +
 Alternatives: `d` , `remove`
 
-Deletes the contacts which you haven't used the 'edit', 'photo' or 'find' command for K months. +
-Format: `delete old/K` +
+Deletes the contacts which you haven't used the 'edit', 'photo' or 'find' command for a certain number of months. +
+Format: `delete old/NUM_OF_MONTH` +
 Alternatives: `d` , `remove`
 
 ****
 * Deletes the person at the specified `INDEX`.
 * The INDEX1, INDEX2, INDEX3... refer to the index numbers shown in the most recent listing.
 * The index *must be a positive integer* 1, 2, 3, ...
-* The K *must be a positive integer* 1, 2, 3, ...
+* The NUM_OF_MONTH *must be a positive integer* 1, 2, 3, ...
 ****
 
 Examples:
