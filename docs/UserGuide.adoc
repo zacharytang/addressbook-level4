@@ -119,13 +119,13 @@ Lists all persons in the address book having birthdays in `December`
 === Sorting all persons : `sort`
 
 Shows a list of all persons in the address book by arranging their names in alphabetical order +
-Format: `sort` 
+Format: `sort` +
 Alternatives: `s` , `sortall`, `arrange`
 
 === Sorting all persons : `sort`
 
 Shows a list of all persons in the address book by arranging their names in alphabetical order +
-Format: `sort`
+Format: `sort` +
 Alternatives: `s` , `sortall`, `arrange`
 
 === Editing a person or a tag: `edit`
