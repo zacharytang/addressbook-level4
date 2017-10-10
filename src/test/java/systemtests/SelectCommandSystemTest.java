@@ -26,9 +26,31 @@ public class SelectCommandSystemTest extends AddressBookSystemTest {
         String command = "   " + SelectCommand.COMMAND_WORD + " " + INDEX_FIRST_PERSON.getOneBased() + "   ";
         assertCommandSuccess(command, INDEX_FIRST_PERSON);
 
+        /* Case: select the first card in the person list using alias, command with leading spaces and trailing spaces
+         * -> selected
+         */
+        command = "   " + SelectCommand.COMMAND_ALIAS + " " + INDEX_FIRST_PERSON.getOneBased() + "   ";
+        assertCommandSuccess(command, INDEX_FIRST_PERSON);
+
+        /* Case: select the first card in the person list using secondary keyword,
+         * command with leading spaces and trailing spaces -> selected
+         */
+        command = "   " + SelectCommand.COMMAND_SECONDARY + " " + INDEX_FIRST_PERSON.getOneBased() + "   ";
+        assertCommandSuccess(command, INDEX_FIRST_PERSON);
+
         /* Case: select the last card in the person list -> selected */
         Index personCount = Index.fromOneBased(getTypicalPersons().size());
         command = SelectCommand.COMMAND_WORD + " " + personCount.getOneBased();
+        assertCommandSuccess(command, personCount);
+
+        /* Case: select the last card in the person list, using alias -> selected */
+        personCount = Index.fromOneBased(getTypicalPersons().size());
+        command = SelectCommand.COMMAND_ALIAS + " " + personCount.getOneBased();
+        assertCommandSuccess(command, personCount);
+
+        /* Case: select the last card in the person list, using secondary keyword -> selected */
+        personCount = Index.fromOneBased(getTypicalPersons().size());
+        command = SelectCommand.COMMAND_SECONDARY + " " + personCount.getOneBased();
         assertCommandSuccess(command, personCount);
 
         /* Case: undo previous selection -> rejected */
