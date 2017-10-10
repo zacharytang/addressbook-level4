@@ -240,7 +240,7 @@ You must *set a location* `setlocation` first before using some of the location 
 Sets the point of reference/origin for the use of location commands. +
 This location will be the point of reference for the location commands +
 Format: `setlocaton a/ADDRESS` +
-Alternatives: `setloc`
+Alternatives: `sl` `setloc`
 
 Example:
 
@@ -249,7 +249,7 @@ Example:
 ==== Listing persons who live nearby : `nearby`
 Shows a list of persons who's address is nearby the *location* set within a specified radius. +
 Format: `nearby d/DISTANCE` +
-Alternatives: `n`, `nearme`, `closeby`, `neighbours`
+Alternatives: `n`, `nearme`, `closeby`, `neighbours` `neighbors`
 
 ****
 * The distance specified is in metres.
@@ -266,7 +266,7 @@ After listing persons, shows the central location among the persons most recentl
 Including the word 'withme' will include the set location in calculating central location
 If an index, or multiple indexes are specified, shows the central location among the specified people with these indexes +
 Format: `central [withme] [INDEX]...` +
-Alternatives: `c`, `center`, `wheremeet`
+Alternatives: `ct`, `center`, `wheremeet`
 
 Example:
 
