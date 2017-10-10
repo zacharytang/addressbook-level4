@@ -1,15 +1,17 @@
 package seedu.address.logic.commands;
 
+import static java.util.Objects.requireNonNull;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_REMARK;
+
 import seedu.address.commons.core.Messages;
 import seedu.address.commons.core.index.Index;
 import seedu.address.commons.util.CollectionUtil;
 import seedu.address.logic.commands.exceptions.CommandException;
-
-import static java.util.Objects.requireNonNull;
-import static seedu.address.logic.parser.CliSyntax.PREFIX_REMARK;
-
-import seedu.address.model.person.*;
+import seedu.address.model.person.Person;
+import seedu.address.model.person.ReadOnlyPerson;
+import seedu.address.model.person.exceptions.DuplicatePersonException;
 import seedu.address.model.person.exceptions.PersonNotFoundException;
+import seedu.address.model.person.*;
 
 import java.util.List;
 import java.util.Optional;
@@ -26,6 +28,7 @@ public class RemarkCommand extends UndoableCommand {
             + "Example: " + COMMAND_WORD + " 1" + PREFIX_REMARK + "Likes to drink coffee";
 
     public static final String MESSAGE_REMARK_PERSON_SUCCESS = "Remarked Person: %1$s";
+    public static final String MESSAGE_SAME_REMARK = "This remark already exists.";
 
     private final Index targetIndex;
     private final Remark remark;
@@ -48,12 +51,15 @@ public class RemarkCommand extends UndoableCommand {
         }
 
         ReadOnlyPerson personToRemark = lastShownList.get(targetIndex.getZeroBased());
+
         Person remarkedPerson = createRemarkedPerson(personToRemark, remark);
 
         try {
-            model.remarkPerson(personToRemark, remarkedPerson);
+            model.updatePerson(personToRemark, remarkedPerson);
+        } catch (DuplicatePersonException dpe) {
+            throw new CommandException(MESSAGE_SAME_REMARK);
         } catch (PersonNotFoundException pnfe) {
-            assert false : "The target person cannot be missing";
+            throw new AssertionError("The target person cannot be missing");
         }
 
         return new CommandResult(String.format(MESSAGE_REMARK_PERSON_SUCCESS, personToRemark));
@@ -64,14 +70,12 @@ public class RemarkCommand extends UndoableCommand {
      * remarked with {@code remarkPersonDescriptor}.
      */
     private static Person createRemarkedPerson(ReadOnlyPerson personToRemark,
-                                             RemarkCommand.RemarkPersonDescriptor remarkPersonDescriptor) {
+                                                 Remark remark) {
         assert personToRemark != null;
+        Person remarkPerson = new Person(personToRemark.getName(), personToRemark.getPhone(),
+                personToRemark.getEmail(), personToRemark.getAddress(), remark, personToRemark.getTags());
 
-        Remark updatedRemark = remarkPersonDescriptor.getRemark().orElse(personToRemark.getRemark());
-
-        return new Person(personToRemark.getName(), personToRemark.getPhone(),
-                personToRemark.getEmail(), personToRemark.getAddress(), personToRemark.getTags(),
-                updatedRemark);
+        return remarkPerson;
     }
 
     @Override
@@ -89,7 +93,7 @@ public class RemarkCommand extends UndoableCommand {
         // state check
         RemarkCommand r = (RemarkCommand) other;
         return targetIndex.equals(r.targetIndex)
-                && remarkPersonDescriptor.equals(r.remarkPersonDescriptor);
+                && remark.equals(r.remark);
     }
 
     /**
