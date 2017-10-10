@@ -407,11 +407,14 @@ Alternatives: `p` , `code`
 
 ****
 * The length of password is limited to 20 characters.
+* Cancel password by leaving blank behind the command word `password`
 ****
 
 Example:
 
 * `password 123456789`
+* `password`
+To cancel password set.
 
 === Exiting the program : `exit`
 
