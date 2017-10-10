@@ -59,18 +59,21 @@ Format: `help`
 ==== Adding a person manually
 
 Adds a person to the address book +
-Format: `add n/NAME p/PHONE_NUMBER e/EMAIL a/ADDRESS t/TAG b/BIRTHDAY...` +
+Format: `add n/NAME p/PHONE_NUMBER e/EMAIL a/ADDRESS [b/BIRTHDAY] [tt/TIMETABLE_URL] [t/TAG] ...` +
 Alternatives: `a` , `insert`
 
+[TIP]
+A person can have any number of tags (including 0).
+
 ****
-* A person can have any number of tags (including 0).
 * The format for birthday is YYYYMMDD.
 ****
 
 Examples:
 
-* `add n/John Doe p/98765432 e/johnd@example.com a/John street, block 123, #01-01 b/19980523`
+* `add n/John Doe p/98765432 e/johnd@example.com a/John street, block 123, #01-01 tt/http://modsn.us/abCdE`
 * `add n/Betsy Crowe t/friend e/betsycrowe@example.com a/Newgate Prison p/1234567 t/criminal`
+* `add n/Betty p/12345678 e/betty@example.com b/19980523`
 
 ==== Adding a person using the information on social media _(Coming in v2.0)_
 
@@ -85,12 +88,20 @@ Examples:
 
 * `add s/facebook John Doe`
 
+==== Adding timetables
+
+If you want to save a person's timetable, add their NUSMods link when adding them to the address book.
+Their timetable will be saved and will be available to be viewed at any time
+
+[TIP]
+Address Book accepts both full and shortened NUSMods links!
+
 === Listing persons : `list`
 
 Shows a list of all persons in the address book. +
 If a tag, or tags, is/are specified, then it shows a list of all persons containing one of the tags. +
 If a month, or months, is/are specified, then it shows a list of all persons having birthdays in one of the months. +
-Format: `list t/TAG... b/BIRTHDAY_MONTH` +
+Format: `list [t/TAG] [b/BIRTHDAY_MONTH]` +
 Alternatives: `l` , `showall`, `viewall`
 
 Examples :
@@ -106,7 +117,7 @@ Lists all persons in the address book having birthdays in `December`
 ==== Editing a person
 
 Edits an existing person in the address book. +
-Format: `edit INDEX n/NAME p/PHONE e/EMAIL a/ADDRESS t/TAG...` +
+Format: `edit INDEX [n/NAME] [p/PHONE] [e/EMAIL] [a/ADDRESS] [tt/TIMETABLE_URL] [t/TAG]...` +
 Alternatives: `e` , `modify`, `change`
 
 ****
@@ -253,9 +264,28 @@ Selects the 2nd person in the address book.
 `select 1` +
 Selects the 1st person in the results of the `find` command.
 
+=== Viewing combined timetables : `whenfree`
+
+Views the combined timetables of a group of persons, selected by indexes. +
+Format: `whenfree [INDEX]...`
+
+Examples:
+
+* `whenfree 1 2` +
+Displays a combined timetable for the 1st and 2nd person in the address book
+
+* `whenfree`
+Displays a combined timetable for all listed users
+
+****
+* Creates a combined timetable representing all the persons chosen
+* If no index is specified, displays the timetable representing all the persons currently listed
+* All persons specified *must have timetables added*
+****
+
 === Open a Google Maps view of a selected person's address : `gmaps`
 
-For a person selected with the `select` command, opens a Google Maps view of the person's address locaton.
+For a person selected with the `select` command, opens a Google Maps view of the person's address locaton. +
 Format: `gmaps` +
 Alternatives: `g`, `map`, `maps`
 
@@ -270,15 +300,15 @@ Opens the Google Maps view for the address of the 2nd person selected in the add
 `gmaps` +
 Opens the Google Maps view for the address of the 1st person in the results of the `find` command.
 
-=== Location Commands
-[IMPORTANT]
+=== Location Commands : `setlocation`  `nearby`  `central`
+[NOTE]
 You must *set a location* `setlocation` first before using some of the location commands +
 
-==== Set location: `setlocation`
+==== Set location : `setlocation`
 Sets the point of reference/origin for the use of location commands. +
 This location will be the point of reference for the location commands +
 Format: `setlocaton a/ADDRESS` +
-Alternatives: `setloc`
+Alternatives: `sl` `setloc`
 
 Example:
 
@@ -287,11 +317,8 @@ Example:
 ==== Listing persons who live nearby : `nearby`
 Shows a list of persons who's address is nearby the *location* set within a specified radius. +
 Format: `nearby d/DISTANCE` +
-Alternatives: `n`, `nearme`, `closeby`, `neighbours`
+Alternatives: `n`, `nearme`, `closeby`, `neighbours` `neighbors`
 
-****
-* The distance specified is in metres.
-****
 
 Example:
 
@@ -299,13 +326,16 @@ Example:
  `nearby 500` +
  Shows a list of people with address 500m away from Blk 123 Kent Ridge Drive.
 
+****
+* The distance specified is in metres.
+****
+
 ==== Finding a central location among a group of persons : `central` _(Coming in v2.0)_
 After listing persons, shows the central location among the persons most recently listed +
 Including the word 'withme' will include the set location in calculating central location
-If an index, or multiple indexes are specified, shows the central location among the specified people with these indexes
-
+If an index, or multiple indexes are specified, shows the central location among the specified people with these indexes +
 Format: `central [withme] [INDEX]...` +
-Alternatives: `c`, `center`, `wheremeet`
+Alternatives: `ct`, `center`, `wheremeet`
 
 Example:
 
@@ -425,18 +455,37 @@ Address book data are saved in the hard disk automatically after any command tha
 There is no need to save manually.
 
 == Other features
+
 Here are some features in the Address Book that are not command line based, but good to know to aid in your productivity
 
+=== Theme Selection
+
+To change the theme of the app, click on *Appearance* -> *Themes*, at the top of the window. +
+Several themes are available, such as *Day Mode* and *Night Mode*.
+
+=== Font Size
+
+If you find the font too big or too small, the font size can be changed in *Appearance* -> *Themes*
+
 === Command Suggestion
-Typeing the wrong word for a command will trigger the address book to suggest the correct phrasing for that command
+
+Typing the wrong word for a command will trigger the address book to suggest the correct phrasing for that command
+
+Example:
+* Typing the command `cancel` will trigger the response `Do you mean DELETE or UNDO?`
 
 === Tag Bar
-All existing tags can be viewed as icons on the UI
+
+All existing tags can be viewed as icons on the UI +
 Clicking on the icons will show a list of contacts being tagged with that tag
 
 === Footer Bar
 
+Clicking on a tag will display the number of people associated with that tag. +
+By default, the footer bar shows the total number of people stored.
+
 === Google Maps Integration with Address
+
 Clicking on the address in the address book will open a Google Map map view of the address location.
 
 
@@ -459,10 +508,16 @@ e.g. `delete t/modulemate t/colleague`
 e.g. `edit 2 n/James Lee e/jameslee@example.com`
 * *Find* : `find KEYWORD [MORE_KEYWORDS]` +
 e.g. `find James Jake`
+* *Google Maps* `gmaps`
+* *Nearby* `nearby` +
+e.g. `nearby d/500`
+* *Central* `central`
 * *List* : `list`
 * *Help* : `help`
 * *Select* : `select INDEX` +
 e.g.`select 2`
+* *Set Location* `setlocation` +
+e.g. `setlocation a/123 Dover Road`
 * *History* : `history`
 * *Undo* : `undo`
 * *Redo* : `redo`
