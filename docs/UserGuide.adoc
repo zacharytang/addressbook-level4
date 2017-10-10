@@ -232,11 +232,11 @@ Opens the Google Maps view for the address of the 2nd person selected in the add
 `gmaps` +
 Opens the Google Maps view for the address of the 1st person in the results of the `find` command.
 
-=== Location Commands
+=== Location Commands : `setlocation`  `nearby`  `central`
 [NOTE]
 You must *set a location* `setlocation` first before using some of the location commands +
 
-==== Set location: `setlocation`
+==== Set location : `setlocation`
 Sets the point of reference/origin for the use of location commands. +
 This location will be the point of reference for the location commands +
 Format: `setlocaton a/ADDRESS` +
