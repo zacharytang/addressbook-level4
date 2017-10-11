@@ -11,8 +11,8 @@ We are a team based in the http://www.comp.nus.edu.sg[School of Computing, Natio
 == Project Team
 
 === Fan Yuting
-image::damithc.jpg[width="150", align="left"]
-{empty}[https://github.com/April0616[homepage]] [<<johndoe#, portfolio>>]
+image::yuting.JPG[width="150", align="left"]
+{empty}[https://github.com/April0616[github]] [<<April0616#, portfolio>>]
 
 Role: Developer +
 Responsibilities: UI
