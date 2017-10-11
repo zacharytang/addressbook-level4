@@ -107,22 +107,15 @@ public class CommandBox extends UiPart<Region> {
             // process result of the command
             commandTextField.setText("");
             logger.info("Result: " + commandResult.feedbackToUser);
-<<<<<<< .merge_file_mFdwGC
-            raise(new NewResultAvailableEvent(commandResult.feedbackToUser));
-=======
-            raise(new NewResultAvailableEvent(commandResult.feedbackToUser, false));
->>>>>>> .merge_file_jxiIqN
 
+            raise(new NewResultAvailableEvent(commandResult.feedbackToUser, false));
         } catch (CommandException | ParseException e) {
             initHistory();
             // handle command failure
             setStyleToIndicateCommandFailure();
             logger.info("Invalid command: " + commandTextField.getText());
-<<<<<<< .merge_file_mFdwGC
-            raise(new NewResultAvailableEvent(e.getMessage()));
-=======
+
             raise(new NewResultAvailableEvent(e.getMessage(), true));
->>>>>>> .merge_file_jxiIqN
         }
     }
 
