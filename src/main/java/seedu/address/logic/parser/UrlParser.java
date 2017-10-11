@@ -90,7 +90,7 @@ public class UrlParser {
         ArrayList<Module> modules = parseModuleInfo(moduleInfo[1]);
 
         for (Module moduleToGet : modules) {
-            ArrayList<HashMap<String, String>> classInfo = getModuleJson(acadYear, semester,
+            ArrayList<HashMap<String, String>> classInfo = getModuleInfo(acadYear, semester,
                                                                             moduleToGet.getModuleCode());
 
             // get timings for each class and add to something
@@ -101,7 +101,7 @@ public class UrlParser {
      * Uses NUSMods API to obtain all classes a module has, and returns it in
      * an arraylist of classes. Each class is represented by a hash map, storing the information about the class
      */
-    private static ArrayList<HashMap<String, String>> getModuleJson(String acadYear,
+    private static ArrayList<HashMap<String, String>> getModuleInfo(String acadYear,
                                                                     String semester, String moduleCode) {
         String uri = "http://api.nusmods.com/" + acadYear + "/" + semester + "/modules/" + moduleCode + ".json";
         ObjectMapper mapper = new ObjectMapper();
