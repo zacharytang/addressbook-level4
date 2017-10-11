@@ -59,6 +59,8 @@ Format: `help`
 ==== Adding a person manually
 
 Adds a person to the address book +
+
+Format: `add n/NAME [p/PHONE_NUMBER] [e/EMAIL] [a/ADDRESS] [b/BIRTHDAY] [tt/TIMETABLE_URL] [t/TAG] ...` +
 Format: `add n/NAME g/GENDER p/PHONE_NUMBER e/EMAIL a/ADDRESS [m/MATRIC_NUMBER] [b/BIRTHDAY] [tt/TIMETABLE_URL] [t/TAG]... [tmpt/NUM_OF_MONTHS/TEMPORARY TAG]...` +
 Alternatives: `a` , `insert`
 
@@ -542,7 +544,7 @@ If you find the font too big or too small, the font size can be changed in *Appe
 Typing the wrong word for a command will trigger the address book to suggest the correct phrasing for that command
 
 Example:
-* Typing the command `cancel` will trigger the response `Do you mean DELETE or UNDO?`
+Typing the command `cancel` will trigger the response `Do you mean DELETE or UNDO?`
 
 === Tag Bar
 
