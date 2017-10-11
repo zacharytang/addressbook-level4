@@ -11,34 +11,34 @@ We are a team based in the http://www.comp.nus.edu.sg[School of Computing, Natio
 == Project Team
 
 === Fan Yuting
-image::damithc.jpg[width="150", align="left"]
-{empty}[https://github.com/April0616[homepage]] [<<johndoe#, portfolio>>]
+image::yuting.JPG[width="150", align="left"]
+{empty}[https://github.com/April0616[github]] [<<April0616#, portfolio>>]
 
 Role: Developer +
 Responsibilities: UI
 
 '''
 
-=== Neil Brian Labayna
-image::lejolly.jpg[width="150", align="left"]
-{empty}[http://github.com/lejolly[github]] [<<johndoe#, portfolio>>]
+=== Labayna Neil Brian Narido
+image::nbriannl.jpg[width="150", align="left"]
+{empty}[http://github.com/nbriannl[github]] [<<nbriannl#, portfolio>>]
 
-Role: Team Lead +
-Responsibilities: UI
+Role: Developer +
+Responsibilities: Model
 
 '''
 
 === Tsai Yu Hsuan
-image::yijinl.jpg[width="150", align="left"]
-{empty}[http://github.com/yijinl[github]] [<<johndoe#, portfolio>>]
+image::yuhsuan.jpg[width="150", align="left"]
+{empty}[http://github.com/CindyTsai1[github]] [<<CindyTsai1#, portfolio>>]
 
 Role: Developer +
-Responsibilities: Data
+Responsibilities: Storage
 
 '''
 
 === Zachary Tang
-image::zachary.jpg[width="150", align="left"]
+image::zacharytang.jpg[width="150", align="left"]
 {empty}[https://github.com/zacharytang[github]] [<<johndoe#, portfolio>>]
 
 Role: Developer +
