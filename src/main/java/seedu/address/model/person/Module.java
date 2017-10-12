@@ -1,6 +1,6 @@
 package seedu.address.model.person;
 
-import java.util.HashMap;
+import java.util.ArrayList;
 
 /**
  * Class representing a person's module, to be used in Timetable
@@ -8,23 +8,23 @@ import java.util.HashMap;
 public class Module {
 
     private String moduleCode;
-    private HashMap<String, String> classSlots;
+    private ArrayList<Lesson> lessons;
 
     public Module(String moduleCode) {
         this.moduleCode = moduleCode;
-        classSlots = new HashMap<>();
+        this.lessons = new ArrayList<>();
     }
 
     public String getModuleCode() {
         return moduleCode;
     }
 
-    public void addClassSlot(String slotType, String slotValue) {
-        classSlots.put(slotType, slotValue);
+    public void addLesson(Lesson lesson) {
+        lessons.add(lesson);
     }
 
-    public HashMap<String, String> getClassSlots() {
-        return classSlots;
+    public ArrayList<Lesson> getLessons() {
+        return lessons;
     }
 
     @Override

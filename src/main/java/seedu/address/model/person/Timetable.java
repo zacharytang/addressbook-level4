@@ -6,6 +6,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import seedu.address.commons.exceptions.IllegalValueException;
+import seedu.address.logic.parser.TimetableParser;
 
 /**
  * Represents a person's timetable in the address book
@@ -66,4 +67,5 @@ public class Timetable {
     public int hashCode() {
         return value.hashCode();
     }
+
 }
