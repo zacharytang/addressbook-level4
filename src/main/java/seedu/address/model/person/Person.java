@@ -26,7 +26,7 @@ public class Person implements ReadOnlyPerson {
     private ObjectProperty<UniqueTagList> tags;
 
     /**
-     * Constructor includes a remark field.
+     * Every field must be present and not null.
      */
     public Person(Name name, Phone phone, Email email, Address address, Remark remark, Set<Tag> tags) {
         requireAllNonNull(name, phone, email, address, tags);
