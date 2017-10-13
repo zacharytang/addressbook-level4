@@ -37,7 +37,7 @@ public class DeleteCommandParser implements Parser<DeleteCommand> {
                 throw new ParseException(
                         String.format(MESSAGE_INVALID_COMMAND_FORMAT, DeleteCommand.MESSAGE_USAGE));
             }
-        } else if (preamble.matches("\\d+")) {
+        } else if (preamble.matches("-?\\d+")) {
             try {
                 Index index = ParserUtil.parseIndex(args);
                 return new DeleteCommand(index);
