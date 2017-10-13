@@ -14,11 +14,10 @@ import seedu.address.logic.parser.exceptions.ParseException;
  */
 public class Timetable {
 
+    public static final String MESSAGE_TIMETABLE_URL_CONSTRAINTS =
+            "Timetable URLs should be a valid shortened NUSMods URL";
     private static final String NUSMODS_SHORT = "modsn.us";
     private static final String URL_HOST_REGEX = "\\/\\/.*?\\/";
-
-    private static final String MESSAGE_INVALID_TIMETABLE_URL =
-            "Timetable URLs should be a valid shortened NUSMods URL";
 
     public final String value;
     private final HasLesson[][][] timetable;
@@ -34,13 +33,13 @@ public class Timetable {
         requireNonNull(url);
         String trimmedUrl = url.trim();
         if (!isValidUrl(trimmedUrl)) {
-            throw new IllegalValueException(MESSAGE_INVALID_TIMETABLE_URL);
+            throw new IllegalValueException(MESSAGE_TIMETABLE_URL_CONSTRAINTS);
         }
         this.value = trimmedUrl;
         try {
             this.timetable = TimetableParser.parseUrl(trimmedUrl);
         } catch (ParseException e) {
-            throw new IllegalValueException(MESSAGE_INVALID_TIMETABLE_URL);
+            throw new IllegalValueException(MESSAGE_TIMETABLE_URL_CONSTRAINTS);
         }
     }
 
