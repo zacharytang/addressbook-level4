@@ -67,7 +67,7 @@ public class StatusBarFooter extends UiPart<Region> {
     }
 
     private void setTotalPersons(int totalPersons) {
-        this.totalPersons.setText(totalPersons + " person(s) in address book");
+        Platform.runLater(() -> this.totalPersons.setText(totalPersons + " person(s) in address book"));
     }
 
     private void setSaveLocation(String location) {
