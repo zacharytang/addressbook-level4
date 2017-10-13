@@ -7,6 +7,7 @@ import java.util.regex.Pattern;
 
 import seedu.address.commons.exceptions.IllegalValueException;
 import seedu.address.logic.parser.TimetableParser;
+import seedu.address.logic.parser.exceptions.ParseException;
 
 /**
  * Represents a person's timetable in the address book
@@ -17,7 +18,7 @@ public class Timetable {
     private static final String URL_HOST_REGEX = "\\/\\/.*?\\/";
 
     private static final String MESSAGE_INVALID_TIMETABLE_URL =
-            "Timetable URLs should be a shortened NUSMods URL";
+            "Timetable URLs should be a valid shortened NUSMods URL";
 
     public final String value;
     private final HasLesson[][][] timetable;
@@ -36,7 +37,11 @@ public class Timetable {
             throw new IllegalValueException(MESSAGE_INVALID_TIMETABLE_URL);
         }
         this.value = trimmedUrl;
-        this.timetable = TimetableParser.parseUrl(trimmedUrl);
+        try {
+            this.timetable = TimetableParser.parseUrl(trimmedUrl);
+        } catch (ParseException e) {
+            throw new IllegalValueException(MESSAGE_INVALID_TIMETABLE_URL);
+        }
     }
 
     /**

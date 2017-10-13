@@ -91,7 +91,8 @@ public class TimetableParser {
                 String classNo = lessonsForModule.get(classType);
 
                 for (Lesson lesson : lessons) {
-                    if (convertSlotType(classType).equals(lesson.getLessonType()) && classNo.equals(lesson.getClassNo())) {
+                    if (convertSlotType(classType).equals(lesson.getLessonType())
+                            && classNo.equals(lesson.getClassNo())) {
                         addLessonToTimetableArray(lesson, timetable);
                     }
                 }
@@ -187,7 +188,7 @@ public class TimetableParser {
             fillTimetableArray(WEEK_EVEN, dayIndex, startTimeIndex, endTimeIndex, timetableArray);
         } else {
             fillTimetableArray((lesson.getWeekType().equals("Odd Week") ? WEEK_ODD : WEEK_EVEN),
-                    dayIndex, startTimeIndex, endTimeIndex, timetableArray );
+                    dayIndex, startTimeIndex, endTimeIndex, timetableArray);
         }
     }
 
@@ -223,28 +224,28 @@ public class TimetableParser {
     private static int convertDay(String day) {
         int index = -1;
         switch (day) {
-            case "Monday":
-                index = DAY_MONDAY;
-                break;
+        case "Monday":
+            index = DAY_MONDAY;
+            break;
 
-            case "Tuesday":
-                index = DAY_TUESDAY;
-                break;
+        case "Tuesday":
+            index = DAY_TUESDAY;
+            break;
 
-            case "Wednesday":
-                index = DAY_WEDNESDAY;
-                break;
+        case "Wednesday":
+            index = DAY_WEDNESDAY;
+            break;
 
-            case "Thursday":
-                index = DAY_THURSDAY;
-                break;
+        case "Thursday":
+            index = DAY_THURSDAY;
+            break;
 
-            case "Friday":
-                index = DAY_FRIDAY;
-                break;
+        case "Friday":
+            index = DAY_FRIDAY;
+            break;
 
-            default:
-                System.out.println("Unable to find day");
+        default:
+            System.out.println("Unable to find day");
         }
 
         return index;
@@ -255,32 +256,32 @@ public class TimetableParser {
      */
     private static String convertSlotType(String slotType) {
         switch (slotType) {
-            case "LEC":
-                slotType = "Lecture";
-                break;
+        case "LEC":
+            slotType = "Lecture";
+            break;
 
-            case "TUT":
-                slotType = "Tutorial";
-                break;
+        case "TUT":
+            slotType = "Tutorial";
+            break;
 
-            case "LAB":
-                slotType = "Laboratory";
-                break;
+        case "LAB":
+            slotType = "Laboratory";
+            break;
 
-            case "SEM":
-                slotType = "Seminar-Style Module Class";
-                break;
+        case "SEM":
+            slotType = "Seminar-Style Module Class";
+            break;
 
-            case "SEC":
-                slotType = "Sectional Teaching";
-                break;
+        case "SEC":
+            slotType = "Sectional Teaching";
+            break;
 
-            case "REC":
-                slotType = "Recitation";
-                break;
+        case "REC":
+            slotType = "Recitation";
+            break;
 
-            default:
-                System.out.println("Cannot find slot type");
+        default:
+            System.out.println("Cannot find slot type");
         }
 
         return slotType;
