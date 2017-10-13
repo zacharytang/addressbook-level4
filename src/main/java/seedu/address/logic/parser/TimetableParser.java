@@ -40,24 +40,6 @@ public class TimetableParser {
     private static final int ARRAY_NUM_TIMESLOTS = 32;
 
     /**
-     * Tester main method
-     */
-    public static void main(String[] args) {
-        String url = "http://modsn.us/0xECP";
-        try {
-            HasLesson[][][] timetable = parseUrl(url);
-            for (int i = 0; i < 5; i++) {
-                for (int j = 0; j < 32; j++) {
-                    System.out.print(((j / 2.0) + 8) + ": " + timetable[0][i][j] + " ");
-                }
-                System.out.println();
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    /**
      * Takes in a valid timetable URL and attempts to parse it
      */
     public static HasLesson[][][] parseUrl(String url) throws ParseException {
