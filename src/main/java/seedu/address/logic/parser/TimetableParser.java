@@ -1,7 +1,9 @@
 package seedu.address.logic.parser;
 
-import java.io.IOException;
+import static seedu.address.model.person.timetable.Timetable.WEEK_EVEN;
+import static seedu.address.model.person.timetable.Timetable.WEEK_ODD;
 
+import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.Proxy;
 import java.net.URL;
@@ -14,17 +16,13 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import seedu.address.logic.parser.exceptions.ParseException;
 import seedu.address.model.person.timetable.Lesson;
 import seedu.address.model.person.timetable.ModuleInfoFromUrl;
-import seedu.address.model.person.timetable.Timetable.HasLesson;
 import seedu.address.model.person.timetable.TimetableInfoFromUrl;
-
+import seedu.address.model.person.timetable.TimetableWeek;
 
 /**
  * Helper class to parse NUSMods urls.
  */
 public class TimetableParser {
-
-    private static final int WEEK_ODD = 0;
-    private static final int WEEK_EVEN = 1;
 
     private static final int DAY_MONDAY = 0;
     private static final int DAY_TUESDAY = 1;
@@ -32,17 +30,24 @@ public class TimetableParser {
     private static final int DAY_THURSDAY = 3;
     private static final int DAY_FRIDAY = 4;
 
-    private static final int ACAD_YEAR_INDEX = 4;
-    private static final int MODULE_INFO_INDEX = 5;
+    private static final int INDEX_ACAD_YEAR = 4;
+    private static final int INDEX_MODULE_INFO = 5;
+    private static final int INDEX_SEMESTER_INFO = 0;
+    private static final int INDEX_CLASS_INFO = 1;
 
     private static final int ARRAY_NUM_EVEN_ODD = 2;
-    private static final int ARRAY_NUM_DAYS = 5;
-    private static final int ARRAY_NUM_TIMESLOTS = 32;
+
+    private static final String SPLIT_BACKWARDS_SLASH = "/";
+    private static final String SPLIT_QUESTION_MARK = "\\?";
+    private static final String SPLIT_AMPERSAND = "&";
+    private static final String SPLIT_EQUALS_SIGN = "=";
+    private static final String SPLIT_LEFT_SQAURE_BRACKET = "%5B";
+    private static final String SPLIT_RIGHT_SQUARE_BRACKET = "%5D";
 
     /**
      * Takes in a valid timetable URL and attempts to parse it
      */
-    public static HasLesson[][][] parseUrl(String url) throws ParseException {
+    public static TimetableWeek[] parseUrl(String url) throws ParseException {
         try {
             String newUrl = expandUrl(url);
             return parseLongUrl(newUrl);
@@ -54,52 +59,25 @@ public class TimetableParser {
     /**
      * Parses a full expanded NUSMods url
      */
-    private static HasLesson[][][] parseLongUrl(String url) throws ParseException {
+    private static TimetableWeek[] parseLongUrl(String url) throws ParseException {
         String acadYear;
         String semester;
 
-        String[] splitUrl = url.split("/");
+        String[] splitUrl = url.split(SPLIT_BACKWARDS_SLASH);
 
-        acadYear = splitUrl[ACAD_YEAR_INDEX];
-        String toParse = splitUrl[MODULE_INFO_INDEX];
-        String[] modInfo = toParse.split("\\?");
-        semester = modInfo[0].substring(3);
+        acadYear = splitUrl[INDEX_ACAD_YEAR];
+        String toParse = splitUrl[INDEX_MODULE_INFO];
+        String[] modInfo = toParse.split(SPLIT_QUESTION_MARK);
 
-        TimetableInfoFromUrl timetableInfo = parseModuleInfo(modInfo[1]);
-
-        return constructTimetableArray(acadYear, semester, timetableInfo);
-    }
-
-    /**
-     * Constructs a timetable array using information parsed from a url
-     * @param acadYear academic year
-     * @param semester semester
-     * @param timetableInfo Class information parsed from url, stored by module code
-     */
-    private static HasLesson[][][] constructTimetableArray(String acadYear, String semester,
-                                                         TimetableInfoFromUrl timetableInfo) throws ParseException {
-        HasLesson[][][] timetable = new HasLesson[ARRAY_NUM_EVEN_ODD][ARRAY_NUM_DAYS][ARRAY_NUM_TIMESLOTS];
-        initializeTimetableArray(timetable);
-
-        ArrayList<ModuleInfoFromUrl> lessonInfoByModules = timetableInfo.getModuleInfoList();
-
-        for (ModuleInfoFromUrl moduleInfoFromTimetable : lessonInfoByModules) {
-            ArrayList<Lesson> lessons = getLessonInfoFromApi(acadYear, semester, moduleInfoFromTimetable.getModCode());
-            HashMap<String, String> lessonsForModule = moduleInfoFromTimetable.getLessonInfo();
-
-            for (String classType : lessonsForModule.keySet()) {
-                String classNo = lessonsForModule.get(classType);
-
-                for (Lesson lesson : lessons) {
-                    if (convertSlotType(classType).equals(lesson.getLessonType())
-                            && classNo.equals(lesson.getClassNo())) {
-                        addLessonToTimetableArray(lesson, timetable);
-                    }
-                }
-            }
+        if (modInfo.length != 2) {
+            throw new ParseException("Malformed URL!");
         }
 
-        return timetable;
+        semester = modInfo[INDEX_SEMESTER_INFO].substring(3);
+
+        TimetableInfoFromUrl timetableInfo = parseModuleInfo(modInfo[INDEX_CLASS_INFO]);
+
+        return constructTimetable(acadYear, semester, timetableInfo);
     }
 
     /**
@@ -138,12 +116,13 @@ public class TimetableParser {
      */
     private static TimetableInfoFromUrl parseModuleInfo(String modInfoFromString) {
         TimetableInfoFromUrl modules = new TimetableInfoFromUrl();
-        String[] classes = modInfoFromString.split("&");
+        String[] classes = modInfoFromString.split(SPLIT_AMPERSAND);
 
+        // Split a string of format "MODULE_CODE[CLASS_TYPE]=CLASS_NO"
         for (String classInfo : classes) {
-            String moduleCode = classInfo.split("%5B")[0];
-            String classType = classInfo.split("%5B")[1].split("%5D")[0];
-            String classNo = classInfo.split("=")[1];
+            String moduleCode = classInfo.split(SPLIT_LEFT_SQAURE_BRACKET)[0];
+            String classType = classInfo.split(SPLIT_LEFT_SQAURE_BRACKET)[1].split(SPLIT_RIGHT_SQUARE_BRACKET)[0];
+            String classNo = classInfo.split(SPLIT_EQUALS_SIGN)[1];
 
             ModuleInfoFromUrl moduleInfo = modules.getModuleInfo(moduleCode);
             moduleInfo.addLesson(classType, classNo);
@@ -176,42 +155,57 @@ public class TimetableParser {
     }
 
     /**
-     * Adds a lesson to the timetable array provided
+     * Constructs a timetable array using information parsed from a url
+     * @param acadYear academic year
+     * @param semester semester
+     * @param timetableInfo Class information parsed from url, stored by module code
      */
-    private static void addLessonToTimetableArray(Lesson lesson, HasLesson[][][] timetableArray) {
-        int startTimeIndex = convertStartEndTime(lesson.getStartTime());
-        int endTimeIndex = convertStartEndTime(lesson.getEndTime());
-        int dayIndex = convertDay(lesson.getDay());
+    private static TimetableWeek[] constructTimetable(String acadYear, String semester,
+                                                      TimetableInfoFromUrl timetableInfo) throws ParseException {
+        TimetableWeek[] timetable = new TimetableWeek[ARRAY_NUM_EVEN_ODD];
+        initializeTimetable(timetable);
 
-        if (lesson.getWeekType().equals("Every Week")) {
-            fillTimetableArray(WEEK_ODD, dayIndex, startTimeIndex, endTimeIndex, timetableArray);
-            fillTimetableArray(WEEK_EVEN, dayIndex, startTimeIndex, endTimeIndex, timetableArray);
-        } else {
-            fillTimetableArray((lesson.getWeekType().equals("Odd Week") ? WEEK_ODD : WEEK_EVEN),
-                    dayIndex, startTimeIndex, endTimeIndex, timetableArray);
+        ArrayList<ModuleInfoFromUrl> lessonInfoByModules = timetableInfo.getModuleInfoList();
+
+        for (ModuleInfoFromUrl moduleInfoFromTimetable : lessonInfoByModules) {
+            ArrayList<Lesson> lessons = getLessonInfoFromApi(acadYear, semester, moduleInfoFromTimetable.getModCode());
+            HashMap<String, String> lessonsForModule = moduleInfoFromTimetable.getLessonInfo();
+
+            for (String classType : lessonsForModule.keySet()) {
+                String classNo = lessonsForModule.get(classType);
+
+                for (Lesson lesson : lessons) {
+                    if (convertSlotType(classType).equals(lesson.getLessonType())
+                            && classNo.equals(lesson.getClassNo())) {
+                        addLessonToTimetableArray(lesson, timetable);
+                    }
+                }
+            }
         }
+
+        return timetable;
     }
 
     /**
-     * Fills the timetable array using the indexes specified
+     * Adds a lesson to the timetable array provided
      */
-    private static void fillTimetableArray(int weekIndex, int dayIndex, int startTimeIndex,
-                                           int endTimeIndex, HasLesson[][][] timetableArray) {
-        for (int i = startTimeIndex; i < endTimeIndex; i++) {
-            timetableArray[weekIndex][dayIndex][i] = HasLesson.hasLesson;
+    private static void addLessonToTimetableArray(Lesson lesson, TimetableWeek[] timetable) {
+
+        if (lesson.getWeekType().equals("Every Week")) {
+            timetable[WEEK_ODD].updateSlotWithLesson(lesson.getDay(), lesson.getStartTime(), lesson.getEndTime());
+            timetable[WEEK_EVEN].updateSlotWithLesson(lesson.getDay(), lesson.getStartTime(), lesson.getEndTime());
+        } else {
+            timetable[lesson.getWeekType().equals("Odd Week") ? WEEK_ODD : WEEK_EVEN]
+                    .updateSlotWithLesson(lesson.getDay(), lesson.getStartTime(), lesson.getEndTime());
         }
     }
 
     /**
      * Initialises the timetable array to be an empty timetable without lessons
      */
-    private static void initializeTimetableArray(HasLesson[][][] timetableArray) {
+    private static void initializeTimetable(TimetableWeek[] timetableArray) {
         for (int i = 0; i < ARRAY_NUM_EVEN_ODD; i++) {
-            for (int j = 0; j < ARRAY_NUM_DAYS; j++) {
-                for (int k = 0; k < ARRAY_NUM_TIMESLOTS; k++) {
-                    timetableArray[i][j][k] = HasLesson.noLesson;
-                }
-            }
+            timetableArray[i] = new TimetableWeek();
         }
     }
 
@@ -221,7 +215,7 @@ public class TimetableParser {
      * Converts string representing day of class to integer representation
      * Returns -1 if day cannot be found;
      */
-    private static int convertDay(String day) {
+    public static int convertDay(String day) {
         int index = -1;
         switch (day) {
         case "Monday":
@@ -249,6 +243,13 @@ public class TimetableParser {
         }
 
         return index;
+    }
+
+    /**
+     * Takes in String representing start/end timing of lessons, and returns respective index to be used for array
+     */
+    public static int convertStartEndTime(String timing) {
+        return (int) Math.ceil(((Integer.parseInt(timing) - 800) * 2) / 100.0);
     }
 
     /**
@@ -285,12 +286,5 @@ public class TimetableParser {
         }
 
         return slotType;
-    }
-
-    /**
-     * Takes in String representing start/end timing of lessons, and returns respective index to be used for array
-     */
-    private static int convertStartEndTime(String timing) {
-        return (int) Math.ceil(((Integer.parseInt(timing) - 800) * 2) / 100.0);
     }
 }

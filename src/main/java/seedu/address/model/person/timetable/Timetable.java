@@ -14,20 +14,18 @@ import seedu.address.logic.parser.exceptions.ParseException;
  */
 public class Timetable {
 
+    public static final int WEEK_ODD = 0;
+    public static final int WEEK_EVEN = 1;
+
     public static final String MESSAGE_TIMETABLE_URL_CONSTRAINTS =
             "Timetable URLs should be a valid shortened NUSMods URL";
+
     private static final String NUSMODS_SHORT = "modsn.us";
     private static final String URL_HOST_REGEX = "\\/\\/.*?\\/";
 
-    public final String value;
-    private final HasLesson[][][] timetable;
 
-    /**
-     * Represents whether a lesson exists at that specific time slot
-     */
-    public enum HasLesson {
-        hasLesson, noLesson
-    }
+    public final String value;
+    private TimetableWeek[] timetable;
 
     public Timetable(String url) throws IllegalValueException {
         requireNonNull(url);
@@ -39,7 +37,7 @@ public class Timetable {
         try {
             this.timetable = TimetableParser.parseUrl(trimmedUrl);
         } catch (ParseException e) {
-            throw new IllegalValueException(MESSAGE_TIMETABLE_URL_CONSTRAINTS);
+            throw new IllegalValueException(e.getMessage());
         }
     }
 
