@@ -1,4 +1,4 @@
-package seedu.address.model.person;
+package seedu.address.model.person.timetable;
 
 import static java.util.Objects.requireNonNull;
 
@@ -10,18 +10,24 @@ import seedu.address.logic.parser.TimetableParser;
 
 /**
  * Represents a person's timetable in the address book
- * Guarantees: immutable
  */
 public class Timetable {
 
     private static final String NUSMODS_SHORT = "modsn.us";
-    private static final String NUSMODS_HOST = "nusmods.com";
     private static final String URL_HOST_REGEX = "\\/\\/.*?\\/";
 
     private static final String MESSAGE_INVALID_TIMETABLE_URL =
-            "Timetable URLs should be either a full NUSMods url or a shortened URL";
+            "Timetable URLs should be a shortened NUSMods URL";
 
     public final String value;
+    private final HasLesson[][][] timetable;
+
+    /**
+     * Represents whether a lesson exists at that specific time slot
+     */
+    public enum HasLesson {
+        hasLesson, noLesson
+    }
 
     public Timetable(String url) throws IllegalValueException {
         requireNonNull(url);
@@ -30,6 +36,7 @@ public class Timetable {
             throw new IllegalValueException(MESSAGE_INVALID_TIMETABLE_URL);
         }
         this.value = trimmedUrl;
+        this.timetable = TimetableParser.parseUrl(trimmedUrl);
     }
 
     /**
@@ -44,11 +51,7 @@ public class Timetable {
         String hostName = matcher.group()
                 .substring(2, matcher.group().length() - 1);
 
-        if (!(hostName.equals(NUSMODS_SHORT) || hostName.equals(NUSMODS_HOST))) {
-            return false;
-        }
-
-        return true;
+        return hostName.equals(NUSMODS_SHORT);
     }
 
     @Override

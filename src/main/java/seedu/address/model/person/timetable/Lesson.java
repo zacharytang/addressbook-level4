@@ -1,4 +1,4 @@
-package seedu.address.model.person;
+package seedu.address.model.person.timetable;
 
 /**
  * Represents a lesson that a module has
@@ -8,12 +8,12 @@ public class Lesson {
     private final String classNo;
     private final String lessonType;
     private final String weekType;
-    private final int day;
+    private final String day;
     private final String startTime;
     private final String endTime;
 
     public Lesson(String classNo, String lessonType, String weekType,
-                  int day, String startTime, String endTime) {
+                  String day, String startTime, String endTime) {
         this.classNo = classNo;
         this.lessonType = lessonType;
         this.weekType = weekType;
@@ -34,7 +34,7 @@ public class Lesson {
         return weekType;
     }
 
-    public int getDay() {
+    public String getDay() {
         return day;
     }
 
