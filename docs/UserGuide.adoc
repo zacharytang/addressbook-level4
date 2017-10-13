@@ -94,11 +94,11 @@ Examples:
 
 ==== Adding timetables
 
-If you want to save a person's timetable, add their NUSMods link when adding them to the address book.
+If you want to save a person's timetable, add their shortened NUSMods link when adding them to the address book.
 Their timetable will be saved and will be available to be viewed at any time
 
-[TIP]
-Address Book accepts both full and shortened NUSMods links!
+[IMPORTANT]
+Address Book only accepts shortened NUSMods links
 
 === Listing persons : `list`
 
