@@ -6,7 +6,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import seedu.address.commons.exceptions.IllegalValueException;
-import seedu.address.logic.parser.TimetableParser;
+import seedu.address.logic.parser.TimetableParserUtil;
 import seedu.address.logic.parser.exceptions.ParseException;
 
 /**
@@ -35,7 +35,7 @@ public class Timetable {
         }
         this.value = trimmedUrl;
         try {
-            this.timetable = TimetableParser.parseUrl(trimmedUrl);
+            this.timetable = TimetableParserUtil.parseUrl(trimmedUrl);
         } catch (ParseException e) {
             throw new IllegalValueException(e.getMessage());
         }
@@ -44,7 +44,7 @@ public class Timetable {
     /**
      * Returns if a url is a valid NUSMods url
      */
-    public static boolean isValidUrl(String test) throws IllegalValueException {
+    public static boolean isValidUrl(String test) {
         Matcher matcher = Pattern.compile(URL_HOST_REGEX).matcher(test);
         if (!matcher.find()) {
             return false;

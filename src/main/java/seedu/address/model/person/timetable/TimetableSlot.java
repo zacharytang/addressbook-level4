@@ -18,4 +18,11 @@ public class TimetableSlot {
     public boolean hasLesson() {
         return hasLesson;
     }
+
+    @Override
+    public boolean equals(Object other) {
+        return other == this // short circuit if same object
+                || (other instanceof TimetableSlot // instanceof handles nulls
+                && this.hasLesson == ((TimetableSlot) other).hasLesson());
+    }
 }

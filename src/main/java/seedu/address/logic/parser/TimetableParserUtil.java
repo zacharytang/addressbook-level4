@@ -1,7 +1,9 @@
 package seedu.address.logic.parser;
 
+import static seedu.address.model.person.timetable.Timetable.MESSAGE_TIMETABLE_URL_CONSTRAINTS;
 import static seedu.address.model.person.timetable.Timetable.WEEK_EVEN;
 import static seedu.address.model.person.timetable.Timetable.WEEK_ODD;
+import static seedu.address.model.person.timetable.Timetable.isValidUrl;
 
 import java.io.IOException;
 import java.net.HttpURLConnection;
@@ -20,9 +22,11 @@ import seedu.address.model.person.timetable.TimetableInfoFromUrl;
 import seedu.address.model.person.timetable.TimetableWeek;
 
 /**
- * Helper class to parse NUSMods urls.
+ * Helper class that contains utilities to parse NUSMods urls.
  */
-public class TimetableParser {
+public class TimetableParserUtil {
+
+    public static final String MESSAGE_INVALID_SHORT_URL = "Invalid shortened URL provided";
 
     private static final int DAY_MONDAY = 0;
     private static final int DAY_TUESDAY = 1;
@@ -48,6 +52,10 @@ public class TimetableParser {
      * Takes in a valid timetable URL and attempts to parse it
      */
     public static TimetableWeek[] parseUrl(String url) throws ParseException {
+        if (!isValidUrl(url)) {
+            throw new ParseException(MESSAGE_TIMETABLE_URL_CONSTRAINTS);
+        }
+
         try {
             String newUrl = expandUrl(url);
             return parseLongUrl(newUrl);
@@ -70,7 +78,9 @@ public class TimetableParser {
         String[] modInfo = toParse.split(SPLIT_QUESTION_MARK);
 
         if (modInfo.length != 2) {
-            throw new ParseException("Malformed URL!");
+            TimetableWeek[] emptyTimetable = new TimetableWeek[ARRAY_NUM_EVEN_ODD];
+            initializeEmptyTimetable(emptyTimetable);
+            return emptyTimetable;
         }
 
         semester = modInfo[INDEX_SEMESTER_INFO].substring(3);
@@ -78,36 +88,6 @@ public class TimetableParser {
         TimetableInfoFromUrl timetableInfo = parseModuleInfo(modInfo[INDEX_CLASS_INFO]);
 
         return constructTimetable(acadYear, semester, timetableInfo);
-    }
-
-    /**
-     * Uses NUSMods API to obtain all classes a module has, and returns it in
-     * an arraylist of classes. Each class is represented by a hash map, storing the information about the class
-     */
-    private static ArrayList<Lesson> getLessonInfoFromApi(String acadYear, String semester, String modCode)
-            throws ParseException {
-        String uri = "http://api.nusmods.com/" + acadYear + "/" + semester + "/modules/" + modCode + ".json";
-        ObjectMapper mapper = new ObjectMapper();
-
-        try {
-            URL url = new URL(uri);
-            Map<String, Object> mappedJson = mapper.readValue(url, HashMap.class);
-
-            ArrayList<Lesson> lessons = new ArrayList<>();
-            ArrayList<HashMap<String, String>> lessonInfo = (ArrayList<HashMap<String, String>>)
-                                                                mappedJson.get("Timetable");
-
-            for (HashMap<String, String> lesson : lessonInfo) {
-                Lesson lessonToAdd = new Lesson(lesson.get("ClassNo"), lesson.get("LessonType"),
-                                                lesson.get("WeekText"), lesson.get("DayText"),
-                                                lesson.get("StartTime"), lesson.get("EndTime"));
-                lessons.add(lessonToAdd);
-            }
-
-            return lessons;
-        } catch (Exception e) {
-            throw new ParseException("Cannot retrieve module information");
-        }
     }
 
     /**
@@ -133,6 +113,37 @@ public class TimetableParser {
     }
 
     /**
+     * Uses NUSMods API to obtain all classes a module has, and returns it in
+     * an arraylist of classes. Each class is represented by a hash map, storing the information about the class
+     */
+    private static ArrayList<Lesson> getLessonInfoFromApi(String acadYear, String semester, String modCode)
+            throws ParseException {
+        String uri = "http://api.nusmods.com/" + acadYear + "/" + semester + "/modules/" + modCode + ".json";
+        ObjectMapper mapper = new ObjectMapper();
+
+        try {
+            URL url = new URL(uri);
+            @SuppressWarnings("unchecked")
+            Map<String, Object> mappedJson = mapper.readValue(url, HashMap.class);
+            @SuppressWarnings("unchecked")
+            ArrayList<HashMap<String, String>> lessonInfo = (ArrayList<HashMap<String, String>>)
+                    mappedJson.get("Timetable");
+
+            ArrayList<Lesson> lessons = new ArrayList<>();
+            for (HashMap<String, String> lesson : lessonInfo) {
+                Lesson lessonToAdd = new Lesson(lesson.get("ClassNo"), lesson.get("LessonType"),
+                        lesson.get("WeekText"), lesson.get("DayText"),
+                        lesson.get("StartTime"), lesson.get("EndTime"));
+                lessons.add(lessonToAdd);
+            }
+
+            return lessons;
+        } catch (Exception e) {
+            throw new ParseException("Cannot retrieve module information");
+        }
+    }
+
+    /**
      * Takes a shortened URL and returns the full length URL as a string
      */
     private static String expandUrl(String shortenedUrl) throws IOException, ParseException {
@@ -148,7 +159,7 @@ public class TimetableParser {
         httpUrlConnection.disconnect();
 
         if (expandedUrl.equals("http://modsn.us")) {
-            throw new ParseException("Invalid shortened URL provided");
+            throw new ParseException(MESSAGE_INVALID_SHORT_URL);
         }
 
         return expandedUrl;
@@ -163,7 +174,7 @@ public class TimetableParser {
     private static TimetableWeek[] constructTimetable(String acadYear, String semester,
                                                       TimetableInfoFromUrl timetableInfo) throws ParseException {
         TimetableWeek[] timetable = new TimetableWeek[ARRAY_NUM_EVEN_ODD];
-        initializeTimetable(timetable);
+        initializeEmptyTimetable(timetable);
 
         ArrayList<ModuleInfoFromUrl> lessonInfoByModules = timetableInfo.getModuleInfoList();
 
@@ -175,7 +186,7 @@ public class TimetableParser {
                 String classNo = lessonsForModule.get(classType);
 
                 for (Lesson lesson : lessons) {
-                    if (convertSlotType(classType).equals(lesson.getLessonType())
+                    if (parseSlotType(classType).equals(lesson.getLessonType())
                             && classNo.equals(lesson.getClassNo())) {
                         addLessonToTimetableArray(lesson, timetable);
                     }
@@ -203,7 +214,7 @@ public class TimetableParser {
     /**
      * Initialises the timetable array to be an empty timetable without lessons
      */
-    private static void initializeTimetable(TimetableWeek[] timetableArray) {
+    private static void initializeEmptyTimetable(TimetableWeek[] timetableArray) {
         for (int i = 0; i < ARRAY_NUM_EVEN_ODD; i++) {
             timetableArray[i] = new TimetableWeek();
         }
@@ -215,7 +226,7 @@ public class TimetableParser {
      * Converts string representing day of class to integer representation
      * Returns -1 if day cannot be found;
      */
-    public static int convertDay(String day) {
+    public static int parseDay(String day) {
         int index = -1;
         switch (day) {
         case "Monday":
@@ -248,14 +259,14 @@ public class TimetableParser {
     /**
      * Takes in String representing start/end timing of lessons, and returns respective index to be used for array
      */
-    public static int convertStartEndTime(String timing) {
+    public static int parseStartEndTime(String timing) {
         return (int) Math.ceil(((Integer.parseInt(timing) - 800) * 2) / 100.0);
     }
 
     /**
      * Converts shortened slot type in URL to full slot-type string used in API
      */
-    private static String convertSlotType(String slotType) {
+    public static String parseSlotType(String slotType) {
         switch (slotType) {
         case "LEC":
             slotType = "Lecture";

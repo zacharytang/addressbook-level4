@@ -1,6 +1,6 @@
 package seedu.address.model.person.timetable;
 
-import seedu.address.logic.parser.TimetableParser;
+import seedu.address.logic.parser.TimetableParserUtil;
 
 /**
  * Represents a full timetable for a week
@@ -19,10 +19,33 @@ public class TimetableWeek {
     }
 
     public boolean doesSlotHaveLesson(String day, String timing) {
-        return days[TimetableParser.convertDay(day)].doesSlotHaveLesson(timing);
+        return days[TimetableParserUtil.parseDay(day)].doesSlotHaveLesson(timing);
     }
 
     public void updateSlotWithLesson(String day, String startTime, String endTime) {
-        days[TimetableParser.convertDay(day)].updateSlotsWithLesson(startTime, endTime);
+        days[TimetableParserUtil.parseDay(day)].updateSlotsWithLesson(startTime, endTime);
+    }
+
+    private TimetableDay getDay(int dayIndex) {
+        return days[dayIndex];
+    }
+
+    @Override
+    public boolean equals(Object other) {
+        if (other == this) {
+            return true;
+        }
+
+        if (!(other instanceof TimetableWeek)) {
+            return false;
+        }
+
+        for (int i = 0; i < ARRAY_NUM_DAYS; i++) {
+            if (!this.days[i].equals(((TimetableWeek) other).getDay(i))) {
+                return false;
+            }
+        }
+
+        return true;
     }
 }
