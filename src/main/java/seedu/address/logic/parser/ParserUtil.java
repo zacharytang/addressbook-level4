@@ -91,7 +91,6 @@ public class ParserUtil {
         }
         return tagSet;
     }
-
     /**
      * Parses a {@code Optional<String> url} into an {@code Optional<Timetable>} if {@code url} is present.
      */

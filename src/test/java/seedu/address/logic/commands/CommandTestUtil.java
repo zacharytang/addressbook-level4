@@ -18,6 +18,7 @@ import seedu.address.model.AddressBook;
 import seedu.address.model.Model;
 import seedu.address.model.person.NameContainsKeywordsPredicate;
 import seedu.address.model.person.ReadOnlyPerson;
+import seedu.address.model.person.Remark;
 import seedu.address.model.person.exceptions.PersonNotFoundException;
 import seedu.address.testutil.EditPersonDescriptorBuilder;
 
@@ -38,6 +39,8 @@ public class CommandTestUtil {
     public static final String VALID_TIMETABLE_BOB = "http://modsn.us/0ECRP";
     public static final String VALID_TAG_HUSBAND = "husband";
     public static final String VALID_TAG_FRIEND = "friend";
+    public static final String VALID_REMARK_COFFEE = "like to drink coffee";
+    public static final String VALID_REMARK_CAP = "CAP 5.0";
 
     public static final String NAME_DESC_AMY = " " + PREFIX_NAME + VALID_NAME_AMY;
     public static final String NAME_DESC_BOB = " " + PREFIX_NAME + VALID_NAME_BOB;
@@ -59,8 +62,12 @@ public class CommandTestUtil {
     public static final String INVALID_TIMETABLE_DESC = " " + PREFIX_TIMETABLE + "https://www.google.com";
     public static final String INVALID_TAG_DESC = " " + PREFIX_TAG + "hubby*"; // '*' not allowed in tags
 
+    public static final Remark REMARK_COFFEE = new Remark(VALID_REMARK_COFFEE);
+    public static final Remark REMARK_CAP = new Remark(VALID_REMARK_CAP);
+
     public static final EditCommand.EditPersonDescriptor DESC_AMY;
     public static final EditCommand.EditPersonDescriptor DESC_BOB;
+
 
     static {
         DESC_AMY = new EditPersonDescriptorBuilder().withName(VALID_NAME_AMY)
