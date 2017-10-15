@@ -1,6 +1,8 @@
 package seedu.address.model.person.timetable;
 
-import seedu.address.commons.util.TimetableParserUtil;
+import static seedu.address.commons.util.TimetableParserUtil.parseStartEndTime;
+
+import seedu.address.commons.exceptions.IllegalValueException;
 
 /**
  * Represents a single day in a timetable
@@ -21,17 +23,17 @@ public class TimetableDay {
     /**
      * Sets all slots between two timings to have lessons
      */
-    public void updateSlotsWithLesson(String startTime, String endTime) {
-        int startTimeIndex = TimetableParserUtil.parseStartEndTime(startTime);
-        int endTimeIndex = TimetableParserUtil.parseStartEndTime(endTime);
+    public void updateSlotsWithLesson(String startTime, String endTime) throws IllegalValueException {
+        int startTimeIndex = parseStartEndTime(startTime);
+        int endTimeIndex = parseStartEndTime(endTime);
 
         for (int i = startTimeIndex; i < endTimeIndex; i++) {
             slots[i].setLesson();
         }
     }
 
-    public boolean doesSlotHaveLesson(String timing) {
-        return slots[TimetableParserUtil.parseStartEndTime(timing)].hasLesson();
+    public boolean doesSlotHaveLesson(String timing) throws IllegalValueException {
+        return slots[parseStartEndTime(timing)].hasLesson();
     }
 
     private TimetableSlot getTimetableSlot(int index) {

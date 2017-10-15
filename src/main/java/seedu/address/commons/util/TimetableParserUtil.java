@@ -1,6 +1,12 @@
 package seedu.address.commons.util;
 
+import static seedu.address.model.person.timetable.Timetable.DAY_FRIDAY;
+import static seedu.address.model.person.timetable.Timetable.DAY_MONDAY;
+import static seedu.address.model.person.timetable.Timetable.DAY_THURSDAY;
+import static seedu.address.model.person.timetable.Timetable.DAY_TUESDAY;
+import static seedu.address.model.person.timetable.Timetable.DAY_WEDNESDAY;
 import static seedu.address.model.person.timetable.Timetable.MESSAGE_TIMETABLE_URL_CONSTRAINTS;
+import static seedu.address.model.person.timetable.Timetable.WEEK_BOTH;
 import static seedu.address.model.person.timetable.Timetable.WEEK_EVEN;
 import static seedu.address.model.person.timetable.Timetable.WEEK_ODD;
 import static seedu.address.model.person.timetable.Timetable.isValidUrl;
@@ -15,31 +21,28 @@ import java.util.Map;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import seedu.address.commons.exceptions.IllegalValueException;
 import seedu.address.logic.parser.exceptions.ParseException;
 import seedu.address.model.person.timetable.Lesson;
 import seedu.address.model.person.timetable.ModuleInfoFromUrl;
+import seedu.address.model.person.timetable.Timetable;
+import seedu.address.model.person.timetable.TimetableInfo;
 import seedu.address.model.person.timetable.TimetableInfoFromUrl;
-import seedu.address.model.person.timetable.TimetableWeek;
 
 /**
  * Helper class that contains utilities to parse NUSMods urls.
  */
 public class TimetableParserUtil {
 
-    public static final String MESSAGE_INVALID_SHORT_URL = "Invalid shortened URL provided";
-
-    private static final int DAY_MONDAY = 0;
-    private static final int DAY_TUESDAY = 1;
-    private static final int DAY_WEDNESDAY = 2;
-    private static final int DAY_THURSDAY = 3;
-    private static final int DAY_FRIDAY = 4;
+    public static final String MESSAGE_INVALID_CLASS_TYPE = "Invalid class type provided!";
+    public static final String MESSAGE_INVALID_WEEK_TYPE = "Invald week type!";
+    public static final String MESSAGE_INVALID_TIME = "Invalid timing provided!";
+    public static final String MESSAGE_INVALID_DAY = "Invalid day provided";
 
     private static final int INDEX_ACAD_YEAR = 4;
     private static final int INDEX_MODULE_INFO = 5;
     private static final int INDEX_SEMESTER_INFO = 0;
     private static final int INDEX_CLASS_INFO = 1;
-
-    private static final int ARRAY_NUM_EVEN_ODD = 2;
 
     private static final String SPLIT_BACKWARDS_SLASH = "/";
     private static final String SPLIT_QUESTION_MARK = "\\?";
@@ -51,9 +54,9 @@ public class TimetableParserUtil {
     /**
      * Takes in a valid timetable URL and attempts to parse it
      */
-    public static TimetableWeek[] parseUrl(String url) throws ParseException {
+    public static TimetableInfo parseUrl(String url) throws IllegalValueException {
         if (!isValidUrl(url)) {
-            throw new ParseException(MESSAGE_TIMETABLE_URL_CONSTRAINTS);
+            throw new IllegalValueException(MESSAGE_TIMETABLE_URL_CONSTRAINTS);
         }
 
         try {
@@ -67,7 +70,7 @@ public class TimetableParserUtil {
     /**
      * Parses a full expanded NUSMods url
      */
-    private static TimetableWeek[] parseLongUrl(String url) throws ParseException {
+    private static TimetableInfo parseLongUrl(String url) throws IllegalValueException {
         String acadYear;
         String semester;
 
@@ -78,9 +81,7 @@ public class TimetableParserUtil {
         String[] modInfo = toParse.split(SPLIT_QUESTION_MARK);
 
         if (modInfo.length != 2) {
-            TimetableWeek[] emptyTimetable = new TimetableWeek[ARRAY_NUM_EVEN_ODD];
-            initializeEmptyTimetable(emptyTimetable);
-            return emptyTimetable;
+            return new TimetableInfo();
         }
 
         semester = modInfo[INDEX_SEMESTER_INFO].substring(3);
@@ -159,7 +160,7 @@ public class TimetableParserUtil {
         httpUrlConnection.disconnect();
 
         if (expandedUrl.equals("http://modsn.us")) {
-            throw new ParseException(MESSAGE_INVALID_SHORT_URL);
+            throw new ParseException(Timetable.MESSAGE_INVALID_SHORT_URL);
         }
 
         return expandedUrl;
@@ -171,10 +172,9 @@ public class TimetableParserUtil {
      * @param semester semester
      * @param timetableInfo Class information parsed from url, stored by module code
      */
-    private static TimetableWeek[] constructTimetable(String acadYear, String semester,
-                                                      TimetableInfoFromUrl timetableInfo) throws ParseException {
-        TimetableWeek[] timetable = new TimetableWeek[ARRAY_NUM_EVEN_ODD];
-        initializeEmptyTimetable(timetable);
+    private static TimetableInfo constructTimetable(String acadYear, String semester,
+                                                    TimetableInfoFromUrl timetableInfo) throws IllegalValueException {
+        TimetableInfo timetable = new TimetableInfo();
 
         ArrayList<ModuleInfoFromUrl> lessonInfoByModules = timetableInfo.getModuleInfoList();
 
@@ -188,7 +188,8 @@ public class TimetableParserUtil {
                 for (Lesson lesson : lessons) {
                     if (parseSlotType(classType).equals(lesson.getLessonType())
                             && classNo.equals(lesson.getClassNo())) {
-                        addLessonToTimetableArray(lesson, timetable);
+                        timetable.updateSlotsWithLesson(lesson.getWeekType(), lesson.getDay(), lesson.getStartTime(),
+                                lesson.getEndTime());
                     }
                 }
             }
@@ -197,112 +198,86 @@ public class TimetableParserUtil {
         return timetable;
     }
 
-    /**
-     * Adds a lesson to the timetable array provided
-     */
-    private static void addLessonToTimetableArray(Lesson lesson, TimetableWeek[] timetable) {
-
-        if (lesson.getWeekType().equals("Every Week")) {
-            timetable[WEEK_ODD].updateSlotsWithLesson(lesson.getDay(), lesson.getStartTime(), lesson.getEndTime());
-            timetable[WEEK_EVEN].updateSlotsWithLesson(lesson.getDay(), lesson.getStartTime(), lesson.getEndTime());
-        } else {
-            timetable[parseWeekType(lesson.getWeekType())]
-                    .updateSlotsWithLesson(lesson.getDay(), lesson.getStartTime(), lesson.getEndTime());
-        }
-    }
-
-    /**
-     * Initialises the timetable array to be an empty timetable without lessons
-     */
-    private static void initializeEmptyTimetable(TimetableWeek[] timetableArray) {
-        for (int i = 0; i < ARRAY_NUM_EVEN_ODD; i++) {
-            timetableArray[i] = new TimetableWeek();
-        }
-    }
-
     /* ------------------------------------------- Helper methods ----------------------------------------------------*/
 
     /**
      * Converts string representing day of class to integer representation
      * Returns -1 if day cannot be found;
      */
-    public static int parseDay(String day) {
-        int index = -1;
+    public static int parseDay(String day) throws IllegalValueException {
         switch (day) {
         case "Monday":
-            index = DAY_MONDAY;
-            break;
+            return DAY_MONDAY;
 
         case "Tuesday":
-            index = DAY_TUESDAY;
-            break;
+            return DAY_TUESDAY;
 
         case "Wednesday":
-            index = DAY_WEDNESDAY;
-            break;
+            return DAY_WEDNESDAY;
 
         case "Thursday":
-            index = DAY_THURSDAY;
-            break;
+            return DAY_THURSDAY;
 
         case "Friday":
-            index = DAY_FRIDAY;
-            break;
+            return DAY_FRIDAY;
 
         default:
-            System.out.println("Unable to find day");
+            throw new IllegalValueException(MESSAGE_INVALID_DAY);
         }
-
-        return index;
     }
 
     /**
      * Takes in String representing start/end timing of lessons, and returns respective index to be used for array
      */
-    public static int parseStartEndTime(String timing) {
-        return (int) Math.ceil(((Integer.parseInt(timing) - 800) * 2) / 100.0);
+    public static int parseStartEndTime(String timing) throws IllegalValueException {
+        try {
+            return (int) Math.ceil(((Integer.parseInt(timing) - 800) * 2) / 100.0);
+        } catch (NumberFormatException e) {
+            throw new IllegalValueException(MESSAGE_INVALID_TIME);
+        }
     }
 
     /**
      * Converts shortened slot type in URL to full slot-type string used in API
      */
-    public static String parseSlotType(String slotType) {
+    public static String parseSlotType(String slotType) throws IllegalValueException {
         switch (slotType) {
         case "LEC":
-            slotType = "Lecture";
-            break;
+            return "Lecture";
 
         case "TUT":
-            slotType = "Tutorial";
-            break;
+            return "Tutorial";
 
         case "LAB":
-            slotType = "Laboratory";
-            break;
+            return "Laboratory";
 
         case "SEM":
-            slotType = "Seminar-Style Module Class";
-            break;
+            return "Seminar-Style Module Class";
 
         case "SEC":
-            slotType = "Sectional Teaching";
-            break;
+            return "Sectional Teaching";
 
         case "REC":
-            slotType = "Recitation";
-            break;
+            return "Recitation";
 
         default:
-            System.out.println("Cannot find slot type");
+            throw new IllegalValueException(MESSAGE_INVALID_CLASS_TYPE);
         }
-
-        return slotType;
     }
 
     /**
      * Converts week type from string used in api to integer index for use in URL
      */
-    public static int parseWeekType(String weekType) {
-        return weekType.equals("Odd Week") ? WEEK_ODD : WEEK_EVEN;
+    public static int parseWeekType(String weekType) throws IllegalValueException {
+        switch (weekType) {
+        case "Odd Week":
+            return WEEK_ODD;
+        case "Even Week":
+            return WEEK_EVEN;
+        case "Every Week":
+            return WEEK_BOTH;
+        default:
+            throw new IllegalValueException(MESSAGE_INVALID_WEEK_TYPE);
+        }
     }
 }

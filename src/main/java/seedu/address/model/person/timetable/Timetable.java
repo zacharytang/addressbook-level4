@@ -1,13 +1,12 @@
 package seedu.address.model.person.timetable;
 
 import static java.util.Objects.requireNonNull;
+import static seedu.address.commons.util.TimetableParserUtil.parseUrl;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import seedu.address.commons.exceptions.IllegalValueException;
-import seedu.address.commons.util.TimetableParserUtil;
-import seedu.address.logic.parser.exceptions.ParseException;
 
 /**
  * Represents a person's timetable in the address book
@@ -17,16 +16,24 @@ public class Timetable {
 
     public static final int WEEK_ODD = 0;
     public static final int WEEK_EVEN = 1;
+    public static final int WEEK_BOTH = -1;
+
+    public static final int DAY_MONDAY = 0;
+    public static final int DAY_TUESDAY = 1;
+    public static final int DAY_WEDNESDAY = 2;
+    public static final int DAY_THURSDAY = 3;
+    public static final int DAY_FRIDAY = 4;
 
     public static final String MESSAGE_TIMETABLE_URL_CONSTRAINTS =
             "Timetable URLs should be a valid shortened NUSMods URL";
+    public static final String MESSAGE_INVALID_SHORT_URL = "Invalid shortened URL provided";
 
     private static final String NUSMODS_SHORT = "modsn.us";
     private static final String URL_HOST_REGEX = "\\/\\/.*?\\/";
 
 
     public final String value;
-    private final TimetableWeek[] timetable;
+    private final TimetableInfo timetable;
 
     public Timetable(String url) throws IllegalValueException {
         requireNonNull(url);
@@ -35,11 +42,7 @@ public class Timetable {
             throw new IllegalValueException(MESSAGE_TIMETABLE_URL_CONSTRAINTS);
         }
         this.value = trimmedUrl;
-        try {
-            this.timetable = TimetableParserUtil.parseUrl(trimmedUrl);
-        } catch (ParseException e) {
-            throw new IllegalValueException(e.getMessage());
-        }
+        this.timetable = parseUrl(trimmedUrl);
     }
 
     /**
@@ -60,9 +63,8 @@ public class Timetable {
     /**
      * Checks if a timeslot specified has a lesson
      */
-    public boolean doesSlotHaveLesson(String weekType, String day, String timing) {
-        int week = TimetableParserUtil.parseWeekType(weekType);
-        return timetable[week].doesSlotHaveLesson(day, timing);
+    public boolean doesSlotHaveLesson(String weekType, String day, String timing) throws IllegalValueException {
+        return timetable.doesSlotHaveLesson(weekType, day, timing);
     }
 
     @Override

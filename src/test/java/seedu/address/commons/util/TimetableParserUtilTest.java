@@ -1,8 +1,9 @@
 package seedu.address.commons.util;
 
-import static org.junit.Assert.assertArrayEquals;
-
-import static seedu.address.commons.util.TimetableParserUtil.MESSAGE_INVALID_SHORT_URL;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
+import static seedu.address.commons.util.TimetableParserUtil.parseUrl;
+import static seedu.address.model.person.timetable.Timetable.MESSAGE_INVALID_SHORT_URL;
 import static seedu.address.model.person.timetable.Timetable.MESSAGE_TIMETABLE_URL_CONSTRAINTS;
 
 import org.junit.Rule;
@@ -11,7 +12,7 @@ import org.junit.rules.ExpectedException;
 
 import seedu.address.commons.exceptions.IllegalValueException;
 import seedu.address.logic.parser.exceptions.ParseException;
-import seedu.address.model.person.timetable.TimetableWeek;
+import seedu.address.model.person.timetable.TimetableInfo;
 
 public class TimetableParserUtilTest {
 
@@ -20,6 +21,7 @@ public class TimetableParserUtilTest {
     private static final String INVALID_SHORT_URL = "http://modsn.us/abc";
 
     private static final String VALID_URL_EMPTY = "http://modsn.us/5tN3z";
+    private static final String VALID_URL_ALL_TYPES = "http://modsn.us/BkDgl";
 
     @Rule
     public final ExpectedException thrown = ExpectedException.none();
@@ -28,36 +30,38 @@ public class TimetableParserUtilTest {
     public void parseUrl_invalidUrl_throwsIllegalValueException() throws Exception {
         thrown.expect(IllegalValueException.class);
         thrown.expectMessage(MESSAGE_TIMETABLE_URL_CONSTRAINTS);
-        TimetableParserUtil.parseUrl(INVALID_URL);
+        parseUrl(INVALID_URL);
     }
 
     @Test
     public void parseUrl_notUrl_throwsIllegalValueException() throws Exception {
         thrown.expect(IllegalValueException.class);
         thrown.expectMessage(MESSAGE_TIMETABLE_URL_CONSTRAINTS);
-        TimetableParserUtil.parseUrl(INVALID_URL_NOT_URL);
+        parseUrl(INVALID_URL_NOT_URL);
     }
 
     @Test
     public void parseUrl_invalidShortUrl_throwsParseException() throws Exception {
         thrown.expect(ParseException.class);
         thrown.expectMessage(MESSAGE_INVALID_SHORT_URL);
-        TimetableParserUtil.parseUrl(INVALID_SHORT_URL);
+        parseUrl(INVALID_SHORT_URL);
     }
 
     @Test
     public void parseUrl_null_throwsNullPointerException() throws Exception {
         thrown.expect(NullPointerException.class);
-        TimetableParserUtil.parseUrl(null);
+        parseUrl(null);
     }
 
     @Test
     public void parseUrl_validUrlEmptyTimetable_success() throws Exception {
-        TimetableWeek[] emptyTimetable = {
-            new TimetableWeek(),
-            new TimetableWeek()
-        };
+        TimetableInfo emptyTimetable = new TimetableInfo();
+        assertEquals(emptyTimetable, parseUrl(VALID_URL_EMPTY));
+    }
 
-        assertArrayEquals(TimetableParserUtil.parseUrl(VALID_URL_EMPTY), emptyTimetable);
+    @Test
+    public void parseUrl_validUrl_success() throws Exception {
+        TimetableInfo emptyTimetable = new TimetableInfo();
+        assertNotEquals(emptyTimetable, parseUrl(VALID_URL_ALL_TYPES));
     }
 }

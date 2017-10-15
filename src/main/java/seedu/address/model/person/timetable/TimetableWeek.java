@@ -1,6 +1,8 @@
 package seedu.address.model.person.timetable;
 
-import seedu.address.commons.util.TimetableParserUtil;
+import static seedu.address.commons.util.TimetableParserUtil.parseDay;
+
+import seedu.address.commons.exceptions.IllegalValueException;
 
 /**
  * Represents a full timetable for a week
@@ -18,12 +20,12 @@ public class TimetableWeek {
         }
     }
 
-    public boolean doesSlotHaveLesson(String day, String timing) {
-        return days[TimetableParserUtil.parseDay(day)].doesSlotHaveLesson(timing);
+    public boolean doesSlotHaveLesson(String day, String timing) throws IllegalValueException {
+        return days[parseDay(day)].doesSlotHaveLesson(timing);
     }
 
-    public void updateSlotsWithLesson(String day, String startTime, String endTime) {
-        days[TimetableParserUtil.parseDay(day)].updateSlotsWithLesson(startTime, endTime);
+    public void updateSlotsWithLesson(String day, String startTime, String endTime) throws IllegalValueException {
+        days[parseDay(day)].updateSlotsWithLesson(startTime, endTime);
     }
 
     private TimetableDay getDay(int dayIndex) {
