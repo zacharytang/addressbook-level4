@@ -10,7 +10,6 @@ import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
 import seedu.address.commons.exceptions.IllegalValueException;
-import seedu.address.commons.util.TimetableParserUtil;
 import seedu.address.logic.parser.exceptions.ParseException;
 import seedu.address.model.person.timetable.TimetableWeek;
 
