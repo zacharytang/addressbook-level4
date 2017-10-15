@@ -22,7 +22,7 @@ public class TimetableWeek {
         return days[TimetableParserUtil.parseDay(day)].doesSlotHaveLesson(timing);
     }
 
-    public void updateSlotWithLesson(String day, String startTime, String endTime) {
+    public void updateSlotsWithLesson(String day, String startTime, String endTime) {
         days[TimetableParserUtil.parseDay(day)].updateSlotsWithLesson(startTime, endTime);
     }
 

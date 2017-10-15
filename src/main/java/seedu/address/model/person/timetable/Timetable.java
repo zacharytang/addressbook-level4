@@ -11,6 +11,7 @@ import seedu.address.logic.parser.exceptions.ParseException;
 
 /**
  * Represents a person's timetable in the address book
+ * Guarantees: Immutable
  */
 public class Timetable {
 
@@ -25,7 +26,7 @@ public class Timetable {
 
 
     public final String value;
-    private TimetableWeek[] timetable;
+    private final TimetableWeek[] timetable;
 
     public Timetable(String url) throws IllegalValueException {
         requireNonNull(url);
@@ -54,6 +55,14 @@ public class Timetable {
                 .substring(2, matcher.group().length() - 1);
 
         return hostName.equals(NUSMODS_SHORT);
+    }
+
+    /**
+     * Checks if a timeslot specified has a lesson
+     */
+    public boolean doesSlotHaveLesson(String weekType, String day, String timing) {
+        int week = TimetableParserUtil.parseWeekType(weekType);
+        return timetable[week].doesSlotHaveLesson(day, timing);
     }
 
     @Override

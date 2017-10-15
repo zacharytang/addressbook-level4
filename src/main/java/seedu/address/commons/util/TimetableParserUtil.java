@@ -203,11 +203,11 @@ public class TimetableParserUtil {
     private static void addLessonToTimetableArray(Lesson lesson, TimetableWeek[] timetable) {
 
         if (lesson.getWeekType().equals("Every Week")) {
-            timetable[WEEK_ODD].updateSlotWithLesson(lesson.getDay(), lesson.getStartTime(), lesson.getEndTime());
-            timetable[WEEK_EVEN].updateSlotWithLesson(lesson.getDay(), lesson.getStartTime(), lesson.getEndTime());
+            timetable[WEEK_ODD].updateSlotsWithLesson(lesson.getDay(), lesson.getStartTime(), lesson.getEndTime());
+            timetable[WEEK_EVEN].updateSlotsWithLesson(lesson.getDay(), lesson.getStartTime(), lesson.getEndTime());
         } else {
-            timetable[lesson.getWeekType().equals("Odd Week") ? WEEK_ODD : WEEK_EVEN]
-                    .updateSlotWithLesson(lesson.getDay(), lesson.getStartTime(), lesson.getEndTime());
+            timetable[parseWeekType(lesson.getWeekType())]
+                    .updateSlotsWithLesson(lesson.getDay(), lesson.getStartTime(), lesson.getEndTime());
         }
     }
 
@@ -297,5 +297,12 @@ public class TimetableParserUtil {
         }
 
         return slotType;
+    }
+
+    /**
+     * Converts week type from string used in api to integer index for use in URL
+     */
+    public static int parseWeekType(String weekType) {
+        return weekType.equals("Odd Week") ? WEEK_ODD : WEEK_EVEN;
     }
 }

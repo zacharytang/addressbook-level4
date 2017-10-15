@@ -59,6 +59,6 @@ public class Lesson {
         Lesson otherLesson = (Lesson) other;
         return this.classNo.equals(otherLesson.getClassNo())
                 && this.lessonType.equals(otherLesson.getLessonType())
-                && (this.day == otherLesson.getDay());
+                && (this.day.equals(otherLesson.getDay()));
     }
 }
