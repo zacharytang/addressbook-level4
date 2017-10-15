@@ -1,6 +1,6 @@
 package seedu.address.model.person.timetable;
 
-import seedu.address.logic.parser.TimetableParserUtil;
+import seedu.address.commons.util.TimetableParserUtil;
 
 /**
  * Represents a full timetable for a week

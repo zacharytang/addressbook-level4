@@ -1,4 +1,4 @@
-package seedu.address.logic.parser;
+package seedu.address.commons.util;
 
 import static seedu.address.model.person.timetable.Timetable.MESSAGE_TIMETABLE_URL_CONSTRAINTS;
 import static seedu.address.model.person.timetable.Timetable.WEEK_EVEN;

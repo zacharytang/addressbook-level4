@@ -1,8 +1,8 @@
-package seedu.address.logic.parser;
+package seedu.address.commons.util;
 
 import static org.junit.Assert.assertArrayEquals;
 
-import static seedu.address.logic.parser.TimetableParserUtil.MESSAGE_INVALID_SHORT_URL;
+import static seedu.address.commons.util.TimetableParserUtil.MESSAGE_INVALID_SHORT_URL;
 import static seedu.address.model.person.timetable.Timetable.MESSAGE_TIMETABLE_URL_CONSTRAINTS;
 
 import org.junit.Rule;
@@ -10,6 +10,7 @@ import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
 import seedu.address.commons.exceptions.IllegalValueException;
+import seedu.address.commons.util.TimetableParserUtil;
 import seedu.address.logic.parser.exceptions.ParseException;
 import seedu.address.model.person.timetable.TimetableWeek;
 

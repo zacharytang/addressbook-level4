@@ -6,7 +6,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import seedu.address.commons.exceptions.IllegalValueException;
-import seedu.address.logic.parser.TimetableParserUtil;
+import seedu.address.commons.util.TimetableParserUtil;
 import seedu.address.logic.parser.exceptions.ParseException;
 
 /**
