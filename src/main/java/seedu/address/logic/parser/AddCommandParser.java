@@ -20,8 +20,8 @@ import seedu.address.model.person.Name;
 import seedu.address.model.person.Person;
 import seedu.address.model.person.Phone;
 import seedu.address.model.person.ReadOnlyPerson;
-import seedu.address.model.person.timetable.Timetable;
 import seedu.address.model.person.Remark;
+import seedu.address.model.person.timetable.Timetable;
 import seedu.address.model.tag.Tag;
 
 /**
@@ -39,7 +39,8 @@ public class AddCommandParser implements Parser<AddCommand> {
                 ArgumentTokenizer.tokenize(args, PREFIX_NAME, PREFIX_PHONE, PREFIX_EMAIL,
                         PREFIX_ADDRESS, PREFIX_TAG, PREFIX_TIMETABLE);
 
-        if (!arePrefixesPresent(argMultimap, PREFIX_NAME, PREFIX_ADDRESS, PREFIX_PHONE, PREFIX_TIMETABLE, PREFIX_EMAIL)) {
+        if (!arePrefixesPresent(argMultimap, PREFIX_NAME, PREFIX_ADDRESS, PREFIX_PHONE,
+                PREFIX_TIMETABLE, PREFIX_EMAIL)) {
             throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, AddCommand.MESSAGE_USAGE));
         }
 

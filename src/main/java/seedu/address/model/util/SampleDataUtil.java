@@ -11,9 +11,9 @@ import seedu.address.model.person.Email;
 import seedu.address.model.person.Name;
 import seedu.address.model.person.Person;
 import seedu.address.model.person.Phone;
-import seedu.address.model.person.timetable.Timetable;
 import seedu.address.model.person.Remark;
 import seedu.address.model.person.exceptions.DuplicatePersonException;
+import seedu.address.model.person.timetable.Timetable;
 import seedu.address.model.tag.Tag;
 
 /**
@@ -24,9 +24,8 @@ public class SampleDataUtil {
         try {
             return new Person[]{
                 new Person(new Name("Alex Yeoh"), new Phone("87438807"), new Email("alexyeoh@example.com"),
-                    new Address("Blk 30 Geylang Street 29, #06-40"), new Remark(""),
-                    new Timetable("http://modsn.us/0ECRP"),
-                    getTagSet("friends")),
+                    new Address("Blk 30 Geylang Street 29, #06-40"), new Timetable("http://modsn.us/0ECRP"),
+                    new Remark(""), getTagSet("friends")),
                 new Person(new Name("Bernice Yu"), new Phone("99272758"), new Email("berniceyu@example.com"),
                     new Address("Blk 30 Lorong 3 Serangoon Gardens, #07-18"), new Timetable("http://modsn.us/0ECRP"),
                     new Remark(""), getTagSet("colleagues", "friends")),
