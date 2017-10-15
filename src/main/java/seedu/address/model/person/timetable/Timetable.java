@@ -1,7 +1,7 @@
 package seedu.address.model.person.timetable;
 
 import static java.util.Objects.requireNonNull;
-import static seedu.address.commons.util.TimetableParserUtil.parseUrl;
+import static seedu.address.commons.util.timetable.TimetableParserUtil.parseUrl;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;

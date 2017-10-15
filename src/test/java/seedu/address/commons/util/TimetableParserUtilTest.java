@@ -2,7 +2,7 @@ package seedu.address.commons.util;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
-import static seedu.address.commons.util.TimetableParserUtil.parseUrl;
+import static seedu.address.commons.util.timetable.TimetableParserUtil.parseUrl;
 import static seedu.address.model.person.timetable.Timetable.MESSAGE_INVALID_SHORT_URL;
 import static seedu.address.model.person.timetable.Timetable.MESSAGE_TIMETABLE_URL_CONSTRAINTS;
 

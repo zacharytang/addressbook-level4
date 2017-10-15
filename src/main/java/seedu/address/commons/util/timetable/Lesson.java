@@ -1,4 +1,4 @@
-package seedu.address.model.person.timetable;
+package seedu.address.commons.util.timetable;
 
 /**
  * Represents a lesson that a module has
@@ -44,21 +44,5 @@ public class Lesson {
 
     public String getEndTime() {
         return endTime;
-    }
-
-    @Override
-    public boolean equals(Object other) {
-        if (other == this) {
-            return true;
-        }
-
-        if (!(other instanceof Lesson)) {
-            return false;
-        }
-
-        Lesson otherLesson = (Lesson) other;
-        return this.classNo.equals(otherLesson.getClassNo())
-                && this.lessonType.equals(otherLesson.getLessonType())
-                && (this.day.equals(otherLesson.getDay()));
     }
 }

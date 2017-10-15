@@ -1,4 +1,4 @@
-package seedu.address.model.person.timetable;
+package seedu.address.commons.util.timetable;
 
 import java.util.ArrayList;
 

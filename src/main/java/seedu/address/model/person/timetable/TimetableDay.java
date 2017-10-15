@@ -1,6 +1,6 @@
 package seedu.address.model.person.timetable;
 
-import static seedu.address.commons.util.TimetableParserUtil.parseStartEndTime;
+import static seedu.address.commons.util.timetable.TimetableParserUtil.parseStartEndTime;
 
 import seedu.address.commons.exceptions.IllegalValueException;
 

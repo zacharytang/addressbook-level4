@@ -1,10 +1,11 @@
-package seedu.address.commons.util;
+package seedu.address.commons.util.timetable;
 
 import static seedu.address.model.person.timetable.Timetable.DAY_FRIDAY;
 import static seedu.address.model.person.timetable.Timetable.DAY_MONDAY;
 import static seedu.address.model.person.timetable.Timetable.DAY_THURSDAY;
 import static seedu.address.model.person.timetable.Timetable.DAY_TUESDAY;
 import static seedu.address.model.person.timetable.Timetable.DAY_WEDNESDAY;
+import static seedu.address.model.person.timetable.Timetable.MESSAGE_INVALID_SHORT_URL;
 import static seedu.address.model.person.timetable.Timetable.MESSAGE_TIMETABLE_URL_CONSTRAINTS;
 import static seedu.address.model.person.timetable.Timetable.WEEK_BOTH;
 import static seedu.address.model.person.timetable.Timetable.WEEK_EVEN;
@@ -23,11 +24,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import seedu.address.commons.exceptions.IllegalValueException;
 import seedu.address.logic.parser.exceptions.ParseException;
-import seedu.address.model.person.timetable.Lesson;
-import seedu.address.model.person.timetable.ModuleInfoFromUrl;
-import seedu.address.model.person.timetable.Timetable;
 import seedu.address.model.person.timetable.TimetableInfo;
-import seedu.address.model.person.timetable.TimetableInfoFromUrl;
 
 /**
  * Helper class that contains utilities to parse NUSMods urls.
@@ -116,6 +113,7 @@ public class TimetableParserUtil {
     /**
      * Uses NUSMods API to obtain all classes a module has, and returns it in
      * an arraylist of classes. Each class is represented by a hash map, storing the information about the class
+     * @return list of all lessons a module has
      */
     private static ArrayList<Lesson> getLessonInfoFromApi(String acadYear, String semester, String modCode)
             throws ParseException {
@@ -160,7 +158,7 @@ public class TimetableParserUtil {
         httpUrlConnection.disconnect();
 
         if (expandedUrl.equals("http://modsn.us")) {
-            throw new ParseException(Timetable.MESSAGE_INVALID_SHORT_URL);
+            throw new ParseException(MESSAGE_INVALID_SHORT_URL);
         }
 
         return expandedUrl;
@@ -179,23 +177,55 @@ public class TimetableParserUtil {
         ArrayList<ModuleInfoFromUrl> lessonInfoByModules = timetableInfo.getModuleInfoList();
 
         for (ModuleInfoFromUrl moduleInfoFromTimetable : lessonInfoByModules) {
-            ArrayList<Lesson> lessons = getLessonInfoFromApi(acadYear, semester, moduleInfoFromTimetable.getModCode());
-            HashMap<String, String> lessonsForModule = moduleInfoFromTimetable.getLessonInfo();
-
-            for (String classType : lessonsForModule.keySet()) {
-                String classNo = lessonsForModule.get(classType);
-
-                for (Lesson lesson : lessons) {
-                    if (parseSlotType(classType).equals(lesson.getLessonType())
-                            && classNo.equals(lesson.getClassNo())) {
-                        timetable.updateSlotsWithLesson(lesson.getWeekType(), lesson.getDay(), lesson.getStartTime(),
-                                lesson.getEndTime());
-                    }
-                }
-            }
+            constructTimetableForModule(acadYear, semester, timetable, moduleInfoFromTimetable);
         }
 
         return timetable;
+    }
+
+    /**
+     * Adds all lessons for a specific module found in the timetable information parsed from URL
+     * Timings for every lesson from a specific module will be added to the timetable information
+     * @param acadYear academic year
+     * @param semester semester
+     * @param timetable timetable to be updated
+     * @param moduleInfo lessons for a module parsed from url
+     */
+    private static void constructTimetableForModule(String acadYear, String semester, TimetableInfo timetable,
+                                                    ModuleInfoFromUrl moduleInfo) throws IllegalValueException {
+        ArrayList<Lesson> lessons = getLessonInfoFromApi(acadYear, semester, moduleInfo.getModCode());
+        HashMap<String, String> lessonsForModule = moduleInfo.getLessonInfo();
+
+        for (String classType : lessonsForModule.keySet()) {
+            String classNo = lessonsForModule.get(classType);
+
+            addLessonToTimetable(timetable, lessons, classType, classNo);
+        }
+    }
+
+    /**
+     * Finds the timings for a lesson in the URL parsed info, and adds it to the timetable
+     * @param timetable to be returned
+     * @param lessons list of all lessons for a module
+     * @param classType type of class parsed
+     * @param classNo identifier for class parsed
+     */
+    private static void addLessonToTimetable(TimetableInfo timetable, ArrayList<Lesson> lessons, String classType,
+                                             String classNo) throws IllegalValueException {
+        for (Lesson lesson : lessons) {
+            if (lessonExistsInParsedInfo(classType, classNo, lesson)) {
+                timetable.updateSlotsWithLesson(lesson.getWeekType(), lesson.getDay(), lesson.getStartTime(),
+                        lesson.getEndTime());
+            }
+        }
+    }
+
+    /**
+     * Checks if lesson info that was parsed from URL is equivalent to a lesson
+     */
+    private static boolean lessonExistsInParsedInfo(String classType, String classNo, Lesson lesson)
+            throws IllegalValueException {
+        return parseSlotType(classType).equals(lesson.getLessonType()) && classNo.equals(lesson.getClassNo());
     }
 
     /* ------------------------------------------- Helper methods ----------------------------------------------------*/

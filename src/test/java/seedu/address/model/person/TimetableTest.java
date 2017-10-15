@@ -4,9 +4,9 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertTrue;
-import static seedu.address.commons.util.TimetableParserUtil.MESSAGE_INVALID_DAY;
-import static seedu.address.commons.util.TimetableParserUtil.MESSAGE_INVALID_TIME;
-import static seedu.address.commons.util.TimetableParserUtil.MESSAGE_INVALID_WEEK_TYPE;
+import static seedu.address.commons.util.timetable.TimetableParserUtil.MESSAGE_INVALID_DAY;
+import static seedu.address.commons.util.timetable.TimetableParserUtil.MESSAGE_INVALID_TIME;
+import static seedu.address.commons.util.timetable.TimetableParserUtil.MESSAGE_INVALID_WEEK_TYPE;
 
 import org.junit.Rule;
 import org.junit.Test;
@@ -33,6 +33,7 @@ public class TimetableTest {
     private static final String VALID_TIME_CHECK = "0900";
     private static final String VALID_DAY_CHECK = "Tuesday";
     private static final String VALID_WEEK_TYPE_CHECK = "Even Week";
+    private static final String VALID_WEEK_EVERY = "Every Week";
 
     @Rule
     public final ExpectedException thrown = ExpectedException.none();
@@ -110,6 +111,14 @@ public class TimetableTest {
         thrown.expectMessage(MESSAGE_INVALID_WEEK_TYPE);
         Timetable timetable = new Timetable(VALID_URL_EMPTY);
         timetable.doesSlotHaveLesson(INVALID_WEEK_TYPE, VALID_DAY, VALID_TIME);
+    }
+
+    @Test
+    public void timetableQueries_validEveryWeek_throwsIllegalValueException() throws Exception {
+        thrown.expect(IllegalValueException.class);
+        thrown.expectMessage("Please specify a week type!");
+        Timetable timetable = new Timetable(VALID_URL_EMPTY);
+        timetable.doesSlotHaveLesson(VALID_WEEK_EVERY, VALID_DAY, VALID_TIME);
     }
 
     @Test

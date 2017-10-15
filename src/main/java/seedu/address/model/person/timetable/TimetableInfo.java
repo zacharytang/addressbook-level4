@@ -1,6 +1,6 @@
 package seedu.address.model.person.timetable;
 
-import static seedu.address.commons.util.TimetableParserUtil.parseWeekType;
+import static seedu.address.commons.util.timetable.TimetableParserUtil.parseWeekType;
 import static seedu.address.model.person.timetable.Timetable.WEEK_BOTH;
 import static seedu.address.model.person.timetable.Timetable.WEEK_EVEN;
 import static seedu.address.model.person.timetable.Timetable.WEEK_ODD;
