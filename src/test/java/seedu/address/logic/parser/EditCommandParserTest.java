@@ -119,6 +119,13 @@ public class EditCommandParserTest {
     }
 
     @Test
+    public void parseTagEdit_validValue_sucess() throws Exception {
+        EditCommand expectedCommand = new EditCommand(new Tag("old"), new Tag("new"));
+        assertParseSuccess(parser, " old/old new/new ", expectedCommand);
+    }
+
+
+    @Test
     public void parse_allFieldsSpecified_success() {
         Index targetIndex = INDEX_SECOND_PERSON;
         String userInput = targetIndex.getOneBased() + PHONE_DESC_BOB + TAG_DESC_HUSBAND
