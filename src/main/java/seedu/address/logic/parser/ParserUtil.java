@@ -14,6 +14,7 @@ import seedu.address.model.person.Address;
 import seedu.address.model.person.Email;
 import seedu.address.model.person.Name;
 import seedu.address.model.person.Phone;
+import seedu.address.model.person.timetable.Timetable;
 import seedu.address.model.tag.Tag;
 
 /**
@@ -100,4 +101,11 @@ public class ParserUtil {
         return tag.isPresent() ? Optional.of(new Tag(tag.get())) : Optional.empty();
     }
 
+    /**
+     * Parses a {@code Optional<String> url} into an {@code Optional<Timetable>} if {@code url} is present.
+     */
+    public static Optional<Timetable> parseTimetable(Optional<String> url) throws IllegalValueException {
+        requireNonNull(url);
+        return url.isPresent() ? Optional.of(new Timetable(url.get())) : Optional.empty();
+    }
 }

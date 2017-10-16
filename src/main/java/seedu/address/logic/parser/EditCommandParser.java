@@ -9,6 +9,7 @@ import static seedu.address.logic.parser.CliSyntax.PREFIX_NEW_TAG;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_OLD_TAG;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_PHONE;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_TAG;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_TIMETABLE;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -36,7 +37,7 @@ public class EditCommandParser implements Parser<EditCommand> {
     public EditCommand parse(String args) throws ParseException {
         requireNonNull(args);
         ArgumentMultimap argsMultimap = ArgumentTokenizer.tokenize(args, PREFIX_NAME, PREFIX_PHONE, PREFIX_EMAIL,
-                PREFIX_ADDRESS, PREFIX_TAG, PREFIX_OLD_TAG, PREFIX_NEW_TAG);
+                PREFIX_ADDRESS, PREFIX_TIMETABLE, PREFIX_TAG, PREFIX_OLD_TAG, PREFIX_NEW_TAG);
         String preamble = argsMultimap.getPreamble();
 
         if (preamble.matches("")) {
@@ -65,8 +66,9 @@ public class EditCommandParser implements Parser<EditCommand> {
                 ParserUtil.parseName(argsMultimap.getValue(PREFIX_NAME)).ifPresent(editPersonDescriptor::setName);
                 ParserUtil.parsePhone(argsMultimap.getValue(PREFIX_PHONE)).ifPresent(editPersonDescriptor::setPhone);
                 ParserUtil.parseEmail(argsMultimap.getValue(PREFIX_EMAIL)).ifPresent(editPersonDescriptor::setEmail);
-                ParserUtil.parseAddress(argsMultimap.getValue(PREFIX_ADDRESS))
-                        .ifPresent(editPersonDescriptor::setAddress);
+                ParserUtil.parseAddress(argsMultimap.getValue(PREFIX_ADDRESS)).ifPresent(editPersonDescriptor::setAddress);
+                ParserUtil.parseTimetable(argsMultimap.getValue(PREFIX_TIMETABLE))
+                          .ifPresent(editPersonDescriptor::setTimetable);
                 parseTagsForEdit(argsMultimap.getAllValues(PREFIX_TAG)).ifPresent(editPersonDescriptor::setTags);
             } catch (IllegalValueException ive) {
                 throw new ParseException(ive.getMessage(), ive);
