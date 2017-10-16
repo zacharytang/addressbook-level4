@@ -1,0 +1,57 @@
+package seedu.address.model.person;
+
+import static java.util.Objects.requireNonNull;
+
+import seedu.address.commons.exceptions.IllegalValueException;
+
+/**
+ * Represents a Person's Matriculation Number in the address book.
+ * Guarantees: immutable; is valid as declared in {@link #isValidMatricNo(String)}
+ */
+public class MatricNo {
+
+    public static final String MESSAGE_MATRIC_NO_CONSTRAINTS =
+            "Person matric number should be an 8-digit string starting with 'A'";
+    public static final String MATRIC_NO_VALIDATION_REGEX = "A+[\\w\\.]+";
+
+    public final String value;
+
+    /**
+     * Validates given matricNo.
+     *
+     * @throws IllegalValueException if given matricNo string is invalid.
+     */
+    public MatricNo(String matricNo) throws IllegalValueException {
+        requireNonNull(matricNo);
+        String trimmedMatricNo = matricNo.trim();
+        if (!isValidMatricNo(trimmedMatricNo)) {
+            throw new IllegalValueException(MESSAGE_MATRIC_NO_CONSTRAINTS);
+        }
+        this.value = trimmedMatricNo;
+    }
+
+    /**
+     * Returns if a given string is a valid person matricNo.
+     */
+    public static boolean isValidMatricNo(String test) {
+        return test.matches(MATRIC_NO_VALIDATION_REGEX) && test.length() == 9;
+    }
+
+    @Override
+    public String toString() {
+        return value;
+    }
+
+    @Override
+    public boolean equals(Object other) {
+        return other == this // short circuit if same object
+                || (other instanceof MatricNo // instanceof handles nulls
+                && this.value.equals(((MatricNo) other).value)); // state check
+    }
+
+    @Override
+    public int hashCode() {
+        return value.hashCode();
+    }
+
+}
