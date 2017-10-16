@@ -1,11 +1,7 @@
 package seedu.address.logic.commands;
 
 import static java.util.Objects.requireNonNull;
-import static seedu.address.logic.parser.CliSyntax.PREFIX_ADDRESS;
-import static seedu.address.logic.parser.CliSyntax.PREFIX_EMAIL;
-import static seedu.address.logic.parser.CliSyntax.PREFIX_NAME;
-import static seedu.address.logic.parser.CliSyntax.PREFIX_PHONE;
-import static seedu.address.logic.parser.CliSyntax.PREFIX_TAG;
+import static seedu.address.logic.parser.CliSyntax.*;
 import static seedu.address.model.Model.PREDICATE_SHOW_ALL_PERSONS;
 
 import java.util.List;
@@ -43,6 +39,8 @@ public class EditCommand extends UndoableCommand {
             + "Existing values will be overwritten by the input values.\n"
             + "Parameters: INDEX (must be a positive integer) "
             + "[" + PREFIX_NAME + "NAME] "
+            + "[" + PREFIX_GENDER + "GENDER] "
+            + "[" + PREFIX_MATRIC_NO + "MATRIC NO.] "
             + "[" + PREFIX_PHONE + "PHONE] "
             + "[" + PREFIX_EMAIL + "EMAIL] "
             + "[" + PREFIX_ADDRESS + "ADDRESS] "
@@ -101,13 +99,16 @@ public class EditCommand extends UndoableCommand {
         assert personToEdit != null;
 
         Name updatedName = editPersonDescriptor.getName().orElse(personToEdit.getName());
+        Gender updatedGender = editPersonDescriptor.getGender().orElse(personToEdit.getGender());
+        MatricNo updatedMatricNo = editPersonDescriptor.getMatricNo().orElse(personToEdit.getMatricNo());
         Phone updatedPhone = editPersonDescriptor.getPhone().orElse(personToEdit.getPhone());
         Email updatedEmail = editPersonDescriptor.getEmail().orElse(personToEdit.getEmail());
         Address updatedAddress = editPersonDescriptor.getAddress().orElse(personToEdit.getAddress());
         Remark updatedRemark = personToEdit.getRemark();
         Set<Tag> updatedTags = editPersonDescriptor.getTags().orElse(personToEdit.getTags());
 
-        return new Person(updatedName, updatedPhone, updatedEmail, updatedAddress, updatedRemark, updatedTags);
+        return new Person(updatedName, updatedGender, updatedMatricNo,
+                updatedPhone, updatedEmail, updatedAddress, updatedRemark, updatedTags);
     }
 
     @Override
@@ -134,6 +135,8 @@ public class EditCommand extends UndoableCommand {
      */
     public static class EditPersonDescriptor {
         private Name name;
+        private Gender gender;
+        private MatricNo matricNo;
         private Phone phone;
         private Email email;
         private Address address;
@@ -143,6 +146,8 @@ public class EditCommand extends UndoableCommand {
 
         public EditPersonDescriptor(EditPersonDescriptor toCopy) {
             this.name = toCopy.name;
+            this.gender = toCopy.gender;
+            this.matricNo = toCopy.matricNo;
             this.phone = toCopy.phone;
             this.email = toCopy.email;
             this.address = toCopy.address;
@@ -153,7 +158,8 @@ public class EditCommand extends UndoableCommand {
          * Returns true if at least one field is edited.
          */
         public boolean isAnyFieldEdited() {
-            return CollectionUtil.isAnyNonNull(this.name, this.phone, this.email, this.address, this.tags);
+            return CollectionUtil.isAnyNonNull(this.name, this.gender, this.matricNo, this.phone, this.email,
+                    this.address, this.tags);
         }
 
         public void setName(Name name) {
@@ -162,6 +168,22 @@ public class EditCommand extends UndoableCommand {
 
         public Optional<Name> getName() {
             return Optional.ofNullable(name);
+        }
+
+        public void setGender(Gender gender) {
+            this.gender = gender;
+        }
+
+        public Optional<Gender> getGender() {
+            return Optional.ofNullable(gender);
+        }
+
+        public void setMatricNo(MatricNo matricNo) {
+            this.matricNo = matricNo;
+        }
+
+        public Optional<MatricNo> getMatricNo() {
+            return Optional.ofNullable(matricNo);
         }
 
         public void setPhone(Phone phone) {
@@ -212,6 +234,8 @@ public class EditCommand extends UndoableCommand {
             EditPersonDescriptor e = (EditPersonDescriptor) other;
 
             return getName().equals(e.getName())
+                    && getGender().equals(e.getGender())
+                    && getMatricNo().equals(e.getMatricNo())
                     && getPhone().equals(e.getPhone())
                     && getEmail().equals(e.getEmail())
                     && getAddress().equals(e.getAddress())
