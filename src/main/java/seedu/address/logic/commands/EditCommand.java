@@ -1,7 +1,6 @@
 package seedu.address.logic.commands;
 
 import static java.util.Objects.requireNonNull;
-import static seedu.address.commons.core.Messages.MESSAGE_INVALID_TAG_PROVIDED;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_ADDRESS;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_EMAIL;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_NAME;
@@ -27,7 +26,6 @@ import seedu.address.model.person.Remark;
 import seedu.address.model.person.exceptions.DuplicatePersonException;
 import seedu.address.model.person.exceptions.PersonNotFoundException;
 import seedu.address.model.tag.Tag;
-import seedu.address.model.tag.UniqueTagList;
 import seedu.address.model.tag.exceptions.TagNotFoundException;
 
 /**
@@ -62,7 +60,7 @@ public class EditCommand extends UndoableCommand {
     public static final String MESSAGE_DUPLICATE_PERSON = "This person already exists in the address book.";
     public static final String MESSAGE_EDIT_TAG_SUCCESS = "Edited Tag: %1$s";
     public static final String MESSAGE_TAG_NOT_EDITED = "Both of the old and new field must be provided.";
-    public static final String MESSAGE_NONEXISTENT_TAG = "The specified tag does not exist";
+    public static final String MESSAGE_NONEXISTENT_TAG = "The specified old tag does not exist";
     public static final String MESSAGE_NOT_IMPLEMENTED_YET = "Edit command for Tag not implemented yet";
 
     private final boolean isEditForPerson;
@@ -122,13 +120,12 @@ public class EditCommand extends UndoableCommand {
             try {
                 model.editTag(oldTag, newTag);
             } catch (DuplicatePersonException dpe) {
-                throw new CommandException(MESSAGE_DUPLICATE_PERSON);
+                throw new AssertionError("Updating the tags on one person cannot possibly make the person"
+                        + " identical to another person.");
             } catch (PersonNotFoundException pnfe) {
                 throw new AssertionError("The target person cannot be missing");
             } catch (TagNotFoundException tgne) {
-                throw new CommandException(MESSAGE_INVALID_TAG_PROVIDED);
-            } catch (UniqueTagList.DuplicateTagException dte) {
-                throw new CommandException("Duplicate tags");
+                throw new CommandException(MESSAGE_NONEXISTENT_TAG);
             }
             model.updateFilteredPersonList(PREDICATE_SHOW_ALL_PERSONS);
             return new CommandResult(String.format(MESSAGE_EDIT_TAG_SUCCESS, oldTag));
@@ -167,8 +164,16 @@ public class EditCommand extends UndoableCommand {
 
         // state check
         EditCommand e = (EditCommand) other;
-        return index.equals(e.index)
-                && editPersonDescriptor.equals(e.editPersonDescriptor);
+
+        if (isEditForPerson) {
+            return  isEditForPerson == e.isEditForPerson
+                    && index.equals(e.index)
+                    && editPersonDescriptor.equals(e.editPersonDescriptor);
+        } else {
+            return isEditForPerson == e.isEditForPerson
+                    && oldTag.equals(e.oldTag)
+                    && newTag.equals(e.newTag);
+        }
     }
 
     /**

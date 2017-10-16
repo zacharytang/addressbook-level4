@@ -25,7 +25,6 @@ import seedu.address.model.person.ReadOnlyPerson;
 import seedu.address.model.person.exceptions.DuplicatePersonException;
 import seedu.address.model.person.exceptions.PersonNotFoundException;
 import seedu.address.model.tag.Tag;
-import seedu.address.model.tag.UniqueTagList;
 import seedu.address.model.tag.exceptions.TagNotFoundException;
 import seedu.address.testutil.PersonBuilder;
 
@@ -133,7 +132,7 @@ public class AddCommandTest {
 
         @Override
         public void editTag(Tag oldTag, Tag newTag) throws DuplicatePersonException,
-                PersonNotFoundException, TagNotFoundException, UniqueTagList.DuplicateTagException {
+                PersonNotFoundException, TagNotFoundException {
             fail("This method should not be called.");
         }
 

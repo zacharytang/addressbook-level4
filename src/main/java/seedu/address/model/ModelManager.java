@@ -19,7 +19,7 @@ import seedu.address.model.person.ReadOnlyPerson;
 import seedu.address.model.person.exceptions.DuplicatePersonException;
 import seedu.address.model.person.exceptions.PersonNotFoundException;
 import seedu.address.model.tag.Tag;
-import seedu.address.model.tag.UniqueTagList;
+import seedu.address.model.tag.UniqueTagList.DuplicateTagException;
 import seedu.address.model.tag.exceptions.TagNotFoundException;
 
 /**
@@ -73,6 +73,7 @@ public class ModelManager extends ComponentManager implements Model {
 
     @Override
     public void deleteTag(Tag tag) throws DuplicatePersonException, PersonNotFoundException, TagNotFoundException {
+        addressBook.removeTag(tag);
         for (int i = 0; i < addressBook.getPersonList().size(); i++) {
             ReadOnlyPerson oldPerson = addressBook.getPersonList().get(i);
 
@@ -83,14 +84,13 @@ public class ModelManager extends ComponentManager implements Model {
 
             addressBook.updatePerson(oldPerson, newPerson);
         }
-        addressBook.removeTag(tag);
         indicateAddressBookChanged();
     }
 
     @Override
     public void editTag(Tag oldTag, Tag newTag) throws DuplicatePersonException, PersonNotFoundException,
-            TagNotFoundException, UniqueTagList.DuplicateTagException {
-
+            TagNotFoundException {
+        addressBook.removeTag(oldTag);
         for (int i = 0; i < addressBook.getPersonList().size(); i++) {
             ReadOnlyPerson oldPerson = addressBook.getPersonList().get(i);
 
@@ -102,11 +102,10 @@ public class ModelManager extends ComponentManager implements Model {
                 addressBook.updatePerson(oldPerson, newPerson);
             }
         }
-        addressBook.removeTag(oldTag);
         try {
             addressBook.addTag(newTag);
-        } catch (UniqueTagList.DuplicateTagException dpe) {
-            //do nothing
+        } catch (DuplicateTagException dpe) {
+            //do nothing. It's perfectly fine if the new tag already exists in the address book. Enabled merge
         }
 
         indicateAddressBookChanged();
