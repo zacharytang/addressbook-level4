@@ -19,6 +19,7 @@ import seedu.address.model.person.ReadOnlyPerson;
 import seedu.address.model.person.exceptions.DuplicatePersonException;
 import seedu.address.model.person.exceptions.PersonNotFoundException;
 import seedu.address.model.tag.Tag;
+import seedu.address.model.tag.UniqueTagList;
 import seedu.address.model.tag.exceptions.TagNotFoundException;
 
 /**
@@ -85,6 +86,32 @@ public class ModelManager extends ComponentManager implements Model {
         addressBook.removeTag(tag);
         indicateAddressBookChanged();
     }
+
+    @Override
+    public void editTag(Tag oldTag, Tag newTag) throws DuplicatePersonException, PersonNotFoundException,
+            TagNotFoundException, UniqueTagList.DuplicateTagException {
+
+        for (int i = 0; i < addressBook.getPersonList().size(); i++) {
+            ReadOnlyPerson oldPerson = addressBook.getPersonList().get(i);
+
+            Person newPerson = new Person(oldPerson);
+            Set<Tag> newTags = new HashSet<Tag>(newPerson.getTags());
+            if (newTags.remove(oldTag)) {
+                newTags.add(newTag);
+                newPerson.setTags(newTags);
+                addressBook.updatePerson(oldPerson, newPerson);
+            }
+        }
+        addressBook.removeTag(oldTag);
+        try {
+            addressBook.addTag(newTag);
+        } catch (UniqueTagList.DuplicateTagException dpe) {
+            //do nothing
+        }
+
+        indicateAddressBookChanged();
+    }
+
 
     @Override
     public synchronized void addPerson(ReadOnlyPerson person) throws DuplicatePersonException {

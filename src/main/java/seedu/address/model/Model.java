@@ -7,6 +7,7 @@ import seedu.address.model.person.ReadOnlyPerson;
 import seedu.address.model.person.exceptions.DuplicatePersonException;
 import seedu.address.model.person.exceptions.PersonNotFoundException;
 import seedu.address.model.tag.Tag;
+import seedu.address.model.tag.UniqueTagList;
 import seedu.address.model.tag.exceptions.TagNotFoundException;
 
 /**
@@ -48,6 +49,9 @@ public interface Model {
      * @throws TagNotFoundException if {@code tag} could not be found in the list.
      */
     void deleteTag(Tag tag) throws DuplicatePersonException, PersonNotFoundException, TagNotFoundException;
+
+    void editTag(Tag oldTag, Tag newTag) throws DuplicatePersonException, PersonNotFoundException,
+            TagNotFoundException, UniqueTagList.DuplicateTagException;
 
     /** Returns an unmodifiable view of the filtered person list */
     ObservableList<ReadOnlyPerson> getFilteredPersonList();
