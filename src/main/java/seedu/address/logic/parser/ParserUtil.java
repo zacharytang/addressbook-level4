@@ -53,6 +53,24 @@ public class ParserUtil {
     }
 
     /**
+     * Parses a {@code Optional<String> gender} into an {@code Optional<Gender>} if {@code gender} is present.
+     * See header comment of this class regarding the use of {@code Optional} parameters.
+     */
+    public static Optional<Gender> parseGender(Optional<String> gender) throws IllegalValueException {
+        requireNonNull(gender);
+        return gender.isPresent() ? Optional.of(new Gender(gender.get())) : Optional.empty();
+    }
+
+    /**
+     * Parses a {@code Optional<String> matricNo} into an {@code Optional<MatricNo>} if {@code matricNo} is present.
+     * See header comment of this class regarding the use of {@code Optional} parameters.
+     */
+    public static Optional<MatricNo> parseMatricNo(Optional<String> matricNo) throws IllegalValueException {
+        requireNonNull(matricNo);
+        return matricNo.isPresent() ? Optional.of(new MatricNo(matricNo.get())) : Optional.empty();
+    }
+
+    /**
      * Parses a {@code Optional<String> phone} into an {@code Optional<Phone>} if {@code phone} is present.
      * See header comment of this class regarding the use of {@code Optional} parameters.
      */
