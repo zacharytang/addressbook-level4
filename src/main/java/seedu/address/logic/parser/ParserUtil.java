@@ -93,7 +93,7 @@ public class ParserUtil {
     }
 
     /**
-     * Parses a {@code Optional<String> Tag} into an {@code Optional<Tag>} if {@code email} is present.
+     * Parses a single {@code Optional<String> tag} into an {@code Optional<Tag>} if {@code tag} is present.
      * See header comment of this class regarding the use of {@code Optional} parameters.
      */
     public static Optional<Tag> parseSingleTag(Optional<String> tag) throws IllegalValueException {

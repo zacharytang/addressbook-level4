@@ -49,6 +49,15 @@ public interface Model {
      */
     void deleteTag(Tag tag) throws DuplicatePersonException, PersonNotFoundException, TagNotFoundException;
 
+    /**
+     * Deletes the specified tag from everyone in the address book
+     *
+     * @throws DuplicatePersonException if updating a tag for the person causes the person to be equivalent to
+     *      another existing person in the list
+     * @throws PersonNotFoundException if unable to find a person in the list when iterating through
+     *      all the persons
+     * @throws TagNotFoundException if {@code tag} could not be found in the list.
+     */
     void editTag(Tag oldTag, Tag newTag) throws DuplicatePersonException, PersonNotFoundException,
             TagNotFoundException;
 

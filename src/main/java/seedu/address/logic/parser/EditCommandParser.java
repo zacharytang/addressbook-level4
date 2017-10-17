@@ -40,7 +40,7 @@ public class EditCommandParser implements Parser<EditCommand> {
                 PREFIX_ADDRESS, PREFIX_TIMETABLE, PREFIX_TAG, PREFIX_OLD_TAG, PREFIX_NEW_TAG);
         String preamble = argsMultimap.getPreamble();
 
-        if (preamble.matches("")) {
+        if (preamble.matches("")) { // this code block deals with edit for a tag
             if (!arePrefixesPresent(argsMultimap, PREFIX_NEW_TAG, PREFIX_OLD_TAG)) {
                 throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, EditCommand.MESSAGE_USAGE));
             }
@@ -52,7 +52,7 @@ public class EditCommandParser implements Parser<EditCommand> {
             } catch (IllegalValueException ive) {
                 throw new ParseException(ive.getMessage(), ive);
             }
-        } else if (preamble.matches("\\d+")) {
+        } else if (preamble.matches("\\d+")) { // this code block deals with edit for a person
             Index index;
 
             try {

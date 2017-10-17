@@ -16,7 +16,8 @@ import seedu.address.model.tag.Tag;
 import seedu.address.model.tag.exceptions.TagNotFoundException;
 
 /**
- * Deletes a person identified using it's last displayed index from the address book.
+ * Deletes a person identified using it's last displayed index from the address book,
+ * or a tag identified by the tag name
  */
 public class DeleteCommand extends UndoableCommand {
 
@@ -49,7 +50,6 @@ public class DeleteCommand extends UndoableCommand {
         this.targetTags = targetTags;
         this.targetIndex = null;
     }
-
 
     @Override
     public CommandResult executeUndoableCommand() throws CommandException {

@@ -27,7 +27,7 @@ public class DeleteCommandParser implements Parser<DeleteCommand> {
         ArgumentMultimap argMultimap = ArgumentTokenizer.tokenize(args, PREFIX_TAG);
         String preamble = argMultimap.getPreamble();
 
-        if (preamble.equals("")) {
+        if (preamble.equals("")) { // code block for delete for a tag
             try {
                 if (arePrefixesPresent(argMultimap, PREFIX_TAG)) {
                     Set<Tag> tagList = ParserUtil.parseTags(argMultimap.getAllValues(PREFIX_TAG));
@@ -37,7 +37,7 @@ public class DeleteCommandParser implements Parser<DeleteCommand> {
                 throw new ParseException(
                         String.format(MESSAGE_INVALID_COMMAND_FORMAT, DeleteCommand.MESSAGE_USAGE));
             }
-        } else if (preamble.matches("-?\\d+")) {
+        } else if (preamble.matches("-?\\d+")) { // code block for delete for a person
             try {
                 Index index = ParserUtil.parseIndex(args);
                 return new DeleteCommand(index);

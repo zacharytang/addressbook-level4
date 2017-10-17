@@ -4,6 +4,8 @@ import static java.util.Objects.requireNonNull;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_ADDRESS;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_EMAIL;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_NAME;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_NEW_TAG;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_OLD_TAG;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_PHONE;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_TAG;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_TIMETABLE;
@@ -55,22 +57,21 @@ public class EditCommand extends UndoableCommand {
             + PREFIX_EMAIL + "johndoe@example.com\n"
             + "OR "
             + "Edit the specified tag in all contacts containing this tag with a new specified tag "
-            + "Parameters: [old/TAG] [new/TAG] "
+            + "Parameters: " + PREFIX_OLD_TAG + "TAG " + PREFIX_NEW_TAG + "TAG"
             + "Example: " + COMMAND_WORD + "old/CS1020 new/CS2010";
 
     public static final String MESSAGE_EDIT_PERSON_SUCCESS = "Edited Person: %1$s";
     public static final String MESSAGE_NOT_EDITED = "At least one field to edit must be provided.";
     public static final String MESSAGE_DUPLICATE_PERSON = "This person already exists in the address book.";
     public static final String MESSAGE_EDIT_TAG_SUCCESS = "Edited Tag: %1$s";
-    public static final String MESSAGE_TAG_NOT_EDITED = "Both of the old and new field must be provided.";
     public static final String MESSAGE_NONEXISTENT_TAG = "The specified old tag does not exist";
-    public static final String MESSAGE_NOT_IMPLEMENTED_YET = "Edit command for Tag not implemented yet";
 
     private final boolean isEditForPerson;
     private final Index index;
     private final EditPersonDescriptor editPersonDescriptor;
     private final Tag oldTag;
     private final Tag newTag;
+
     /**
      * @param index of the person in the filtered person list to edit
      * @param editPersonDescriptor details to edit the person with
@@ -86,6 +87,11 @@ public class EditCommand extends UndoableCommand {
         this.newTag = null;
     }
 
+    /**
+     *
+     * @param oldTag the old tag to be replaced by the new tag
+     * @param newTag that will replace the old tag
+     */
     public EditCommand(Tag oldTag, Tag newTag) {
         requireNonNull(oldTag);
         requireNonNull(newTag);
