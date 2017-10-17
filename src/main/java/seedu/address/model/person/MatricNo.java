@@ -11,7 +11,7 @@ import seedu.address.commons.exceptions.IllegalValueException;
 public class MatricNo {
 
     public static final String MESSAGE_MATRIC_NO_CONSTRAINTS =
-            "Person matric number should be an 8-digit string starting with 'A'";
+            "Person matric number should be a 9-digit string starting with 'A' and ending with a letter";
     public static final String MATRIC_NO_VALIDATION_REGEX = "A+[\\w\\.]+";
 
     public final String value;

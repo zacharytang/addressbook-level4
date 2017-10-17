@@ -27,7 +27,7 @@ public class AddCommand extends UndoableCommand {
             + "Parameters: "
             + PREFIX_NAME + "NAME "
             + PREFIX_GENDER + "GENDER "
-            + PREFIX_MATRIC_NO + "MATRIC NO"
+            + PREFIX_MATRIC_NO + "MATRIC NO. "
             + PREFIX_PHONE + "PHONE "
             + PREFIX_EMAIL + "EMAIL "
             + PREFIX_ADDRESS + "ADDRESS "

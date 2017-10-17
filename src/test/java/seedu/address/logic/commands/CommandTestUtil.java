@@ -61,8 +61,8 @@ public class CommandTestUtil {
     public static final String TAG_DESC_HUSBAND = " " + PREFIX_TAG + VALID_TAG_HUSBAND;
 
     public static final String INVALID_NAME_DESC = " " + PREFIX_NAME + "James&"; // '&' not allowed in names
-    public static final String INVALID_GENDER_DESC = " " + PREFIX_NAME + "male&"; // '&' not allowed in genders
-    public static final String INVALID_MATRIC_NO_DESC = " " + PREFIX_NAME + "30132222K";
+    public static final String INVALID_GENDER_DESC = " " + PREFIX_GENDER + "male&"; // '&' not allowed in genders
+    public static final String INVALID_MATRIC_NO_DESC = " " + PREFIX_MATRIC_NO + "30132222K";
     // missing 'A' at the start of the string in matric numbers
     public static final String INVALID_PHONE_DESC = " " + PREFIX_PHONE + "911a";
     // 'a' not allowed in phones
