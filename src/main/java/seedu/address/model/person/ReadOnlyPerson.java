@@ -3,6 +3,7 @@ package seedu.address.model.person;
 import java.util.Set;
 
 import javafx.beans.property.ObjectProperty;
+import seedu.address.model.person.timetable.Timetable;
 import seedu.address.model.tag.Tag;
 import seedu.address.model.tag.UniqueTagList;
 
@@ -20,6 +21,8 @@ public interface ReadOnlyPerson {
     Email getEmail();
     ObjectProperty<Address> addressProperty();
     Address getAddress();
+    ObjectProperty<Timetable> timetableProperty();
+    Timetable getTimetable();
     ObjectProperty<Remark> remarkProperty();
     Remark getRemark();
     ObjectProperty<UniqueTagList> tagProperty();
@@ -35,6 +38,7 @@ public interface ReadOnlyPerson {
                 && other.getPhone().equals(this.getPhone())
                 && other.getEmail().equals(this.getEmail())
                 && other.getAddress().equals(this.getAddress())
+                && other.getTimetable().equals(this.getTimetable())
                 && other.getRemark().equals(this.getRemark()));
     }
 
@@ -50,6 +54,8 @@ public interface ReadOnlyPerson {
                 .append(getEmail())
                 .append(" Address: ")
                 .append(getAddress())
+                .append(" Timetable: ")
+                .append(getTimetable())
                 .append(" Remark: ")
                 .append(getRemark())
                 .append(" Tags: ");
