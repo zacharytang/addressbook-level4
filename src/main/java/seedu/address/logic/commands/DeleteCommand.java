@@ -13,9 +13,11 @@ import seedu.address.model.person.ReadOnlyPerson;
 import seedu.address.model.person.exceptions.DuplicatePersonException;
 import seedu.address.model.person.exceptions.PersonNotFoundException;
 import seedu.address.model.tag.Tag;
+import seedu.address.model.tag.exceptions.TagNotFoundException;
 
 /**
- * Deletes a person identified using it's last displayed index from the address book.
+ * Deletes a person identified using it's last displayed index from the address book,
+ * or a tag identified by the tag name
  */
 public class DeleteCommand extends UndoableCommand {
 
@@ -49,7 +51,6 @@ public class DeleteCommand extends UndoableCommand {
         this.targetIndex = null;
     }
 
-
     @Override
     public CommandResult executeUndoableCommand() throws CommandException {
         // this code block is command execution for delete [index]
@@ -80,6 +81,8 @@ public class DeleteCommand extends UndoableCommand {
             for (Tag tagToBeDeleted: arrayTags) {
                 try {
                     model.deleteTag(tagToBeDeleted);
+                } catch (TagNotFoundException tnfe) {
+                    assert false : "[Delete Tag] A tag is not found";
                 } catch (DuplicatePersonException dpe) {
                     assert false : "[Delete Tag] A duplicate person is there";
                 } catch (PersonNotFoundException pnfe) {

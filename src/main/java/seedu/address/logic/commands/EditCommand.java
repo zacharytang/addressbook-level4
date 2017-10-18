@@ -4,6 +4,8 @@ import static java.util.Objects.requireNonNull;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_ADDRESS;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_EMAIL;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_NAME;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_NEW_TAG;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_OLD_TAG;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_PHONE;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_TAG;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_TIMETABLE;
@@ -17,7 +19,6 @@ import seedu.address.commons.core.Messages;
 import seedu.address.commons.core.index.Index;
 import seedu.address.commons.util.CollectionUtil;
 import seedu.address.logic.commands.exceptions.CommandException;
-
 import seedu.address.model.person.Address;
 import seedu.address.model.person.Email;
 import seedu.address.model.person.Name;
@@ -29,6 +30,7 @@ import seedu.address.model.person.exceptions.DuplicatePersonException;
 import seedu.address.model.person.exceptions.PersonNotFoundException;
 import seedu.address.model.person.timetable.Timetable;
 import seedu.address.model.tag.Tag;
+import seedu.address.model.tag.exceptions.TagNotFoundException;
 
 /**
  * Edits the details of an existing person in the address book.
@@ -52,14 +54,23 @@ public class EditCommand extends UndoableCommand {
             + "[" + PREFIX_TAG + "TAG]...\n"
             + "Example: " + COMMAND_WORD + " 1 "
             + PREFIX_PHONE + "91234567 "
-            + PREFIX_EMAIL + "johndoe@example.com";
+            + PREFIX_EMAIL + "johndoe@example.com\n"
+            + "OR "
+            + "Edit the specified tag in all contacts containing this tag with a new specified tag "
+            + "Parameters: " + PREFIX_OLD_TAG + "TAG " + PREFIX_NEW_TAG + "TAG"
+            + "Example: " + COMMAND_WORD + "old/CS1020 new/CS2010";
 
     public static final String MESSAGE_EDIT_PERSON_SUCCESS = "Edited Person: %1$s";
     public static final String MESSAGE_NOT_EDITED = "At least one field to edit must be provided.";
     public static final String MESSAGE_DUPLICATE_PERSON = "This person already exists in the address book.";
+    public static final String MESSAGE_EDIT_TAG_SUCCESS = "Edited Tag: %1$s";
+    public static final String MESSAGE_NONEXISTENT_TAG = "The specified old tag does not exist";
 
+    private final boolean isEditForPerson;
     private final Index index;
     private final EditPersonDescriptor editPersonDescriptor;
+    private final Tag oldTag;
+    private final Tag newTag;
 
     /**
      * @param index of the person in the filtered person list to edit
@@ -69,30 +80,65 @@ public class EditCommand extends UndoableCommand {
         requireNonNull(index);
         requireNonNull(editPersonDescriptor);
 
+        this.isEditForPerson = true;
         this.index = index;
         this.editPersonDescriptor = new EditPersonDescriptor(editPersonDescriptor);
+        this.oldTag = null;
+        this.newTag = null;
+    }
+
+    /**
+     *
+     * @param oldTag the old tag to be replaced by the new tag
+     * @param newTag that will replace the old tag
+     */
+    public EditCommand(Tag oldTag, Tag newTag) {
+        requireNonNull(oldTag);
+        requireNonNull(newTag);
+
+        this.isEditForPerson = false;
+        this.index = null;
+        this.editPersonDescriptor = null;
+        this.oldTag = oldTag;
+        this.newTag = newTag;
     }
 
     @Override
     public CommandResult executeUndoableCommand() throws CommandException {
-        List<ReadOnlyPerson> lastShownList = model.getFilteredPersonList();
+        if (isEditForPerson) {
+            List<ReadOnlyPerson> lastShownList = model.getFilteredPersonList();
 
-        if (index.getZeroBased() >= lastShownList.size()) {
-            throw new CommandException(Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX);
+            if (index.getZeroBased() >= lastShownList.size()) {
+                throw new CommandException(Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX);
+            }
+
+            ReadOnlyPerson personToEdit = lastShownList.get(index.getZeroBased());
+            Person editedPerson = createEditedPerson(personToEdit, editPersonDescriptor);
+
+            try {
+                model.updatePerson(personToEdit, editedPerson);
+            } catch (DuplicatePersonException dpe) {
+                throw new CommandException(MESSAGE_DUPLICATE_PERSON);
+            } catch (PersonNotFoundException pnfe) {
+                throw new AssertionError("The target person cannot be missing");
+            }
+            model.updateFilteredPersonList(PREDICATE_SHOW_ALL_PERSONS);
+            return new CommandResult(String.format(MESSAGE_EDIT_PERSON_SUCCESS, editedPerson));
+        } else {
+
+            try {
+                model.editTag(oldTag, newTag);
+            } catch (DuplicatePersonException dpe) {
+                throw new AssertionError("Updating the tags on one person cannot possibly make the person"
+                        + " identical to another person.");
+            } catch (PersonNotFoundException pnfe) {
+                throw new AssertionError("The target person cannot be missing");
+            } catch (TagNotFoundException tgne) {
+                throw new CommandException(MESSAGE_NONEXISTENT_TAG);
+            }
+            model.updateFilteredPersonList(PREDICATE_SHOW_ALL_PERSONS);
+            return new CommandResult(String.format(MESSAGE_EDIT_TAG_SUCCESS, oldTag));
         }
-
-        ReadOnlyPerson personToEdit = lastShownList.get(index.getZeroBased());
-        Person editedPerson = createEditedPerson(personToEdit, editPersonDescriptor);
-
-        try {
-            model.updatePerson(personToEdit, editedPerson);
-        } catch (DuplicatePersonException dpe) {
-            throw new CommandException(MESSAGE_DUPLICATE_PERSON);
-        } catch (PersonNotFoundException pnfe) {
-            throw new AssertionError("The target person cannot be missing");
-        }
-        model.updateFilteredPersonList(PREDICATE_SHOW_ALL_PERSONS);
-        return new CommandResult(String.format(MESSAGE_EDIT_PERSON_SUCCESS, editedPerson));
     }
 
     /**
@@ -129,8 +175,16 @@ public class EditCommand extends UndoableCommand {
 
         // state check
         EditCommand e = (EditCommand) other;
-        return index.equals(e.index)
-                && editPersonDescriptor.equals(e.editPersonDescriptor);
+
+        if (isEditForPerson) {
+            return  isEditForPerson == e.isEditForPerson
+                    && index.equals(e.index)
+                    && editPersonDescriptor.equals(e.editPersonDescriptor);
+        } else {
+            return isEditForPerson == e.isEditForPerson
+                    && oldTag.equals(e.oldTag)
+                    && newTag.equals(e.newTag);
+        }
     }
 
     /**
