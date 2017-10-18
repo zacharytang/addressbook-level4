@@ -373,21 +373,21 @@ The implementation of this parse is shown below:
 
 [source,java]
 ----
-    public DeleteCommand parse(String args) throws ParseException {
+public DeleteCommand parse(String args) throws ParseException {
 
-        ArgumentMultimap argMultimap = ArgumentTokenizer.tokenize(args, PREFIX_TAG);
-        String preamble = argMultimap.getPreamble();
+    ArgumentMultimap argMultimap = ArgumentTokenizer.tokenize(args, PREFIX_TAG);
+    String preamble = argMultimap.getPreamble();
 
-        if (preamble.equals("")) {
-            // parsing of tags into a Set<Tag> tagList
-            return new DeleteCommand(tagList); # <1>
+    if (preamble.equals("")) {
+        // parsing of tags into a Set<Tag> tagList
+        return new DeleteCommand(tagList); # <1>
 
-        } else if (preamble.matches("-?\\d+")) {
-            // parsing of the index
-            return new DeleteCommand(index); # <2>
-        }
-        // ...
+    } else if (preamble.matches("-?\\d+")) {
+        // parsing of the index
+        return new DeleteCommand(index); # <2>
     }
+    // ...
+}
 ----
 
 
@@ -435,15 +435,15 @@ This trivial implementation is show below.
 
 [source,java]
 ----
-    public CommandResult executeUndoableCommand() throws CommandException {
+public CommandResult executeUndoableCommand() throws CommandException {
 
-        if (targetTags == null && targetIndex != null) {
-            // command logic for deletion for a person
-        } else {
-            // command logic for deletion for a tag
-        }
-        // ...
+    if (targetTags == null && targetIndex != null) {
+        // command logic for deletion for a person
+    } else {
+        // command logic for deletion for a tag
     }
+    // ...
+}
 ----
 
 ==== Command Logic
