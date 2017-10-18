@@ -20,5 +20,7 @@ public class GenderTest {
         // valid Gender
         assertTrue(Gender.isValidGender("Male")); // GENDER_VALIDATION_WORD1
         assertTrue(Gender.isValidGender("Female")); // GENDER_VALIDATION_WORD2
+        assertTrue(Gender.isValidGender("M")); // GENDER_VALIDATION_WORD3
+        assertTrue(Gender.isValidGender("F")); // GENDER_VALIDATION_WORD4
     }
 }

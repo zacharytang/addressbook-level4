@@ -11,9 +11,11 @@ import seedu.address.commons.exceptions.IllegalValueException;
 public class Gender {
 
     public static final String MESSAGE_GENDER_CONSTRAINTS =
-            "Person gender should be a string of either 'Male' or 'Female'";
+            "Person gender should be a string of either 'Male', 'Female' or 'M', 'F'";
     public static final String GENDER_VALIDATION_WORD1 = "Male";
     public static final String GENDER_VALIDATION_WORD2 = "Female";
+    public static final String GENDER_VALIDATION_WORD3 = "M";
+    public static final String GENDER_VALIDATION_WORD4 = "F";
 
     public final String value;
 
@@ -35,7 +37,8 @@ public class Gender {
      * Returns if a given string is a valid person gender.
      */
     public static boolean isValidGender(String test) {
-        return test.equals(GENDER_VALIDATION_WORD1) || test.equals(GENDER_VALIDATION_WORD2);
+        return test.equals(GENDER_VALIDATION_WORD1) || test.equals(GENDER_VALIDATION_WORD2)
+                || test.equals(GENDER_VALIDATION_WORD3) || test.equals(GENDER_VALIDATION_WORD4);
     }
 
     @Override
