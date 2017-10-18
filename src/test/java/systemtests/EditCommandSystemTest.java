@@ -327,8 +327,8 @@ public class EditCommandSystemTest extends AddressBookSystemTest {
                 Tag.MESSAGE_TAG_CONSTRAINTS);
 
         /* Case: invalid timetable -> rejected */
-        assertCommandFailure(EditCommand.COMMAND_ALIAS + " " + INDEX_FIRST_PERSON.getOneBased() + INVALID_TIMETABLE_DESC,
-                Timetable.MESSAGE_TIMETABLE_URL_CONSTRAINTS);
+        assertCommandFailure(EditCommand.COMMAND_ALIAS + " " + INDEX_FIRST_PERSON.getOneBased()
+                        + INVALID_TIMETABLE_DESC, Timetable.MESSAGE_TIMETABLE_URL_CONSTRAINTS);
 
         assertCommandFailure(command, EditCommand.MESSAGE_DUPLICATE_PERSON);
     }

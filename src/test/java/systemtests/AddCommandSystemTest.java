@@ -60,7 +60,13 @@ import seedu.address.logic.commands.RedoCommand;
 import seedu.address.logic.commands.SelectCommand;
 import seedu.address.logic.commands.UndoCommand;
 import seedu.address.model.Model;
-import seedu.address.model.person.*;
+import seedu.address.model.person.Address;
+import seedu.address.model.person.Email;
+import seedu.address.model.person.Gender;
+import seedu.address.model.person.MatricNo;
+import seedu.address.model.person.Name;
+import seedu.address.model.person.Phone;
+import seedu.address.model.person.ReadOnlyPerson;
 import seedu.address.model.person.exceptions.DuplicatePersonException;
 import seedu.address.model.person.timetable.Timetable;
 import seedu.address.model.tag.Tag;
@@ -72,13 +78,15 @@ public class AddCommandSystemTest extends AddressBookSystemTest {
     @Test
     public void add() throws Exception {
         Model model = getModel();
-        /* Case: add a person without tags to a non-empty address book, command with leading spaces and trailing spaces
+        /* Case: add a person without tags to a non-empty address book,
+         * command with leading spaces and trailing spaces
          * -> added
          */
         ReadOnlyPerson toAdd = AMY;
         String command = "   " + AddCommand.COMMAND_WORD + "  " + NAME_DESC_AMY + "  " + GENDER_DESC_AMY + "  "
                 + MATRIC_NO_DESC_AMY + "   " + PHONE_DESC_AMY + " "
-                + EMAIL_DESC_AMY + "   " + ADDRESS_DESC_AMY + "   " + TIMETABLE_DESC_AMY + "   " + TAG_DESC_FRIEND + " ";
+                + EMAIL_DESC_AMY + "   " + ADDRESS_DESC_AMY + "   " + TIMETABLE_DESC_AMY + "   "
+                + TAG_DESC_FRIEND + " ";
 
         assertCommandSuccess(command, toAdd);
 
@@ -89,7 +97,8 @@ public class AddCommandSystemTest extends AddressBookSystemTest {
 
         command = "   " + AddCommand.COMMAND_ALIAS + "  " + NAME_DESC_AMY + "  " + GENDER_DESC_AMY + "  "
                 + MATRIC_NO_DESC_AMY + "   " + PHONE_DESC_AMY + " "
-                + EMAIL_DESC_AMY + "   " + ADDRESS_DESC_AMY + "   " + TIMETABLE_DESC_AMY + "   " + TAG_DESC_FRIEND + " ";
+                + EMAIL_DESC_AMY + "   " + ADDRESS_DESC_AMY + "   " + TIMETABLE_DESC_AMY + "   "
+                + TAG_DESC_FRIEND + " ";
 
         assertCommandSuccess(command, toAdd);
 
@@ -100,7 +109,8 @@ public class AddCommandSystemTest extends AddressBookSystemTest {
 
         command = "   " + AddCommand.COMMAND_SECONDARY + "  " + NAME_DESC_AMY + "  " + GENDER_DESC_AMY + "  "
                 + MATRIC_NO_DESC_AMY + "   " + PHONE_DESC_AMY + " "
-                + EMAIL_DESC_AMY + "   " + ADDRESS_DESC_AMY + "   " + TIMETABLE_DESC_AMY + "   " + TAG_DESC_FRIEND + " ";
+                + EMAIL_DESC_AMY + "   " + ADDRESS_DESC_AMY + "   " + TIMETABLE_DESC_AMY + "   "
+                + TAG_DESC_FRIEND + " ";
         assertCommandSuccess(command, toAdd);
 
         /* Case: undo adding Amy to the list -> Amy deleted */
@@ -177,11 +187,12 @@ public class AddCommandSystemTest extends AddressBookSystemTest {
                 + EMAIL_DESC_AMY + ADDRESS_DESC_BOB + TIMETABLE_DESC_AMY + TAG_DESC_FRIEND;
 
         /* Case: add a person with all fields same as another person in the address book except timetable -> added */
-            toAdd = new PersonBuilder().withName(VALID_NAME_AMY).withPhone(VALID_PHONE_AMY).withEmail(VALID_EMAIL_AMY)
-                    .withAddress(VALID_ADDRESS_AMY).withTimetable(VALID_TIMETABLE_BOB).withTags(VALID_TAG_FRIEND).build();
-            command = AddCommand.COMMAND_WORD + NAME_DESC_AMY + GENDER_DESC_AMY + MATRIC_NO_DESC_AMY
-                    + PHONE_DESC_AMY + EMAIL_DESC_AMY + ADDRESS_DESC_AMY
-                    + TIMETABLE_DESC_BOB + TAG_DESC_FRIEND;
+        toAdd = new PersonBuilder().withName(VALID_NAME_AMY).withGender(VALID_GENDER_AMY)
+                .withMatricNo(VALID_MATRIC_NO_AMY).withPhone(VALID_PHONE_AMY).withEmail(VALID_EMAIL_AMY)
+                .withAddress(VALID_ADDRESS_AMY).withTimetable(VALID_TIMETABLE_BOB).withTags(VALID_TAG_FRIEND).build();
+        command = AddCommand.COMMAND_WORD + NAME_DESC_AMY + GENDER_DESC_AMY + MATRIC_NO_DESC_AMY
+                + PHONE_DESC_AMY + EMAIL_DESC_AMY + ADDRESS_DESC_AMY
+                + TIMETABLE_DESC_BOB + TAG_DESC_FRIEND;
 
         assertCommandSuccess(command, toAdd);
 
@@ -256,8 +267,8 @@ public class AddCommandSystemTest extends AddressBookSystemTest {
                 + EMAIL_DESC_AMY + TIMETABLE_DESC_AMY;
 
         /* Case: missing timetable -> rejected */
-            command = AddCommand.COMMAND_WORD + NAME_DESC_AMY + GENDER_DESC_AMY + MATRIC_NO_DESC_AMY
-                    + PHONE_DESC_AMY + EMAIL_DESC_AMY + ADDRESS_DESC_AMY;
+        command = AddCommand.COMMAND_WORD + NAME_DESC_AMY + GENDER_DESC_AMY + MATRIC_NO_DESC_AMY
+                + PHONE_DESC_AMY + EMAIL_DESC_AMY + ADDRESS_DESC_AMY;
 
         assertCommandFailure(command, String.format(MESSAGE_INVALID_COMMAND_FORMAT, AddCommand.MESSAGE_USAGE));
 
@@ -273,12 +284,12 @@ public class AddCommandSystemTest extends AddressBookSystemTest {
 
         /* Case: invalid gender -> rejected */
         command = AddCommand.COMMAND_WORD + NAME_DESC_AMY + INVALID_GENDER_DESC + MATRIC_NO_DESC_AMY + PHONE_DESC_AMY
-                + EMAIL_DESC_AMY + ADDRESS_DESC_AMY;
+                + EMAIL_DESC_AMY + ADDRESS_DESC_AMY + TIMETABLE_DESC_AMY;
         assertCommandFailure(command, Gender.MESSAGE_GENDER_CONSTRAINTS);
 
         /* Case: invalid matricNo -> rejected */
         command = AddCommand.COMMAND_WORD + NAME_DESC_AMY + GENDER_DESC_AMY + INVALID_MATRIC_NO_DESC + PHONE_DESC_AMY
-                + EMAIL_DESC_AMY + ADDRESS_DESC_AMY;
+                + EMAIL_DESC_AMY + ADDRESS_DESC_AMY + TIMETABLE_DESC_AMY;
         assertCommandFailure(command, MatricNo.MESSAGE_MATRIC_NO_CONSTRAINTS);
 
         /* Case: invalid phone -> rejected */

@@ -15,9 +15,9 @@ import static seedu.address.logic.commands.CommandTestUtil.INVALID_MATRIC_NO_DES
 import static seedu.address.logic.commands.CommandTestUtil.INVALID_NAME_DESC;
 import static seedu.address.logic.commands.CommandTestUtil.INVALID_PHONE_DESC;
 import static seedu.address.logic.commands.CommandTestUtil.INVALID_TAG_DESC;
+import static seedu.address.logic.commands.CommandTestUtil.INVALID_TIMETABLE_DESC;
 import static seedu.address.logic.commands.CommandTestUtil.MATRIC_NO_DESC_AMY;
 import static seedu.address.logic.commands.CommandTestUtil.MATRIC_NO_DESC_BOB;
-import static seedu.address.logic.commands.CommandTestUtil.INVALID_TIMETABLE_DESC;
 import static seedu.address.logic.commands.CommandTestUtil.NAME_DESC_AMY;
 import static seedu.address.logic.commands.CommandTestUtil.NAME_DESC_BOB;
 import static seedu.address.logic.commands.CommandTestUtil.PHONE_DESC_AMY;
@@ -48,7 +48,13 @@ import static seedu.address.logic.parser.CommandParserTestUtil.assertParseSucces
 import org.junit.Test;
 
 import seedu.address.logic.commands.AddCommand;
-import seedu.address.model.person.*;
+import seedu.address.model.person.Address;
+import seedu.address.model.person.Email;
+import seedu.address.model.person.Gender;
+import seedu.address.model.person.MatricNo;
+import seedu.address.model.person.Name;
+import seedu.address.model.person.Person;
+import seedu.address.model.person.Phone;
 import seedu.address.model.person.timetable.Timetable;
 import seedu.address.model.tag.Tag;
 import seedu.address.testutil.PersonBuilder;
@@ -58,7 +64,6 @@ public class AddCommandParserTest {
 
     @Test
     public void parse_allFieldsPresent_success() {
-<<<<<<< HEAD
         Person expectedPerson = new PersonBuilder().withName(VALID_NAME_BOB).withGender(VALID_GENDER_BOB)
                 .withMatricNo(VALID_MATRIC_NO_BOB).withPhone(VALID_PHONE_BOB)
                 .withEmail(VALID_EMAIL_BOB).withAddress(VALID_ADDRESS_BOB).withTimetable(VALID_TIMETABLE_BOB)
@@ -67,32 +72,38 @@ public class AddCommandParserTest {
         // multiple names - last name accepted
         assertParseSuccess(parser, AddCommand.COMMAND_WORD + NAME_DESC_AMY + NAME_DESC_BOB + GENDER_DESC_BOB
                 + MATRIC_NO_DESC_BOB + PHONE_DESC_BOB
-                + EMAIL_DESC_BOB + ADDRESS_DESC_BOB + TIMETABLE_DESC_BOB + TAG_DESC_FRIEND, new AddCommand(expectedPerson));
+                + EMAIL_DESC_BOB + ADDRESS_DESC_BOB + TIMETABLE_DESC_BOB + TAG_DESC_FRIEND,
+                new AddCommand(expectedPerson));
 
         // multiple genders - last gender accepted
         assertParseSuccess(parser, AddCommand.COMMAND_WORD + NAME_DESC_BOB + GENDER_DESC_AMY + GENDER_DESC_BOB
                 + MATRIC_NO_DESC_BOB + PHONE_DESC_BOB
-                + EMAIL_DESC_BOB + ADDRESS_DESC_BOB + TIMETABLE_DESC_BOB + TAG_DESC_FRIEND, new AddCommand(expectedPerson));
+                + EMAIL_DESC_BOB + ADDRESS_DESC_BOB + TIMETABLE_DESC_BOB + TAG_DESC_FRIEND,
+                new AddCommand(expectedPerson));
 
         // multiple matric numbers - last matric number accepted
         assertParseSuccess(parser, AddCommand.COMMAND_WORD + NAME_DESC_BOB + GENDER_DESC_BOB
                 + MATRIC_NO_DESC_AMY + MATRIC_NO_DESC_BOB + PHONE_DESC_BOB
-                + EMAIL_DESC_BOB + ADDRESS_DESC_BOB + TIMETABLE_DESC_BOB + TAG_DESC_FRIEND, new AddCommand(expectedPerson));
+                + EMAIL_DESC_BOB + ADDRESS_DESC_BOB + TIMETABLE_DESC_BOB + TAG_DESC_FRIEND,
+                new AddCommand(expectedPerson));
 
         // multiple phones - last phone accepted
         assertParseSuccess(parser, AddCommand.COMMAND_WORD + NAME_DESC_BOB + GENDER_DESC_BOB
                 + MATRIC_NO_DESC_BOB + PHONE_DESC_AMY + PHONE_DESC_BOB
-                + EMAIL_DESC_BOB + ADDRESS_DESC_BOB + TIMETABLE_DESC_BOB + TAG_DESC_FRIEND, new AddCommand(expectedPerson));
+                + EMAIL_DESC_BOB + ADDRESS_DESC_BOB + TIMETABLE_DESC_BOB + TAG_DESC_FRIEND,
+                new AddCommand(expectedPerson));
 
         // multiple emails - last email accepted
         assertParseSuccess(parser, AddCommand.COMMAND_WORD + NAME_DESC_BOB + GENDER_DESC_BOB
                 + MATRIC_NO_DESC_BOB + PHONE_DESC_BOB + EMAIL_DESC_AMY
-                + EMAIL_DESC_BOB + ADDRESS_DESC_BOB + TIMETABLE_DESC_BOB + TAG_DESC_FRIEND, new AddCommand(expectedPerson));
+                + EMAIL_DESC_BOB + ADDRESS_DESC_BOB + TIMETABLE_DESC_BOB + TAG_DESC_FRIEND,
+                new AddCommand(expectedPerson));
 
         // multiple addresses - last address accepted
         assertParseSuccess(parser, AddCommand.COMMAND_WORD + NAME_DESC_BOB + GENDER_DESC_BOB
                 + MATRIC_NO_DESC_BOB + PHONE_DESC_BOB + EMAIL_DESC_BOB
-                + ADDRESS_DESC_AMY + ADDRESS_DESC_BOB + TIMETABLE_DESC_BOB + TAG_DESC_FRIEND, new AddCommand(expectedPerson));
+                + ADDRESS_DESC_AMY + ADDRESS_DESC_BOB + TIMETABLE_DESC_BOB + TAG_DESC_FRIEND,
+                new AddCommand(expectedPerson));
 
         // multiple tags - all accepted
         Person expectedPersonMultipleTags = new PersonBuilder().withName(VALID_NAME_BOB)
@@ -167,27 +178,32 @@ public class AddCommandParserTest {
         // invalid name
         assertParseFailure(parser, AddCommand.COMMAND_WORD + INVALID_NAME_DESC + GENDER_DESC_BOB
                         + MATRIC_NO_DESC_BOB + PHONE_DESC_BOB + EMAIL_DESC_BOB
-                        + ADDRESS_DESC_BOB + TIMETABLE_DESC_BOB + TAG_DESC_HUSBAND + TAG_DESC_FRIEND, Name.MESSAGE_NAME_CONSTRAINTS);
+                        + ADDRESS_DESC_BOB + TIMETABLE_DESC_BOB + TAG_DESC_HUSBAND + TAG_DESC_FRIEND,
+                Name.MESSAGE_NAME_CONSTRAINTS);
 
         // invalid gender
         assertParseFailure(parser, AddCommand.COMMAND_WORD + NAME_DESC_BOB + INVALID_GENDER_DESC
                 + MATRIC_NO_DESC_BOB + PHONE_DESC_BOB + EMAIL_DESC_BOB
-                + ADDRESS_DESC_BOB + TAG_DESC_HUSBAND + TAG_DESC_FRIEND, Gender.MESSAGE_GENDER_CONSTRAINTS);
+                + ADDRESS_DESC_BOB + TIMETABLE_DESC_BOB + TAG_DESC_HUSBAND + TAG_DESC_FRIEND,
+                Gender.MESSAGE_GENDER_CONSTRAINTS);
 
         // invalid matricNo
         assertParseFailure(parser, AddCommand.COMMAND_WORD + NAME_DESC_BOB + GENDER_DESC_BOB
                 + INVALID_MATRIC_NO_DESC + PHONE_DESC_BOB + EMAIL_DESC_BOB
-                + ADDRESS_DESC_BOB + TAG_DESC_HUSBAND + TAG_DESC_FRIEND, MatricNo.MESSAGE_MATRIC_NO_CONSTRAINTS);
+                + ADDRESS_DESC_BOB + TIMETABLE_DESC_BOB + TAG_DESC_HUSBAND + TAG_DESC_FRIEND,
+                MatricNo.MESSAGE_MATRIC_NO_CONSTRAINTS);
 
         // invalid phone
         assertParseFailure(parser, AddCommand.COMMAND_WORD + NAME_DESC_BOB + GENDER_DESC_BOB
                 + MATRIC_NO_DESC_BOB + INVALID_PHONE_DESC + EMAIL_DESC_BOB
-                + ADDRESS_DESC_BOB + TIMETABLE_DESC_BOB + TAG_DESC_HUSBAND + TAG_DESC_FRIEND, Phone.MESSAGE_PHONE_CONSTRAINTS);
+                + ADDRESS_DESC_BOB + TIMETABLE_DESC_BOB + TAG_DESC_HUSBAND + TAG_DESC_FRIEND,
+                Phone.MESSAGE_PHONE_CONSTRAINTS);
 
         // invalid email
         assertParseFailure(parser, AddCommand.COMMAND_WORD + NAME_DESC_BOB + GENDER_DESC_BOB
                 + MATRIC_NO_DESC_BOB + PHONE_DESC_BOB + INVALID_EMAIL_DESC
-                        + ADDRESS_DESC_BOB + TIMETABLE_DESC_BOB + TAG_DESC_HUSBAND + TAG_DESC_FRIEND, Email.MESSAGE_EMAIL_CONSTRAINTS);
+                        + ADDRESS_DESC_BOB + TIMETABLE_DESC_BOB + TAG_DESC_HUSBAND + TAG_DESC_FRIEND,
+                Email.MESSAGE_EMAIL_CONSTRAINTS);
 
         // invalid address
         assertParseFailure(parser, AddCommand.COMMAND_WORD + NAME_DESC_BOB + GENDER_DESC_BOB
@@ -196,14 +212,16 @@ public class AddCommandParserTest {
                 Address.MESSAGE_ADDRESS_CONSTRAINTS);
 
         // invalid timetable
-        assertParseFailure(parser, AddCommand.COMMAND_WORD + NAME_DESC_BOB + PHONE_DESC_BOB + EMAIL_DESC_BOB
+        assertParseFailure(parser, AddCommand.COMMAND_WORD + NAME_DESC_BOB + GENDER_DESC_BOB
+                        + MATRIC_NO_DESC_BOB + PHONE_DESC_BOB + EMAIL_DESC_BOB
                         + ADDRESS_DESC_BOB + INVALID_TIMETABLE_DESC + TAG_DESC_HUSBAND + TAG_DESC_FRIEND,
                 Timetable.MESSAGE_TIMETABLE_URL_CONSTRAINTS);
 
         // invalid tag
         assertParseFailure(parser, AddCommand.COMMAND_WORD + NAME_DESC_BOB + GENDER_DESC_BOB
                         + MATRIC_NO_DESC_BOB + PHONE_DESC_BOB + EMAIL_DESC_BOB
-                        + ADDRESS_DESC_BOB + TIMETABLE_DESC_BOB + INVALID_TAG_DESC + VALID_TAG_FRIEND, Tag.MESSAGE_TAG_CONSTRAINTS);
+                        + ADDRESS_DESC_BOB + TIMETABLE_DESC_BOB + INVALID_TAG_DESC + VALID_TAG_FRIEND,
+                Tag.MESSAGE_TAG_CONSTRAINTS);
 
         // two invalid values, only first invalid value reported
         assertParseFailure(parser, AddCommand.COMMAND_WORD + INVALID_NAME_DESC + GENDER_DESC_BOB
