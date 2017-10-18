@@ -19,6 +19,8 @@ import seedu.address.model.person.ReadOnlyPerson;
 import seedu.address.model.person.exceptions.DuplicatePersonException;
 import seedu.address.model.person.exceptions.PersonNotFoundException;
 import seedu.address.model.tag.Tag;
+import seedu.address.model.tag.UniqueTagList.DuplicateTagException;
+import seedu.address.model.tag.exceptions.TagNotFoundException;
 
 /**
  * Represents the in-memory model of the address book data.
@@ -54,20 +56,6 @@ public class ModelManager extends ComponentManager implements Model {
     }
 
     @Override
-    public void deleteTag(Tag tag) throws DuplicatePersonException, PersonNotFoundException {
-        for (int i = 0; i < addressBook.getPersonList().size(); i++) {
-            ReadOnlyPerson oldPerson = addressBook.getPersonList().get(i);
-
-            Person newPerson = new Person(oldPerson);
-            Set<Tag> newTags = new HashSet<Tag>(newPerson.getTags());
-            newTags.remove(tag);
-            newPerson.setTags(newTags);
-
-            addressBook.updatePerson(oldPerson, newPerson);
-        }
-    }
-
-    @Override
     public ReadOnlyAddressBook getAddressBook() {
         return addressBook;
     }
@@ -80,6 +68,46 @@ public class ModelManager extends ComponentManager implements Model {
     @Override
     public synchronized void deletePerson(ReadOnlyPerson target) throws PersonNotFoundException {
         addressBook.removePerson(target);
+        indicateAddressBookChanged();
+    }
+
+    @Override
+    public void deleteTag(Tag tag) throws DuplicatePersonException, PersonNotFoundException, TagNotFoundException {
+        addressBook.removeTag(tag);
+        for (int i = 0; i < addressBook.getPersonList().size(); i++) {
+            ReadOnlyPerson oldPerson = addressBook.getPersonList().get(i);
+
+            Person newPerson = new Person(oldPerson);
+            Set<Tag> newTags = new HashSet<Tag>(newPerson.getTags());
+            newTags.remove(tag);
+            newPerson.setTags(newTags);
+
+            addressBook.updatePerson(oldPerson, newPerson);
+        }
+        indicateAddressBookChanged();
+    }
+
+    @Override
+    public void editTag(Tag oldTag, Tag newTag) throws DuplicatePersonException, PersonNotFoundException,
+            TagNotFoundException {
+        addressBook.removeTag(oldTag);
+        for (int i = 0; i < addressBook.getPersonList().size(); i++) {
+            ReadOnlyPerson oldPerson = addressBook.getPersonList().get(i);
+
+            Person newPerson = new Person(oldPerson);
+            Set<Tag> newTags = new HashSet<Tag>(newPerson.getTags());
+            if (newTags.remove(oldTag)) {
+                newTags.add(newTag);
+                newPerson.setTags(newTags);
+                addressBook.updatePerson(oldPerson, newPerson);
+            }
+        }
+        try {
+            addressBook.addTag(newTag);
+        } catch (DuplicateTagException dpe) {
+            //do nothing. It's perfectly fine if the new tag already exists in the address book. Enabled merge
+        }
+
         indicateAddressBookChanged();
     }
 
