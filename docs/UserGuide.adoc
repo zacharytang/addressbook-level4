@@ -65,7 +65,7 @@ Alternatives: `a` , `insert`
 
 ****
 * GENDER is either Male/Female or M/F
-* MATRIC_NUMBER should be a 9-digit string starting with 'A or a' and ending with a letter
+* MATRIC_NUMBER should be a 9-character string starting with 'A or a' and ending with a letter
 * The format for birthday is YYYYMMDD.
 * A person can have any number of tags (including 0)
 * A person can add a temporary tag to a person by adding [tt/NUM_OF_MONTHS/TEMPORARY TAG]
