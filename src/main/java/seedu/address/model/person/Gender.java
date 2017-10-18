@@ -14,19 +14,24 @@ public class Gender {
             "Person gender should be a string of either 'Male', 'Female' or 'M', 'F'";
     public static final String GENDER_VALIDATION_WORD1 = "Male";
     public static final String GENDER_VALIDATION_WORD2 = "Female";
-    public static final String GENDER_VALIDATION_WORD3 = "M";
-    public static final String GENDER_VALIDATION_WORD4 = "F";
 
     public final String value;
 
     /**
      * Validates given gender.
+     * If gender string is 'Male' or 'Female', it remains the same.
+     * Converts 'M' into 'Male', 'F' into 'Female'.
      *
      * @throws IllegalValueException if given gender string is invalid.
      */
     public Gender(String gender) throws IllegalValueException {
         requireNonNull(gender);
         String trimmedGender = gender.trim();
+        if (trimmedGender.equals("M")) {
+            trimmedGender = "Male";
+        } else if (trimmedGender.equals("F")) {
+            trimmedGender = "Female";
+        }
         if (!isValidGender(trimmedGender)) {
             throw new IllegalValueException(MESSAGE_GENDER_CONSTRAINTS);
         }
@@ -37,8 +42,7 @@ public class Gender {
      * Returns if a given string is a valid person gender.
      */
     public static boolean isValidGender(String test) {
-        return test.equals(GENDER_VALIDATION_WORD1) || test.equals(GENDER_VALIDATION_WORD2)
-                || test.equals(GENDER_VALIDATION_WORD3) || test.equals(GENDER_VALIDATION_WORD4);
+        return test.equals(GENDER_VALIDATION_WORD1) || test.equals(GENDER_VALIDATION_WORD2);
     }
 
     @Override

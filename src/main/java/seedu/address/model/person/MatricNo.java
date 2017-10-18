@@ -43,11 +43,15 @@ public class MatricNo {
         return value;
     }
 
+    /**
+     * Returns true if two matric numbers are the same.
+     * 'A0162533K' equals 'a0162533k'
+     */
     @Override
     public boolean equals(Object other) {
         return other == this // short circuit if same object
                 || (other instanceof MatricNo // instanceof handles nulls
-                && this.value.equals(((MatricNo) other).value)); // state check
+                && this.value.toUpperCase().equals(((MatricNo) other).value.toUpperCase())); // state check
     }
 
     @Override
