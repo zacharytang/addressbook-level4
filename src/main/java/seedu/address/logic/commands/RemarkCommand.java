@@ -99,9 +99,11 @@ public class RemarkCommand extends UndoableCommand {
     public static Person createRemarkedPerson(ReadOnlyPerson personToRemark,
                                                  Remark remark) {
         assert personToRemark != null;
+
         Person remarkPerson = new Person(personToRemark.getName(), personToRemark.getGender(),
                 personToRemark.getMatricNo(), personToRemark.getPhone(),
-                personToRemark.getEmail(), personToRemark.getAddress(), remark, personToRemark.getTags());
+                personToRemark.getEmail(), personToRemark.getAddress(), personToRemark.getTimetable(),
+                remark, personToRemark.getTags());
 
         return remarkPerson;
     }

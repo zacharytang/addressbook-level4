@@ -16,6 +16,7 @@ import seedu.address.model.person.Gender;
 import seedu.address.model.person.MatricNo;
 import seedu.address.model.person.Name;
 import seedu.address.model.person.Phone;
+import seedu.address.model.person.timetable.Timetable;
 import seedu.address.model.tag.Tag;
 
 /**
@@ -111,4 +112,20 @@ public class ParserUtil {
         return tagSet;
     }
 
+    /**
+     * Parses a single {@code Optional<String> tag} into an {@code Optional<Tag>} if {@code tag} is present.
+     * See header comment of this class regarding the use of {@code Optional} parameters.
+     */
+    public static Optional<Tag> parseSingleTag(Optional<String> tag) throws IllegalValueException {
+        requireNonNull(tag);
+        return tag.isPresent() ? Optional.of(new Tag(tag.get())) : Optional.empty();
+    }
+
+    /**
+     * Parses a {@code Optional<String> url} into an {@code Optional<Timetable>} if {@code url} is present.
+     */
+    public static Optional<Timetable> parseTimetable(Optional<String> url) throws IllegalValueException {
+        requireNonNull(url);
+        return url.isPresent() ? Optional.of(new Timetable(url.get())) : Optional.empty();
+    }
 }
