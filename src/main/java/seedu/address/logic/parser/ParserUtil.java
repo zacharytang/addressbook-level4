@@ -91,6 +91,16 @@ public class ParserUtil {
         }
         return tagSet;
     }
+
+    /**
+     * Parses a single {@code Optional<String> tag} into an {@code Optional<Tag>} if {@code tag} is present.
+     * See header comment of this class regarding the use of {@code Optional} parameters.
+     */
+    public static Optional<Tag> parseSingleTag(Optional<String> tag) throws IllegalValueException {
+        requireNonNull(tag);
+        return tag.isPresent() ? Optional.of(new Tag(tag.get())) : Optional.empty();
+    }
+
     /**
      * Parses a {@code Optional<String> url} into an {@code Optional<Timetable>} if {@code url} is present.
      */
