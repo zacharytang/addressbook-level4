@@ -62,7 +62,7 @@ This will generate all resources required by the application and tests.
 
 ==== Configuring the coding style
 
-This project follows https://github.com/oss-generic/process/blob/master/docs/CodingStandards.md[oss-generic coding standards]. IntelliJ's default style is mostly compliant with ours but it uses a different import order from ours. To rectify,
+This project follows https://github.com/oss-generic/process/blob/master/codingStandards/CodingStandard-Java.adoc[oss-generic coding standards]. IntelliJ's default style is mostly compliant with ours but it uses a different import order from ours. To rectify,
 
 . Go to `File` > `Settings...` (Windows/Linux), or `IntelliJ IDEA` > `Preferences...` (macOS)
 . Select `Editor` > `Code Style` > `Java`
@@ -351,6 +351,152 @@ image::UndoRedoActivityDiagram.png[width="200"]
 **Pros:** We do not need to maintain a separate stack, and just reuse what is already in the codebase. +
 **Cons:** Requires dealing with commands that have already been undone: We must remember to skip these commands. Violates Single Responsibility Principle and Separation of Concerns as `HistoryManager` now needs to do two different things. +
 // end::undoredo[]
+
+=== Delete Tag
+
+To delete a tag means to delete a specified tag in all persons who contain that tag, as well as in the master list of tags in the Address Book.
+This is significantly different from deleting a tag for a person via the `edit` command.
+The need for this came about from the User Story in a which a user would like to delete a tag that was no longer relevant or is outdated.
+To delete a particular tag across multiple contacts would be a tedious process. Hence the addition of this feature.
+
+In general, the ability to delete a tag was implemented via an _augmentation_ of the existing `delete` command.
+
+This augmentation is achieved via
+
+* detection of the type of deletion in the DeleteCommandParser
+* overloading the DeleteCommand constructor
+* executing the respective logic based on which attributes are present/non-null.
+
+==== [DeleteCommandParser] Detection of the Deletion Type
+
+The current `delete` command (for a person) is in the format `delete INDEX`. Deleting a tag is in the format `delete t/TAG`.
+The same `delete` command is used but the parameters in the command line are different.
+
+The two types of commands are distinguished by the `preamble` of the parameter arguments after the word `delete`, when tokenized against the `/t` prefix for tags.
+
+The preamble for `delete INDEX` is a *digit* while the preamble for `delete t/TAG` is a *blank*.
+The implementation of this parse is shown below:
+
+
+[source,java]
+----
+public DeleteCommand parse(String args) throws ParseException {
+
+    ArgumentMultimap argMultimap = ArgumentTokenizer.tokenize(args, PREFIX_TAG);
+    String preamble = argMultimap.getPreamble();
+
+    if (preamble.equals("")) {
+        // parsing of tags into a Set<Tag> tagList
+        return new DeleteCommand(tagList); # <1>
+
+    } else if (preamble.matches("-?\\d+")) {
+        // parsing of the index
+        return new DeleteCommand(index); # <2>
+    }
+    // ...
+}
+----
+
+
+==== [DeleteCommand] Overloading the DeleteCommand constructor
+
+With reference to the previous code snippet the type of `DeleteCommand` returned during the parse are also different.
+
+<1> a `new DeleteCommand(tagList)` is returned when deleting one or more tags.
+<2> a `new DeleteCommand(index)` is returned when deleting a person.
+
+The following code shows the respective object construction of both types of DeleteCommand.
+
+
+Depending on the constructor method called, *either* the `targetIndex` attribute *or* the `targetTags` will be made null.
+Which will lead on to the next section about command execution.
+
+[source,java]
+----
+public class DeleteCommand extends UndoableCommand {
+    // ...
+    private final Index targetIndex;
+
+    private final Set<Tag> targetTags;
+
+    public DeleteCommand(Index targetIndex) {
+        this.targetIndex = targetIndex;
+        this.targetTags = null;
+    }
+
+    public DeleteCommand(Set<Tag> targetTags) {
+        this.targetTags = targetTags;
+        this.targetIndex = null;
+    }
+    // ...
+}
+----
+
+
+
+==== [DeleteCommand] Logic Execution depending on which attributes are present.
+
+_If_ `targetIndex` is present, execute the logic for deleting a person, _else_ execute the logic for deleting a tag.
+
+This trivial implementation is show below.
+
+[source,java]
+----
+public CommandResult executeUndoableCommand() throws CommandException {
+
+    if (targetTags == null && targetIndex != null) {
+        // command logic for deletion for a person
+    } else {
+        // command logic for deletion for a tag
+    }
+    // ...
+}
+----
+
+==== Command Logic
+
+The following sequence diagrams show how the delete operation for tags work.
+
+Not shown in Figure B, `listTags` are checked against `listOfExistingTags`, i.e. all tags
+to be deleted are checked whether each of them already exist in the address book. If this check fails, an exception is thrown.
+The sequence diagram demonstrates a *successful* deletion, hence this aspect of the logic is omitted for clarity.
+
+image::DeleteCommandForTagSequenceDiagram.png[width="800"]
+_Figure A. Typical command execution_
+
+image::DeleteCommandForTagSequenceDiagram2.png[width="800"]
+_Figure B. The tags parsed are put into an ArrayList and iterated through for deletion_
+
+image::DeleteCommandForTagSequenceDiagram3.png[width="800"]
+_Figure C. How each tag is removed from the Address Book and each Person's list of tags_
+
+==== Design Considerations
+
+**Aspect:** Implementation of Delete Tags +
+**Alternative 1 (current choice):** Augment the existing delete command +
+**Pros:** The same command word `delete` is used which is an intuitive way to invoke a deletion of some object (person or tag).  +
+**Cons:** The DeleteCommand class is no longer responsible for deletion of a person *only*
+but is now responsible for deleting a tag as well.
+Augmenting the command via overriding constructors, adding new attributes
+and modifying the parse may seem too convoluted a solution.
+Users who are used to the previous version of the command may not appreciate the new change
+If bugs arise from this implementation, these users will be very unhappy because this is a change
+to the command that to them may be uncalled for. +
+**Alternative 2:** Just create a new command `deletetag` +
+**Pros:** Simple implementation of a new command. Does not involve any major modification of existing parse and command logic +
+**Cons:** `deletetag t/tag` is not as inuitive a command line especially to new or casual users.
+Users may try `delete t/tag` out of instinct and we would need to inform or prompt users of the `deletetag` command.
+
+---
+
+**Aspect:** How delete command executes +
+**Alternative 1 (current choice):** On the `Logic` level, iterate through an array of tags and invoke a Model method `deleteTag(Tag tag)` on each tag.  +
+**Alternative 2:** On the `Logic` level, invoke a method `deleteTags(tagSet)` on a Set<Tag>. Implement `deleteTags(Set<Tag> tagSet)` in the Model component. +
+**Reason:** We have decided that the Model API deal with objects in singular amounts, i.e. deletePerson, addPerson, deleteTag,
+as opposed to collections of objects, i.e. deletePersons, deleteTags.
+In order to maintain consistency within the API, the first choice was chosen.
+
+---
 
 === Logging
 

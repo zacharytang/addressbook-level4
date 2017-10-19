@@ -2,6 +2,8 @@
 <addressbook>
     <persons>
         <name>Hans Muster</name>
+        <gender isPrivate="false">Male</gender>
+        <matricNo isPrivate="false">A0133311K</matricNo>
         <phone isPrivate="false">9482424</phone>
         <email isPrivate="false">hans@example.com</email>
         <address isPrivate="false">4th street</address>
@@ -10,6 +12,8 @@
     </persons>
     <persons>
         <name>Ruth Mueller</name>
+        <gender isPrivate="false">Male</gender>
+        <matricNo isPrivate="false">A2211335J</matricNo>
         <phone isPrivate="false">87249245</phone>
         <email isPrivate="false">ruth@example.com</email>
         <address isPrivate="false">81th street</address>
@@ -18,6 +22,8 @@
     </persons>
     <persons>
         <name>Heinz Kurz</name>
+        <gender isPrivate="false">Female</gender>
+        <matricNo isPrivate="false">A0165522S</matricNo>
         <phone isPrivate="false">95352563</phone>
         <email isPrivate="false">heinz@example.com</email>
         <address isPrivate="false">wall street</address>
@@ -26,6 +32,8 @@
     </persons>
     <persons>
         <name>Cornelia Meier</name>
+        <gender isPrivate="false">Female</gender>
+        <matricNo isPrivate="false">A0142251U</matricNo>
         <phone isPrivate="false">87652533</phone>
         <email isPrivate="false">cornelia@example.com</email>
         <address isPrivate="false">10th street</address>
@@ -34,6 +42,8 @@
     </persons>
     <persons>
         <name>Werner Meyer</name>
+        <gender isPrivate="false">Male</gender>
+        <matricNo isPrivate="false">A0165432U</matricNo>
         <phone isPrivate="false">9482224</phone>
         <email isPrivate="false">werner@example.com</email>
         <address isPrivate="false">michegan ave</address>
@@ -42,6 +52,8 @@
     </persons>
     <persons>
         <name>Lydia Kunz</name>
+        <gender isPrivate="false">Female</gender>
+        <matricNo isPrivate="false">A0123442U</matricNo>
         <phone isPrivate="false">9482427</phone>
         <email isPrivate="false">lydia@example.com</email>
         <address isPrivate="false">little tokyo</address>
@@ -50,6 +62,8 @@
     </persons>
     <persons>
         <name>Anna Best</name>
+        <gender isPrivate="false">Female</gender>
+        <matricNo isPrivate="false">A0162232U</matricNo>
         <phone isPrivate="false">9482442</phone>
         <email isPrivate="false">anna@example.com</email>
         <address isPrivate="false">4th street</address>
@@ -58,6 +72,8 @@
     </persons>
     <persons>
         <name>Stefan Meier</name>
+        <gender isPrivate="false">Male</gender>
+        <matricNo isPrivate="false">A0133432U</matricNo>
         <phone isPrivate="false">8482424</phone>
         <email isPrivate="false">stefan@example.com</email>
         <address isPrivate="false">little india</address>
@@ -66,6 +82,8 @@
     </persons>
     <persons>
         <name>Martin Mueller</name>
+        <gender isPrivate="false">Male</gender>
+        <matricNo isPrivate="false">A0115252T</matricNo>
         <phone isPrivate="false">8482131</phone>
         <email isPrivate="false">hans@example.com</email>
         <address isPrivate="false">chicago ave</address>
