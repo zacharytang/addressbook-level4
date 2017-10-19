@@ -352,6 +352,70 @@ image::UndoRedoActivityDiagram.png[width="200"]
 **Cons:** Requires dealing with commands that have already been undone: We must remember to skip these commands. Violates Single Responsibility Principle and Separation of Concerns as `HistoryManager` now needs to do two different things. +
 // end::undoredo[]
 
+=== Timetables
+
+Users are able to store timetables by supplying a shortened NUSMods url when adding a person.
+
+==== Retrieval of Lesson Information
+
+NUSMods urls are in the format of `.../timetable/ACAD_YEAR/SEM?MODULE_CODE[LESSON_TYPE]=LESSON_NO&...`  We use `TimetableParserUtil:expandUrl` to get an expanded url from shortened URL provided, then parse the expanded url accordingly to obtain lesson data.
+Lessons for each module are stored in `ModuleInfoFromUrl`, which is then represented in `TimetableInfoFromUrl`.
+
+https://github.com/nusmodifications/nusmods-api[NUSMods API] is used to retrieve data related to lessons parsed from urls. JSON objects representing each module is retrieved and
+cast to a `Map` using http://wiki.fasterxml.com/JacksonHome[Jackson library]. Lesson data is then retrieved as a list of `Lesson` objects.
+
+----
+Map<String, Object> mappedJson = mapper.readValue(url, HashMap.class); // read JSON as map
+ArrayList<HashMap<String, String>> lessonInfo = mappedJson.get("Timetable"); // retrieve lesson data
+
+ArrayList<Lesson> lessons = new ArrayList<>();
+for (HashMap<String, String> lesson : lessonInfo) {
+    Lesson lessonToAdd = new Lesson(...);
+    lessons.add(lessonToAdd);
+}
+----
+
+`TimetableParserUtil` in `commons.util.timetable` contains all utility methods for parsing of NUSMods urls and conversion between terms parsed from urls and terms used in NUSMods api.
+
+==== Representation of Timetables
+
+Storing of timetables is facilitated by an immutable `Timetable` object, which is a component of `Person`. The information regarding the timings of each lesson is stored in a single `TimetableInfo` object within `Timetable`.
+More specific information for a person's lessons is abstracted further as follows:
+
+* Information for odd/even weeks are stored by two `TimetableWeek` objects within `TimetableInfo`
+* Each day of the timetable (Monday to Friday) is represented by five `TimetableDay` objects in `TimetableWeek`
+* To represent each timeslot in `TimetableDay`, a `TimetableSlot` class is used to represent a 30 minute interval. 32 instances of `TimetableSlot` are used to represent a full day from 0800 to 0000
+
+The following UML diagram represents the implementation of the classes.
+
+[NOTE]
+XYZComponent refers to all other components that `Person` is composed of, the class diagram is not complete.
+
+image::TimetableClassDiagram.png[width="800]
+
+==== Design Considerations
+
+**Aspect:** Representation of timetables +
+**Alternative 1 (current choice):** Abstraction of timetable grid using classes for weeks/days/slots +
+**Pros:** Easily extendable to include new functionality e.g. lessons that occur in each slot +
+**Cons:** Requires many method call chains to update and query timetable, might not be intuitive for new programmers. Hard to iterate through entire timetable +
+**Alternative 2:** Using a 3D array to represent the entire timetable +
+**Pros:** Simple and easy to understand,  easy to iterate through +
+**Cons:** Does not follow OOP concepts, cannot be extended to implement new functionalities. +
+**Alternative 3:** Storing individual lesson timings and information.
+**Pros:** Building the timetable is not required +
+**Cons:** Inefficient queries if a timing has a lesson, need to iterate through every lesson stored.
+
+---
+
+**Aspect:** Shortened URLs versus full-length URLs +
+**Alternative 1 (current choice):** Only accept short URLs +
+**Pros:** No need to deal with multiple types of URL +
+**Cons:** Less user friendly as users need to supply specific type of URL +
+**Alternative 2:** Accept both shortened and full-length NUSMods URLs +
+**Pros:** More user friendly as any type of NUSMods URL is accepted +
+**Cons:** Much harder to detect malformed URL as parsing data does not detect errors in lesson tokens in URL. Shortened URL gives 403 response on bad URL.
+
 === Logging
 
 We are using `java.util.logging` package for logging. The `LogsCenter` class is used to manage the logging levels and logging destinations.
