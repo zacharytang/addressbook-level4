@@ -1,4 +1,4 @@
-= AddressBook Level 2.0 - Developer Guide
+= UniFy - Developer Guide
 :toc:
 :toc-title:
 :toc-placement: preamble
@@ -13,6 +13,13 @@ ifdef::env-github,env-browser[:outfilesuffix: .adoc]
 :repoURL: https://github.com/CS2103AUG2017-W09-B1/main/tree/master
 
 By: `Team W09-B1`      Since: `Aug 2017`      Licence: `MIT`
+
+== Introduction
+
+Welcome to UniFy !
+
+UniFy is a command-line application which provides a way to store students' contact information. It provides powerful functions and user-friendly interface for NUS students, and it allows them to efficiently manage their contact lists. This developer guide provides a brief introduction to the basic information about this application, helping you get started with the contribution work.
+
 
 == Setting up
 
