@@ -402,7 +402,7 @@ image::TimetableClassDiagram.png[width="800]
 **Alternative 2:** Using a 3D array to represent the entire timetable +
 **Pros:** Simple and easy to understand,  easy to iterate through +
 **Cons:** Does not follow OOP concepts, cannot be extended to implement new functionalities. +
-**Alternative 3:** Storing individual lesson timings and information.
+**Alternative 3:** Storing individual lesson timings and information. +
 **Pros:** Building the timetable is not required +
 **Cons:** Inefficient queries if a timing has a lesson, need to iterate through every lesson stored.
 
