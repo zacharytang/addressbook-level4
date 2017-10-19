@@ -4,6 +4,10 @@ import static seedu.address.logic.commands.CommandTestUtil.VALID_ADDRESS_AMY;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_ADDRESS_BOB;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_EMAIL_AMY;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_EMAIL_BOB;
+import static seedu.address.logic.commands.CommandTestUtil.VALID_GENDER_AMY;
+import static seedu.address.logic.commands.CommandTestUtil.VALID_GENDER_BOB;
+import static seedu.address.logic.commands.CommandTestUtil.VALID_MATRIC_NO_AMY;
+import static seedu.address.logic.commands.CommandTestUtil.VALID_MATRIC_NO_BOB;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_NAME_AMY;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_NAME_BOB;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_PHONE_AMY;
@@ -21,44 +25,56 @@ import seedu.address.model.AddressBook;
 import seedu.address.model.person.ReadOnlyPerson;
 import seedu.address.model.person.exceptions.DuplicatePersonException;
 
+
+
 /**
  * A utility class containing a list of {@code Person} objects to be used in tests.
  */
 public class TypicalPersons {
 
     public static final ReadOnlyPerson ALICE = new PersonBuilder().withName("Alice Pauline")
+            .withGender("Female").withMatricNo("A0172633J")
             .withAddress("123, Jurong West Ave 6, #08-111").withEmail("alice@example.com")
             .withPhone("85355255")
             .withTags("friends").build();
     public static final ReadOnlyPerson BENSON = new PersonBuilder().withName("Benson Meier")
+            .withGender("Male").withMatricNo("A0173333J")
             .withAddress("311, Clementi Ave 2, #02-25")
             .withEmail("johnd@example.com").withPhone("98765432")
             .withTags("owesMoney", "friends").build();
-    public static final ReadOnlyPerson CARL = new PersonBuilder().withName("Carl Kurz").withPhone("95352563")
+    public static final ReadOnlyPerson CARL = new PersonBuilder().withName("Carl Kurz")
+            .withGender("Male").withMatricNo("A0185633J").withPhone("95352563")
             .withEmail("heinz@example.com").withAddress("wall street").build();
-    public static final ReadOnlyPerson DANIEL = new PersonBuilder().withName("Daniel Meier").withPhone("87652533")
+    public static final ReadOnlyPerson DANIEL = new PersonBuilder().withName("Daniel Meier")
+            .withGender("Male").withMatricNo("A0162234J").withPhone("87652533")
             .withEmail("cornelia@example.com").withAddress("10th street").build();
-    public static final ReadOnlyPerson ELLE = new PersonBuilder().withName("Elle Meyer").withPhone("9482224")
+    public static final ReadOnlyPerson ELLE = new PersonBuilder().withName("Elle Meyer")
+            .withGender("Female").withMatricNo("A0144433K").withPhone("9482224")
             .withEmail("werner@example.com").withAddress("michegan ave").build();
-    public static final ReadOnlyPerson FIONA = new PersonBuilder().withName("Fiona Kunz").withPhone("9482427")
+    public static final ReadOnlyPerson FIONA = new PersonBuilder().withName("Fiona Kunz")
+            .withGender("Female").withMatricNo("A0182342J").withPhone("9482427")
             .withEmail("lydia@example.com").withAddress("little tokyo").build();
-    public static final ReadOnlyPerson GEORGE = new PersonBuilder().withName("George Best").withPhone("9482442")
+    public static final ReadOnlyPerson GEORGE = new PersonBuilder().withName("George Best")
+            .withGender("Male").withMatricNo("A0182323J").withPhone("9482442")
             .withEmail("anna@example.com").withAddress("4th street").withRemark("Likes to drink").build();
 
     // Manually added
-    public static final ReadOnlyPerson HOON = new PersonBuilder().withName("Hoon Meier").withPhone("8482424")
+    public static final ReadOnlyPerson HOON = new PersonBuilder().withName("Hoon Meier")
+            .withGender("Female").withMatricNo("A0132323W").withPhone("8482424")
             .withEmail("stefan@example.com").withAddress("little india").build();
-    public static final ReadOnlyPerson IDA = new PersonBuilder().withName("Ida Mueller").withPhone("8482131")
+    public static final ReadOnlyPerson IDA = new PersonBuilder().withName("Ida Mueller")
+            .withGender("Female").withMatricNo("A0162530W").withPhone("8482131")
             .withEmail("hans@example.com").withAddress("chicago ave").build();
 
     // Manually added - Person's details found in {@code CommandTestUtil}
-    public static final ReadOnlyPerson AMY = new PersonBuilder().withName(VALID_NAME_AMY).withPhone(VALID_PHONE_AMY)
+    public static final ReadOnlyPerson AMY = new PersonBuilder().withName(VALID_NAME_AMY)
+            .withGender(VALID_GENDER_AMY).withMatricNo(VALID_MATRIC_NO_AMY).withPhone(VALID_PHONE_AMY)
             .withEmail(VALID_EMAIL_AMY).withAddress(VALID_ADDRESS_AMY).withTimetable(VALID_TIMETABLE_AMY)
             .withTags(VALID_TAG_FRIEND).build();
-    public static final ReadOnlyPerson BOB = new PersonBuilder().withName(VALID_NAME_BOB).withPhone(VALID_PHONE_BOB)
+    public static final ReadOnlyPerson BOB = new PersonBuilder().withName(VALID_NAME_BOB)
+            .withGender(VALID_GENDER_BOB).withMatricNo(VALID_MATRIC_NO_BOB).withPhone(VALID_PHONE_BOB)
             .withEmail(VALID_EMAIL_BOB).withAddress(VALID_ADDRESS_BOB).withTimetable(VALID_TIMETABLE_BOB)
-            .withTags(VALID_TAG_HUSBAND, VALID_TAG_FRIEND)
-            .build();
+            .withTags(VALID_TAG_HUSBAND, VALID_TAG_FRIEND).build();
 
     public static final String KEYWORD_MATCHING_MEIER = "Meier"; // A keyword that matches MEIER
 
