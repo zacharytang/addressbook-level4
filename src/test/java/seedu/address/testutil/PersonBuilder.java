@@ -5,6 +5,8 @@ import java.util.Set;
 import seedu.address.commons.exceptions.IllegalValueException;
 import seedu.address.model.person.Address;
 import seedu.address.model.person.Email;
+import seedu.address.model.person.Gender;
+import seedu.address.model.person.MatricNo;
 import seedu.address.model.person.Name;
 import seedu.address.model.person.Person;
 import seedu.address.model.person.Phone;
@@ -20,6 +22,8 @@ import seedu.address.model.util.SampleDataUtil;
 public class PersonBuilder {
 
     public static final String DEFAULT_NAME = "Alice Pauline";
+    public static final String DEFAULT_GENDER = "Female";
+    public static final String DEFAULT_MATRIC_NO = "A0134118K";
     public static final String DEFAULT_PHONE = "85355255";
     public static final String DEFAULT_EMAIL = "alice@gmail.com";
     public static final String DEFAULT_ADDRESS = "123, Jurong West Ave 6, #08-111";
@@ -32,14 +36,17 @@ public class PersonBuilder {
     public PersonBuilder() {
         try {
             Name defaultName = new Name(DEFAULT_NAME);
+            Gender defaultGender = new Gender(DEFAULT_GENDER);
+            MatricNo defaultMatricNo = new MatricNo(DEFAULT_MATRIC_NO);
             Phone defaultPhone = new Phone(DEFAULT_PHONE);
             Email defaultEmail = new Email(DEFAULT_EMAIL);
             Address defaultAddress = new Address(DEFAULT_ADDRESS);
             Timetable defaultTimetable = new Timetable(DEFAULT_TIMETABLE_URL);
             Remark defaultRemark = new Remark(DEFAULT_REMARK);
             Set<Tag> defaultTags = SampleDataUtil.getTagSet(DEFAULT_TAGS);
-            this.person = new Person(defaultName, defaultPhone, defaultEmail, defaultAddress,
-                    defaultTimetable, defaultRemark, defaultTags);
+
+            this.person = new Person(defaultName, defaultGender, defaultMatricNo, defaultPhone, defaultEmail,
+                    defaultAddress, defaultTimetable, defaultRemark, defaultTags);
         } catch (IllegalValueException ive) {
             throw new AssertionError("Default person's values are invalid.");
         }
@@ -60,6 +67,30 @@ public class PersonBuilder {
             this.person.setName(new Name(name));
         } catch (IllegalValueException ive) {
             throw new IllegalArgumentException("name is expected to be unique.");
+        }
+        return this;
+    }
+
+    /**
+     * Sets the {@code Gender} of the {@code Person} that we are building.
+     */
+    public PersonBuilder withGender(String gender) {
+        try {
+            this.person.setGender(new Gender(gender));
+        } catch (IllegalValueException ive) {
+            throw new IllegalArgumentException("gender is expected to be unique.");
+        }
+        return this;
+    }
+
+    /**
+     * Sets the {@code Gender} of the {@code Person} that we are building.
+     */
+    public PersonBuilder withMatricNo(String matricNo) {
+        try {
+            this.person.setMatricNo(new MatricNo(matricNo));
+        } catch (IllegalValueException ive) {
+            throw new IllegalArgumentException("matric number is expected to be unique.");
         }
         return this;
     }
