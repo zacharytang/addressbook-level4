@@ -1,4 +1,4 @@
-= Address Book (Level 4)
+# UniFy
 ifdef::env-github,env-browser[:relfileprefix: docs/]
 ifdef::env-github,env-browser[:outfilesuffix: .adoc]
 
@@ -15,26 +15,27 @@ ifndef::env-github[]
 image::images/Ui.png[width="600"]
 endif::[]
 
-* This is a desktop Address Book application. It has a GUI but most of the user interactions happen using a CLI (Command Line Interface).
-* It is a Java application for University Students to manage their contacts, plus much more, in a productive manner.
-* For developers, this application is *written in OOP fashion*. The code base is *reasonably well-written* and *significantly big* (around 6 KLoC).
-* Source code is based on the  https://github.com/se-edu/addressbook-level4[AddressBook-Level4] project created by SE-EDU initiative.
-* This application is an enhanced version of AddressBook-Level 4
-** More Commands, and a more intuitive Command Line syntax.
-** More attractive UI
-** And many other features targeting the *university student*.
+__Unifying your University Contact Information, and more. For You.__
+
+* This is a desktop Address Book application for University students, particularly those from NUS (National University of Singapore).
+* Manage the many people you meet in University, keep track of your friends' Birthdays, view your friend's timetables, plus much more!
+* Most of your user interactions are via command line, while there exists a GUI (Graphical User Interface).
 
 == Site Map
 
 * <<UserGuide#, User Guide>>
 * <<DeveloperGuide#, Developer Guide>>
-* <<LearningOutcomes#, Learning Outcomes>>
 * <<AboutUs#, About Us>>
 * <<ContactUs#, Contact Us>>
+
+== For Developers
+* This Java application is *written in OOP fashion*. The code base is *reasonably well-written* and *significantly big* (around 6 KLoC).
 
 == Acknowledgements
 
 * Some parts of this sample application were inspired by the excellent http://code.makery.ch/library/javafx-8-tutorial/[Java FX tutorial] by
 _Marco Jakob_.
+* Source code is based on the  https://github.com/se-edu/addressbook-level4[AddressBook-Level4] project created by SE-EDU initiative.
+
 
 == Licence : link:LICENSE[MIT]
