@@ -20,6 +20,8 @@ import org.junit.rules.ExpectedException;
 import seedu.address.commons.exceptions.IllegalValueException;
 import seedu.address.model.person.Address;
 import seedu.address.model.person.Email;
+import seedu.address.model.person.Gender;
+import seedu.address.model.person.MatricNo;
 import seedu.address.model.person.Name;
 import seedu.address.model.person.Phone;
 import seedu.address.model.person.timetable.Timetable;
@@ -27,6 +29,8 @@ import seedu.address.model.tag.Tag;
 
 public class ParserUtilTest {
     private static final String INVALID_NAME = "R@chel";
+    private static final String INVALID_GENDER = "female";
+    private static final String INVALID_MATRIC_NO = "45663445K";
     private static final String INVALID_PHONE = "+651234";
     private static final String INVALID_ADDRESS = " ";
     private static final String INVALID_EMAIL = "example.com";
@@ -34,6 +38,8 @@ public class ParserUtilTest {
     private static final String INVALID_TAG = "#friend";
 
     private static final String VALID_NAME = "Rachel Walker";
+    private static final String VALID_GENDER = "Female";
+    private static final String VALID_MATRIC_NO = "A0162533K";
     private static final String VALID_PHONE = "123456";
     private static final String VALID_ADDRESS = "123 Main Street #0505";
     private static final String VALID_EMAIL = "rachel@example.com";
@@ -89,6 +95,56 @@ public class ParserUtilTest {
         Optional<Name> actualName = ParserUtil.parseName(Optional.of(VALID_NAME));
 
         assertEquals(expectedName, actualName.get());
+    }
+
+    @Test
+    public void parseGender_null_throwsNullPointerException() throws Exception {
+        thrown.expect(NullPointerException.class);
+        ParserUtil.parseGender(null);
+    }
+
+    @Test
+    public void parseGender_invalidValue_throwsIllegalValueException() throws Exception {
+        thrown.expect(IllegalValueException.class);
+        ParserUtil.parseGender(Optional.of(INVALID_GENDER));
+    }
+
+    @Test
+    public void parseGender_optionalEmpty_returnsOptionalEmpty() throws Exception {
+        assertFalse(ParserUtil.parseGender(Optional.empty()).isPresent());
+    }
+
+    @Test
+    public void parseGender_validValue_returnsGender() throws Exception {
+        Gender expectedGender = new Gender(VALID_GENDER);
+        Optional<Gender> actualGender = ParserUtil.parseGender(Optional.of(VALID_GENDER));
+
+        assertEquals(expectedGender, actualGender.get());
+    }
+
+    @Test
+    public void parseMatricNo_null_throwsNullPointerException() throws Exception {
+        thrown.expect(NullPointerException.class);
+        ParserUtil.parseMatricNo(null);
+    }
+
+    @Test
+    public void parseMatricNo_invalidValue_throwsIllegalValueException() throws Exception {
+        thrown.expect(IllegalValueException.class);
+        ParserUtil.parseMatricNo(Optional.of(INVALID_MATRIC_NO));
+    }
+
+    @Test
+    public void parseMatricNo_optionalEmpty_returnsOptionalEmpty() throws Exception {
+        assertFalse(ParserUtil.parseMatricNo(Optional.empty()).isPresent());
+    }
+
+    @Test
+    public void parseMatricNo_validValue_returnsMatricNo() throws Exception {
+        MatricNo expectedMatricNo = new MatricNo(VALID_MATRIC_NO);
+        Optional<MatricNo> actualMatricNo = ParserUtil.parseMatricNo(Optional.of(VALID_MATRIC_NO));
+
+        assertEquals(expectedMatricNo, actualMatricNo.get());
     }
 
     @Test
