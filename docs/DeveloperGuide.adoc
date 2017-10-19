@@ -485,7 +485,7 @@ to the command that to them may be uncalled for. +
 **Alternative 2:** Just create a new command `deletetag` +
 **Pros:** Simple implementation of a new command. Does not involve any major modification of existing parse and command logic +
 **Cons:** `deletetag t/tag` is not as inuitive a command line especially to new or casual users.
-Users may try delete t/tag out of instinct and we would need to inform or prompt users of the `deletetag` command.
+Users may try `delete t/tag` out of instinct and we would need to inform or prompt users of the `deletetag` command.
 
 ---
 
