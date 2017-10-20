@@ -68,7 +68,7 @@ e.g. typing *`help`* and pressing kbd:[Enter] will open the help window.
 Format: `help`
 
 === Adding a person: `add`
-==== Adding a person manually
+==== Adding a person manually with new attributes gender, phone numbers, timetable and birthday _(Coming in v1.2)_
 
 Adds a person to the address book +
 
@@ -294,7 +294,7 @@ Deletes the tags 'module1' and 'module2' from all people containing one of the t
 This command is most useful for batch deleting Tags. Especially when you've finished a project in a module.
 
 
-=== Editing the remark of a person : `remark`
+=== Editing the remark of a person : `remark` _(Since v1.1)_
 
 Adds or Deletes a remark to the specified person from the address book. +
 Format:
