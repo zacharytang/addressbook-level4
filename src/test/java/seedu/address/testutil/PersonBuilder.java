@@ -4,6 +4,7 @@ import java.util.Set;
 
 import seedu.address.commons.exceptions.IllegalValueException;
 import seedu.address.model.person.Address;
+import seedu.address.model.person.Birthday;
 import seedu.address.model.person.Email;
 import seedu.address.model.person.Gender;
 import seedu.address.model.person.MatricNo;
@@ -27,6 +28,7 @@ public class PersonBuilder {
     public static final String DEFAULT_PHONE = "85355255";
     public static final String DEFAULT_EMAIL = "alice@gmail.com";
     public static final String DEFAULT_ADDRESS = "123, Jurong West Ave 6, #08-111";
+    public static final String DEFAULT_BIRTHDAY = "23051997";
     public static final String DEFAULT_TIMETABLE_URL = "http://modsn.us/HXDrJ";
     public static final String DEFAULT_REMARK = "";
     public static final String DEFAULT_TAGS = "friends";
@@ -44,9 +46,9 @@ public class PersonBuilder {
             Timetable defaultTimetable = new Timetable(DEFAULT_TIMETABLE_URL);
             Remark defaultRemark = new Remark(DEFAULT_REMARK);
             Set<Tag> defaultTags = SampleDataUtil.getTagSet(DEFAULT_TAGS);
-
+            Birthday defaultBirthday = new Birthday(DEFAULT_BIRTHDAY);
             this.person = new Person(defaultName, defaultGender, defaultMatricNo, defaultPhone, defaultEmail,
-                    defaultAddress, defaultTimetable, defaultRemark, defaultTags);
+                    defaultAddress, defaultTimetable, defaultRemark, defaultTags, defaultBirthday);
         } catch (IllegalValueException ive) {
             throw new AssertionError("Default person's values are invalid.");
         }
@@ -150,6 +152,17 @@ public class PersonBuilder {
         }
         return this;
     }
+    /**
+     * Sets the {@code Birthday} of the {@code Person} that we are building.
+     */
+    public PersonBuilder withBirthday(String birthday) {
+        try {
+            this.person.setBirthday(new Birthday(birthday));
+        } catch (IllegalValueException ive) {
+            throw new IllegalArgumentException("birthday is expected to be unique.");
+        }
+        return this;
+    }
 
     /**
      * Sets the {@code Address} of the {@code Person} that we are building.
@@ -166,5 +179,4 @@ public class PersonBuilder {
     public Person build() {
         return this.person;
     }
-
 }

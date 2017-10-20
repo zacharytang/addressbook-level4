@@ -71,14 +71,13 @@ Format: `help`
 ==== Adding a person manually with new attributes gender, phone numbers, timetable and birthday _(Coming in v1.2)_
 
 Adds a person to the address book +
-
 Format: `add n/NAME g/GENDER p/PHONE_NUMBER e/EMAIL a/ADDRESS [m/MATRIC_NUMBER] [b/BIRTHDAY] [tt/TIMETABLE_URL] [t/TAG]... [tmpt/NUM_OF_MONTHS/TEMPORARY TAG]...` +
 Alternatives: `a` , `insert`
 
 ****
 * GENDER is either Male/Female or M/F
 * MATRIC_NUMBER should be a 9-character string starting with 'A or a' and ending with a letter
-* The format for birthday is YYYYMMDD.
+* The format for birthday is DDMMYYYY.
 * A person can have any number of tags (including 0)
 * A person can add a temporary tag to a person by adding [tt/NUM_OF_MONTHS/TEMPORARY TAG]
 ** The NUM_OF_MONTHS *must be a positive integer* 1, 2, 3, ...
@@ -90,7 +89,7 @@ Examples:
 * `add n/John Doe g/Male p/98765432 e/johnd@example.com a/John street, block 123, #01-01 m/A0134232H tt/http://modsn.us/abCdE`
 * `add n/Betsy Crowe g/Female p/1234567 e/betsycrowe@example.com a/Newgate Prison t/friend t/criminal`
 * `add n/Amy Tan g/F p/82974823 tt/4/CS2101classmates e/amy_tan@example.com a/PGP m/a0142323T`
-* `add n/Betty g/F p/12345678 e/betty@example.com b/19980523`
+* `add n/Betty g/F p/12345678 e/betty@example.com b/23051998`
 
 ==== Adding a person using the information on social media _(Coming in v2.0)_
 
@@ -147,7 +146,7 @@ Alternatives: `s` , `sortall`, `arrange`
 ==== Editing a person
 
 Edits an existing person in the address book. +
-Format: `edit INDEX [n/NAME] [g/GENDER] [m/MATRIC_NO] [p/PHONE] [e/EMAIL] [a/ADDRESS] [tt/TIMETABLE_URL] [t/TAG]...` +
+Format: `edit INDEX [n/NAME] [g/GENDER] [m/MATRIC_NO] [p/PHONE] [e/EMAIL] [a/ADDRESS] [b/BIRTHDAY] [tt/TIMETABLE_URL] [t/TAG]...` +
 Alternatives: `e` , `modify`, `change`
 
 ****
@@ -163,8 +162,8 @@ Examples:
 * `edit 1 p/91234567 g/Male e/johndoe@example.com` +
 Edits the phone number, gender and email address of the 1st person to be `91234567`, `Male` and `johndoe@example.com` respectively.
 
-* `edit 2 n/Betsy Crower m/A0162522j t/` +
-Edits the name and matriculation number of the 2nd person to be `Betsy Crower`, A0162522j and clears all existing tags.
+* `edit 2 n/Betsy Crower m/A0162522j b/14081998 t/` +
+Edits the name and matriculation number and birthday of the 2nd person to be `Betsy Crower`, A0162522j and clears all existing tags.
 
 ==== Editing a tag
 
@@ -278,7 +277,6 @@ Format: `delete t/TAG...`
 * The tag specified is case-sensitive.
 * You can delete multiple tags with one delete command.
 * The tag (or all the tags) specified must already exist in the address book.
-
 ****
 
 Examples:
@@ -292,7 +290,6 @@ Deletes the tags 'module1' and 'module2' from all people containing one of the t
 
 [TIP]
 This command is most useful for batch deleting Tags. Especially when you've finished a project in a module.
-
 
 === Editing the remark of a person : `remark` _(Since v1.1)_
 
@@ -605,15 +602,15 @@ Clicking on the address in the address book will open a Google Map map view of t
 
 == Command Summary
 
-* *Add* : `add n/NAME p/PHONE_NUMBER e/EMAIL a/ADDRESS [t/TAG]...` +
-e.g. `add n/James Ho p/22224444 e/jamesho@example.com a/123, Clementi Rd, 1234665 t/friend t/colleague`
+* *Add* : `add n/NAME p/PHONE_NUMBER e/EMAIL a/ADDRESS [b/BIRTHDAY] [t/TAG]...` +
+e.g. `add n/James Ho p/22224444 e/jamesho@example.com a/123, Clementi Rd, 1234665 b/26021995 t/friend t/colleague`
 * *Clear* : `clear`
 * *Delete (Person)* : `delete INDEX` +
 e.g. `delete 3`
 * *Delete (Tag)* : `delete [t/TAG]...` +
 e.g. `delete t/modulemate t/colleague`
-* *Edit* : `edit INDEX [n/NAME] [p/PHONE_NUMBER] [e/EMAIL] [a/ADDRESS] [t/TAG]...` +
-e.g. `edit 2 n/James Lee e/jameslee@example.com`
+* *Edit* : `edit INDEX [n/NAME] [p/PHONE_NUMBER] [e/EMAIL] [b/BIRTHDAY] [a/ADDRESS] [t/TAG]...` +
+e.g. `edit 2 n/James Lee e/jameslee@example.com b/19051994`
 * *Remark* : `remark INDEX [r/REMARK] ` +
 e.g. `remark 2 r/Likes to drink coffee.`
 * *Find* : `find KEYWORD [MORE_KEYWORDS]` +
