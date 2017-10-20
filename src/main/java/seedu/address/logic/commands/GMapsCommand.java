@@ -14,13 +14,14 @@ public class GMapsCommand extends Command {
 
     public static final String COMMAND_WORD = "gmaps";
     public static final String COMMAND_ALIAS = "g";
-    public static final String COMMAND_SECONDARY = "map";
+    public static final String COMMAND_SECONDARY_ONE = "map";
+    public static final String COMMAND_SECONDARY_TWO = "maps";
 
     public static final String MESSAGE_USAGE = COMMAND_WORD
-            + ": show maps\n"
+            + ": Opens a Google Maps view of a Person’s Address location.\n"
             + "Example: " + COMMAND_WORD + " 1";
 
-    public static final String MESSAGE_SELECT_PERSON_SUCCESS = "Showed maps of Person: %1$s";
+    public static final String MESSAGE_SELECT_PERSON_SUCCESS = "Showing Map View of Person %1$s";
 
     private final Index targetIndex;
 

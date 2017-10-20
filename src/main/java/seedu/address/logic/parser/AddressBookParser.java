@@ -78,7 +78,8 @@ public class AddressBookParser {
 
         case GMapsCommand.COMMAND_WORD:
         case GMapsCommand.COMMAND_ALIAS:
-        case GMapsCommand.COMMAND_SECONDARY:
+        case GMapsCommand.COMMAND_SECONDARY_ONE:
+        case GMapsCommand.COMMAND_SECONDARY_TWO:
             return new GMapsCommandParser().parse(arguments);
 
         case FindCommand.COMMAND_WORD:
