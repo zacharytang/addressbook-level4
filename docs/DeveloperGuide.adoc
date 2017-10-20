@@ -562,6 +562,120 @@ In order to maintain consistency within the API, the first choice was chosen.
 
 ---
 
+=== Remark Command
+
+The remark command allows user to modify the remark of a contact, and it supports adding, editing and deleting remarks.
+It is different from adding the tags using 'add' command as it is used to store unique information of contact.
+The reason why we need to implement Remark Command can be found in the User Stories: the user wants to save more details about the contacts.
+
+Generally, the implementation of this command is similar to 'edit' command.
+
+---
+
+These main classes are added to implement this enhancement:
+
+1. Remark
+2. RemarkCommand
+3. RemarkCommandParser
+
+---
+
+These main classes are significantly edited to implement this enhancement:
+
+1. AddressBookParser
+2. PersonListCard, PersonCardHandle
+3. XmlAdaptedPerson
+4. Person
+5. EditCommand
+6. AddCommand
+
+* Notes
+
+Instead of typing “remark” in the command box, one can also type “rm” to represent “remark” as it will also be parsed by the parser.
+The alias is added to the RemarkCommand Class.
+The added remark will be displayed on the last line of the person card.
+If a person is newly added to the personList by Add Command, its remark field will have an empty string at first. Also, in the EditCommand class, a new attribute updatedRemark is added to the person, and it is independent from editPersonDescriptor.
+
+==== [BasicStep]Implement this command
+
+[Step 1] Logic: Teach the app to accept 'remark' which does nothing
+
+[Step 2] Logic: Teach the app to accept 'remark' arguments
+
+[Step 3] Ui: Add a placeholder for remark in PersonCard
+
+[Step 4] Model: Add Remark class
+
+[Step 5] Model: Modify ReadOnlyPerson to support a Remark field
+
+[Step 6] Storage: Add Remark field to XmlAdaptedPerson class
+
+[Step 7] Ui: Connect Remark field to PersonCard
+
+[Step 8] Logic: Implement RemarkCommand#execute() logic
+
+==== [Detail Implementation]Codes and Diagrams
+The following diagram shows the high-level sequence diagram of the remark command:
+
+image::RemarkCommandHighLevelSequenceDiagram.png[width="800"]
+_Figure A. High-level sequence diagram
+
+The RemarkCommand extends Undoale Command, which is an abstract subclass of abstract class Command, so the user can also undo the added remark.
+The class inheritance diagram is shown below:
+
+image::RemarkCommandClassInheritanceDiagram.png[width="800"]
+_Figure B. Class Inheritance Diagram
+
+The implementation is shown below.
+
+[source,java]
+----
+/**
+ * Edits the remark of a person to the address book.
+ */
+public class RemarkCommand extends UndoableCommand {
+    //...
+}
+----
+
+After the remark command is executed, the new data will be saved to the AddressBook. The logic component sequence diagram is shown below:
+
+image::RemarkCommandLogicComponentSequenceDiagram.png[width="800"]
+_Figure C. Logic Component Sequence Diagram
+
+A person class is linked to a new remark attribute. Its model component class diagram is shown below:
+
+image::RemarkCommandComponentClassDiagram.png[width="800"]
+_Figure D. Component Class Diagram
+
+The implementation is shown below.
+
+[source,java]
+----
+public class Person implements ReadOnlyPerson {
+    //...
+    private ObjectProperty<Address> address;
+    private ObjectProperty<Timetable> timetable;
+    private ObjectProperty<Remark> remark;
+    // ...
+}
+----
+
+==== Design Considerations
+**Aspects** UI Display of Remark +
+**Alternative 1(current choice):** Display the remark of the specified contact at the end of the personCard
+
+**Pros:** It has the consistent format with other fields in the person card.
+**Cons:** It does not highlight the remark so that the user will hardly notice the additional remark information.
+
+**Alternative 2:** Display the Remark next to the name
+
+**Pros:** Placing the remark in this prominent place will better remind the user of the added remark.
+Also, the font-size is bigger
+**Cons:** It does not the consistent format with other fields in the person card.
+If the remark is too long, it will be poorly displayed.
+
+
 === Logging
 
 We are using `java.util.logging` package for logging. The `LogsCenter` class is used to manage the logging levels and logging destinations.
