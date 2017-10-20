@@ -9,6 +9,7 @@ import java.util.Set;
 
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
+import seedu.address.model.person.timetable.Timetable;
 import seedu.address.model.tag.Tag;
 import seedu.address.model.tag.UniqueTagList;
 
@@ -19,9 +20,13 @@ import seedu.address.model.tag.UniqueTagList;
 public class Person implements ReadOnlyPerson {
 
     private ObjectProperty<Name> name;
+    private ObjectProperty<Gender> gender;
+    private ObjectProperty<MatricNo> matricNo;
     private ObjectProperty<Phone> phone;
     private ObjectProperty<Email> email;
     private ObjectProperty<Address> address;
+    private ObjectProperty<Timetable> timetable;
+    private ObjectProperty<Remark> remark;
     private ObjectProperty<Birthday> birthday;
 
     private ObjectProperty<UniqueTagList> tags;
@@ -29,12 +34,17 @@ public class Person implements ReadOnlyPerson {
     /**
      * Every field must be present and not null.
      */
-    public Person(Name name, Phone phone, Email email, Address address, Set<Tag> tags, Birthday birthday) {
+    public Person(Name name, Gender gender, MatricNo matricNo, Phone phone, Email email, Address address,
+                  Timetable timetable, Remark remark, Set<Tag> tags, Birthday birthday) {
         requireAllNonNull(name, phone, email, address, tags);
         this.name = new SimpleObjectProperty<>(name);
+        this.gender = new SimpleObjectProperty<>(gender);
+        this.matricNo = new SimpleObjectProperty<>(matricNo);
         this.phone = new SimpleObjectProperty<>(phone);
         this.email = new SimpleObjectProperty<>(email);
         this.address = new SimpleObjectProperty<>(address);
+        this.timetable = new SimpleObjectProperty<>(timetable);
+        this.remark = new SimpleObjectProperty<>(remark);
         // protect internal tags from changes in the arg list
         this.tags = new SimpleObjectProperty<>(new UniqueTagList(tags));
         this.birthday = new SimpleObjectProperty<>(birthday);
@@ -44,8 +54,8 @@ public class Person implements ReadOnlyPerson {
      * Creates a copy of the given ReadOnlyPerson.
      */
     public Person(ReadOnlyPerson source) {
-        this(source.getName(), source.getPhone(), source.getEmail(), source.getAddress(),
-                source.getTags(), source.getBirthday());
+        this(source.getName(), source.getGender(), source.getMatricNo(), source.getPhone(), source.getEmail(),
+                source.getAddress(), source.getTimetable(), source.getRemark(), source.getTags(), source.getBirthday());
     }
 
     public void setName(Name name) {
@@ -60,6 +70,34 @@ public class Person implements ReadOnlyPerson {
     @Override
     public Name getName() {
         return name.get();
+    }
+
+    public void setGender(Gender gender) {
+        this.gender.set(requireNonNull(gender));
+    }
+
+    @Override
+    public ObjectProperty<Gender> genderProperty() {
+        return gender;
+    }
+
+    @Override
+    public Gender getGender() {
+        return gender.get();
+    }
+
+    public void setMatricNo(MatricNo matricNo) {
+        this.matricNo.set(requireNonNull(matricNo));
+    }
+
+    @Override
+    public ObjectProperty<MatricNo> matricNoProperty() {
+        return matricNo;
+    }
+
+    @Override
+    public MatricNo getMatricNo() {
+        return matricNo.get();
     }
 
     public void setPhone(Phone phone) {
@@ -102,6 +140,34 @@ public class Person implements ReadOnlyPerson {
     @Override
     public Address getAddress() {
         return address.get();
+    }
+
+    public void setTimetable(Timetable timetable) {
+        this.timetable.set(requireNonNull(timetable));
+    }
+
+    @Override
+    public ObjectProperty<Timetable> timetableProperty() {
+        return timetable;
+    }
+
+    @Override
+    public Timetable getTimetable() {
+        return timetable.get();
+    }
+
+    public void setRemark(Remark remark) {
+        this.remark.set(requireNonNull(remark));
+    }
+
+    @Override
+    public ObjectProperty<Remark> remarkProperty() {
+        return remark;
+    }
+
+    @Override
+    public Remark getRemark() {
+        return remark.get();
     }
 
     /**
@@ -148,7 +214,7 @@ public class Person implements ReadOnlyPerson {
     @Override
     public int hashCode() {
         // use this method for custom fields hashing instead of implementing your own
-        return Objects.hash(name, phone, email, address, tags, birthday);
+        return Objects.hash(name, gender, matricNo, phone, email, address, timetable, tags, birthday);
     }
 
     @Override

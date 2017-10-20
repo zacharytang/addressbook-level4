@@ -59,21 +59,25 @@ Format: `help`
 ==== Adding a person manually
 
 Adds a person to the address book +
-Format: `add n/NAME [p/PHONE_NUMBER] [e/EMAIL] [a/ADDRESS] [b/BIRTHDAY] [tt/TIMETABLE_URL] [t/TAG] ...` +
+Format: `add n/NAME g/GENDER p/PHONE_NUMBER e/EMAIL a/ADDRESS [m/MATRIC_NUMBER] [b/BIRTHDAY] [tt/TIMETABLE_URL] [t/TAG]... [tmpt/NUM_OF_MONTHS/TEMPORARY TAG]...` +
 Alternatives: `a` , `insert`
 
-[TIP]
-A person can have any number of tags (including 0).
-
 ****
+* GENDER is either Male/Female or M/F
+* MATRIC_NUMBER should be a 9-character string starting with 'A or a' and ending with a letter
 * The format for birthday is DDMMYYYY.
+* A person can have any number of tags (including 0)
+* A person can add a temporary tag to a person by adding [tt/NUM_OF_MONTHS/TEMPORARY TAG]
+** The NUM_OF_MONTHS *must be a positive integer* 1, 2, 3, ...
+** The temporary tag will disappear on its own after the specified number of months.
 ****
 
 Examples:
 
-* `add n/John Doe p/98765432 e/johnd@example.com a/John street, block 123, #01-01 tt/http://modsn.us/abCdE`
-* `add n/Betsy Crowe t/friend e/betsycrowe@example.com a/Newgate Prison p/1234567 t/criminal`
-* `add n/Betty p/12345678 e/betty@example.com b/23051998`
+* `add n/John Doe g/Male p/98765432 e/johnd@example.com a/John street, block 123, #01-01 m/A0134232H tt/http://modsn.us/abCdE`
+* `add n/Betsy Crowe g/Female p/1234567 e/betsycrowe@example.com a/Newgate Prison t/friend t/criminal`
+* `add n/Amy Tan g/F p/82974823 tt/4/CS2101classmates e/amy_tan@example.com a/PGP m/a0142323T`
+* `add n/Betty g/F p/12345678 e/betty@example.com b/23051998`
 
 ==== Adding a person using the information on social media _(Coming in v2.0)_
 
@@ -91,11 +95,11 @@ Examples:
 
 ==== Adding timetables
 
-If you want to save a person's timetable, add their NUSMods link when adding them to the address book.
+If you want to save a person's timetable, add their shortened NUSMods link when adding them to the address book.
 Their timetable will be saved and will be available to be viewed at any time
 
-[TIP]
-Address Book accepts both full and shortened NUSMods links!
+[IMPORTANT]
+Address Book only accepts shortened NUSMods links
 
 === Listing persons : `list`
 
@@ -114,11 +118,23 @@ Lists all persons in the address book containing *either* 'JCfriends' or 'comput
 * `list b/December` +
 Lists all persons in the address book having birthdays in `December`
 
+=== Sorting all persons : `sort`
+
+Shows a list of all persons in the address book by arranging their names in alphabetical order +
+Format: `sort` +
+Alternatives: `s` , `sortall`, `arrange`
+
+=== Sorting all persons : `sort`
+
+Shows a list of all persons in the address book by arranging their names in alphabetical order +
+Format: `sort` +
+Alternatives: `s` , `sortall`, `arrange`
+
 === Editing a person or a tag: `edit`
 ==== Editing a person
 
 Edits an existing person in the address book. +
-Format: `edit INDEX [n/NAME] [p/PHONE] [e/EMAIL] [a/ADDRESS] [b/BIRTHDAY] [tt/TIMETABLE_URL] [t/TAG]...` +
+Format: `edit INDEX [n/NAME] [g/GENDER] [m/MATRIC_NO] [p/PHONE] [e/EMAIL] [a/ADDRESS] [b/BIRTHDAY] [tt/TIMETABLE_URL] [t/TAG]...` +
 Alternatives: `e` , `modify`, `change`
 
 ****
@@ -131,10 +147,11 @@ Alternatives: `e` , `modify`, `change`
 
 Examples:
 
-* `edit 1 p/91234567 e/johndoe@example.com` +
-Edits the phone number and email address of the 1st person to be `91234567` and `johndoe@example.com` respectively.
-* `edit 2 n/Betsy Crower b/14081998 t/` +
-Edits the name of the 2nd person to be `Betsy Crower` and clears all existing tags.
+* `edit 1 p/91234567 g/Male e/johndoe@example.com` +
+Edits the phone number, gender and email address of the 1st person to be `91234567`, `Male` and `johndoe@example.com` respectively.
+
+* `edit 2 n/Betsy Crower m/A0162522j b/14081998 t/` +
+Edits the name and matriculation number and birthday of the 2nd person to be `Betsy Crower`, A0162522j and clears all existing tags.
 
 ==== Editing a tag
 
@@ -176,6 +193,7 @@ Examples:
 
 * `find John` +
 Returns `john` and `John Doe`
+
 * `find Betsy Tim John` +
 Returns any person having names `Betsy`, `Tim`, or `John`
 
@@ -199,16 +217,14 @@ Returns any person tagged by `friends`
 * `find t/friends p/1234` +
 Returns any person tagged by `friends`, and having phone numbers containing `1234`
 
-=== Deleting a person or a tag: `delete`
-==== Deleting a Person
+=== Deleting multiple persons or a tag: `delete`
+==== Deleting multiple persons
 
-Deletes the specified person from the address book. +
-Format: `delete INDEX` +
+By specifying an index or multiple indexes, deletes the specified person(s) in the most recent listing from the address book. +
+Format: `delete INDEX...` +
 Alternatives: `d` , `remove`
 
 ****
-* Deletes the person at the specified `INDEX`.
-* The index refers to the index number shown in the most recent listing.
 * The index *must be a positive integer* 1, 2, 3, ...
 ****
 
@@ -217,9 +233,28 @@ Examples:
 * `list` +
 `delete 2` +
 Deletes the 2nd person in the address book.
+
+* `list` +
+`delete 2, 3, 4` +
+Deletes the 2nd, 3rd, 4th persons in the address book.
+
 * `find Betsy` +
-`delete 1` +
-Deletes the 1st person in the results of the `find` command.
+`delete 1, 5` +
+Deletes the 1st and 5th persons in the results of the `find` command.
+
+==== Deleting old contacts
+Deletes the contacts which you haven't used the 'edit', 'photo' or 'find' command for a certain number of months. +
+Format: `delete old/NUM_OF_MONTH` +
+Alternatives: `d` , `remove`
+
+****
+* The NUM_OF_MONTH *must be a positive integer* 1, 2, 3, ...
+****
+
+Examples:
+
+* `delete old/2` +
+Deletes all the contacts which you haven't used the 'edit', 'photo' or 'find' command for the past 2 months.
 
 ==== Deleting a Tag (or multiple Tags)
 
@@ -233,16 +268,39 @@ Format: `delete t/TAG...`
 ****
 
 Examples:
-
 * `list` +
 `delete t/friends` +
 Deletes the tag 'friends' from all people containing the tag 'friends' in the address book.
+
 * `find Betsy` +
 `delete t/module1 t/module2` +
 Deletes the tags 'module1' and 'module2' from all people containing one of the tag, or both of the tags in the address book.
 
 [TIP]
 This command is most useful for batch deleting Tags. Especially when you've finished a project in a module.
+
+=== Editing the remark of a person : `remark`
+
+Adds or Deletes a remark to the specified person from the address book. +
+Format:
+Add a remark: `remark INDEX [r/REMARK]`
+Delete a remark: `remark INDEX [r/]`
+
+****
+* Edits the remark of the person at the specified `INDEX`.
+* The index refers to the index number shown in the most recent listing.
+* The index *must be a positive integer* 1, 2, 3, ...
+****
+
+Examples:
+
+* `list` +
+`remark 2 r/Likes to drink coffee.` +
+Adds 'Likes to drink coffee' remark to the 2nd person in the address book.
+* `find Betsy` +
+`remark 1 r/` +
+Removes the remark from the 1st person in the results of the `find` command.
+
 
 === Selecting a person : `select`
 
@@ -261,6 +319,7 @@ Examples:
 * `list` +
 `select 2` +
 Selects the 2nd person in the address book.
+
 * `find Betsy` +
 `select 1` +
 Selects the 1st person in the results of the `find` command.
@@ -360,6 +419,36 @@ Shows the central locaton among the persons tagged as 'jcfriends'.
 ****
 * The index refers to the index number shown in the most recent listing.
 ****
+
+=== Editing the photo of the specified person : `photo`
+
+Adds a photo to an existing person in the address book. +
+Format: `photo INDEX [ph/PHOTO PATH]` +
+Alternatives: `ph`
+
+Removes a photo from an existing person in the address book. +
+Format: `photo INDEX [ph/]`
+
+****
+* Edits the photo of the person at the specified `INDEX`.
+* The index refers to the index number shown in the last person listing.
+* The index *must be a positive integer* 1, 2, 3, ...
+* The format of the path to the photo file should be correct.
+* Existing path to the photo will be updated to the new path.
+****
+
+Examples:
+
+* `list` +
+`photo 1 ph/ C:\Users\User\Files\Amy_selfie.jpg` +
+Add the picture 'Amy_selfie.jpg' in the specified location to the 1st person in the last shown list. +
+The photo of the 1st person will be shown while clicking on the name.
+* `list` +
+`photo 2 ph/` +
+Removes the picture from the 2nd person in the last shown list.
+* `find Betsy` +
+`photo 1 ph/` +
+Removes the picture from the 1st person in the results of the `find` command.
 
 === Listing entered commands : `history`
 
@@ -510,6 +599,8 @@ e.g. `delete 3`
 e.g. `delete t/modulemate t/colleague`
 * *Edit* : `edit INDEX [n/NAME] [p/PHONE_NUMBER] [e/EMAIL] [b/BIRTHDAY] [a/ADDRESS] [t/TAG]...` +
 e.g. `edit 2 n/James Lee e/jameslee@example.com b/19051994`
+* *Remark* : `remark INDEX [r/REMARK] ` +
+e.g. `remark 2 r/Likes to drink coffee.`
 * *Find* : `find KEYWORD [MORE_KEYWORDS]` +
 e.g. `find James Jake`
 * *Google Maps* `gmaps`
