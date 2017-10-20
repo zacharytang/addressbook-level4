@@ -658,6 +658,7 @@ public class Person implements ReadOnlyPerson {
     private ObjectProperty<Timetable> timetable;
     private ObjectProperty<Remark> remark;
     // ...
+----
 
 
 ==== Design Considerations
@@ -674,6 +675,8 @@ public class Person implements ReadOnlyPerson {
 Also, the font-size is bigger
 **Cons:** It does not the consistent format with other fields in the person card.
 If the remark is too long, it will be poorly displayed.
+
+---
 
 
 === Birthdays
@@ -734,21 +737,6 @@ public static boolean isValidBirthday(String test) {
 ----
 
 ==== Design Considerations
-
-**Aspects** UI Display of Remark +
-**Alternative 1(current choice):** Display the remark of the specified contact at the end of the personCard
-
-**Pros:** It has the consistent format with other fields in the person card.
-**Cons:** It does not highlight the remark so that the user will hardly notice the additional remark information.
-
-**Alternative 2:** Display the Remark next to the name
-
-**Pros:** Placing the remark in this prominent place will better remind the user of the added remark.
-Also, the font-size is bigger
-**Cons:** It does not the consistent format with other fields in the person card.
-If the remark is too long, it will be poorly displayed.
-
-=======
 
 **Aspect:** Representation of birthdays +
 **Alternative 1 (current choice):** Display the birthday of the specified contact at the end of the personCard +
