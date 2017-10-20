@@ -391,7 +391,7 @@ The following UML diagram represents the implementation of the classes.
 [NOTE]
 XYZComponent refers to all other components that `Person` is composed of, the class diagram is not complete.
 
-image::TimetableClassDiagram.png[width="800]
+image::TimetableClassDiagram.png[width="800"]
 
 ==== Design Considerations
 
@@ -658,10 +658,10 @@ public class Person implements ReadOnlyPerson {
     private ObjectProperty<Timetable> timetable;
     private ObjectProperty<Remark> remark;
     // ...
-}
-----
+
 
 ==== Design Considerations
+
 **Aspects** UI Display of Remark +
 **Alternative 1(current choice):** Display the remark of the specified contact at the end of the personCard
 
@@ -675,6 +675,91 @@ Also, the font-size is bigger
 **Cons:** It does not the consistent format with other fields in the person card.
 If the remark is too long, it will be poorly displayed.
 
+
+=== Birthdays
+
+User are able to store birthdays by inputting in the format of DDMMYYYY when adding a person.
+This allows the user to get a list of people having the same birthday month.
+
+In general, the ability to store a person's birthday was implemented via an _augmentation_ of the component of `Person`.
+
+==== Representation of Birthdays
+
+Storing of birthdays is facilitated by an immutable `Birthday` object, which is a component of `Person`.
+
+The following are the main classes edited to implement this:
+
+* AddCommand
+* AddCommandParser
+* EditCommand
+* EditCommandParser
+* Person
+* PersonListCard, PersonCardHandle
+* XmlAdaptedPerson
+
+
+The following UML diagram represents the implementation of the classes in the Model component.
+
+image::BirthdayModelComponentClassDiagram.png[width="500"]
+
+==== Validation of Birthdays
+After the birthday is inputted, it will be checked if the date is valid.
+The number of digits inputted will be checked first.
+Then the year would be checked from the 20th century until now.
+Range of day inputted will then be checked according to month.
+
+[source,java]
+----
+public static boolean isValidBirthday(String test) {
+    int month = Integer.valueOf(test.subString(2, 4));
+    int date = Integer.valueOf(ttest.subString(0, 2));
+    int year = Integer.valueOf(test.subString(4));
+
+    if (!test.matches(BIRTHDAY_VALIDATION_REGEX) {
+        // Number of digits input is not 8
+        return false;
+    } else if (1900 > year || year > 2017){
+        return false;
+    } else {
+        //Check for months with 30 days, with 31 days and Feburary
+        if (month == 2)
+            return date <= 29;
+        else if ((month < 7 && month % 2 == 0) || (month > 7 && month % 2 == 1))
+            return date <= 30;
+        else
+            return date <= 31;
+
+    }
+}
+----
+
+==== Design Considerations
+
+**Aspects** UI Display of Remark +
+**Alternative 1(current choice):** Display the remark of the specified contact at the end of the personCard
+
+**Pros:** It has the consistent format with other fields in the person card.
+**Cons:** It does not highlight the remark so that the user will hardly notice the additional remark information.
+
+**Alternative 2:** Display the Remark next to the name
+
+**Pros:** Placing the remark in this prominent place will better remind the user of the added remark.
+Also, the font-size is bigger
+**Cons:** It does not the consistent format with other fields in the person card.
+If the remark is too long, it will be poorly displayed.
+
+=======
+
+**Aspect:** Representation of birthdays +
+**Alternative 1 (current choice):** Display the birthday of the specified contact at the end of the personCard +
+**Pros:** It has the consistent format with other fields in the person card +
+**Cons:** It is difficult to recognise the number displayed is birthday +
+
+**Alternative 2:** Display the birthday with "Birthday:" in front +
+**Pros:** Simple and easy to understand +
+**Cons:** Inconsistent with the fomat in person card
+
+---
 
 === Logging
 

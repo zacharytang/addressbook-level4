@@ -136,12 +136,6 @@ Shows a list of all persons in the address book by arranging their names in alph
 Format: `sort` +
 Alternatives: `s` , `sortall`, `arrange`
 
-=== Sorting all persons : `sort`
-
-Shows a list of all persons in the address book by arranging their names in alphabetical order +
-Format: `sort` +
-Alternatives: `s` , `sortall`, `arrange`
-
 === Editing a person or a tag: `edit`
 ==== Editing a person
 
@@ -208,6 +202,26 @@ Returns `john` and `John Doe`
 
 * `find Betsy Tim John` +
 Returns any person having names `Betsy`, `Tim`, or `John`
+
+==== Locating persons by birthday _(Coming in v1.3)
+
+Finds persons whose birthday is in the given month. +
+Format: `find b/MONTH` +
+
+****
+* MONTH should be inputted by numbers. e.g `12` searches for December babies
+* Single digit months needs a 0 in front. e.g `02` searches for Febuarary babies
+* Only the birthday month is searched.
+* Persons matching the correct birthday month will be returned in ascending order of their birthday dates.
+****
+
+Examples:
+
+* `find b/12` +
+Returns any person having birthday in December
+
+* `find b/05` +
+Returns any person having brithday in May
 
 ==== Locating persons by filters _(Coming in v2.0)_
 
