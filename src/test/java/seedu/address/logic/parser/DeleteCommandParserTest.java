@@ -4,13 +4,17 @@ import static seedu.address.commons.core.Messages.MESSAGE_INVALID_COMMAND_FORMAT
 import static seedu.address.logic.parser.CommandParserTestUtil.assertParseFailure;
 import static seedu.address.logic.parser.CommandParserTestUtil.assertParseSuccess;
 import static seedu.address.testutil.TypicalIndexes.INDEX_FIRST_PERSON;
+import static seedu.address.testutil.TypicalIndexes.INDEX_SECOND_PERSON;
+import static seedu.address.testutil.TypicalIndexes.INDEX_THIRD_PERSON;
 
+import java.util.ArrayList;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.junit.Test;
 
+import seedu.address.commons.core.index.Index;
 import seedu.address.logic.commands.DeleteCommand;
 import seedu.address.model.tag.Tag;
 
@@ -26,8 +30,19 @@ public class DeleteCommandParserTest {
     private DeleteCommandParser parser = new DeleteCommandParser();
 
     @Test
-    public void parse_validArgs_returnsDeleteCommand() {
-        assertParseSuccess(parser, "1", new DeleteCommand(INDEX_FIRST_PERSON));
+    public void parse_validArgsOnePerson_returnsDeleteCommand() {
+        ArrayList<Index> deletePersonList = new ArrayList<>();
+        deletePersonList.add(INDEX_FIRST_PERSON);
+        assertParseSuccess(parser, "1", new DeleteCommand(deletePersonList));
+    }
+
+    @Test
+    public void parse_validArgsMultiplePersons_returnsDeleteCommand() {
+        ArrayList<Index> deletePersonList = new ArrayList<>();
+        deletePersonList.add(INDEX_FIRST_PERSON);
+        deletePersonList.add(INDEX_SECOND_PERSON);
+        deletePersonList.add(INDEX_THIRD_PERSON);
+        assertParseSuccess(parser, "1, 2, 3", new DeleteCommand(deletePersonList));
     }
 
     @Test
@@ -54,6 +69,8 @@ public class DeleteCommandParserTest {
         assertParseFailure(parser, "a", String.format(MESSAGE_INVALID_COMMAND_FORMAT, DeleteCommand.MESSAGE_USAGE));
         assertParseFailure(parser, "-1", String.format(MESSAGE_INVALID_COMMAND_FORMAT, DeleteCommand.MESSAGE_USAGE));
         assertParseFailure(parser, "0", String.format(MESSAGE_INVALID_COMMAND_FORMAT, DeleteCommand.MESSAGE_USAGE));
+        assertParseFailure(parser, "0, -1", String.format(MESSAGE_INVALID_COMMAND_FORMAT, DeleteCommand.MESSAGE_USAGE));
+        assertParseFailure(parser, "-1, -2, -3", String.format(MESSAGE_INVALID_COMMAND_FORMAT, DeleteCommand.MESSAGE_USAGE));
     }
 
 }
