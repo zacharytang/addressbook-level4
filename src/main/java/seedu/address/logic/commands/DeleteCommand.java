@@ -37,7 +37,7 @@ public class DeleteCommand extends UndoableCommand {
 
     //need to check here
     //public static final String MESSAGE_DELETE_PERSON_SUCCESS = "Deleted Person: %1$s";
-    public static final String MESSAGE_DELETE_PERSON_SUCCESS = "Deleted Persons";
+    public static final String MESSAGE_DELETE_PERSON_SUCCESS = "Deleted Person(s) Successful";
     public static final String MESSAGE_DELETE_TAG_SUCCESS = "Deleted Tags";
 
     private final ArrayList<Index> targetIndexes;
