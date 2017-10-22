@@ -65,18 +65,20 @@ public class DeleteCommand extends UndoableCommand {
         // this code block is command execution for delete [indexes]
         if (targetTags == null && targetIndexes != null) {
             List<ReadOnlyPerson> lastShownList = model.getFilteredPersonList();
+            ArrayList<ReadOnlyPerson> deletePersonList = new ArrayList<>();
 
             for (Index index : targetIndexes) {
                 if (index.getZeroBased() >= lastShownList.size()) {
                     throw new CommandException(Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX);
                 }
                 ReadOnlyPerson personToDelete = lastShownList.get(index.getZeroBased());
+                deletePersonList.add(personToDelete);
+            }
 
-                try {
-                    model.deletePerson(personToDelete);
-                } catch (PersonNotFoundException pnfe) {
-                    assert false : "The target person with index " + index.getOneBased() + "cannot be missing";
-                }
+            try {
+                model.deletePersons(deletePersonList);
+            } catch (PersonNotFoundException pnfe) {
+                assert false : "One of the target persons is missing";
             }
 
             return new CommandResult(String.format(MESSAGE_DELETE_PERSON_SUCCESS));

@@ -2,12 +2,7 @@ package seedu.address.model;
 
 import static java.util.Objects.requireNonNull;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 
 import javafx.collections.ObservableList;
 import seedu.address.model.person.Person;
@@ -155,6 +150,19 @@ public class AddressBook implements ReadOnlyAddressBook {
         } else {
             throw new PersonNotFoundException();
         }
+    }
+
+    /**
+     * Removes {@code keys} from this {@code AddressBook}.
+     * @throws PersonNotFoundException if one of the {@code keys} is not in this {@code AddressBook}.
+     */
+    public boolean removePersons(ArrayList<ReadOnlyPerson> keys) throws PersonNotFoundException {
+        for (ReadOnlyPerson key : keys) {
+            if (!persons.remove(key)) {
+                throw new PersonNotFoundException();
+            }
+        }
+        return true;
     }
 
     //// tag-level operations
