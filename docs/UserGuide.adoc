@@ -67,7 +67,7 @@ Understanding the Command Format is easy! Let us explain:
 * Words in `UPPER_CASE` are *parameters* you have to give to the command. Each *parameter* is assigned and preceded by a *prefix*: a letter followed by a `/` +
 ** Example: `add n/*NAME*` +
    `NAME` is a *parameter* you have to give to the `add` command, assigned to the `n/` *prefix* +
-   If the *parameter* you want to provide is John Doe, the command will be `add *n/John Doe*`.
+   If the *parameter* you want to provide is John Doe, the command will be `add n/*John Doe*`.
 * Items in square brackets are optional
 ** Example: `add n/NAME *[t/TAG]*` +
    You can use the `add` command as `add n/John Doe t/friend` or as `add n/John Doe`.
@@ -120,7 +120,7 @@ Here are a the following attributes a person can have: +
 ** The full link is not allowed
 * *Tags*
 ** A person can have any number of tags (even no tags at all!)
-* *_Temporary_ Tags*
+* *_Temporary_ Tags* _(Coming in v2.0)_
 ** `NUM_OF_MONTHS` *must be a positive integer* eg: 1, 2, 3, ...
 ** `NUM_OF_MONTHS` specifies the number of months the temporary tag will last, after which it will disappear.
 *** Example: `tmpt/6/ATAPcolleauge` tags the person with `ATAPcolleauge`. After 6 months, the tag will disappear.
@@ -641,10 +641,11 @@ If you find the font too big or too small, the font size can be changed in *Appe
 
 === Command Suggestion _(Coming in v2.0)_
 
-Typing the wrong word for a command will trigger the address book to suggest the correct phrasing for that command
+Typing the wrong/mispelled word for a command will trigger the address book to suggest the correct phrasing for that command
 
 Example:
-Typing the command `cancel` will make UniFy reply `Do you mean DELETE or UNDO?`
+Typing the command `cancel` will make UniFy reply `Do you mean DELETE or UNDO?` +
+Typing 'cacnel` will also trigger the same response.
 
 === Tag Bar _(Coming in v2.0)_
 
