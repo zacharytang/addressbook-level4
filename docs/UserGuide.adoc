@@ -64,6 +64,8 @@ Understanding the Command Format is easy! Let us explain:
 
 * Commands always start with a command word.
 ** Example: `add`, `delete`, `clears`, `edit`
+* `INDEX` refers to the index number shown in the last generated listing of people.
+** `INDEX` *must be a positive integer* e.g.: 1, 2, 3, ...
 * Words in `UPPER_CASE` are *parameters* you have to give to the command. Each *parameter* is assigned and preceded by a *prefix*: a letter followed by a `/` +
 ** Example: `add n/*NAME*` +
    `NAME` is a *parameter* you have to give to the `add` command, assigned to the `n/` *prefix* +
@@ -162,10 +164,8 @@ Alternatives: `ph`
 
 ****
 * Edits the photo of the person at the specified `INDEX`.
-** The index refers to the index number shown in the last person listing.
-** The index *must be a positive integer* 1, 2, 3, ...
-* The format of the path to the photo file should be correct.
-* Existing path to the photo will be updated to the new path.
+* Ensure that format of the path to the photo file is correct.
+* The file path of the photo will be updated to the new path.
 ****
 
 Examples:
@@ -193,8 +193,6 @@ Format: +
 
 ****
 * Edits the remark of the person at the specified `INDEX`.
-* The index refers to the index number shown in the most recent listing.
-* The index *must be a positive integer* 1, 2, 3, ...
 ****
 
 Examples:
@@ -287,8 +285,6 @@ Alternatives: `e` , `modify`, `change`
 
 ****
 * Edits the person at the specified `INDEX`.
-** `INDEX` refers to the index number shown in the last person listing.
-** `INDEX` *must be a positive integer* 1, 2, 3, ...
 * You must provided at least one of the optional fields.
 * Editing tags is not cumulative! WWhen editing tags, the person's existing tags will be replaced by the new ones you put in.
 ** This also means you can remove all the person's tags by typing `t/` without specifying any tags after it.
@@ -335,7 +331,6 @@ Format: `delete INDEX1, INDEX2, INDEX3...` +
 Alternatives: `d` , `remove`
 
 ****
-* The index *must be a positive integer* e.g.: 1, 2, 3, ...
 * UniFy accepts duplicated indexes.
 ****
 
@@ -409,8 +404,6 @@ Alternatives: `s`, `choose`
 
 ****
 * Selects the person and loads the Google search page the person at the specified `INDEX`.
-* The index refers to the index number shown in the most recent listing.
-* The index *must be a positive integer* `1, 2, 3, ...`
 ****
 
 Examples:
@@ -451,11 +444,6 @@ ____
 For a person specified by an index, opens a Google Maps view of the person's address locaton. +
 Format: `gmaps INDEX` +
 Alternatives: `g`, `map`, `maps`
-
-****
-* The index refers to the index number shown in the most recent listing.
-* The index *must be a positive integer* `1, 2, 3, ...`
-****
 
 Examples:
 
@@ -513,10 +501,6 @@ Shows the central location among the persons most recently listed with Index 1, 
 * `list t/jcfriends` +
 `central` +
 Shows the central locaton among the persons tagged as 'jcfriends'.
-
-****
-* The index refers to the index number shown in the most recent listing.
-****
 
 === Listing entered commands : `history`
 ____
