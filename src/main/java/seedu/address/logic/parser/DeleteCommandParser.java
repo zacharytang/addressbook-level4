@@ -41,29 +41,15 @@ public class DeleteCommandParser implements Parser<DeleteCommand> {
         } else if (preamble.matches("-?\\d+")) { // code block for delete for a person
             try {
                 Index index = ParserUtil.parseIndex(args);
-                ArrayList<Index> deletePerson = new ArrayList<>();
-                deletePerson.add(index);
-
-                return new DeleteCommand(deletePerson);
+                return new DeleteCommand(index);
             } catch (IllegalValueException ive) {
                 throw new ParseException(
                         String.format(MESSAGE_INVALID_COMMAND_FORMAT, DeleteCommand.MESSAGE_USAGE));
             }
         } else if (preamble.matches("((\\d\\,(?=\\d))|\\d)+")) { //code block for delete multiple persons
             try {
-
-                //still need to change it into ParserUtil
-
-
-                String[] indexes = args.split(",");
-
-                ArrayList<Index> deletePersons = new ArrayList<>();
-                for (String index : indexes) {
-                    deletePersons.add(Index.fromZeroBased(Integer.valueOf(index)- 1));
-                }
-
+                ArrayList<Index> deletePersons = ParserUtil.parseIndexes(args);
                 return new DeleteCommand(deletePersons);
-
             } catch (IllegalValueException ive) {
                 throw new ParseException(
                         String.format(MESSAGE_INVALID_COMMAND_FORMAT, DeleteCommand.MESSAGE_USAGE));
