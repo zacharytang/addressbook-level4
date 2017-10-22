@@ -56,6 +56,7 @@ public class ParserUtil {
 
         ArrayList<Index> deletePersons = new ArrayList<>();
         for (String index : indexes) {
+            index = index.trim();
             if (!StringUtil.isNonZeroUnsignedInteger(index)) {
                 throw new IllegalValueException(MESSAGE_INVALID_INDEX);
             }
