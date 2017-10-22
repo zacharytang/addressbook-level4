@@ -53,15 +53,18 @@ public class ParserUtil {
     public static ArrayList<Index> parseIndexes(String oneBasedIndexes) throws IllegalValueException {
         String trimmedIndexes = oneBasedIndexes.trim();
         String[] indexes = trimmedIndexes.split(",");
-
         ArrayList<Index> deletePersons = new ArrayList<>();
+
         for (String index : indexes) {
             index = index.trim();
             if (!StringUtil.isNonZeroUnsignedInteger(index)) {
                 throw new IllegalValueException(MESSAGE_INVALID_INDEX);
             }
 
-            deletePersons.add(Index.fromOneBased(Integer.valueOf(index)));
+            Index thisIndex = Index.fromOneBased(Integer.valueOf(index));
+            if (!deletePersons.contains(thisIndex)) {
+                deletePersons.add(thisIndex);
+            }
         }
 
         return deletePersons;
