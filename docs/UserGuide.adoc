@@ -106,11 +106,10 @@ Format: `add n/NAME g/GENDER p/PHONE_NUMBER e/EMAIL a/ADDRESS [m/MATRIC_NUMBER] 
 Alternatives: `a` , `insert` +
  +
 
-.A person with various contact information
+.A person with various contact information +
 image::PersonCard.png[]
 
 ****
-+
 Here are a the following information a person can have: +
 
 * *Name*
