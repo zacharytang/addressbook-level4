@@ -95,7 +95,7 @@ _First thing to do with UniFy is to start adding the various people you've met i
 _Add contact information you want to remember! Your group mate's timetable, your friend's birthday. Tag your
 module mates with appropriate tags too!_
 
-[IMPORTANT]
+[NOTE]
 Adds a person to the address book +
 Format: `add n/NAME g/GENDER p/PHONE_NUMBER e/EMAIL a/ADDRESS [m/MATRIC_NUMBER] [b/BIRTHDAY] [tt/TIMETABLE_URL] [t/TAG]... [tmpt/NUM_OF_MONTHS/TEMPORARY TAG]...` +
 Alternatives: `a` , `insert`
