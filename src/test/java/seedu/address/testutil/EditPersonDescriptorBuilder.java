@@ -36,6 +36,7 @@ public class EditPersonDescriptorBuilder {
         descriptor.setAddress(person.getAddress());
         descriptor.setTimetable(person.getTimetable());
         descriptor.setTags(person.getTags());
+        descriptor.setBirthday(person.getBirthday());
     }
 
     /**
@@ -135,7 +136,20 @@ public class EditPersonDescriptorBuilder {
         return this;
     }
 
+    /**
+     * Sets the {@code Birthday} of the {@code EditPersonDescriptor} that we are building.
+     */
+    public EditPersonDescriptorBuilder withBirthday(String birthday) {
+        try {
+            ParserUtil.parseBirthday(Optional.of(birthday)).ifPresent(descriptor::setBirthday);
+        } catch (IllegalValueException ive) {
+            throw new IllegalArgumentException("birthday is expected to be unique.");
+        }
+        return this;
+    }
     public EditPersonDescriptor build() {
         return descriptor;
     }
+
+
 }

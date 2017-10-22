@@ -27,6 +27,7 @@ public class Person implements ReadOnlyPerson {
     private ObjectProperty<Address> address;
     private ObjectProperty<Timetable> timetable;
     private ObjectProperty<Remark> remark;
+    private ObjectProperty<Birthday> birthday;
 
     private ObjectProperty<UniqueTagList> tags;
 
@@ -34,9 +35,8 @@ public class Person implements ReadOnlyPerson {
      * Every field must be present and not null.
      */
     public Person(Name name, Gender gender, MatricNo matricNo, Phone phone, Email email, Address address,
-                  Timetable timetable, Remark remark, Set<Tag> tags) {
-        requireAllNonNull(name, gender, matricNo, phone, email, address, tags);
-
+                  Timetable timetable, Remark remark, Set<Tag> tags, Birthday birthday) {
+        requireAllNonNull(name, phone, email, address, tags);
         this.name = new SimpleObjectProperty<>(name);
         this.gender = new SimpleObjectProperty<>(gender);
         this.matricNo = new SimpleObjectProperty<>(matricNo);
@@ -47,6 +47,7 @@ public class Person implements ReadOnlyPerson {
         this.remark = new SimpleObjectProperty<>(remark);
         // protect internal tags from changes in the arg list
         this.tags = new SimpleObjectProperty<>(new UniqueTagList(tags));
+        this.birthday = new SimpleObjectProperty<>(birthday);
     }
 
     /**
@@ -54,7 +55,7 @@ public class Person implements ReadOnlyPerson {
      */
     public Person(ReadOnlyPerson source) {
         this(source.getName(), source.getGender(), source.getMatricNo(), source.getPhone(), source.getEmail(),
-                source.getAddress(), source.getTimetable(), source.getRemark(), source.getTags());
+                source.getAddress(), source.getTimetable(), source.getRemark(), source.getTags(), source.getBirthday());
     }
 
     public void setName(Name name) {
@@ -189,6 +190,20 @@ public class Person implements ReadOnlyPerson {
         tags.set(new UniqueTagList(replacement));
     }
 
+    public void setBirthday(Birthday birthday) {
+        this.birthday.set(requireNonNull(birthday));
+    }
+
+    @Override
+    public ObjectProperty<Birthday> birthdayProperty() {
+        return birthday;
+    }
+
+    @Override
+    public Birthday getBirthday() {
+        return birthday.get();
+    }
+
     @Override
     public boolean equals(Object other) {
         return other == this // short circuit if same object
@@ -199,7 +214,7 @@ public class Person implements ReadOnlyPerson {
     @Override
     public int hashCode() {
         // use this method for custom fields hashing instead of implementing your own
-        return Objects.hash(name, gender, matricNo, phone, email, address, timetable, tags);
+        return Objects.hash(name, gender, matricNo, phone, email, address, timetable, tags, birthday);
     }
 
     @Override

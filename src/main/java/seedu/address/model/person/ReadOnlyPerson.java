@@ -31,6 +31,8 @@ public interface ReadOnlyPerson {
     Remark getRemark();
     ObjectProperty<UniqueTagList> tagProperty();
     Set<Tag> getTags();
+    ObjectProperty<Birthday> birthdayProperty();
+    Birthday getBirthday();
 
     /**
      * Returns true if both have the same state. (interfaces cannot override .equals)
@@ -45,7 +47,8 @@ public interface ReadOnlyPerson {
                 && other.getEmail().equals(this.getEmail())
                 && other.getAddress().equals(this.getAddress())
                 && other.getTimetable().equals(this.getTimetable())
-                && other.getRemark().equals(this.getRemark()));
+                && other.getRemark().equals(this.getRemark()))
+                && other.getBirthday().equals(this.getBirthday());
     }
 
     /**
@@ -64,6 +67,8 @@ public interface ReadOnlyPerson {
                 .append(getEmail())
                 .append(" Address: ")
                 .append(getAddress())
+                .append(" Birthday: ")
+                .append(getBirthday())
                 .append(" Timetable: ")
                 .append(getTimetable())
                 .append(" Remark: ")
