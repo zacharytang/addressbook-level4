@@ -81,15 +81,17 @@ Understanding the Command Format is easy! Let us explain:
 
 === Viewing help : `help`
 
+____
 _Unsure what to do inside UniFy? Call for help with this simple command._
+____
 
 Views the User Guide for Help +
 Format: `help`
 
 === Adding a person: `add`
-
+____
 _First thing to do with UniFy is to start adding the various people you've met in University, as well as important people like your family._
-
+____
 ==== Adding a person manually
 
 ____
@@ -132,9 +134,9 @@ Examples:
 * `add n/Betty g/F p/12345678 e/betty@example.com b/23051998`
 
 ==== Adding a person using the information on social media _(Coming in v2.0)_
-
+____
 _Add someone from a module via Facebook? Add him seamlessly into UniFy!_
-
+____
 
 Adds a person to address book from the social media accounts +
 Format: `add s/SOCIAL_MEDIA_TYPE SOCIAL_MEDIA_ID`
@@ -149,9 +151,9 @@ Examples:
 * `add s/Instagram John Doe`
 
 === Adding/Deleting a Photo for a person : `photo`
-
+____
 _When you study too much, sometimes, you forget how someone looks like._
-
+____
 Adds or removes a photo to an existing person in the address book. +
 Format: +
 (Add photo) `photo INDEX [ph/PHOTO PATH]` +
@@ -180,10 +182,10 @@ Removes the picture from the 2nd person in the last shown list.
 Removes the picture from the 1st person in the results of the `find` command.
 
 === Giving a remark to a person : `remark` _(Since v1.1)_
-
+____
 _Sometimes you want to remind yourself how this person was like in a funny incident. Or you owe friends money for last night's supper. +
 Tags are too short, and your remarks for a person are more descriptive and unique. UniFy lets you add a remark to a person you can always look back on._
-
+____
 Adds or Deletes a remark to the specified person from the address book. +
 Format: +
 (Add remark) `remark INDEX [r/REMARK]` +
@@ -205,10 +207,10 @@ Adds 'Likes to drink coffee' remark to the 2nd person in the address book.
 Removes the remark from the 1st person in the results of the `find` command.
 
 === Listing persons : `list`
-
+____
 _Display your contacts how you like it. All of them? Just your classmates for a particular module? +
 Want to know who's birthday is in this month? Unify every common contact together and list them as one._
-
+____
 ==== List all people
 
 Shows a list of all persons in the address book. +
@@ -267,18 +269,18 @@ Returns any person tagged by `friends`
 Returns any person tagged by `friends`, and having phone numbers containing `1234`
 
 === Sorting all persons : `sort` _(Coming in v2.0)_
-
+____
 _Sometimes, you just meet too many people in University. Do not worry, get all your contacts in order._
-
+____
 Shows a list of all persons in the address book by arranging their names in alphabetical order +
 Format: `sort` +
 Alternatives: `s` , `sortall`, `arrange`
 
 === Editing a person or a tag: `edit`
 ==== Editing a person
-
+____
 _Made a mistake? Someone changed their contact details? Edit it._
-
+____
 Edits an existing person in the address book. +
 Format: `edit INDEX [n/NAME] [g/GENDER] [m/MATRIC_NO] [p/PHONE] [e/EMAIL] [a/ADDRESS] [b/BIRTHDAY] [tt/TIMETABLE_URL] [t/TAG]...` +
 Alternatives: `e` , `modify`, `change`
@@ -301,10 +303,10 @@ Edits the phone number, gender and email address of the 1st person to be `912345
 Edits the name and matriculation number and birthday of the 2nd person to be `Betsy Crower`, A0162522j and clears all existing tags.
 
 ==== Editing a tag _(Added since v1.2)_
-
+____
 _When you need to edit module tags of classmates when advancing from a prerequisite module (e.g. CS1010 -> CS1020),
 changing each of their tag to an updated one is too tedious! UniFy let's you simply edit a particular tag for all contacts in one command._ +
-
+____
 
 Replaces the specified tag word to a specified new word for all people containing the specified tag +
 Format: `edit old/OLDTAG new/NEWTAG` +
@@ -325,9 +327,9 @@ Editing a person's tag only edits the tag(s) for a *single* person. This command
 
 === Deleting multiple persons or a tag: `delete`
 ==== Deleting multiple persons _(Coming in v2.0)_
-
+____
 _Some people just have to go away in your life. Sometimes they leave you. Delete these people out of UniFy as well._
-
+____
 By specifying an index or multiple indexes, deletes the specified person(s) in the most recent listing from the address book. +
 Format: `delete INDEX1, INDEX2, INDEX3...` +
 Alternatives: `d` , `remove`
@@ -356,10 +358,10 @@ Deletes the 2nd and 4th persons in the address book.
 Deletes the 1st and 5th persons in the results of the `find` command.
 
 ==== Deleting old contacts
-
+____
 _Some people you do not talk for months. Maybe a group mate from a previous module you never see ever again.
 They drift away, and out of UniFy they go as well._
-
+____
 Deletes the contacts who you have not been viewed/edited/listed by the 'edit', 'photo' or 'find' command
 for a certain number of months. +
 Format: `delete old/NUM_OF_MONTH` +
@@ -375,10 +377,10 @@ Examples:
 Deletes all the contacts which you have not been viewed/edited/listed by the 'edit', 'photo' or 'find' command for the past 2 months.
 
 ==== Deleting a Tag (or multiple Tags) _(Added since v1.1)_
-
+____
 _You have just finished a project in a module. Sticking a group mate label to your project mates seems rude for you.
 Instead of going through each member one by one, delete that particular tag in one go._
-
+____
 Deletes the specified tag from all people containing the tag in the address book. +
 Format: `delete t/TAG...`
 
@@ -422,9 +424,9 @@ Selects the 2nd person in the address book.
 Selects the 1st person in the results of the `find` command.
 
 === Viewing combined timetables : `whenfree` _(Coming in v2.0)_
-
+____
 _"When are all of you free?" is an extremely common question in University. Let us solve that._
-
+____
 Views the combined timetables of a group of persons, selected by indexes. +
 Format: `whenfree [INDEX]...`
 
@@ -443,9 +445,9 @@ Displays a combined timetable for all listed users
 ****
 
 === Open a Google Maps view of a selected person's address : `gmaps` _(Coming in v2.0)_
-
+____
 _You are meeting your group mate at his house. But where is his house on the map?_
-
+____
 For a person specified by an index, opens a Google Maps view of the person's address locaton. +
 Format: `gmaps INDEX` +
 Alternatives: `g`, `map`, `maps`
@@ -465,9 +467,9 @@ Opens the Google Maps view for the address of the 2nd person selected in the add
 Opens the Google Maps view for the address of the 1st person in the results of the `find` command.
 
 ==== Listing persons who live nearby : `nearby` _(Coming in v2.0)_
-
+____
 _It is Summer break. Who is there to call for late night supper near your home?_
-
+____
 Shows a list of persons who's address is nearby a specified *address* within a specified radius. +
 Format: `nearby a/ADDRESS d/DISTANCE` +
 Alternatives: `n`, `nearme`, `closeby`, `neighbours` `neighbors`
@@ -482,9 +484,9 @@ Example:
 ****
 
 ==== Finding a central location among a group of persons : `central` _(Coming in v2.0)_
-
-_Where is a good place for us to meet?_
-
+____
+_"Where is a good place for us to meet?" UniFy everyone's location to find a central one._
+____
 After listing persons, shows the central location among the persons most recently listed +
 Format: `central [a/ADDRESS] [INDEX]...` +
 Alternatives: `ct`, `center`, `wheremeet`
@@ -517,9 +519,9 @@ Shows the central locaton among the persons tagged as 'jcfriends'.
 ****
 
 === Listing entered commands : `history`
-
+____
 _What have you been doing? Check the past._
-
+____
 Lists all the commands that you have entered in reverse chronological order. +
 Format: `history` +
 Alternatives: `h` , `past`
@@ -531,9 +533,9 @@ Pressing the kbd:[&uarr;] and kbd:[&darr;] arrows will display the previous and 
 
 // tag::undoredo[]
 === Undoing previous command : `undo`
-
+____
 _You made a mistake, deleted some one by accident. Do not fret. UniFy is forgiving, undo your mistakes._
-
+____
 Restores the address book to the state before the previous _undoable_ command was executed. +
 Format: `undo` +
 Alternatives: `u`
@@ -560,9 +562,9 @@ The `undo` command fails as there are no undoable commands executed previously.
 `undo` (reverses the `delete 1` command) +
 
 === Redoing the previously undone command : `redo`
-
+____
 _It is OK. You wanted to delete that person anyways._
-
+____
 Reverses the most recent `undo` command. +
 Format: `redo` +
 Alternatives: `r`
@@ -592,9 +594,9 @@ Format: `clear` +
 Alternatives: `c`, `wipe`
 
 === Setting a password for your address book : `password` _(Coming in v2.0)_
-
+____
 _Your privacy is important. Prevent others from viewing the contact details you possess._
-
+____
 Sets or changes the password that allows access to the address book +
 Format: `password pw/PASSWORD` +
 Alternatives: `p` , `code`
@@ -612,9 +614,9 @@ Example:
 To cancel password set.
 
 === Exiting the program : `exit`
-
-_You are done with what you need to do. Time to get out of UniFy._
-
+____
+_You are done with what you need to do. Thank you for using UniFy._
+____
 Exits the program. +
 Format: `exit` +
 Alternatives: `x` , `quit`
