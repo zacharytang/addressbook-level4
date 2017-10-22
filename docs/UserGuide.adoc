@@ -109,6 +109,8 @@ Alternatives: `a` , `insert` +
 .A person with various contact information +
 image::PersonCard.png[]
 
+You can view the contacts you have added in UniFy in the form of _cards_.
+
 ****
 Here are a the following information a person can have: +
 
