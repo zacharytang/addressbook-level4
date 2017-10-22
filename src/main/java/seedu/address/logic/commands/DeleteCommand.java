@@ -44,6 +44,12 @@ public class DeleteCommand extends UndoableCommand {
 
     private final Set<Tag> targetTags;
 
+    public DeleteCommand(Index targetIndex) {
+        this.targetIndexes = new ArrayList<>();
+        targetIndexes.add(targetIndex);
+        this.targetTags = null;
+    }
+
     public DeleteCommand(ArrayList<Index> targetIndexes) {
         this.targetIndexes = targetIndexes;
         this.targetTags = null;
