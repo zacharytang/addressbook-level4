@@ -54,6 +54,14 @@ public class DeleteCommandParserTest {
     }
 
     @Test
+    public void parse_validArgsMultiplePersonsDuplicatedIndexes_returnsDeleteCommand() {
+        ArrayList<Index> deletePersonList = new ArrayList<>();
+        deletePersonList.add(INDEX_FIRST_PERSON);
+        deletePersonList.add(INDEX_THIRD_PERSON);
+        assertParseSuccess(parser, "1, 1, 3, 3", new DeleteCommand(deletePersonList));
+    }
+
+    @Test
     public void parse_validArgsMultiplePersonsManyWhiteSpaces_returnsDeleteCommand() {
         ArrayList<Index> deletePersonList = new ArrayList<>();
         deletePersonList.add(INDEX_FIRST_PERSON);
