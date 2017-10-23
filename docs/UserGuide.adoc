@@ -14,6 +14,18 @@ endif::[]
 
 By: `Team SE-EDU`      Since: `Jun 2016`      Licence: `MIT`
 
+== Introduction
+Thank you for downloading **UniFy**! We're glad that you've chosen us to help you manage your hectic university life.
+
+**UniFy** is a personal assistant to your everyday life in NUS. It helps you maintain your numerous groups,
+tells you when your friends are free for lunch and find common time for project meetings. It even helps you find directions to
+wherever your friends might be!
+
+We know that time is precious for university students, so we made **UniFy** as simple to use as possible. You only need commands
+to use **UniFy**, no more searching for hidden buttons or navigating unfamiliar pages!
+
+Excited? Let's get started!
+
 == Quick Start
 
 .  Ensure you have Java version `1.8.0_60` or later installed in your Computer.
@@ -56,17 +68,16 @@ e.g. typing *`help`* and pressing kbd:[Enter] will open the help window.
 Format: `help`
 
 === Adding a person: `add`
-==== Adding a person manually
+==== Adding a person manually with new attributes gender, phone numbers, timetable and birthday _(Coming in v1.2)_
 
 Adds a person to the address book +
-
-Format: `add n/NAME [p/PHONE_NUMBER] [e/EMAIL] [a/ADDRESS] [b/BIRTHDAY] [tt/TIMETABLE_URL] [t/TAG] ...` +
 Format: `add n/NAME g/GENDER p/PHONE_NUMBER e/EMAIL a/ADDRESS [m/MATRIC_NUMBER] [b/BIRTHDAY] [tt/TIMETABLE_URL] [t/TAG]... [tmpt/NUM_OF_MONTHS/TEMPORARY TAG]...` +
 Alternatives: `a` , `insert`
 
 ****
 * GENDER is either Male/Female or M/F
-* The format for birthday is YYYYMMDD.
+* MATRIC_NUMBER should be a 9-character string starting with 'A or a' and ending with a letter
+* The format for birthday is DDMMYYYY.
 * A person can have any number of tags (including 0)
 * A person can add a temporary tag to a person by adding [tt/NUM_OF_MONTHS/TEMPORARY TAG]
 ** The NUM_OF_MONTHS *must be a positive integer* 1, 2, 3, ...
@@ -77,8 +88,8 @@ Examples:
 
 * `add n/John Doe g/Male p/98765432 e/johnd@example.com a/John street, block 123, #01-01 m/A0134232H tt/http://modsn.us/abCdE`
 * `add n/Betsy Crowe g/Female p/1234567 e/betsycrowe@example.com a/Newgate Prison t/friend t/criminal`
-* `add n/Amy Tan g/Feamle p/82974823 tt/4/CS2101classmates e/amy_tan@example.com a/PGP m/A0142323T`
-* `add n/Betty g/Female p/12345678 e/betty@example.com b/19980523`
+* `add n/Amy Tan g/F p/82974823 tt/4/CS2101classmates e/amy_tan@example.com a/PGP m/a0142323T`
+* `add n/Betty g/F p/12345678 e/betty@example.com b/23051998`
 
 ==== Adding a person using the information on social media _(Coming in v2.0)_
 
@@ -125,17 +136,11 @@ Shows a list of all persons in the address book by arranging their names in alph
 Format: `sort` +
 Alternatives: `s` , `sortall`, `arrange`
 
-=== Sorting all persons : `sort`
-
-Shows a list of all persons in the address book by arranging their names in alphabetical order +
-Format: `sort` +
-Alternatives: `s` , `sortall`, `arrange`
-
 === Editing a person or a tag: `edit`
 ==== Editing a person
 
 Edits an existing person in the address book. +
-Format: `edit INDEX [n/NAME] [p/PHONE] [e/EMAIL] [a/ADDRESS] [tt/TIMETABLE_URL] [t/TAG]...` +
+Format: `edit INDEX [n/NAME] [g/GENDER] [m/MATRIC_NO] [p/PHONE] [e/EMAIL] [a/ADDRESS] [b/BIRTHDAY] [tt/TIMETABLE_URL] [t/TAG]...` +
 Alternatives: `e` , `modify`, `change`
 
 ****
@@ -148,11 +153,11 @@ Alternatives: `e` , `modify`, `change`
 
 Examples:
 
-* `edit 1 p/91234567 e/johndoe@example.com` +
-Edits the phone number and email address of the 1st person to be `91234567` and `johndoe@example.com` respectively.
+* `edit 1 p/91234567 g/Male e/johndoe@example.com` +
+Edits the phone number, gender and email address of the 1st person to be `91234567`, `Male` and `johndoe@example.com` respectively.
 
-* `edit 2 n/Betsy Crower t/` +
-Edits the name of the 2nd person to be `Betsy Crower` and clears all existing tags.
+* `edit 2 n/Betsy Crower m/A0162522j b/14081998 t/` +
+Edits the name and matriculation number and birthday of the 2nd person to be `Betsy Crower`, A0162522j and clears all existing tags.
 
 ==== Editing a tag
 
@@ -198,6 +203,26 @@ Returns `john` and `John Doe`
 * `find Betsy Tim John` +
 Returns any person having names `Betsy`, `Tim`, or `John`
 
+==== Locating persons by birthday _(Coming in v1.3)
+
+Finds persons whose birthday is in the given month. +
+Format: `find b/MONTH` +
+
+****
+* MONTH should be inputted by numbers. e.g `12` searches for December babies
+* Single digit months needs a 0 in front. e.g `02` searches for Febuarary babies
+* Only the birthday month is searched.
+* Persons matching the correct birthday month will be returned in ascending order of their birthday dates.
+****
+
+Examples:
+
+* `find b/12` +
+Returns any person having birthday in December
+
+* `find b/05` +
+Returns any person having brithday in May
+
 ==== Locating persons by filters _(Coming in v2.0)_
 
 Finds persons whose information contain any of the given keywords from each category. +
@@ -222,11 +247,12 @@ Returns any person tagged by `friends`, and having phone numbers containing `123
 ==== Deleting multiple persons
 
 By specifying an index or multiple indexes, deletes the specified person(s) in the most recent listing from the address book. +
-Format: `delete INDEX...` +
+Format: `delete INDEX1, INDEX2, INDEX3...` +
 Alternatives: `d` , `remove`
 
 ****
 * The index *must be a positive integer* 1, 2, 3, ...
+* The command parser accepts duplicated indexes.
 ****
 
 Examples:
@@ -238,6 +264,10 @@ Deletes the 2nd person in the address book.
 * `list` +
 `delete 2, 3, 4` +
 Deletes the 2nd, 3rd, 4th persons in the address book.
+
+* `list` +
+`delete 2, 2, 4` +
+Deletes the 2nd and 4th persons in the address book.
 
 * `find Betsy` +
 `delete 1, 5` +
@@ -266,7 +296,6 @@ Format: `delete t/TAG...`
 * The tag specified is case-sensitive.
 * You can delete multiple tags with one delete command.
 * The tag (or all the tags) specified must already exist in the address book.
-
 ****
 
 Examples:
@@ -281,8 +310,7 @@ Deletes the tags 'module1' and 'module2' from all people containing one of the t
 [TIP]
 This command is most useful for batch deleting Tags. Especially when you've finished a project in a module.
 
-
-=== Editing the remark of a person : `remark`
+=== Editing the remark of a person : `remark` _(Since v1.1)_
 
 Adds or Deletes a remark to the specified person from the address book. +
 Format:
@@ -478,9 +506,9 @@ Undoable commands: those commands that modify the address book's content (`add`,
 
 Examples:
 
-* `delete 1` +
+* `delete 1, 2` +
 `list` +
-`undo` (reverses the `delete 1` command) +
+`undo` (reverses the `delete 1, 2` command) +
 
 * `select 1` +
 `list` +
@@ -500,9 +528,9 @@ Alternatives: `r`
 
 Examples:
 
-* `delete 1` +
-`undo` (reverses the `delete 1` command) +
-`redo` (reapplies the `delete 1` command) +
+* `delete 1, 2` +
+`undo` (reverses the `delete 1, 2` command) +
+`redo` (reapplies the `delete 1, 2` command) +
 
 * `delete 1` +
 `redo` +
@@ -593,15 +621,15 @@ Clicking on the address in the address book will open a Google Map map view of t
 
 == Command Summary
 
-* *Add* : `add n/NAME p/PHONE_NUMBER e/EMAIL a/ADDRESS [t/TAG]...` +
-e.g. `add n/James Ho p/22224444 e/jamesho@example.com a/123, Clementi Rd, 1234665 t/friend t/colleague`
+* *Add* : `add n/NAME g/GENDER m/MATRIC_NO p/PHONE_NUMBER e/EMAIL a/ADDRESS [b/BIRTHDAY] [t/TAG]...` +
+e.g. `add n/James Ho g/Male m/A0162525k p/22224444 e/jamesho@example.com a/123, Clementi Rd, 1234665 b/26021995 t/friend t/colleague`
 * *Clear* : `clear`
-* *Delete (Person)* : `delete INDEX` +
-e.g. `delete 3`
+* *Delete (Person)* : `delete INDEX1, INDEX2, INDEX3` +
+e.g. `delete 1, 2, 3`
 * *Delete (Tag)* : `delete [t/TAG]...` +
 e.g. `delete t/modulemate t/colleague`
-* *Edit* : `edit INDEX [n/NAME] [p/PHONE_NUMBER] [e/EMAIL] [a/ADDRESS] [t/TAG]...` +
-e.g. `edit 2 n/James Lee e/jameslee@example.com`
+* *Edit* : `edit INDEX [n/NAME] [p/PHONE_NUMBER] [e/EMAIL] [b/BIRTHDAY] [a/ADDRESS] [t/TAG]...` +
+e.g. `edit 2 n/James Lee e/jameslee@example.com b/19051994`
 * *Remark* : `remark INDEX [r/REMARK] ` +
 e.g. `remark 2 r/Likes to drink coffee.`
 * *Find* : `find KEYWORD [MORE_KEYWORDS]` +

@@ -41,11 +41,17 @@ public class PersonCard extends UiPart<Region> {
     @FXML
     private Label id;
     @FXML
+    private Label gender;
+    @FXML
+    private Label matricNo;
+    @FXML
     private Label phone;
     @FXML
     private Label address;
     @FXML
     private Label email;
+    @FXML
+    private Label birthday;
     @FXML
     private Label timetable;
     @FXML
@@ -91,9 +97,12 @@ public class PersonCard extends UiPart<Region> {
      */
     private void bindListeners(ReadOnlyPerson person) {
         name.textProperty().bind(Bindings.convert(person.nameProperty()));
+        gender.textProperty().bind(Bindings.convert(person.genderProperty()));
+        matricNo.textProperty().bind(Bindings.convert(person.matricNoProperty()));
         phone.textProperty().bind(Bindings.convert(person.phoneProperty()));
         address.textProperty().bind(Bindings.convert(person.addressProperty()));
         email.textProperty().bind(Bindings.convert(person.emailProperty()));
+        birthday.textProperty().bind(Bindings.convert(person.birthdayProperty()));
         timetable.textProperty().bind(Bindings.convert(person.timetableProperty()));
         remark.textProperty().bind(Bindings.convert(person.remarkProperty()));
         person.tagProperty().addListener((observable, oldValue, newValue) -> {

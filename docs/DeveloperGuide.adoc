@@ -62,7 +62,7 @@ This will generate all resources required by the application and tests.
 
 ==== Configuring the coding style
 
-This project follows https://github.com/oss-generic/process/blob/master/docs/CodingStandards.md[oss-generic coding standards]. IntelliJ's default style is mostly compliant with ours but it uses a different import order from ours. To rectify,
+This project follows https://github.com/oss-generic/process/blob/master/codingStandards/CodingStandard-Java.adoc[oss-generic coding standards]. IntelliJ's default style is mostly compliant with ours but it uses a different import order from ours. To rectify,
 
 . Go to `File` > `Settings...` (Windows/Linux), or `IntelliJ IDEA` > `Preferences...` (macOS)
 . Select `Editor` > `Code Style` > `Java`
@@ -351,6 +351,403 @@ image::UndoRedoActivityDiagram.png[width="200"]
 **Pros:** We do not need to maintain a separate stack, and just reuse what is already in the codebase. +
 **Cons:** Requires dealing with commands that have already been undone: We must remember to skip these commands. Violates Single Responsibility Principle and Separation of Concerns as `HistoryManager` now needs to do two different things. +
 // end::undoredo[]
+
+=== Timetables
+
+Users are able to store timetables by supplying a shortened NUSMods url when adding a person.
+
+==== Retrieval of Lesson Information
+
+NUSMods urls are in the format of `.../timetable/ACAD_YEAR/SEM?MODULE_CODE[LESSON_TYPE]=LESSON_NO&...`  We use `TimetableParserUtil:expandUrl` to get an expanded url from shortened URL provided, then parse the expanded url accordingly to obtain lesson data.
+Lessons for each module are stored in `ModuleInfoFromUrl`, which is then represented in `TimetableInfoFromUrl`.
+
+https://github.com/nusmodifications/nusmods-api[NUSMods API] is used to retrieve data related to lessons parsed from urls. JSON objects representing each module is retrieved and
+cast to a `Map` using http://wiki.fasterxml.com/JacksonHome[Jackson library]. Lesson data is then retrieved as a list of `Lesson` objects.
+
+----
+Map<String, Object> mappedJson = mapper.readValue(url, HashMap.class); // read JSON as map
+ArrayList<HashMap<String, String>> lessonInfo = mappedJson.get("Timetable"); // retrieve lesson data
+
+ArrayList<Lesson> lessons = new ArrayList<>();
+for (HashMap<String, String> lesson : lessonInfo) {
+    Lesson lessonToAdd = new Lesson(...);
+    lessons.add(lessonToAdd);
+}
+----
+
+`TimetableParserUtil` in `commons.util.timetable` contains all utility methods for parsing of NUSMods urls and conversion between terms parsed from urls and terms used in NUSMods api.
+
+==== Representation of Timetables
+
+Storing of timetables is facilitated by an immutable `Timetable` object, which is a component of `Person`. The information regarding the timings of each lesson is stored in a single `TimetableInfo` object within `Timetable`.
+More specific information for a person's lessons is abstracted further as follows:
+
+* Information for odd/even weeks are stored by two `TimetableWeek` objects within `TimetableInfo`
+* Each day of the timetable (Monday to Friday) is represented by five `TimetableDay` objects in `TimetableWeek`
+* To represent each timeslot in `TimetableDay`, a `TimetableSlot` class is used to represent a 30 minute interval. 32 instances of `TimetableSlot` are used to represent a full day from 0800 to 0000
+
+The following UML diagram represents the implementation of the classes.
+
+[NOTE]
+XYZComponent refers to all other components that `Person` is composed of, the class diagram is not complete.
+
+image::TimetableClassDiagram.png[width="800"]
+
+==== Design Considerations
+
+**Aspect:** Representation of timetables +
+**Alternative 1 (current choice):** Abstraction of timetable grid using classes for weeks/days/slots +
+**Pros:** Easily extendable to include new functionality e.g. lessons that occur in each slot +
+**Cons:** Requires many method call chains to update and query timetable, might not be intuitive for new programmers. Hard to iterate through entire timetable +
+**Alternative 2:** Using a 3D array to represent the entire timetable +
+**Pros:** Simple and easy to understand,  easy to iterate through +
+**Cons:** Does not follow OOP concepts, cannot be extended to implement new functionalities. +
+**Alternative 3:** Storing individual lesson timings and information. +
+**Pros:** Building the timetable is not required +
+**Cons:** Inefficient queries if a timing has a lesson, need to iterate through every lesson stored.
+
+---
+
+**Aspect:** Shortened URLs versus full-length URLs +
+**Alternative 1 (current choice):** Only accept short URLs +
+**Pros:** No need to deal with multiple types of URL +
+**Cons:** Less user friendly as users need to supply specific type of URL +
+**Alternative 2:** Accept both shortened and full-length NUSMods URLs +
+**Pros:** More user friendly as any type of NUSMods URL is accepted +
+**Cons:** Much harder to detect malformed URL as parsing data does not detect errors in lesson tokens in URL. Shortened URL gives 403 response on bad URL.
+
+=== Delete Tag
+
+To delete a tag means to delete a specified tag in all persons who contain that tag, as well as in the master list of tags in the Address Book.
+This is significantly different from deleting a tag for a person via the `edit` command.
+The need for this came about from the User Story in a which a user would like to delete a tag that was no longer relevant or is outdated.
+To delete a particular tag across multiple contacts would be a tedious process. Hence the addition of this feature.
+
+In general, the ability to delete a tag was implemented via an _augmentation_ of the existing `delete` command.
+
+This augmentation is achieved via
+
+* detection of the type of deletion in the DeleteCommandParser
+* overloading the DeleteCommand constructor
+* executing the respective logic based on which attributes are present/non-null.
+
+==== [DeleteCommandParser] Detection of the Deletion Type
+
+The current `delete` command (for a person) is in the format `delete INDEX`. Deleting a tag is in the format `delete t/TAG`.
+The same `delete` command is used but the parameters in the command line are different.
+
+The two types of commands are distinguished by the `preamble` of the parameter arguments after the word `delete`, when tokenized against the `/t` prefix for tags.
+
+The preamble for `delete INDEX` is a *digit* while the preamble for `delete t/TAG` is a *blank*.
+The implementation of this parse is shown below:
+
+
+[source,java]
+----
+public DeleteCommand parse(String args) throws ParseException {
+
+    ArgumentMultimap argMultimap = ArgumentTokenizer.tokenize(args, PREFIX_TAG);
+    String preamble = argMultimap.getPreamble();
+
+    if (preamble.equals("")) {
+        // parsing of tags into a Set<Tag> tagList
+        return new DeleteCommand(tagList); # <1>
+
+    } else if (preamble.matches("-?\\d+")) {
+        // parsing of the index
+        return new DeleteCommand(index); # <2>
+    }
+    // ...
+}
+----
+
+
+==== [DeleteCommand] Overloading the DeleteCommand constructor
+
+With reference to the previous code snippet the type of `DeleteCommand` returned during the parse are also different.
+
+<1> a `new DeleteCommand(tagList)` is returned when deleting one or more tags.
+<2> a `new DeleteCommand(index)` is returned when deleting a person.
+
+The following code shows the respective object construction of both types of DeleteCommand.
+
+
+Depending on the constructor method called, *either* the `targetIndex` attribute *or* the `targetTags` will be made null.
+Which will lead on to the next section about command execution.
+
+[source,java]
+----
+public class DeleteCommand extends UndoableCommand {
+    // ...
+    private final Index targetIndex;
+
+    private final Set<Tag> targetTags;
+
+    public DeleteCommand(Index targetIndex) {
+        this.targetIndex = targetIndex;
+        this.targetTags = null;
+    }
+
+    public DeleteCommand(Set<Tag> targetTags) {
+        this.targetTags = targetTags;
+        this.targetIndex = null;
+    }
+    // ...
+}
+----
+
+
+
+==== [DeleteCommand] Logic Execution depending on which attributes are present.
+
+_If_ `targetIndex` is present, execute the logic for deleting a person, _else_ execute the logic for deleting a tag.
+
+This trivial implementation is show below.
+
+[source,java]
+----
+public CommandResult executeUndoableCommand() throws CommandException {
+
+    if (targetTags == null && targetIndex != null) {
+        // command logic for deletion for a person
+    } else {
+        // command logic for deletion for a tag
+    }
+    // ...
+}
+----
+
+==== Command Logic
+
+The following sequence diagrams show how the delete operation for tags work.
+
+Not shown in Figure B, `listTags` are checked against `listOfExistingTags`, i.e. all tags
+to be deleted are checked whether each of them already exist in the address book. If this check fails, an exception is thrown.
+The sequence diagram demonstrates a *successful* deletion, hence this aspect of the logic is omitted for clarity.
+
+image::DeleteCommandForTagSequenceDiagram.png[width="800"]
+_Figure A. Typical command execution_
+
+image::DeleteCommandForTagSequenceDiagram2.png[width="800"]
+_Figure B. The tags parsed are put into an ArrayList and iterated through for deletion_
+
+image::DeleteCommandForTagSequenceDiagram3.png[width="800"]
+_Figure C. How each tag is removed from the Address Book and each Person's list of tags_
+
+==== Design Considerations
+
+**Aspect:** Implementation of Delete Tags +
+**Alternative 1 (current choice):** Augment the existing delete command +
+**Pros:** The same command word `delete` is used which is an intuitive way to invoke a deletion of some object (person or tag).  +
+**Cons:** The DeleteCommand class is no longer responsible for deletion of a person *only*
+but is now responsible for deleting a tag as well.
+Augmenting the command via overriding constructors, adding new attributes
+and modifying the parse may seem too convoluted a solution.
+Users who are used to the previous version of the command may not appreciate the new change
+If bugs arise from this implementation, these users will be very unhappy because this is a change
+to the command that to them may be uncalled for. +
+**Alternative 2:** Just create a new command `deletetag` +
+**Pros:** Simple implementation of a new command. Does not involve any major modification of existing parse and command logic +
+**Cons:** `deletetag t/tag` is not as inuitive a command line especially to new or casual users.
+Users may try `delete t/tag` out of instinct and we would need to inform or prompt users of the `deletetag` command.
+
+---
+
+**Aspect:** How delete command executes +
+**Alternative 1 (current choice):** On the `Logic` level, iterate through an array of tags and invoke a Model method `deleteTag(Tag tag)` on each tag.  +
+**Alternative 2:** On the `Logic` level, invoke a method `deleteTags(tagSet)` on a Set<Tag>. Implement `deleteTags(Set<Tag> tagSet)` in the Model component. +
+**Reason:** We have decided that the Model API deal with objects in singular amounts, i.e. deletePerson, addPerson, deleteTag,
+as opposed to collections of objects, i.e. deletePersons, deleteTags.
+In order to maintain consistency within the API, the first choice was chosen.
+
+---
+
+=== Remark Command
+
+The remark command allows user to modify the remark of a contact, and it supports adding, editing and deleting remarks.
+It is different from adding the tags using 'add' command as it is used to store unique information of contact.
+The reason why we need to implement Remark Command can be found in the User Stories: the user wants to save more details about the contacts.
+
+Generally, the implementation of this command is similar to 'edit' command.
+
+---
+
+These main classes are added to implement this enhancement:
+
+1. Remark
+2. RemarkCommand
+3. RemarkCommandParser
+
+---
+
+These main classes are significantly edited to implement this enhancement:
+
+1. AddressBookParser
+2. PersonListCard, PersonCardHandle
+3. XmlAdaptedPerson
+4. Person
+5. EditCommand
+6. AddCommand
+
+* Notes
+
+Instead of typing “remark” in the command box, one can also type “rm” to represent “remark” as it will also be parsed by the parser.
+The alias is added to the RemarkCommand Class.
+The added remark will be displayed on the last line of the person card.
+If a person is newly added to the personList by Add Command, its remark field will have an empty string at first. Also, in the EditCommand class, a new attribute updatedRemark is added to the person, and it is independent from editPersonDescriptor.
+
+==== [BasicStep]Implement this command
+
+[Step 1] Logic: Teach the app to accept 'remark' which does nothing
+
+[Step 2] Logic: Teach the app to accept 'remark' arguments
+
+[Step 3] Ui: Add a placeholder for remark in PersonCard
+
+[Step 4] Model: Add Remark class
+
+[Step 5] Model: Modify ReadOnlyPerson to support a Remark field
+
+[Step 6] Storage: Add Remark field to XmlAdaptedPerson class
+
+[Step 7] Ui: Connect Remark field to PersonCard
+
+[Step 8] Logic: Implement RemarkCommand#execute() logic
+
+==== [Detail Implementation]Codes and Diagrams
+The following diagram shows the high-level sequence diagram of the remark command:
+
+image::RemarkCommandHighLevelSequenceDiagram.png[width="800"]
+_Figure A. High-level sequence diagram
+
+The RemarkCommand extends Undoale Command, which is an abstract subclass of abstract class Command, so the user can also undo the added remark.
+The class inheritance diagram is shown below:
+
+image::RemarkCommandClassInheritanceDiagram.png[width="800"]
+_Figure B. Class Inheritance Diagram
+
+The implementation is shown below.
+
+[source,java]
+----
+/**
+ * Edits the remark of a person to the address book.
+ */
+public class RemarkCommand extends UndoableCommand {
+    //...
+}
+----
+
+After the remark command is executed, the new data will be saved to the AddressBook. The logic component sequence diagram is shown below:
+
+image::RemarkCommandLogicComponentSequenceDiagram.png[width="800"]
+_Figure C. Logic Component Sequence Diagram
+
+A person class is linked to a new remark attribute. Its model component class diagram is shown below:
+
+image::RemarkCommandComponentClassDiagram.png[width="800"]
+_Figure D. Component Class Diagram
+
+The implementation is shown below.
+
+[source,java]
+----
+public class Person implements ReadOnlyPerson {
+    //...
+    private ObjectProperty<Address> address;
+    private ObjectProperty<Timetable> timetable;
+    private ObjectProperty<Remark> remark;
+    // ...
+----
+
+
+==== Design Considerations
+
+**Aspects** UI Display of Remark +
+**Alternative 1(current choice):** Display the remark of the specified contact at the end of the personCard
+
+**Pros:** It has the consistent format with other fields in the person card.
+**Cons:** It does not highlight the remark so that the user will hardly notice the additional remark information.
+
+**Alternative 2:** Display the Remark next to the name
+
+**Pros:** Placing the remark in this prominent place will better remind the user of the added remark.
+Also, the font-size is bigger
+**Cons:** It does not the consistent format with other fields in the person card.
+If the remark is too long, it will be poorly displayed.
+
+---
+
+
+=== Birthdays
+
+User are able to store birthdays by inputting in the format of DDMMYYYY when adding a person.
+This allows the user to get a list of people having the same birthday month.
+
+In general, the ability to store a person's birthday was implemented via an _augmentation_ of the component of `Person`.
+
+==== Representation of Birthdays
+
+Storing of birthdays is facilitated by an immutable `Birthday` object, which is a component of `Person`.
+
+The following are the main classes edited to implement this:
+
+* AddCommand
+* AddCommandParser
+* EditCommand
+* EditCommandParser
+* Person
+* PersonListCard, PersonCardHandle
+* XmlAdaptedPerson
+
+
+The following UML diagram represents the implementation of the classes in the Model component.
+
+image::BirthdayModelComponentClassDiagram.png[width="500"]
+
+==== Validation of Birthdays
+After the birthday is inputted, it will be checked if the date is valid.
+The number of digits inputted will be checked first.
+Then the year would be checked from the 20th century until now.
+Range of day inputted will then be checked according to month.
+
+[source,java]
+----
+public static boolean isValidBirthday(String test) {
+    int month = Integer.valueOf(test.subString(2, 4));
+    int date = Integer.valueOf(ttest.subString(0, 2));
+    int year = Integer.valueOf(test.subString(4));
+
+    if (!test.matches(BIRTHDAY_VALIDATION_REGEX) {
+        // Number of digits input is not 8
+        return false;
+    } else if (1900 > year || year > 2017){
+        return false;
+    } else {
+        //Check for months with 30 days, with 31 days and Feburary
+        if (month == 2)
+            return date <= 29;
+        else if ((month < 7 && month % 2 == 0) || (month > 7 && month % 2 == 1))
+            return date <= 30;
+        else
+            return date <= 31;
+
+    }
+}
+----
+
+==== Design Considerations
+
+**Aspect:** Representation of birthdays +
+**Alternative 1 (current choice):** Display the birthday of the specified contact at the end of the personCard +
+**Pros:** It has the consistent format with other fields in the person card +
+**Cons:** It is difficult to recognise the number displayed is birthday +
+
+**Alternative 2:** Display the birthday with "Birthday:" in front +
+**Pros:** Simple and easy to understand +
+**Cons:** Inconsistent with the fomat in person card
+
+---
 
 === Logging
 
@@ -832,8 +1229,8 @@ Priorities: High (must have) - `* * \*`, Medium (nice to have) - `* \*`, Low (un
 
 1.  User requests to list persons
 2.  AddressBook shows a list of persons
-3.  User requests to delete a specific person in the list
-4.  AddressBook deletes the person
+3.  User requests to delete the specific person(s) in the list
+4.  AddressBook deletes the person(s)
 +
 Use case ends.
 
@@ -844,7 +1241,7 @@ Use case ends.
 +
 Use case ends.
 
-* 3a. The given index is invalid.
+* 3a. One of the given indexes is invalid.
 +
 [none]
 ** 3a1. AddressBook shows an error message.

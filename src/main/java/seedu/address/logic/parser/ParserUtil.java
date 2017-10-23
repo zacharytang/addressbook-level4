@@ -11,7 +11,10 @@ import seedu.address.commons.core.index.Index;
 import seedu.address.commons.exceptions.IllegalValueException;
 import seedu.address.commons.util.StringUtil;
 import seedu.address.model.person.Address;
+import seedu.address.model.person.Birthday;
 import seedu.address.model.person.Email;
+import seedu.address.model.person.Gender;
+import seedu.address.model.person.MatricNo;
 import seedu.address.model.person.Name;
 import seedu.address.model.person.Phone;
 import seedu.address.model.person.timetable.Timetable;
@@ -54,6 +57,24 @@ public class ParserUtil {
     }
 
     /**
+     * Parses a {@code Optional<String> gender} into an {@code Optional<Gender>} if {@code gender} is present.
+     * See header comment of this class regarding the use of {@code Optional} parameters.
+     */
+    public static Optional<Gender> parseGender(Optional<String> gender) throws IllegalValueException {
+        requireNonNull(gender);
+        return gender.isPresent() ? Optional.of(new Gender(gender.get())) : Optional.empty();
+    }
+
+    /**
+     * Parses a {@code Optional<String> matricNo} into an {@code Optional<MatricNo>} if {@code matricNo} is present.
+     * See header comment of this class regarding the use of {@code Optional} parameters.
+     */
+    public static Optional<MatricNo> parseMatricNo(Optional<String> matricNo) throws IllegalValueException {
+        requireNonNull(matricNo);
+        return matricNo.isPresent() ? Optional.of(new MatricNo(matricNo.get())) : Optional.empty();
+    }
+
+    /**
      * Parses a {@code Optional<String> phone} into an {@code Optional<Phone>} if {@code phone} is present.
      * See header comment of this class regarding the use of {@code Optional} parameters.
      */
@@ -90,6 +111,15 @@ public class ParserUtil {
             tagSet.add(new Tag(tagName));
         }
         return tagSet;
+    }
+
+    /**
+     * Parses {@code Optional<int> birthday} into a {@code HashMap<Birthday>} if {@code birthday} is present.
+     * See header comment of this class regarding the use of {@code Optional} parameters.
+     */
+    public static Optional<Birthday> parseBirthday(Optional<String> birthday) throws IllegalValueException {
+        requireNonNull(birthday);
+        return birthday.isPresent() ? Optional.of(new Birthday(birthday.get())) : Optional.empty();
     }
 
     /**
