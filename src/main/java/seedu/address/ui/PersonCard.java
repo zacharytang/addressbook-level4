@@ -51,6 +51,8 @@ public class PersonCard extends UiPart<Region> {
     @FXML
     private Label email;
     @FXML
+    private Label birthday;
+    @FXML
     private Label timetable;
     @FXML
     private Label remark;
@@ -100,6 +102,7 @@ public class PersonCard extends UiPart<Region> {
         phone.textProperty().bind(Bindings.convert(person.phoneProperty()));
         address.textProperty().bind(Bindings.convert(person.addressProperty()));
         email.textProperty().bind(Bindings.convert(person.emailProperty()));
+        birthday.textProperty().bind(Bindings.convert(person.birthdayProperty()));
         timetable.textProperty().bind(Bindings.convert(person.timetableProperty()));
         remark.textProperty().bind(Bindings.convert(person.remarkProperty()));
         person.tagProperty().addListener((observable, oldValue, newValue) -> {
