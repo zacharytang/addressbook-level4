@@ -2,6 +2,10 @@ language: java
 matrix:
   include:
     - jdk: oraclejdk8
+    
+    
+install: 
+  travis_wait mvn install
 
 script: >-
     ./config/travis/run-checks.sh &&
