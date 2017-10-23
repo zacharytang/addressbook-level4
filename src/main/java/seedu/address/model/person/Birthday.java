@@ -2,6 +2,10 @@ package seedu.address.model.person;
 
 import static java.util.Objects.requireNonNull;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+
 import seedu.address.commons.exceptions.IllegalValueException;
 
 /**
@@ -18,6 +22,8 @@ public class Birthday {
      * otherwise " " (a blank string) becomes a valid input.
      */
     public static final String BIRTHDAY_VALIDATION_REGEX = "\\d{2}\\d{2}\\d{4}";
+
+    public static final String DATE_FORMAT = "ddMMyyyy";
 
     public final String date;
 
@@ -39,7 +45,17 @@ public class Birthday {
      * Returns true if a given string is a valid person birthday.
      */
     public static boolean isValidBirthday(String test) {
-        return test.matches(BIRTHDAY_VALIDATION_REGEX);
+        if (test.matches(BIRTHDAY_VALIDATION_REGEX)) {
+            try {
+                DateFormat df = new SimpleDateFormat(DATE_FORMAT);
+                df.setLenient(false);
+                df.parse(test);
+                return true;
+            } catch (ParseException pe) {
+                return false;
+            }
+        }
+        return false;
     }
 
 
