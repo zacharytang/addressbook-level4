@@ -159,7 +159,7 @@ Examples:
 * `add s/facebook John Doe`
 * `add s/Instagram John Doe`
 
-=== Adding/Deleting a Photo for a person : `photo`
+=== Adding/Deleting a Photo for a person : `photo` _(Coming in v2.0)_
 ____
 _When you study too much, sometimes, you forget how someone looks like._
 ____
@@ -328,8 +328,8 @@ Examples:
 [TIP]
 Editing a person's tag only edits the tag(s) for a *single* person. This command edits one tag name for *all* people.
 
-=== Deleting multiple persons or a tag: `delete`
-==== Deleting multiple persons _(Coming in v2.0)_
+=== Deleting a person, multiple people or a tag: `delete`
+==== Deleting a person or multiple persons _(Added since v1.3)_
 ____
 _Some people just have to go away in your life. Sometimes they leave you. Delete these people out of UniFy as well._
 ____
@@ -446,7 +446,7 @@ Displays a combined timetable for all listed users
 * All persons specified *must have timetables added*
 ****
 
-=== Open a Google Maps view of a selected person's address : `gmaps` _(Since v1.3)_
+=== Open a Google Maps view of a selected person's address : `gmaps` _(Added since v1.3)_
 ____
 _You are meeting your group mate at his house. But where is his house on the map?_
 ____
@@ -717,7 +717,25 @@ e.g.`select 2`
 |redo | r |-|-|-|-
 |password | p | code |-|-|-
 |exit | x | quit |-|-|-
+|=======
 
+== Version Notes
 
+=== Version 1.1
+
+* `remark` command
+* `delete` support for tags
+
+=== Version 1.2
+* Added new person contact information fields
+** Birthday
+** Timetable
+** Gender
+** Matriculation Number
+* `edit` support for tags
+
+=== Version 1.3
+* `gmaps` command
+* `delete` support for multiple persons
 
 |=======
