@@ -244,7 +244,7 @@ Alternatives: `l` , `showall`, `viewall`
 * Single digit months needs to be preceded by a 0 in front.
 ** Example: `02` searches for those born in February
 * Only the birthday month is searched.
-* The list be be ordered in terms of ascending order of their birthday dates.
+* The list will be ordered in terms of ascending order of their birthday dates.
 ** Example: Person with birthday on October 10 is listed after someone with October 2.
 ****
 
