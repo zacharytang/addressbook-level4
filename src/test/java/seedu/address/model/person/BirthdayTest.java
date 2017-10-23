@@ -16,6 +16,8 @@ public class BirthdayTest {
         assertFalse(Birthday.isValidBirthday("dgd")); // non-numeric
         assertFalse(Birthday.isValidBirthday("23/05/1997")); // invalid slash
         assertFalse(Birthday.isValidBirthday("23 05 1997")); // invalid space
+        assertFalse(Birthday.isValidBirthday("99999999")); //invalid dates
+        assertFalse(Birthday.isValidBirthday("00000000")); //invalid dates
 
         // valid birthdays
         assertTrue(Birthday.isValidBirthday("23051997"));
