@@ -1,6 +1,7 @@
 package seedu.address.logic.commands;
 
 import java.util.List;
+import java.util.Objects;
 
 import seedu.address.commons.core.Messages;
 import seedu.address.commons.core.index.Index;
@@ -57,8 +58,21 @@ public class GMapsCommand extends Command {
 
     @Override
     public boolean equals(Object other) {
-        return other == this // short circuit if same object
-                || (other instanceof GMapsCommand // instanceof handles nulls
-                && this.targetIndex.equals(((GMapsCommand) other).targetIndex)); // state check
+        // short circuit if same object
+        if (other == this) {
+            return true;
+        }
+
+        // instanceof handles nulls
+        if (!(other instanceof GMapsCommand)) {
+            return false;
+        }
+
+        // state check
+        GMapsCommand e = (GMapsCommand) other;
+
+        return Objects.equals(this.targetIndex, e.targetIndex)
+                && Objects.equals(this.targetAddress, e.targetAddress);
+
     }
 }
