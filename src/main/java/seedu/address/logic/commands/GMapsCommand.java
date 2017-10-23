@@ -20,8 +20,11 @@ public class GMapsCommand extends Command {
     public static final String COMMAND_SECONDARY_TWO = "maps";
 
     public static final String MESSAGE_USAGE = COMMAND_WORD
-            + ": Opens a Google Maps view of a Person’s Address location.\n"
-            + "Example: " + COMMAND_WORD + " 1";
+            + ": Opens a Google Maps view of a person’s address.\n"
+            + " If you specify an address, you can find directions from the address to that person's address.\n"
+            + "Format: " + COMMAND_WORD + " INDEX [a/ADDRESS]\n"
+            + "Example: " + COMMAND_WORD + " 1 \n"
+            + "         " + COMMAND_WORD + " 1 a/Blk 123, Yishun 75";
 
     public static final String MESSAGE_SELECT_PERSON_SUCCESS = "Showing Map View of %1$s 's address";
     public static final String MESSAGE_DIRECTIONS_TO_PERSON_SUCCESS = "Showing directions to %1$s";
