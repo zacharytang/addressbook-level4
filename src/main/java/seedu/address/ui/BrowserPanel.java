@@ -12,8 +12,10 @@ import javafx.scene.layout.Region;
 import javafx.scene.web.WebView;
 import seedu.address.MainApp;
 import seedu.address.commons.core.LogsCenter;
+import seedu.address.commons.events.model.PersonAddressDisplayDirectionsEvent;
 import seedu.address.commons.events.model.PersonAddressDisplayMapEvent;
 import seedu.address.commons.events.ui.PersonPanelSelectionChangedEvent;
+import seedu.address.model.person.Address;
 import seedu.address.model.person.ReadOnlyPerson;
 
 /**
@@ -51,6 +53,10 @@ public class BrowserPanel extends UiPart<Region> {
         loadPage("https://www.google.com.sg/maps/search/" + person.getAddress());
     }
 
+    private void loadGoogleMapDirections(ReadOnlyPerson person, Address address) {
+        loadPage("https://www.google.com.sg/maps/dir/" + address.toString() + "/" + person.getAddress());
+    }
+
     public void loadPage(String url) {
         Platform.runLater(() -> browser.getEngine().load(url));
     }
@@ -80,5 +86,11 @@ public class BrowserPanel extends UiPart<Region> {
     private void handlePersonAddressDisplayMapEvent(PersonAddressDisplayMapEvent event) {
         logger.info(LogsCenter.getEventHandlingLogMessage(event));
         loadGoogleMap(event.person);
+    }
+
+    @Subscribe
+    private void handlePersonAddressDisplayDirectionsEvent(PersonAddressDisplayDirectionsEvent event) {
+        logger.info(LogsCenter.getEventHandlingLogMessage(event));
+        loadGoogleMapDirections(event.person, event.address);
     }
 }

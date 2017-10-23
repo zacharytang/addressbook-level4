@@ -3,6 +3,7 @@ package seedu.address.model;
 import java.util.function.Predicate;
 
 import javafx.collections.ObservableList;
+import seedu.address.model.person.Address;
 import seedu.address.model.person.ReadOnlyPerson;
 import seedu.address.model.person.exceptions.DuplicatePersonException;
 import seedu.address.model.person.exceptions.PersonNotFoundException;
@@ -24,6 +25,9 @@ public interface Model {
 
     /** Show map of the given person **/
     void showMapOf(ReadOnlyPerson person);
+
+    /** Show direction to the given person from a given address **/
+    void showDirectionsTo(ReadOnlyPerson target, Address address);
 
     /** Deletes the given person. */
     void deletePerson(ReadOnlyPerson target) throws PersonNotFoundException;
