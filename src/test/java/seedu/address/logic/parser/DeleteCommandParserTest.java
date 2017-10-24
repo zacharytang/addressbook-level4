@@ -71,6 +71,24 @@ public class DeleteCommandParserTest {
     }
 
     @Test
+    public void parse_invalidArgsMultiplePersonsNoComma_returnsDeleteCommand() {
+        ArrayList<Index> deletePersonList = new ArrayList<>();
+        deletePersonList.add(INDEX_FIRST_PERSON);
+        deletePersonList.add(INDEX_SECOND_PERSON);
+        deletePersonList.add(INDEX_THIRD_PERSON);
+        assertParseSuccess(parser, "  1 2 3 ", new DeleteCommand(deletePersonList));
+    }
+
+    @Test
+    public void parse_invalidArgsMultiplePersonsManyWhiteSpacesLessComma_returnsDeleteCommand() {
+        ArrayList<Index> deletePersonList = new ArrayList<>();
+        deletePersonList.add(INDEX_FIRST_PERSON);
+        deletePersonList.add(INDEX_SECOND_PERSON);
+        deletePersonList.add(INDEX_THIRD_PERSON);
+        assertParseSuccess(parser, "  1, 2 3 ", new DeleteCommand(deletePersonList));
+    }
+
+    @Test
     public void parse_validArgsTag_returnsDeleteCommand() throws Exception {
         Set<Tag> expectedTagSet = Stream.of(new Tag("tag")).collect(Collectors.toSet());
         assertParseSuccess(parser, " t/tag", new DeleteCommand(expectedTagSet));
