@@ -92,6 +92,8 @@ public class EditCommandSystemTest extends AddressBookSystemTest {
                 .withTags(VALID_TAG_HUSBAND).withBirthday(VALID_BIRTHDAY_BOB).build();
         assertCommandSuccess(command, index, editedPerson);
 
+        System.out.println(".");
+
         /* Case: edit all fields, command with leading spaces and alias, trailing spaces and multiple spaces
          * between each field -> edited
          */
@@ -100,6 +102,8 @@ public class EditCommandSystemTest extends AddressBookSystemTest {
                 + GENDER_DESC_BOB + " " + MATRIC_NO_DESC_BOB + " " + PHONE_DESC_BOB + " " + EMAIL_DESC_BOB + "  "
                 + ADDRESS_DESC_BOB + " " + TIMETABLE_DESC_BOB + " " + TAG_DESC_HUSBAND + " " + BIRTHDAY_DESC_BOB + " ";
         assertCommandSuccess(command, index, editedPerson);
+
+        System.out.println(".");
 
         /* Case: edit all fields, command with leading spaces and secondary keyword, trailing spaces and multiple spaces
          * between each field -> edited
@@ -131,6 +135,8 @@ public class EditCommandSystemTest extends AddressBookSystemTest {
                 getModel().getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased()), editedPerson);
         assertCommandSuccess(command, model, expectedResultMessage);
 
+        System.out.println(".");
+
         /* Case: edit a person with new values same as existing values -> edited */
         command = EditCommand.COMMAND_WORD + " " + index.getOneBased() + NAME_DESC_BOB
                 + GENDER_DESC_BOB + MATRIC_NO_DESC_BOB + PHONE_DESC_BOB + EMAIL_DESC_BOB
@@ -161,6 +167,8 @@ public class EditCommandSystemTest extends AddressBookSystemTest {
         command = EditCommand.COMMAND_WORD + " " + index.getOneBased() + " " + PREFIX_TAG.getPrefix();
         editedPerson = new PersonBuilder(personToEdit).withTags().build();
         assertCommandSuccess(command, index, editedPerson);
+
+        System.out.println(".");
 
         /* ------------------ Performing edit operation while a filtered list is being shown ------------------------ */
 
@@ -219,6 +227,8 @@ public class EditCommandSystemTest extends AddressBookSystemTest {
         assertCommandFailure(EditCommand.COMMAND_WORD + " " + INDEX_FIRST_PERSON.getOneBased(),
                 EditCommand.MESSAGE_NOT_EDITED);
 
+        System.out.println(".");
+
         /* Case: invalid name -> rejected */
         assertCommandFailure(EditCommand.COMMAND_WORD + " " + INDEX_FIRST_PERSON.getOneBased() + INVALID_NAME_DESC,
                 Name.MESSAGE_NAME_CONSTRAINTS);
@@ -258,6 +268,8 @@ public class EditCommandSystemTest extends AddressBookSystemTest {
         /* Case: invalid birthday -> rejected */
         assertCommandFailure(EditCommand.COMMAND_WORD + " " + INDEX_FIRST_PERSON.getOneBased() + INVALID_BIRTHDAY_DESC,
                 Birthday.MESSAGE_BIRTHDAY_CONSTRAINTS);
+
+        System.out.println(".");
 
         /* Case: edit a person with new values same as another person's values -> rejected */
         executeCommand(PersonUtil.getAddCommand(BOB));
@@ -334,6 +346,8 @@ public class EditCommandSystemTest extends AddressBookSystemTest {
         assertCommandFailure(EditCommand.COMMAND_ALIAS + " " + INDEX_FIRST_PERSON.getOneBased()
                 + INVALID_TIMETABLE_DESC, Timetable.MESSAGE_TIMETABLE_URL_CONSTRAINTS);
 
+        System.out.println(".");
+
         /* Case: edit a person with new values same as another person's values -> rejected */
         executeCommand(PersonUtil.getAddCommand(BOB));
         assertTrue(getModel().getAddressBook().getPersonList().contains(BOB));
@@ -388,6 +402,8 @@ public class EditCommandSystemTest extends AddressBookSystemTest {
         /* Case: invalid address -> rejected */
         assertCommandFailure(EditCommand.COMMAND_SECONDARY_ONE + " " + INDEX_FIRST_PERSON.getOneBased()
                         + INVALID_ADDRESS_DESC, Address.MESSAGE_ADDRESS_CONSTRAINTS);
+
+        System.out.println(".");
 
         /* Case: invalid tag -> rejected */
         assertCommandFailure(EditCommand.COMMAND_SECONDARY_ONE + " " + INDEX_FIRST_PERSON.getOneBased()
