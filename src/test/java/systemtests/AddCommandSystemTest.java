@@ -57,12 +57,12 @@ import static seedu.address.testutil.TypicalPersons.KEYWORD_MATCHING_MEIER;
 
 import org.junit.Test;
 
-import seedu.address.commons.core.Messages;
 import seedu.address.logic.commands.AddCommand;
 import seedu.address.logic.commands.ClearCommand;
 import seedu.address.logic.commands.FindCommand;
 import seedu.address.logic.commands.RedoCommand;
 import seedu.address.logic.commands.SelectCommand;
+import seedu.address.logic.commands.SuggestCommand;
 import seedu.address.logic.commands.UndoCommand;
 import seedu.address.model.Model;
 import seedu.address.model.person.Address;
@@ -107,6 +107,15 @@ public class AddCommandSystemTest extends AddressBookSystemTest {
          */
         executeCommand(UndoCommand.COMMAND_WORD);
         command = "   " + AddCommand.COMMAND_SECONDARY + "  " + NAME_DESC_AMY + "  " + GENDER_DESC_AMY + "  "
+                + MATRIC_NO_DESC_AMY + "   " + PHONE_DESC_AMY + " " + EMAIL_DESC_AMY + "   " + ADDRESS_DESC_AMY + "   "
+                + BIRTHDAY_DESC_AMY + "   " + TIMETABLE_DESC_AMY + "   " + TAG_DESC_FRIEND + " ";
+        assertCommandSuccess(command, toAdd);
+
+        /* Case: add a person without tags to a non-empty address book using mixed case keyword,
+         * command with leading spaces and trailing spaces -> added
+         */
+        executeCommand(UndoCommand.COMMAND_WORD);
+        command = "   " + "aDd" + "  " + NAME_DESC_AMY + "  " + GENDER_DESC_AMY + "  "
                 + MATRIC_NO_DESC_AMY + "   " + PHONE_DESC_AMY + " " + EMAIL_DESC_AMY + "   " + ADDRESS_DESC_AMY + "   "
                 + BIRTHDAY_DESC_AMY + "   " + TIMETABLE_DESC_AMY + "   " + TAG_DESC_FRIEND + " ";
         assertCommandSuccess(command, toAdd);
@@ -289,9 +298,9 @@ public class AddCommandSystemTest extends AddressBookSystemTest {
                 + ADDRESS_DESC_AMY + EMAIL_DESC_AMY + TIMETABLE_DESC_AMY;
         assertCommandFailure(command, String.format(MESSAGE_INVALID_COMMAND_FORMAT, AddCommand.MESSAGE_USAGE));
 
-        /* Case: invalid keyword -> rejected */
+        /* Case: invalid keyword -> suggested */
         command = "adds " + PersonUtil.getPersonDetails(toAdd);
-        assertCommandFailure(command, Messages.MESSAGE_UNKNOWN_COMMAND);
+        assertCommandFailure(command, String.format(SuggestCommand.MESSAGE_SUCCESS, "add"));
 
         /* Case: invalid name -> rejected */
         command = AddCommand.COMMAND_WORD + INVALID_NAME_DESC + GENDER_DESC_AMY + MATRIC_NO_DESC_AMY + PHONE_DESC_AMY

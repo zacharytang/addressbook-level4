@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+
+<StackPane styleClass="info-panel" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+    <SplitPane dividerPositions="0.25" orientation="VERTICAL">
+        <AnchorPane>
+            <SplitPane dividerPositions="0.24" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                <AnchorPane minHeight="0.0" minWidth="0.0" styleClass="info-name-cell">
+                    <Label fx:id="name" alignment="CENTER" contentDisplay="CENTER" prefHeight="28.0" prefWidth="43.2" styleClass="display_big_label" text="\$name" textAlignment="CENTER" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                </AnchorPane>
+                <AnchorPane minHeight="0.0" minWidth="0.0" styleClass="info-cell">
+                    <VBox alignment="CENTER_LEFT" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                        <HBox alignment="CENTER_LEFT" spacing="5">
+                            <Label styleClass="display_small_label" text="Gender:" />
+                            <Label fx:id="gender" styleClass="display_small_value" text="\$gender" />
+                        </HBox>
+                        <HBox alignment="CENTER_LEFT" spacing="5">
+                            <Label styleClass="display_small_label" text="Matriculation No:" />
+                            <Label fx:id="matricNo" styleClass="display_small_value" text="\$matricNo" />
+                        </HBox>
+                        <HBox alignment="CENTER_LEFT" spacing="5">
+                            <Label styleClass="display_small_label" text="Phone No:" />
+                            <Label fx:id="phone" styleClass="display_small_value" text="\$phone" />
+                        </HBox>
+                        <HBox alignment="CENTER_LEFT" spacing="5">
+                            <Label styleClass="display_small_label" text="Address:" />
+                            <Label fx:id="address" styleClass="display_small_value" text="\$address" />
+                        </HBox>
+                        <HBox alignment="CENTER_LEFT" spacing="5">
+                            <Label styleClass="display_small_label" text="Email:" />
+                            <Label fx:id="email" styleClass="display_small_value" text="\$email" />
+                        </HBox>
+                        <HBox alignment="CENTER_LEFT" spacing="5">
+                            <Label styleClass="display_small_label" text="Birthday:" />
+                            <Label fx:id="birthday" styleClass="display_small_value" text="\$birthday" />
+                        </HBox>
+                        <HBox alignment="CENTER_LEFT" spacing="5">
+                            <Label styleClass="display_small_label" text="Remark:" />
+                            <Label fx:id="remark" styleClass="display_small_value" text="\$remark" />
+                        </HBox>
+                    </VBox>
+                </AnchorPane>
+            </SplitPane>
+        </AnchorPane>
+        <AnchorPane minHeight="0.0" minWidth="0.0" />
+    </SplitPane>
+</StackPane>
