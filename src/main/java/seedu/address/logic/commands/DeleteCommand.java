@@ -35,9 +35,6 @@ public class DeleteCommand extends UndoableCommand {
             + "         " + COMMAND_WORD + " " + PREFIX_TAG + "friend\n"
             + "         " + COMMAND_WORD + " " + PREFIX_TAG + "friend " + PREFIX_TAG + "enemy";
 
-    //need to check here
-    //public static final String MESSAGE_DELETE_PERSON_SUCCESS = "Deleted Person: %1$s";
-    public static final String MESSAGE_DELETE_PERSON_SUCCESS = "Deleted Person(s) Successful";
     public static final String MESSAGE_DELETE_TAG_SUCCESS = "Deleted Tags";
 
     private final ArrayList<Index> targetIndexes;
@@ -81,7 +78,8 @@ public class DeleteCommand extends UndoableCommand {
                 assert false : "One of the target persons is missing";
             }
 
-            return new CommandResult(String.format(MESSAGE_DELETE_PERSON_SUCCESS));
+            //return new CommandResult(String.format(MESSAGE_DELETE_PERSON_SUCCESS));
+            return new CommandResult(generateResultMsg(deletePersonList));
 
         } else { // this code block is command execution for delete t/[tag...]
             ArrayList<Tag> arrayTags = new ArrayList<Tag>(targetTags);
@@ -105,6 +103,33 @@ public class DeleteCommand extends UndoableCommand {
 
             return new CommandResult(MESSAGE_DELETE_TAG_SUCCESS);
         }
+    }
+
+    /**
+     * Generate the command result of the deletePersonList.
+     * @param deletePersonList
+     * @return commandResult string
+     */
+    public static String generateResultMsg(ArrayList<ReadOnlyPerson> deletePersonList) {
+        int numOfPersons = deletePersonList.size();
+        StringBuilder formatBuilder = new StringBuilder();
+
+        if (numOfPersons == 1) {
+            formatBuilder.append("Deleted Person :\n");
+        } else {
+            formatBuilder.append("Deleted Persons :\n");
+        }
+
+        for (ReadOnlyPerson p : deletePersonList) {
+            formatBuilder.append("[");
+            formatBuilder.append(p.getAsText());
+            formatBuilder.append("]");
+            formatBuilder.append("\n");
+        }
+        String resultMsg = formatBuilder.toString();
+
+        return resultMsg;
+
     }
 
     @Override

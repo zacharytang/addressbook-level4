@@ -46,7 +46,7 @@ public class DeleteCommandParser implements Parser<DeleteCommand> {
                 throw new ParseException(
                         String.format(MESSAGE_INVALID_COMMAND_FORMAT, DeleteCommand.MESSAGE_USAGE));
             }
-        } else if (preamble.matches("((\\d([\\s+]*)\\,([\\s+]*)(?=\\d))|\\d)+")) {
+        } else if (preamble.matches("((-?\\d([\\s+]*)\\,([\\s+]*)(?=-?\\d))|-?\\d)+")) {
             //code block for delete multiple persons
             try {
                 ArrayList<Index> deletePersons = ParserUtil.parseIndexes(args);
