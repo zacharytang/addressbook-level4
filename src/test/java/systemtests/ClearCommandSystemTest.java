@@ -8,9 +8,11 @@ import org.junit.Test;
 import seedu.address.commons.core.index.Index;
 import seedu.address.logic.commands.ClearCommand;
 import seedu.address.logic.commands.RedoCommand;
+import seedu.address.logic.commands.SuggestCommand;
 import seedu.address.logic.commands.UndoCommand;
 import seedu.address.model.Model;
 import seedu.address.model.ModelManager;
+import seedu.address.testutil.PersonUtil;
 
 public class ClearCommandSystemTest extends AddressBookSystemTest {
 
@@ -74,8 +76,12 @@ public class ClearCommandSystemTest extends AddressBookSystemTest {
         assertCommandSuccess(ClearCommand.COMMAND_SECONDARY);
         assertSelectedCardUnchanged();
 
-        /* Case: mixed case command word -> rejected */
-        assertCommandFailure("ClEaR", MESSAGE_UNKNOWN_COMMAND);
+        /* Case: mixed case command word -> cleared */
+        assertCommandSuccess("ClEaR");
+        assertSelectedCardUnchanged();
+
+        /* Case: invalid keyword -> suggested */
+        assertCommandFailure("claer", String.format(SuggestCommand.MESSAGE_SUCCESS, "clear"));
     }
 
     /**

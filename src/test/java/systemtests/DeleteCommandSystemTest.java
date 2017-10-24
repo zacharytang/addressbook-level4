@@ -16,6 +16,7 @@ import seedu.address.commons.core.Messages;
 import seedu.address.commons.core.index.Index;
 import seedu.address.logic.commands.DeleteCommand;
 import seedu.address.logic.commands.RedoCommand;
+import seedu.address.logic.commands.SuggestCommand;
 import seedu.address.logic.commands.UndoCommand;
 import seedu.address.model.Model;
 import seedu.address.model.person.ReadOnlyPerson;
@@ -48,6 +49,11 @@ public class DeleteCommandSystemTest extends AddressBookSystemTest {
         executeCommand(UndoCommand.COMMAND_WORD); // Restores address book
         command = "     " + DeleteCommand.COMMAND_SECONDARY + "      " + INDEX_FIRST_PERSON.getOneBased() + "       ";
         assertCommandSuccess(command, expectedModel, expectedResultMessage);
+
+        /* Case: delete the first person in the list using mixed case keyword,
+         * command with leading spaces and trailing spaces -> deleted */
+        executeCommand(UndoCommand.COMMAND_WORD); // Restores address book
+        assertCommandSuccess("DelETE 1", expectedModel, expectedResultMessage);
 
         /* Case: delete the last person in the list -> deleted */
         Model modelBeforeDeletingLast = getModel();
@@ -120,9 +126,6 @@ public class DeleteCommandSystemTest extends AddressBookSystemTest {
         /* Case: invalid arguments (extra argument) -> rejected */
         assertCommandFailure(DeleteCommand.COMMAND_WORD + " 1 abc", MESSAGE_INVALID_DELETE_COMMAND_FORMAT);
 
-        /* Case: mixed case command word -> rejected */
-        assertCommandFailure("DelETE 1", MESSAGE_UNKNOWN_COMMAND);
-
         /* Invalid commands with aliases */
 
         /* Case: invalid index (0) -> rejected */
@@ -144,9 +147,6 @@ public class DeleteCommandSystemTest extends AddressBookSystemTest {
 
         /* Case: invalid arguments (extra argument) -> rejected */
         assertCommandFailure(DeleteCommand.COMMAND_ALIAS + " 1 abc", MESSAGE_INVALID_DELETE_COMMAND_FORMAT);
-
-        /* Case: mixed case command word -> rejected */
-        assertCommandFailure("DelETE 1", MESSAGE_UNKNOWN_COMMAND);
 
         /* Invalid commands with secondary keyword */
 
@@ -170,8 +170,9 @@ public class DeleteCommandSystemTest extends AddressBookSystemTest {
         /* Case: invalid arguments (extra argument) -> rejected */
         assertCommandFailure(DeleteCommand.COMMAND_SECONDARY + " 1 abc", MESSAGE_INVALID_DELETE_COMMAND_FORMAT);
 
-        /* Case: mixed case command word -> rejected */
-        assertCommandFailure("DelETE 1", MESSAGE_UNKNOWN_COMMAND);
+        /* Case: invalid keyword -> suggested */
+        assertCommandFailure("Deleete", String.format(SuggestCommand.MESSAGE_SUCCESS, "delete"));
+
     }
 
     /**
