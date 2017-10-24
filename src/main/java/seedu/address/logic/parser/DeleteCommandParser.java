@@ -3,6 +3,7 @@ package seedu.address.logic.parser;
 import static seedu.address.commons.core.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_TAG;
 
+import java.util.ArrayList;
 import java.util.Set;
 import java.util.stream.Stream;
 
@@ -45,12 +46,19 @@ public class DeleteCommandParser implements Parser<DeleteCommand> {
                 throw new ParseException(
                         String.format(MESSAGE_INVALID_COMMAND_FORMAT, DeleteCommand.MESSAGE_USAGE));
             }
+        } else if (preamble.matches("((-?\\d([\\s+]*)\\,([\\s+]*)(?=-?\\d))|-?\\d)+")) {
+            //code block for delete multiple persons
+            try {
+                ArrayList<Index> deletePersons = ParserUtil.parseIndexes(args);
+                return new DeleteCommand(deletePersons);
+            } catch (IllegalValueException ive) {
+                throw new ParseException(
+                        String.format(MESSAGE_INVALID_COMMAND_FORMAT, DeleteCommand.MESSAGE_USAGE));
+            }
         }
-
         throw new ParseException(
                 String.format(MESSAGE_INVALID_COMMAND_FORMAT, DeleteCommand.MESSAGE_USAGE));
     }
-
 
     /**
      * Returns true if none of the prefixes contains empty {@code Optional} values in the given
