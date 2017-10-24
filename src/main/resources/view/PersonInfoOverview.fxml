@@ -11,38 +11,38 @@
     <SplitPane dividerPositions="0.25" orientation="VERTICAL">
         <AnchorPane>
             <SplitPane dividerPositions="0.24" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                <AnchorPane minHeight="0.0" minWidth="0.0">
+                <AnchorPane minHeight="0.0" minWidth="0.0" styleClass="info-name-cell">
                     <Label fx:id="name" alignment="CENTER" contentDisplay="CENTER" prefHeight="28.0" prefWidth="43.2" styleClass="display_big_label" text="\$name" textAlignment="CENTER" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
                 </AnchorPane>
-                <AnchorPane minHeight="0.0" minWidth="0.0">
-                    <VBox alignment="CENTER_LEFT" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                        <HBox alignment="CENTER_LEFT">
+                <AnchorPane minHeight="0.0" minWidth="0.0" styleClass="info-cell">
+                    <VBox alignment="CENTER_LEFT" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                        <HBox alignment="CENTER_LEFT" spacing="5">
                             <Label styleClass="display_small_label" text="Gender:" />
-                            <Label fx:id="gender" alignment="CENTER_RIGHT" styleClass="display_small_label" text="\$gender" />
+                            <Label fx:id="gender" styleClass="display_small_value" text="\$gender" />
                         </HBox>
-                        <HBox>
+                        <HBox alignment="CENTER_LEFT" spacing="5">
                             <Label styleClass="display_small_label" text="Matriculation No:" />
-                            <Label fx:id="matricNo" styleClass="display_small_label" text="\$matricNo" />
+                            <Label fx:id="matricNo" styleClass="display_small_value" text="\$matricNo" />
                         </HBox>
-                        <HBox>
+                        <HBox alignment="CENTER_LEFT" spacing="5">
                             <Label styleClass="display_small_label" text="Phone No:" />
-                            <Label fx:id="phone" styleClass="display_small_label" text="\$phone" />
+                            <Label fx:id="phone" styleClass="display_small_value" text="\$phone" />
                         </HBox>
-                        <HBox>
+                        <HBox alignment="CENTER_LEFT" spacing="5">
                             <Label styleClass="display_small_label" text="Address:" />
-                            <Label fx:id="address" styleClass="display_small_label" text="\$address" />
+                            <Label fx:id="address" styleClass="display_small_value" text="\$address" />
                         </HBox>
-                        <HBox>
+                        <HBox alignment="CENTER_LEFT" spacing="5">
                             <Label styleClass="display_small_label" text="Email:" />
-                            <Label fx:id="email" styleClass="display_small_label" text="\$email" />
+                            <Label fx:id="email" styleClass="display_small_value" text="\$email" />
                         </HBox>
-                        <HBox>
+                        <HBox alignment="CENTER_LEFT" spacing="5">
                             <Label styleClass="display_small_label" text="Birthday:" />
-                            <Label fx:id="birthday" styleClass="display_small_label" text="\$birthday" />
+                            <Label fx:id="birthday" styleClass="display_small_value" text="\$birthday" />
                         </HBox>
-                        <HBox>
+                        <HBox alignment="CENTER_LEFT" spacing="5">
                             <Label styleClass="display_small_label" text="Remark:" />
-                            <Label fx:id="remark" styleClass="display_small_label" text="\$remark" />
+                            <Label fx:id="remark" styleClass="display_small_value" text="\$remark" />
                         </HBox>
                     </VBox>
                 </AnchorPane>

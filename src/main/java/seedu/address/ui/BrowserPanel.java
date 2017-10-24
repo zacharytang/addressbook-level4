@@ -14,7 +14,6 @@ import seedu.address.MainApp;
 import seedu.address.commons.core.LogsCenter;
 import seedu.address.commons.events.model.PersonAddressDisplayDirectionsEvent;
 import seedu.address.commons.events.model.PersonAddressDisplayMapEvent;
-import seedu.address.commons.events.ui.PersonPanelSelectionChangedEvent;
 import seedu.address.model.person.Address;
 import seedu.address.model.person.ReadOnlyPerson;
 

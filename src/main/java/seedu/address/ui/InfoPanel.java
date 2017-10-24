@@ -11,16 +11,16 @@ import seedu.address.commons.core.LogsCenter;
 import seedu.address.commons.events.model.PersonAddressDisplayDirectionsEvent;
 import seedu.address.commons.events.model.PersonAddressDisplayMapEvent;
 import seedu.address.commons.events.ui.PersonPanelSelectionChangedEvent;
+import seedu.address.commons.events.ui.PersonSelectedEvent;
 
 /**
- *
+ * Container for both browser panel and person information panel
  */
 public class InfoPanel extends UiPart<Region> {
 
     private static final String FXML = "InfoPanel.fxml";
 
     private final Logger logger = LogsCenter.getLogger(this.getClass());
-
 
     private BrowserPanel browserPanel;
     private PersonInfoOverview infoOverview;
@@ -48,7 +48,7 @@ public class InfoPanel extends UiPart<Region> {
     }
 
     @Subscribe
-    public void handlePersonPanelSelectionChangedEvent(PersonPanelSelectionChangedEvent event) {
+    public void handlePersonSelectedEvent(PersonSelectedEvent event) {
         logger.info(LogsCenter.getEventHandlingLogMessage(event));
         infoOverviewPlaceholder.toFront();
     }
