@@ -15,6 +15,9 @@ import javafx.collections.transformation.FilteredList;
 import seedu.address.commons.core.ComponentManager;
 import seedu.address.commons.core.LogsCenter;
 import seedu.address.commons.events.model.AddressBookChangedEvent;
+import seedu.address.commons.events.model.PersonAddressDisplayDirectionsEvent;
+import seedu.address.commons.events.model.PersonAddressDisplayMapEvent;
+import seedu.address.model.person.Address;
 import seedu.address.model.person.Person;
 import seedu.address.model.person.ReadOnlyPerson;
 import seedu.address.model.person.exceptions.DuplicatePersonException;
@@ -64,6 +67,16 @@ public class ModelManager extends ComponentManager implements Model {
     /** Raises an event to indicate the model has changed */
     private void indicateAddressBookChanged() {
         raise(new AddressBookChangedEvent(addressBook));
+    }
+
+    @Override
+    public void showMapOf(ReadOnlyPerson person) {
+        raise(new PersonAddressDisplayMapEvent(person));
+    }
+
+    @Override
+    public void showDirectionsTo(ReadOnlyPerson target, Address address) {
+        raise(new PersonAddressDisplayDirectionsEvent(target, address));
     }
 
     @Override
