@@ -16,17 +16,26 @@ import org.junit.Test;
 
 import guitests.guihandles.BrowserPanelHandle;
 import seedu.address.MainApp;
+import seedu.address.commons.events.model.PersonAddressDisplayDirectionsEvent;
+import seedu.address.commons.events.model.PersonAddressDisplayMapEvent;
 import seedu.address.commons.events.ui.PersonPanelSelectionChangedEvent;
+import seedu.address.model.person.Address;
+import seedu.address.model.person.Person;
 
 public class BrowserPanelTest extends GuiUnitTest {
     private PersonPanelSelectionChangedEvent selectionChangedEventStub;
+    private PersonAddressDisplayMapEvent personAddressDisplayMapEventStub;
+    private PersonAddressDisplayDirectionsEvent personAddressDisplayDirectionsEventStub;
 
     private BrowserPanel browserPanel;
     private BrowserPanelHandle browserPanelHandle;
 
     @Before
-    public void setUp() {
+    public void setUp() throws Exception {
         selectionChangedEventStub = new PersonPanelSelectionChangedEvent(new PersonCard(ALICE, 0));
+        personAddressDisplayMapEventStub = new PersonAddressDisplayMapEvent(new Person(ALICE));
+        personAddressDisplayDirectionsEventStub = new PersonAddressDisplayDirectionsEvent(new Person(ALICE),
+                new Address("Blk 123 Yishun 61"));
 
         guiRobot.interact(() -> browserPanel = new BrowserPanel());
         uiPartRule.setUiPart(browserPanel);
@@ -47,5 +56,19 @@ public class BrowserPanelTest extends GuiUnitTest {
 
         waitUntilBrowserLoaded(browserPanelHandle);
         assertEquals(expectedPersonUrl, browserPanelHandle.getLoadedUrl());
+
+        postNow(personAddressDisplayMapEventStub);
+        URL expectedGMapsUrl = new URL(
+                "https://www.google.com.sg/maps/search/123,%20Jurong%20West%20Ave%206,%20?dg=dbrw&newdg=1");
+        waitUntilBrowserLoaded(browserPanelHandle);
+        assertEquals(expectedGMapsUrl, browserPanelHandle.getLoadedUrl());
+
+        postNow(personAddressDisplayDirectionsEventStub);
+        URL expectedGMapsDirectionsUrl = new URL(
+                "https://www.google.com.sg/maps/dir/Blk%20123%20Yishun%2061/123,"
+                        + "%20Jurong%20West%20Ave%206,%20#08-111");
+        waitUntilBrowserLoaded(browserPanelHandle);
+        assertEquals(expectedGMapsDirectionsUrl, browserPanelHandle.getLoadedUrl());
+
     }
 }
