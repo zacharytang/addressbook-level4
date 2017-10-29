@@ -58,6 +58,11 @@ public class LogicManager extends ComponentManager implements Logic {
     }
 
     @Override
+    public void checkAllMasterListTagsAreBeingUsed () {
+        model.checkMasterTagListHasAllTagsUsed();
+    }
+
+    @Override
     public ListElementPointer getHistorySnapshot() {
         return new ListElementPointer(history.getHistory());
     }

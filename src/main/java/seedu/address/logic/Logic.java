@@ -25,6 +25,8 @@ public interface Logic {
 
     ObservableList<Tag> getTagList();
 
+    void checkAllMasterListTagsAreBeingUsed ();
+
     /** Returns the list of input entered by the user, encapsulated in a {@code ListElementPointer} object */
     ListElementPointer getHistorySnapshot();
 }
