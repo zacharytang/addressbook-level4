@@ -13,6 +13,7 @@ import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.Region;
 import seedu.address.commons.core.LogsCenter;
 import seedu.address.commons.events.model.AddressBookChangedEvent;
+import seedu.address.commons.events.model.MasterTagListHasAnUnusedTagEvent;
 import seedu.address.model.tag.Tag;
 
 
@@ -63,26 +64,42 @@ public class TagListPanel extends UiPart<Region> {
         );
     }
 
+    /**
+     *  Update the Tag List panel which has unused tags
+     */
+    private void updateTagListWithUnusedTag (ObservableList<Tag> tagList, Set<Tag> outdatedTags) {
+        tags.getChildren().clear();
+        Set<Tag> tagSet = tagList.stream().collect(Collectors.toSet());
+
+        initTagsWithUnusedTags(outdatedTags, tagSet);
+    }
+
+    /**
+     * Initializes the tags for a tag list which contains unused tags
+     * and gives a different color to distinguish unused tags
+     */
+    private void initTagsWithUnusedTags (Set<Tag> outdatedTags, Set<Tag> tagSet) {
+        tagSet.forEach(tag -> {
+            Label tagLabel = new Label(tag.tagName);
+            if (outdatedTags.contains(tag)) {
+                tagLabel.setStyle("-fx-background-color: LightCoral  ");
+            } else {
+                tagLabel.setStyle("-fx-background-color: Gray ");
+            }
+            tags.getChildren().add(tagLabel);
+        }
+        );
+    }
+
     @Subscribe
     public void handleAddressBookChangedEvent (AddressBookChangedEvent event) {
         logger.info(LogsCenter.getEventHandlingLogMessage(event));
         updateTagList(event.data.getTagList());
     }
-    /*@Override
-    public boolean equals(Object other) {
-        // short circuit if same object
-        if (other == this) {
-            return true;
-        }
 
-        // instanceof handles nulls
-        if (!(other instanceof PersonCard)) {
-            return false;
-        }
-
-        // state check
-        PersonCard card = (PersonCard) other;
-        return id.getText().equals(card.id.getText())
-                && person.equals(card.person);
-    }*/
+    @Subscribe
+    public void handleMasterTagListHasUnusedTagEvent (MasterTagListHasAnUnusedTagEvent event) {
+        logger.info(LogsCenter.getEventHandlingLogMessage(event));
+        updateTagListWithUnusedTag(tagList, event.outdatedTags);
+    }
 }

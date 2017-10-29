@@ -138,6 +138,7 @@ public class MainWindow extends UiPart<Region> {
 
         tagListPanel = new TagListPanel(logic.getTagList());
         tagListPanelPlaceholder.getChildren().add(tagListPanel.getRoot());
+        logic.checkAllMasterListTagsAreBeingUsed();
 
         ResultDisplay resultDisplay = new ResultDisplay();
         resultDisplayPlaceholder.getChildren().add(resultDisplay.getRoot());
