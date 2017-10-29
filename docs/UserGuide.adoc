@@ -159,7 +159,7 @@ Examples:
 * `add s/facebook John Doe`
 * `add s/Instagram John Doe`
 
-=== Adding/Deleting a Photo for a person : `photo` _(Coming in v2.0)_
+=== Adding/Deleting a Photo for a person : `photo` _(Coming in v1.4)_
 ____
 _When you study too much, sometimes, you forget how someone looks like._
 ____
@@ -195,8 +195,8 @@ Tags are too short, and your remarks for a person are more descriptive and uniqu
 ____
 Adds or Deletes a remark to the specified person from the address book. +
 Format: +
-(Add remark) `remark INDEX [r/REMARK]` +
-(Delete remark): `remark INDEX [r/]`
+(Add remark) `remark INDEX r/REMARK` +
+(Delete remark): `remark INDEX r/`
 
 ****
 * Edits the remark of the person at the specified `INDEX`.
@@ -273,13 +273,16 @@ Returns any person tagged by `friends`
 * `find t/friends p/1234` +
 Returns any person tagged by `friends`, and having phone numbers containing `1234`
 
-=== Sorting all persons : `sort` _(Coming in v2.0)_
+=== Sorting all persons : `sort` _(Coming in v1.5)_
 ____
 _Sometimes, you just meet too many people in University. Do not worry, get all your contacts in order._
 ____
 Shows a list of all persons in the address book by arranging their names in alphabetical order. +
-Format: `sort` +
+Format: +
+(Sort by name in ascending order) `sort ASC` +
+(Sort by name in descending order) `sort DESC`
 Alternatives: `s` , `sortall`, `arrange`
+
 
 === Editing a person or a tag: `edit`
 ==== Editing a person
@@ -678,13 +681,17 @@ e.g. `delete t/modulemate t/colleague`
 e.g. `edit 2 n/James Lee e/jameslee@example.com b/19051994`
 * *Edit (Tag)* : `edit old/TAG new/TAG` +
 e.g. `edit tag/friends tag/enemy`
-* *Remark* : `remark INDEX [r/REMARK] ` +
+* *Photo* : `photo INDEX ph/PHOTO_PATH` +
+e.g. `photo 1 ph/ C:/desktop/photo.jpg`
+* *Remark* : `remark INDEX r/REMARK ` +
 e.g. `remark 2 r/Likes to drink coffee.`
 * *Find* : `find KEYWORD [MORE_KEYWORDS]` +
 e.g. `find James Jake`
 * *Google Maps* `gmaps INDEX`
 * *Nearby* `nearby a/ADDRESS d/DISTANCE` +
 e.g. `nearby a/123, Clementi Rd, 1234665 d/500`
+* *Sort (in Ascending Order)* `sort ASC`
+* *Sort (in Descending Order)* `sort DESC`
 * *Central* `central`
 * *List* : `list`
 * *Help* : `help`
