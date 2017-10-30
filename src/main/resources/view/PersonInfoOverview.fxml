@@ -49,6 +49,6 @@
                 </AnchorPane>
             </SplitPane>
         </AnchorPane>
-        <AnchorPane minHeight="0.0" minWidth="0.0" />
+        <AnchorPane fx:id="timetablePlaceholder" />
     </SplitPane>
 </StackPane>

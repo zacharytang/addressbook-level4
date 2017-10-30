@@ -1,0 +1,87 @@
+package seedu.address.ui;
+
+import static seedu.address.model.person.timetable.Timetable.ARRAY_DAYS;
+import static seedu.address.model.person.timetable.Timetable.ARRAY_TIMES;
+import static seedu.address.model.person.timetable.Timetable.ARRAY_WEEKS;
+import static seedu.address.model.person.timetable.Timetable.WEEK_ODD;
+
+import javafx.fxml.FXML;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.Region;
+import seedu.address.commons.exceptions.IllegalValueException;
+import seedu.address.model.person.timetable.Timetable;
+
+/**
+ * Display for timetables in the UI
+ */
+public class TimetableDisplay extends UiPart<Region> {
+
+    private static final String COLOUR_FILLED = "#FFFFFF";
+    private static final String COLOUR_EMPTY = "#000000";
+
+    private static final String FXML = "TimetableDisplay.fxml";
+    private Timetable timetable;
+
+    @FXML
+    private GridPane oddGrid;
+
+    @FXML
+    private GridPane evenGrid;
+
+    public TimetableDisplay(Timetable timetable) {
+        super(FXML);
+
+        this.timetable = timetable;
+        fillTimetable();
+    }
+
+    /**
+     * Fills the timetable grid with panes according to the timetable oject given
+     */
+    private void fillTimetable() {
+        // Default person
+        if (timetable == null) {
+            return;
+        }
+
+        for (int weekType = 0; weekType < ARRAY_WEEKS.length; weekType++) {
+            for (int day = 0; day < ARRAY_DAYS.length; day++) {
+                for (int time = 0; time < ARRAY_TIMES.length; time++) {
+                    markSlot(weekType, day, time);
+                }
+            }
+        }
+    }
+
+    /**
+     * Fills a slot in the timetable grid with a lesson
+     */
+    private void markSlot(int weekIndex, int dayIndex, int timeIndex) {
+        boolean hasLesson = hasLesson(weekIndex, dayIndex, timeIndex);
+
+        Pane pane = new Pane();
+        GridPane.setColumnIndex(pane, timeIndex + 1);
+        GridPane.setRowIndex(pane, dayIndex + 1);
+
+        pane.setStyle("-fx-background-color: " + (hasLesson ? COLOUR_FILLED : COLOUR_EMPTY));
+
+        if (weekIndex == WEEK_ODD) {
+            oddGrid.getChildren().add(pane);
+        } else {
+            evenGrid.getChildren().add(pane);
+        }
+    }
+
+    /**
+     * Checks if a lesson exists in the timetable at the given parameters
+     */
+    private boolean hasLesson(int weekIndex, int dayIndex, int timeIndex) {
+        try {
+            return timetable.doesSlotHaveLesson(ARRAY_WEEKS[weekIndex], ARRAY_DAYS[dayIndex], ARRAY_TIMES[timeIndex]);
+        } catch (IllegalValueException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+}
