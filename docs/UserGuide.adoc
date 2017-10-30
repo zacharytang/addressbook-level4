@@ -227,7 +227,7 @@ Want to know who's birthday is in this month? Unify every common contact togethe
 ____
 
 Finds persons whose information contain any of the given keywords from each category. +
-Format: `find t/Tag p/PHONE e/EMAIL b/BIRTHDAY MONTH...` + 
+Format: `find t/Tag p/PHONE e/EMAIL b/BIRTHDAY MONTH...` +
 Alternatives: `f` , `search`
 
 ****
