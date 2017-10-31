@@ -528,10 +528,11 @@ public class GMapsCommandParser implements Parser<GMapsCommand> {
     -fx-padding: 0;
     -fx-background-color: derive(#1d1d1d, 20%);
 }
+
 ```
 ###### \resources\view\MainWindow.fxml
 ``` fxml
-  <StackPane fx:id="tagListPanelPlaceholder" maxHeight="80" minHeight="80" prefHeight="80" styleClass="pane-with-border" VBox.vgrow="NEVER">
+  <StackPane fx:id="tagListPanelPlaceholder" maxHeight="60" minHeight="60" prefHeight="60" styleClass="pane-with-border" VBox.vgrow="NEVER">
     <padding>
       <Insets bottom="5" left="10" right="10" top="5" />
     </padding>

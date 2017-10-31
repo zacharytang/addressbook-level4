@@ -26,6 +26,7 @@ import seedu.address.commons.exceptions.IllegalValueException;
 import seedu.address.logic.parser.exceptions.ParseException;
 import seedu.address.model.person.timetable.TimetableInfo;
 
+//@@author zacharytang
 /**
  * Helper class that contains utilities to parse NUSMods urls.
  */

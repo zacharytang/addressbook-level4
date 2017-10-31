@@ -53,6 +53,7 @@ public class StatusBarFooterTest extends GuiUnitTest {
         statusBarFooterHandle = new StatusBarFooterHandle(statusBarFooter.getRoot());
     }
 
+    //@@author zacharytang
     @Test
     public void display() {
         // initial state

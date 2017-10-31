@@ -174,11 +174,13 @@ public class AddCommandParserTest {
                 + MATRIC_NO_DESC_BOB + PHONE_DESC_BOB + EMAIL_DESC_BOB + VALID_ADDRESS_BOB
                 + BIRTHDAY_DESC_BOB + TIMETABLE_DESC_BOB, expectedMessage);
 
+        //@@author zacharytang
         // missing timetable prefix
         assertParseFailure(parser, AddCommand.COMMAND_WORD + NAME_DESC_BOB + GENDER_DESC_BOB
                 + MATRIC_NO_DESC_BOB + PHONE_DESC_BOB + EMAIL_DESC_BOB + ADDRESS_DESC_BOB
                 + BIRTHDAY_DESC_BOB + VALID_TIMETABLE_BOB, expectedMessage);
 
+        //@@author
         // missing birthday prefix
         assertParseFailure(parser, AddCommand.COMMAND_WORD + NAME_DESC_BOB + GENDER_DESC_BOB
                 + MATRIC_NO_DESC_BOB + PHONE_DESC_BOB + EMAIL_DESC_BOB + ADDRESS_DESC_BOB
@@ -228,12 +230,14 @@ public class AddCommandParserTest {
                         + BIRTHDAY_DESC_BOB + TIMETABLE_DESC_BOB + TAG_DESC_HUSBAND + TAG_DESC_FRIEND,
                 Address.MESSAGE_ADDRESS_CONSTRAINTS);
 
+        //@@author zacharytang
         // invalid timetable
         assertParseFailure(parser, AddCommand.COMMAND_WORD + NAME_DESC_BOB + GENDER_DESC_BOB
                         + MATRIC_NO_DESC_BOB + PHONE_DESC_BOB + EMAIL_DESC_BOB + ADDRESS_DESC_BOB
                         + BIRTHDAY_DESC_BOB + INVALID_TIMETABLE_DESC + TAG_DESC_HUSBAND + TAG_DESC_FRIEND,
                 Timetable.MESSAGE_TIMETABLE_URL_CONSTRAINTS);
 
+        //@@author
         // invalid tag
         assertParseFailure(parser, AddCommand.COMMAND_WORD + NAME_DESC_BOB + GENDER_DESC_BOB
                         + MATRIC_NO_DESC_BOB + PHONE_DESC_BOB + EMAIL_DESC_BOB + ADDRESS_DESC_BOB

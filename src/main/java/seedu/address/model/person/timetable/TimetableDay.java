@@ -4,6 +4,7 @@ import static seedu.address.commons.util.timetable.TimetableParserUtil.parseStar
 
 import seedu.address.commons.exceptions.IllegalValueException;
 
+//@@author zacharytang
 /**
  * Represents a single day in a timetable
  */

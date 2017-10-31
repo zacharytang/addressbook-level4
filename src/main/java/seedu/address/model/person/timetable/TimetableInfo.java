@@ -7,6 +7,7 @@ import static seedu.address.model.person.timetable.Timetable.WEEK_ODD;
 
 import seedu.address.commons.exceptions.IllegalValueException;
 
+//@@author zacharytang
 /**
  * Fully represents all information about a person's timetable slots
  */

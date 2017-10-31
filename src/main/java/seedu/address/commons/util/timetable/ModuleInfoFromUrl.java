@@ -2,6 +2,7 @@ package seedu.address.commons.util.timetable;
 
 import java.util.HashMap;
 
+//@@author zacharytang
 /**
  * Represents lesson for a specific module parsed from a NUSMods url
  */

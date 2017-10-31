@@ -76,6 +76,7 @@
     -fx-background-color: -fx-focus-color;
 }
 
+/* @@author zacharytang */
 .split-pane:horizontal .split-pane-divider {
     -fx-background-color: derive(#1d1d1d, 20%);
     -fx-border-color: transparent transparent transparent transparent;
@@ -151,6 +152,7 @@
     -fx-text-fill: #010504;
 }
 
+/* @@author zacharytang */
 .display_big_label {
     -fx-font-family: "Segoe UI";
     -fx-font-size: 24px;
@@ -209,6 +211,7 @@
     -fx-background-color: #3c3e3f;
 }
 
+/* @@author */
 .anchor-pane {
      -fx-background-color: derive(#1d1d1d, 20%);
 }
