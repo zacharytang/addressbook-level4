@@ -28,11 +28,31 @@ public class Timetable {
             "Timetable URLs should be a valid shortened NUSMods URL";
     public static final String MESSAGE_INVALID_SHORT_URL = "Invalid shortened URL provided";
 
+    public static final String[] ARRAY_DAYS = {
+        "Monday",
+        "Tuesday",
+        "Wednesday",
+        "Thursday",
+        "Friday"
+    };
+
+    public static final String[] ARRAY_WEEKS = {
+        "Odd Week",
+        "Even Week"
+    };
+
+    public static final String[] ARRAY_TIMES = {
+        "0800", "0830", "0900", "0930", "1000", "1030", "1100", "1130",
+        "1200", "1230", "1300", "1330", "1400", "1430", "1500", "1530",
+        "1600", "1630", "1700", "1730", "1800", "1830", "1900", "1930",
+        "2000", "2030", "2100", "2130", "2200", "2230", "2300", "2330"
+    };
+
     private static final String NUSMODS_SHORT = "modsn.us";
     private static final String URL_HOST_REGEX = "\\/\\/.*?\\/";
 
-
     public final String value;
+
     private final TimetableInfo timetable;
 
     public Timetable(String url) throws IllegalValueException {

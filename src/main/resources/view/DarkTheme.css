@@ -170,6 +170,37 @@
     -fx-text-fill: #ffffff;
 }
 
+.timetable-label {
+    -fx-font-family: "Segoe UI Semibold";
+    -fx-font-weight: 500;
+    -fx-text-fill: #FFFFFF;
+}
+
+.tab-pane .tab-header-area .tab-header-background {
+    -fx-opacity: 0;
+}
+
+.tab-pane .tab {
+    -fx-background-color: #383838;
+}
+
+.tab-pane .tab:selected {
+    -fx-background-color: #515658;
+}
+
+.tab .tab-label {
+    -fx-alignment: CENTER;
+    -fx-text-fill: #FFFFFF;
+    -fx-font-size: 12px;
+    -fx-font-family: "Segoe UI";
+}
+
+.tab:selected .tab-label {
+    -fx-alignment: CENTER;
+    -fx-font-family: "Segoe UI Semibold";
+    -fx-text-fill: #FFFFFF;
+}
+
 .info-name-cell {
     -fx-background-color: #515658;
 }

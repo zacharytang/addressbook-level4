@@ -2,7 +2,6 @@ package seedu.address.ui;
 
 import java.io.File;
 import java.net.URI;
-import java.net.URL;
 import java.util.logging.Logger;
 
 import com.google.common.eventbus.Subscribe;
@@ -12,8 +11,10 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Region;
 import seedu.address.commons.core.LogsCenter;
+import seedu.address.commons.events.ui.PersonPanelSelectionChangedEvent;
 import seedu.address.commons.events.ui.PersonSelectedEvent;
 import seedu.address.model.person.ReadOnlyPerson;
 
@@ -26,6 +27,8 @@ public class PersonInfoOverview extends UiPart<Region> {
     private ReadOnlyPerson person;
 
     private final Logger logger = LogsCenter.getLogger(this.getClass());
+
+    private TimetableDisplay timetableDisplay;
 
     @FXML
     private Label name;
@@ -45,6 +48,9 @@ public class PersonInfoOverview extends UiPart<Region> {
     private Label remark;
     @FXML
     private ImageView contactPhoto;
+
+    @FXML
+    private AnchorPane timetablePlaceholder;
 
     public PersonInfoOverview() {
         super(FXML);
@@ -67,7 +73,11 @@ public class PersonInfoOverview extends UiPart<Region> {
         email.setText("");
         birthday.setText("");
         remark.setText("");
+
         setDefaultContactPhoto();
+
+        timetableDisplay = new TimetableDisplay(null);
+        timetablePlaceholder.getChildren().add(timetableDisplay.getRoot());
     }
 
     /**
@@ -84,7 +94,13 @@ public class PersonInfoOverview extends UiPart<Region> {
         email.textProperty().bind(Bindings.convert(person.emailProperty()));
         birthday.textProperty().bind(Bindings.convert(person.birthdayProperty()));
         remark.textProperty().bind(Bindings.convert(person.remarkProperty()));
+
         loadPhoto(person);
+
+        timetablePlaceholder.getChildren().removeAll();
+
+        timetableDisplay = new TimetableDisplay(person.getTimetable());
+        timetablePlaceholder.getChildren().add(timetableDisplay.getRoot());
     }
 
     /**
@@ -115,5 +131,11 @@ public class PersonInfoOverview extends UiPart<Region> {
     private void handlePersonSelectedEvent(PersonSelectedEvent event) {
         logger.info(LogsCenter.getEventHandlingLogMessage(event));
         loadPerson(event.person);
+    }
+
+    @Subscribe
+    private void handlePersonPanelSelectionChangeEvent(PersonPanelSelectionChangedEvent event) {
+        logger.info(LogsCenter.getEventHandlingLogMessage(event));
+        loadPerson(event.getNewSelection().person);
     }
 }
