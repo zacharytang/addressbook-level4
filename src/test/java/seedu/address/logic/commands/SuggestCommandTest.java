@@ -8,6 +8,7 @@ import org.junit.Test;
 
 import seedu.address.logic.commands.exceptions.CommandException;
 
+//@@author CindyTsai1
 /**
  * Contains integration tests (interaction with the Model) for {@code SuggestCommand}.
  */
