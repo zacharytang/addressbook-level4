@@ -2,6 +2,7 @@ package seedu.address.model.person;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
+import static seedu.address.model.person.PhotoPath.FILE_SAVED_PARENT_PATH;
 
 import org.junit.Test;
 
@@ -25,15 +26,16 @@ public class PhotoPathTest {
 
         // valid photo path
         assertTrue(PhotoPath.isValidPhotoPath("")); // accept empty string by default
-        assertTrue(PhotoPath.isValidPhotoPath("docs/images/contactPhotos/1234.jpg"));
-        assertTrue(PhotoPath.isValidPhotoPath("docs/images/contactPhotos/12345678.jpg"));  //
-        assertTrue(PhotoPath.isValidPhotoPath("docs/images/contactPhotos/1234_5678.jpg"));  // underscore
+        assertTrue(PhotoPath.isValidPhotoPath("src/main/resources/images/contactPhotos/1234.jpg"));
+        assertTrue(PhotoPath.isValidPhotoPath("src/main/resources/images/contactPhotos/12345678.jpg"));  //
+        assertTrue(PhotoPath.isValidPhotoPath("src/main/resources/images/contactPhotos/1234_5678.jpg"));  // underscore
     }
 
     @Test
     public void equals() throws IllegalValueException {
-        PhotoPath validPhotoPath_1 = new PhotoPath("docs/images/contactPhotos/1234.jpg");
-        PhotoPath validPhotoPath_2 = new PhotoPath("docs/images/contactPhotos/5678.jpg");
+        String parentPath = FILE_SAVED_PARENT_PATH;
+        PhotoPath validPhotoPath_1 = new PhotoPath(parentPath + "1234.jpg");
+        PhotoPath validPhotoPath_2 = new PhotoPath(parentPath + "5678.jpg");
 
         // same object -> returns true
         assertTrue(validPhotoPath_1.equals(validPhotoPath_1));
