@@ -49,6 +49,7 @@ public class DeleteCommandTest {
         assertCommandSuccess(deleteCommand, model, expectedMessage, expectedModel);
     }
 
+    //@@author nbriannl
     @Test
     public void execute_validTagUnfilteredList_success() throws Exception {
         Set<Tag> tagsToDelete = Stream.of(new Tag("friends")).collect(Collectors.toSet());
@@ -62,6 +63,7 @@ public class DeleteCommandTest {
         assertCommandSuccess(deleteCommand, model, expectedMessage, expectedModel);
     }
 
+    //@@author
     @Test
     public void execute_invalidIndexUnfilteredList_throwsCommandException() throws Exception {
         Index outOfBoundIndex = Index.fromOneBased(model.getFilteredPersonList().size() + 1);
@@ -70,6 +72,7 @@ public class DeleteCommandTest {
         assertCommandFailure(deleteCommand, model, Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX);
     }
 
+    //@@author nbriannl
     @Test
     public void execute_invalidTagUnfilteredList_throwsCommandException() throws Exception {
         Set<Tag> wrongTag = Stream.of(new Tag("nonexistent")).collect(Collectors.toSet());
@@ -82,6 +85,7 @@ public class DeleteCommandTest {
         assertCommandFailure(deleteCommand2, model, Messages.MESSAGE_INVALID_TAG_PROVIDED);
     }
 
+    //@@author
     @Test
     public void execute_validIndexFilteredList_success() throws Exception {
         showFirstPersonOnly(model);
@@ -101,6 +105,7 @@ public class DeleteCommandTest {
         assertCommandSuccess(deleteCommand, model, expectedMessage, expectedModel);
     }
 
+    //@@author nbriannl
     @Test
     public void execute_validTagFilteredList_success() throws Exception {
         showFirstPersonOnly(model);
@@ -117,6 +122,7 @@ public class DeleteCommandTest {
         assertCommandSuccess(deleteCommand, model, expectedMessage, expectedModel);
     }
 
+    //@@author
     @Test
     public void execute_invalidIndexFilteredList_throwsCommandException() {
         showFirstPersonOnly(model);
@@ -130,6 +136,7 @@ public class DeleteCommandTest {
         assertCommandFailure(deleteCommand, model, Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX);
     }
 
+    //@@author nbriannl
     @Test
     public void execute_invalidTagFilteredList_throwsCommandException() throws Exception {
         showFirstPersonOnly(model);
@@ -144,6 +151,7 @@ public class DeleteCommandTest {
         assertCommandFailure(deleteCommand2, model, Messages.MESSAGE_INVALID_TAG_PROVIDED);
     }
 
+    //@@author nbriannl
     @Test
     public void equals() throws Exception {
         DeleteCommand deleteFirstCommand = new DeleteCommand(INDEX_FIRST_PERSON);
@@ -191,6 +199,7 @@ public class DeleteCommandTest {
         assertFalse(deleteFirstCommandTags.equals(deleteThirdCommandTags));
     }
 
+    //@@author
     /**
      * Returns a {@code DeleteCommand} with the parameter {@code index}.
      */
@@ -200,6 +209,7 @@ public class DeleteCommandTest {
         return deleteCommand;
     }
 
+    //@@author nbriannl
     /**
      * Returns a {@code DeleteCommand} with the parameter {@code tagSet}.
      */
@@ -209,6 +219,7 @@ public class DeleteCommandTest {
         return deleteCommand;
     }
 
+    //@@author
     /**
      * Updates {@code model}'s filtered list to show no one.
      */

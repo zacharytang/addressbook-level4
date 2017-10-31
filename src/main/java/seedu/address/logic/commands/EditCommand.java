@@ -82,6 +82,7 @@ public class EditCommand extends UndoableCommand {
     private final Tag oldTag;
     private final Tag newTag;
 
+    //@@author nbriannl
     /**
      * @param index of the person in the filtered person list to edit
      * @param editPersonDescriptor details to edit the person with
@@ -97,6 +98,7 @@ public class EditCommand extends UndoableCommand {
         this.newTag = null;
     }
 
+    //@@author nbriannl
     /**
      *
      * @param oldTag the old tag to be replaced by the new tag
@@ -113,6 +115,7 @@ public class EditCommand extends UndoableCommand {
         this.newTag = newTag;
     }
 
+    //@@author nbriannl
     @Override
     public CommandResult executeUndoableCommand() throws CommandException {
         if (isEditForPerson) {
@@ -151,6 +154,7 @@ public class EditCommand extends UndoableCommand {
         }
     }
 
+    //@@author
     /**
      * Creates and returns a {@code Person} with the details of {@code personToEdit}
      * edited with {@code editPersonDescriptor}.
@@ -176,6 +180,7 @@ public class EditCommand extends UndoableCommand {
                 updatedTimetable, updatedRemark, updatedPhotoPath, updatedTags, updateBirthday);
     }
 
+    //@@author nbriannl
     @Override
     public boolean equals(Object other) {
         // short circuit if same object
@@ -202,6 +207,7 @@ public class EditCommand extends UndoableCommand {
         }
     }
 
+    //@@author
     /**
      * Stores the details to edit the person with. Each non-empty field value will replace the
      * corresponding field value of the person.

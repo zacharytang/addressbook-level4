@@ -71,21 +71,25 @@ public class ModelManager extends ComponentManager implements Model {
         raise(new AddressBookChangedEvent(addressBook));
     }
 
+    //author@@ nbriannl
     /** Raises an event to indicate a tag in the master list of tags is unused*/
     private void indicateMasterTagListHasAnUnusedTag () {
         raise(new MasterTagListHasAnUnusedTagEvent(addressBook.getUnusedTags()));
     }
 
+    //@@author nbriannl
     @Override
     public void showMapOf(ReadOnlyPerson person) {
         raise(new PersonAddressDisplayMapEvent(person));
     }
 
+    //@@author nbriannl
     @Override
     public void showDirectionsTo(ReadOnlyPerson target, Address address) {
         raise(new PersonAddressDisplayDirectionsEvent(target, address));
     }
 
+    //@@author
     @Override
     public synchronized void deletePerson(ReadOnlyPerson target) throws PersonNotFoundException {
         addressBook.removePerson(target);
@@ -101,6 +105,7 @@ public class ModelManager extends ComponentManager implements Model {
         checkMasterTagListHasAllTagsUsed();
     }
 
+    //author@@ nbriannl
     @Override
     public void checkMasterTagListHasAllTagsUsed () {
         if (!addressBook.hasAllTagsInUse()) {
@@ -108,7 +113,7 @@ public class ModelManager extends ComponentManager implements Model {
         }
     }
 
-
+    //@@author nbriannl
     @Override
     public synchronized void deleteTag(Tag tag) throws DuplicatePersonException, PersonNotFoundException,
             TagNotFoundException {
@@ -127,6 +132,7 @@ public class ModelManager extends ComponentManager implements Model {
         checkMasterTagListHasAllTagsUsed();
     }
 
+    //@@author nbriannl
     @Override
     public void editTag(Tag oldTag, Tag newTag) throws DuplicatePersonException, PersonNotFoundException,
             TagNotFoundException {
@@ -152,6 +158,7 @@ public class ModelManager extends ComponentManager implements Model {
         checkMasterTagListHasAllTagsUsed();
     }
 
+    //@@author
     @Override
     public synchronized void addPerson(ReadOnlyPerson person) throws DuplicatePersonException {
         addressBook.addPerson(person);
