@@ -13,10 +13,12 @@
     <SplitPane dividerPositions="0.3" orientation="VERTICAL">
         <AnchorPane>
             <!--Edit dividerPositions below to adjust the divider position between the person photo and the person details-->
-            <SplitPane dividerPositions="0.5" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                <AnchorPane minHeight="0.0" minWidth="0.0" styleClass="info-name-cell">
+            <SplitPane dividerPositions="0.48333333333333334" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                <AnchorPane fx:id="contactPhotoPane" minHeight="0.0" minWidth="0.0" styleClass="info-name-cell">
                <children>
-                  <ImageView fx:id="contactPhoto" fitHeight="38.0" fitWidth="174.0" layoutX="1.0" layoutY="-1.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                  <ImageView fx:id="contactPhoto" layoutX="1.0" layoutY="-1.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+
+                  </ImageView>
                </children></AnchorPane>
 
                 <AnchorPane minHeight="0.0" minWidth="0.0" styleClass="info-cell">

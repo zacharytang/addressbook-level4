@@ -47,6 +47,8 @@ public class PersonInfoOverview extends UiPart<Region> {
     @FXML
     private Label remark;
     @FXML
+    private AnchorPane contactPhotoPane;
+    @FXML
     private ImageView contactPhoto;
 
     @FXML
@@ -57,7 +59,9 @@ public class PersonInfoOverview extends UiPart<Region> {
 
         this.person = null;
         loadDefaultPerson();
-
+        
+        contactPhoto.fitWidthProperty().bind(contactPhotoPane.widthProperty());
+        contactPhoto.fitHeightProperty().bind(contactPhotoPane.heightProperty());
         registerAsAnEventHandler(this);
     }
 
@@ -111,6 +115,7 @@ public class PersonInfoOverview extends UiPart<Region> {
         File defaultPhoto = new File(defaultPhotoPath);
         URI defaultPhotoUri = defaultPhoto.toURI();
         Image defaultImage = new Image(defaultPhotoUri.toString());
+        centerImage(defaultImage);
         contactPhoto.setImage(defaultImage);
     }
 
@@ -124,7 +129,38 @@ public class PersonInfoOverview extends UiPart<Region> {
         URI photoUri = photo.toURI();
         Image image = new Image(photoUri.toString());
 
+        contactPhoto.setPreserveRatio(true);
+        centerImage(image);
         contactPhoto.setImage(image);
+    }
+
+
+    /**
+     * Put the image at the center of imageView
+     * Credit to trichetriche (Stack Overflow https://stackoverflow.com/users/4676340/trichetriche)
+     * https://stackoverflow.com/questions/32781362/centering-an-image-in-an-imageview
+     */
+    public void centerImage(Image img) {
+        if (img != null) {
+            double w = 0;
+            double h = 0;
+
+            double ratioX = contactPhoto.getFitWidth() / img.getWidth();
+            double ratioY = contactPhoto.getFitHeight() / img.getHeight();
+
+            double reducCoeff = 0;
+            if (ratioX >= ratioY) {
+                reducCoeff = ratioY;
+            } else {
+                reducCoeff = ratioX;
+            }
+
+            w = img.getWidth() * reducCoeff;
+            h = img.getHeight() * reducCoeff;
+
+            contactPhoto.setX((contactPhoto.getFitWidth() - w) / 2);
+            contactPhoto.setY((contactPhoto.getFitHeight() - h) / 2);
+        }
     }
 
     @Subscribe
