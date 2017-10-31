@@ -52,6 +52,7 @@ public class LogicManager extends ComponentManager implements Logic {
         return model.getFilteredPersonList();
     }
 
+    //author@@ nbriannl
     @Override
     public ObservableList<Tag> getTagList() {
         return model.getAddressBook().getTagList();
@@ -62,6 +63,7 @@ public class LogicManager extends ComponentManager implements Logic {
         model.checkMasterTagListHasAllTagsUsed();
     }
 
+    //author@@
     @Override
     public ListElementPointer getHistorySnapshot() {
         return new ListElementPointer(history.getHistory());

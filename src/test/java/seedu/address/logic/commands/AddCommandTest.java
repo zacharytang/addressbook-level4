@@ -115,16 +115,19 @@ public class AddCommandTest {
             return null;
         }
 
+        //@@author nbriannl
         @Override
         public void showMapOf(ReadOnlyPerson person) {
             fail("This method should not be called.");
         }
 
+        //@@author nbriannl
         @Override
         public void showDirectionsTo(ReadOnlyPerson target, Address address) {
             fail("This method should not be called.");
         }
 
+        //@@author
         @Override
         public void deletePerson(ReadOnlyPerson target) throws PersonNotFoundException {
             fail("This method should not be called.");
@@ -141,22 +144,26 @@ public class AddCommandTest {
             fail("This method should not be called.");
         }
 
+        //@@author nbriannl
         @Override
         public void deleteTag(Tag tag) throws DuplicatePersonException, PersonNotFoundException {
             fail("This method should not be called.");
         }
 
+        //@@author nbriannl
         @Override
         public void editTag(Tag oldTag, Tag newTag) throws DuplicatePersonException,
                 PersonNotFoundException, TagNotFoundException {
             fail("This method should not be called.");
         }
 
+        //@@author nbriannl
         @Override
         public void checkMasterTagListHasAllTagsUsed () {
             fail("This method should not be called.");
         }
 
+        //@@author
         @Override
         public ObservableList<ReadOnlyPerson> getFilteredPersonList() {
             fail("This method should not be called.");

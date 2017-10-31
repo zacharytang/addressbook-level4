@@ -10,6 +10,7 @@ import org.junit.Test;
 import seedu.address.logic.commands.GMapsCommand;
 import seedu.address.model.person.Address;
 
+//@@author nbriannl
 public class GMapsCommandParserTest {
 
     private static final String MESSAGE_INVALID_FORMAT =

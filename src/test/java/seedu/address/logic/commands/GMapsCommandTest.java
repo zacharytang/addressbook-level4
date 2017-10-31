@@ -21,6 +21,7 @@ import seedu.address.model.UserPrefs;
 import seedu.address.model.person.Address;
 import seedu.address.model.person.ReadOnlyPerson;
 
+//@@author nbriannl
 /**
  * Contains integration tests (interaction with the Model) and unit tests for {@code GMapsCommand}.
  */

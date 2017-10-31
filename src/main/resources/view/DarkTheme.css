@@ -104,12 +104,14 @@
     -fx-border-color: #4d4d4d;
 }
 
+/* @@author nbriannl */
 .list-view {
     -fx-background-insets: 0;
     -fx-padding: 0;
     -fx-background-color: derive(#1d1d1d, 20%);
 }
 
+/* @@author */
 .list-cell {
     -fx-label-padding: 0 0 0 0;
     -fx-graphic-text-gap : 0;
@@ -166,6 +168,37 @@
     -fx-font-family: "Segoe UI";
     -fx-font-size: 14px;
     -fx-text-fill: #ffffff;
+}
+
+.timetable-label {
+    -fx-font-family: "Segoe UI Semibold";
+    -fx-font-weight: 500;
+    -fx-text-fill: #FFFFFF;
+}
+
+.tab-pane .tab-header-area .tab-header-background {
+    -fx-opacity: 0;
+}
+
+.tab-pane .tab {
+    -fx-background-color: #383838;
+}
+
+.tab-pane .tab:selected {
+    -fx-background-color: #515658;
+}
+
+.tab .tab-label {
+    -fx-alignment: CENTER;
+    -fx-text-fill: #FFFFFF;
+    -fx-font-size: 12px;
+    -fx-font-family: "Segoe UI";
+}
+
+.tab:selected .tab-label {
+    -fx-alignment: CENTER;
+    -fx-font-family: "Segoe UI Semibold";
+    -fx-text-fill: #FFFFFF;
 }
 
 .info-name-cell {

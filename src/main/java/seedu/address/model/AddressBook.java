@@ -146,6 +146,7 @@ public class AddressBook implements ReadOnlyAddressBook {
         persons.forEach(this::syncMasterTagListWith);
     }
 
+    //author@@ nbriannl
     /**
      * Checks if the master list {@link #tags} has every tag being used.
      *  @return true if all tags in the master list is being used by a person
@@ -174,6 +175,7 @@ public class AddressBook implements ReadOnlyAddressBook {
         return masterSet;
     }
 
+    //author@@
     /**
      * Removes {@code key} from this {@code AddressBook}.
      * @throws PersonNotFoundException if the {@code key} is not in this {@code AddressBook}.
@@ -199,6 +201,7 @@ public class AddressBook implements ReadOnlyAddressBook {
         tags.add(t);
     }
 
+    //@@author nbriannl
     /**
      * Removes {@code tag} from this {@code AddressBook}.
      * @throws TagNotFoundException if the {@code tag} is not in this {@code AddressBook}.
@@ -211,6 +214,7 @@ public class AddressBook implements ReadOnlyAddressBook {
         }
     }
 
+    //@@author
     //// util methods
 
     @Override
