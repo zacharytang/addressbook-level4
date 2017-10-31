@@ -78,6 +78,7 @@ public class PhotoCommand extends UndoableCommand {
 
         } else if (isValidLocalPhotoPath(trimmedPhotoPath)) {
             //not specified yet
+
             this.localPhotoPath = trimmedPhotoPath;
             String extension = getFileExtension(this.localPhotoPath);
             String savePath = FILE_SAVED_PARENT_PATH + getSavedFileName(extension);
@@ -110,8 +111,10 @@ public class PhotoCommand extends UndoableCommand {
 
         ReadOnlyPerson personToPhoto = lastShownList.get(targetIndex.getZeroBased());
 
-        if (localPhotoPath.equals("")) {
-            removeAppFile(personToPhoto.getPhotoPath().value);
+        //if the command is 'ph/' or the contact has one original photo, then delete it.
+        String originAppPhotoPath = personToPhoto.getPhotoPath().value;
+        if (localPhotoPath.equals("") || !(originAppPhotoPath.equals(""))) {
+            removeAppFile(originAppPhotoPath);
         }
 
         Person photoedPerson = createPhotoedPerson(personToPhoto, photoPath);
