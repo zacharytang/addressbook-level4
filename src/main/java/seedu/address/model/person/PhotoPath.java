@@ -12,7 +12,7 @@ public class PhotoPath {
     public static final String MESSAGE_APP_PHOTOPATH_CONSTRAINTS =
             "The app photo path should be a string starting with 'docs/images/contactPhotos/',"
                     + "following by the file name, like'photo.jpg'.";
-    public static final String FILE_SAVED_PARENT_PATH = "docs/images/contactPhotos/";
+    public static final String FILE_SAVED_PARENT_PATH = "src/main/resources/images/contactPhotos/";
 
     public final String value;  //photo path
 

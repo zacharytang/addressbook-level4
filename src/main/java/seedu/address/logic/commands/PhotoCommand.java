@@ -2,12 +2,14 @@ package seedu.address.logic.commands;
 
 import static java.util.Objects.requireNonNull;
 import static seedu.address.commons.util.FileUtil.copyFile;
+import static seedu.address.commons.util.FileUtil.createIfMissing;
 import static seedu.address.commons.util.FileUtil.getFileExtension;
 import static seedu.address.commons.util.FileUtil.haveSameContent;
 import static seedu.address.commons.util.FileUtil.removeAppFile;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_PHOTO;
 import static seedu.address.model.Model.PREDICATE_SHOW_ALL_PERSONS;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Date;
@@ -52,7 +54,7 @@ public class PhotoCommand extends UndoableCommand {
     public static final String MESSAGE_LOCAL_PHOTOPATH_CONSTRAINTS =
             "Photo Path should be the absolute path in your PC. It should be a string started with the name of "
                     + "your disk, followed by several groups of backslash and string, like c:\\desktop\\happy.jpg";
-    public static final String FILE_SAVED_PARENT_PATH = "docs/images/contactPhotos/";
+    public static final String FILE_SAVED_PARENT_PATH = "src/main/resources/images/contactPhotos/";
     //copy the photo in in project directory
 
     private final Index targetIndex;
@@ -79,6 +81,8 @@ public class PhotoCommand extends UndoableCommand {
             this.localPhotoPath = trimmedPhotoPath;
             String extension = getFileExtension(this.localPhotoPath);
             String savePath = FILE_SAVED_PARENT_PATH + getSavedFileName(extension);
+
+            createAppPhotoFile(savePath);
 
             try {
                 copyFile(this.localPhotoPath, savePath);
@@ -158,6 +162,20 @@ public class PhotoCommand extends UndoableCommand {
                 personToPhoto.getRemark(), photoPath, personToPhoto.getTags(), personToPhoto.getBirthday());
 
         return photoPerson;
+    }
+
+    /**
+     * Create the empty app photo file if it doesn't exist.
+     * @param path of the app photo
+     * @throws IOException
+     */
+    public void createAppPhotoFile(String path) {
+        File photoFile = new File(path);
+        try {
+            createIfMissing(photoFile);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
