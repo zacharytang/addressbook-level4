@@ -8,6 +8,7 @@ import java.util.regex.Pattern;
 
 import seedu.address.commons.exceptions.IllegalValueException;
 
+//@@author zacharytang
 /**
  * Represents a person's timetable in the address book
  * Guarantees: Immutable

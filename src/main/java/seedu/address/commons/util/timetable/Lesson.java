@@ -1,5 +1,6 @@
 package seedu.address.commons.util.timetable;
 
+//@@author zacharytang
 /**
  * Represents a lesson that a module has
  */

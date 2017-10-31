@@ -51,11 +51,13 @@
       <StackPane fx:id="personListPanelPlaceholder" VBox.vgrow="ALWAYS" />
     </VBox>
 
+    <!-- @@author zacharytang -->
     <StackPane fx:id="infoPlaceholder" prefWidth="340" styleClass="pane-with-border">
       <padding>
         <Insets bottom="10" left="10" right="10" top="10" />
       </padding>
     </StackPane>
+    <!-- @@author -->
   </SplitPane>
 
   <StackPane fx:id="statusbarPlaceholder" VBox.vgrow="NEVER" />

@@ -180,6 +180,7 @@ public class PersonBuilder {
         return this;
     }
 
+    //@@author zacharytang
     /**
      * Sets the {@code Address} of the {@code Person} that we are building.
      */
@@ -192,6 +193,7 @@ public class PersonBuilder {
         return this;
     }
 
+    //@@author
     public Person build() {
         return this.person;
     }

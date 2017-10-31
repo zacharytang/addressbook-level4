@@ -2,6 +2,7 @@ package seedu.address.commons.util.timetable;
 
 import java.util.ArrayList;
 
+//@@author zacharytang
 /**
  * Represents all timetable information parsed from a NUSMods url
  */

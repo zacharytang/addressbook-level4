@@ -12,6 +12,7 @@ import seedu.address.commons.events.model.PersonAddressDisplayDirectionsEvent;
 import seedu.address.commons.events.model.PersonAddressDisplayMapEvent;
 import seedu.address.commons.events.ui.PersonSelectedEvent;
 
+//@@author zacharytang
 /**
  * Container for both browser panel and person information panel
  */

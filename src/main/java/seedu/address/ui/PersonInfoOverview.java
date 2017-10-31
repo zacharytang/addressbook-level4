@@ -18,6 +18,7 @@ import seedu.address.commons.events.ui.PersonPanelSelectionChangedEvent;
 import seedu.address.commons.events.ui.PersonSelectedEvent;
 import seedu.address.model.person.ReadOnlyPerson;
 
+//@@author zacharytang
 /**
  * A UI component that displays a person's data on the main panel
  */

@@ -19,6 +19,7 @@ import seedu.address.model.person.timetable.TimetableInfo;
 import seedu.address.model.person.timetable.TimetableSlot;
 import seedu.address.model.person.timetable.TimetableWeek;
 
+//@@author zacharytang
 public class TimetableTest {
 
     private static final String INVALID_DAY = "Dayday";
