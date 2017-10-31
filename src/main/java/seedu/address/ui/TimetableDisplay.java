@@ -19,6 +19,7 @@ public class TimetableDisplay extends UiPart<Region> {
 
     private static final String COLOUR_FILLED = "#515658";
     private static final String COLOUR_EMPTY = "#383838";
+    private static final String COLOUR_BORDER = "#000000";
 
     private static final String FXML = "TimetableDisplay.fxml";
     private Timetable timetable;
@@ -81,10 +82,16 @@ public class TimetableDisplay extends UiPart<Region> {
         // Sets the borders such that half hour slots are combined into an hour
         String borderStyle = timeIndex % 2 == 0 ? "solid none solid solid" : "solid solid solid none";
 
+        String topWidth = dayIndex == 0 ? "2" : "1";
+        String leftWidth = timeIndex == 0 ? "2" : "1";
+        String bottomWidth = dayIndex == 4 ? "2" : "1";
+        String rightWidth = timeIndex == 31 ? "2" : "1";
+        String borderWidths = topWidth + " " + rightWidth + " " + bottomWidth + " " + leftWidth;
+
         pane.setStyle("-fx-background-color: " + (hasLesson ? COLOUR_FILLED : COLOUR_EMPTY)
                 + ";\n"
-                + "-fx-border-color: #000000;\n"
-                + "-fx-border-width: 1;\n"
+                + "-fx-border-color: " + COLOUR_BORDER + ";\n"
+                + "-fx-border-width: " + borderWidths + ";\n"
                 + "-fx-border-style: " + borderStyle);
 
         if (weekIndex == WEEK_ODD) {
