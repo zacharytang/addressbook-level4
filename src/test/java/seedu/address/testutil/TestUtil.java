@@ -80,7 +80,7 @@ public class TestUtil {
     }
 
     /**
-     * If the file in the specific path in the app directory exists, delete the path
+     * If the file in the specific path in the app directory exists, delete the file in the path
      * @param path
      */
     public static void removeAppFile(String path) {
