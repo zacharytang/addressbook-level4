@@ -56,6 +56,7 @@ public class EditCommandTest {
         assertCommandSuccess(editCommand, model, expectedMessage, expectedModel);
     }
 
+    //@@author nbriannl
     @Test
     public void executeForTags_unfilteredList_success() throws Exception {
         Tag oldTag = new Tag("friends");
@@ -70,6 +71,7 @@ public class EditCommandTest {
         assertCommandSuccess(editCommand, model, expectedMessage, expectedModel);
     }
 
+    //@@author
     @Test
     public void execute_someFieldsSpecifiedUnfilteredList_success() throws Exception {
         Index indexLastPerson = Index.fromOneBased(model.getFilteredPersonList().size());
@@ -122,6 +124,7 @@ public class EditCommandTest {
         assertCommandSuccess(editCommand, model, expectedMessage, expectedModel);
     }
 
+    //@@author nbriannl
     @Test
     public void executeForTags_filteredList_success() throws Exception {
         showFirstPersonOnly(model);
@@ -138,6 +141,7 @@ public class EditCommandTest {
         assertCommandSuccess(editCommand, model, expectedMessage, expectedModel);
     }
 
+    //@@author
     @Test
     public void execute_duplicatePersonUnfilteredList_failure() {
         Person firstPerson = new Person(model.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased()));
@@ -168,6 +172,7 @@ public class EditCommandTest {
         assertCommandFailure(editCommand, model, Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX);
     }
 
+    //@@author nbriannl
     @Test
     public void executeForTags_invalidTagUnfilteredList_failure() throws Exception {
         Tag invalidTag = new Tag("idontevenexistlolololol");
@@ -187,6 +192,7 @@ public class EditCommandTest {
         assertCommandFailure(editCommand, model, MESSAGE_NONEXISTENT_TAG);
     }
 
+    //@@author
     /**
      * Edit filtered list where index is larger than size of filtered list,
      * but smaller than size of address book
@@ -204,6 +210,7 @@ public class EditCommandTest {
         assertCommandFailure(editCommand, model, Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX);
     }
 
+    //@@author nbriannl-reused
     @Test
     public void equals() throws Exception {
         final EditCommand standardCommand = new EditCommand(INDEX_FIRST_PERSON, DESC_AMY);
@@ -252,6 +259,7 @@ public class EditCommandTest {
         assertFalse(standardCommandForTags.equals(new EditCommand(new Tag("absolutely"), new Tag("different"))));
     }
 
+    //@@author
     /**
      * Returns an {@code EditCommand} for person with parameters {@code index} and {@code descriptor}
      */
@@ -261,6 +269,7 @@ public class EditCommandTest {
         return editCommand;
     }
 
+    //@@author nbriannl
     /**
      * Returns an {@code EditCommand} for tag with parameters {@code oldTag} and {@code newTag}
      */
