@@ -528,7 +528,6 @@ public class GMapsCommandParser implements Parser<GMapsCommand> {
     -fx-padding: 0;
     -fx-background-color: derive(#1d1d1d, 20%);
 }
-
 ```
 ###### \resources\view\MainWindow.fxml
 ``` fxml
