@@ -144,6 +144,7 @@ public class ParserUtil {
         return tagSet;
     }
 
+    //@@author CindyTsai1
     /**
      * Parses {@code Optional<int> birthday} into a {@code HashMap<Birthday>} if {@code birthday} is present.
      * See header comment of this class regarding the use of {@code Optional} parameters.

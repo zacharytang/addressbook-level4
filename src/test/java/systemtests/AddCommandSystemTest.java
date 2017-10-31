@@ -213,7 +213,7 @@ public class AddCommandSystemTest extends AddressBookSystemTest {
                 + BIRTHDAY_DESC_AMY + TIMETABLE_DESC_BOB + TAG_DESC_FRIEND;
         assertCommandSuccess(command, toAdd);
 
-        //@@author
+        //@@author CindyTsai1
         /* Case: add a person with all fields same as another person in the address book except birthday -> added */
         toAdd = new PersonBuilder().withName(VALID_NAME_AMY).withGender(VALID_GENDER_AMY)
                 .withMatricNo(VALID_MATRIC_NO_AMY).withPhone(VALID_PHONE_AMY).withEmail(VALID_EMAIL_AMY)
@@ -224,6 +224,7 @@ public class AddCommandSystemTest extends AddressBookSystemTest {
                 + BIRTHDAY_DESC_BOB + TIMETABLE_DESC_AMY + TAG_DESC_FRIEND;
         assertCommandSuccess(command, toAdd);
 
+        //@@author
         /* Case: filters the person list before adding -> added */
         executeCommand(FindCommand.COMMAND_WORD + " " + KEYWORD_MATCHING_MEIER);
         assert getModel().getFilteredPersonList().size()
