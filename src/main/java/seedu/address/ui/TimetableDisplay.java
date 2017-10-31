@@ -17,8 +17,8 @@ import seedu.address.model.person.timetable.Timetable;
  */
 public class TimetableDisplay extends UiPart<Region> {
 
-    private static final String COLOUR_FILLED = "#FFFFFF";
-    private static final String COLOUR_EMPTY = "#000000";
+    private static final String COLOUR_FILLED = "#515658";
+    private static final String COLOUR_EMPTY = "#383838";
 
     private static final String FXML = "TimetableDisplay.fxml";
     private Timetable timetable;
@@ -42,13 +42,28 @@ public class TimetableDisplay extends UiPart<Region> {
     private void fillTimetable() {
         // Default person
         if (timetable == null) {
+            initializeEmptyGrid();
             return;
         }
 
         for (int weekType = 0; weekType < ARRAY_WEEKS.length; weekType++) {
             for (int day = 0; day < ARRAY_DAYS.length; day++) {
                 for (int time = 0; time < ARRAY_TIMES.length; time++) {
-                    markSlot(weekType, day, time);
+                    markSlot(weekType, day, time, hasLesson(weekType, day, time));
+                }
+            }
+        }
+    }
+
+    /**
+     * Initializes an empty grid
+     */
+    private void initializeEmptyGrid() {
+
+        for (int weekType = 0; weekType < ARRAY_WEEKS.length; weekType++) {
+            for (int day = 0; day < ARRAY_DAYS.length; day++) {
+                for (int time = 0; time < ARRAY_TIMES.length; time++) {
+                    markSlot(weekType, day, time, false);
                 }
             }
         }
@@ -57,14 +72,20 @@ public class TimetableDisplay extends UiPart<Region> {
     /**
      * Fills a slot in the timetable grid with a lesson
      */
-    private void markSlot(int weekIndex, int dayIndex, int timeIndex) {
-        boolean hasLesson = hasLesson(weekIndex, dayIndex, timeIndex);
+    private void markSlot(int weekIndex, int dayIndex, int timeIndex, boolean hasLesson) {
 
         Pane pane = new Pane();
         GridPane.setColumnIndex(pane, timeIndex + 1);
         GridPane.setRowIndex(pane, dayIndex + 1);
 
-        pane.setStyle("-fx-background-color: " + (hasLesson ? COLOUR_FILLED : COLOUR_EMPTY));
+        // Sets the borders such that half hour slots are combined into an hour
+        String borderStyle = timeIndex % 2 == 0 ? "solid none solid solid" : "solid solid solid none";
+
+        pane.setStyle("-fx-background-color: " + (hasLesson ? COLOUR_FILLED : COLOUR_EMPTY)
+                + ";\n"
+                + "-fx-border-color: #000000;\n"
+                + "-fx-border-width: 1;\n"
+                + "-fx-border-style: " + borderStyle);
 
         if (weekIndex == WEEK_ODD) {
             oddGrid.getChildren().add(pane);
