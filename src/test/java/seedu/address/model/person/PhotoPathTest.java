@@ -13,7 +13,8 @@ public class PhotoPathTest {
     @Test
     public void isValidPhotoPath() {
 
-        // spaces
+        // empty
+        assertFalse(PhotoPath.isValidPhotoPath(""));
         assertFalse(PhotoPath.isValidPhotoPath(" "));
 
         // / missing parts： not start with 'docs/images/contactPhotos/'
@@ -25,9 +26,9 @@ public class PhotoPathTest {
         assertFalse(PhotoPath.isValidPhotoPath("c:\\"));
 
         // valid photo path
-        assertTrue(PhotoPath.isValidPhotoPath("")); // accept empty string by default
+        assertTrue(PhotoPath.isValidPhotoPath("src/main/resources/images/help_icon.png"));  //default photo path
         assertTrue(PhotoPath.isValidPhotoPath("src/main/resources/images/contactPhotos/1234.jpg"));
-        assertTrue(PhotoPath.isValidPhotoPath("src/main/resources/images/contactPhotos/12345678.jpg"));  //
+        assertTrue(PhotoPath.isValidPhotoPath("src/main/resources/images/contactPhotos/12345678.jpg"));
         assertTrue(PhotoPath.isValidPhotoPath("src/main/resources/images/contactPhotos/1234_5678.jpg"));  // underscore
     }
 

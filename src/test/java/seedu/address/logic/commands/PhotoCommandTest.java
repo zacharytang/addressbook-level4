@@ -17,7 +17,7 @@ public class PhotoCommandTest {
 
     @Test
     public void isValidLocalPhotoPath() {
-        // blank email
+        // blank photo path
         assertFalse(PhotoCommand.isValidLocalPhotoPath("")); // empty string
         assertFalse(PhotoCommand.isValidLocalPhotoPath(" ")); // spaces only
 
