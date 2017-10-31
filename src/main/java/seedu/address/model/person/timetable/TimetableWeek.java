@@ -4,6 +4,7 @@ import static seedu.address.commons.util.timetable.TimetableParserUtil.parseDay;
 
 import seedu.address.commons.exceptions.IllegalValueException;
 
+//@@author zacharytang
 /**
  * Represents a full timetable for a week
  */

@@ -222,6 +222,7 @@ public class ParserUtilTest {
         assertEquals(expectedEmail, actualEmail.get());
     }
 
+    //@@author zacharytang
     @Test
     public void parseTimetable_null_throwsNullPointerException() throws Exception {
         thrown.expect(NullPointerException.class);
@@ -247,6 +248,7 @@ public class ParserUtilTest {
         assertEquals(expectedTimetable, actualTimetable.get());
     }
 
+    //@@author
     @Test
     public void parseTags_null_throwsNullPointerException() throws Exception {
         thrown.expect(NullPointerException.class);
