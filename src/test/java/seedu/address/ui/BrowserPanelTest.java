@@ -31,6 +31,7 @@ public class BrowserPanelTest extends GuiUnitTest {
     private BrowserPanel browserPanel;
     private BrowserPanelHandle browserPanelHandle;
 
+    //@@author nbriannl
     @Before
     public void setUp() throws Exception {
         selectionChangedEventStub = new PersonPanelSelectionChangedEvent(new PersonCard(ALICE, 0));

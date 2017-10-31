@@ -3,6 +3,7 @@ package seedu.address.commons.events.model;
 import seedu.address.commons.events.BaseEvent;
 import seedu.address.model.person.ReadOnlyPerson;
 
+//@@author nbriannl
 /** Indicates a person's address as a map is to be displayed*/
 public class PersonAddressDisplayMapEvent extends BaseEvent {
 

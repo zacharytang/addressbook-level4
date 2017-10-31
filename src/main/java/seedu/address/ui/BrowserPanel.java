@@ -47,10 +47,12 @@ public class BrowserPanel extends UiPart<Region> {
         loadPage("https://www.google.com.sg/maps/search/" + person.getAddress());
     }
 
+    //@@author nbriannl
     private void loadGoogleMapDirections(ReadOnlyPerson person, Address address) {
         loadPage("https://www.google.com.sg/maps/dir/" + address.toString() + "/" + person.getAddress());
     }
 
+    //@@author
     public void loadPage(String url) {
         Platform.runLater(() -> browser.getEngine().load(url));
     }
@@ -70,12 +72,14 @@ public class BrowserPanel extends UiPart<Region> {
         browser = null;
     }
 
+    //@@author nbriannl
     @Subscribe
     private void handlePersonAddressDisplayMapEvent(PersonAddressDisplayMapEvent event) {
         logger.info(LogsCenter.getEventHandlingLogMessage(event));
         loadGoogleMap(event.person);
     }
 
+    //@@author nbriannl
     @Subscribe
     private void handlePersonAddressDisplayDirectionsEvent(PersonAddressDisplayDirectionsEvent event) {
         logger.info(LogsCenter.getEventHandlingLogMessage(event));

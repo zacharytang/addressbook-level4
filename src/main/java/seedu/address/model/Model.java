@@ -24,18 +24,19 @@ public interface Model {
     /** Returns the AddressBook */
     ReadOnlyAddressBook getAddressBook();
 
+    //@@author nbriannl
     /** Show map of the given person **/
     void showMapOf(ReadOnlyPerson person);
 
     /** Show direction to the given person from a given address **/
     void showDirectionsTo(ReadOnlyPerson target, Address address);
 
+    //@@author
     /** Deletes the given person. */
     void deletePerson(ReadOnlyPerson target) throws PersonNotFoundException;
 
     /** Deletes the given list of persons. */
     void deletePersons(ArrayList<ReadOnlyPerson> targets) throws PersonNotFoundException;
-
 
     /** Adds the given person */
     void addPerson(ReadOnlyPerson person) throws DuplicatePersonException;
@@ -50,6 +51,7 @@ public interface Model {
     void updatePerson(ReadOnlyPerson target, ReadOnlyPerson editedPerson)
             throws DuplicatePersonException, PersonNotFoundException;
 
+    //@@author nbriannl
     /**
      * Deletes the specified tag from everyone in the address book
      *
@@ -61,6 +63,7 @@ public interface Model {
      */
     void deleteTag(Tag tag) throws DuplicatePersonException, PersonNotFoundException, TagNotFoundException;
 
+    //@@author nbriannl
     /**
      * Deletes the specified tag from everyone in the address book
      *
@@ -73,12 +76,15 @@ public interface Model {
     void editTag(Tag oldTag, Tag newTag) throws DuplicatePersonException, PersonNotFoundException,
             TagNotFoundException;
 
+    //@@author
     /** Returns an unmodifiable view of the filtered person list */
     ObservableList<ReadOnlyPerson> getFilteredPersonList();
 
+    //author@@ nbriannl
     /** Checks if the master list of tags in the address book has every tag being used */
     void checkMasterTagListHasAllTagsUsed ();
 
+    //author@@
     /**
      * Updates the filter of the filtered person list to filter by the given {@code predicate}.
      * @throws NullPointerException if {@code predicate} is null.
