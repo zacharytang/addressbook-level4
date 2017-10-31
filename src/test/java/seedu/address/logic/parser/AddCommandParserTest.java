@@ -188,6 +188,7 @@ public class AddCommandParserTest {
                 + MATRIC_NO_DESC_BOB + PHONE_DESC_BOB + EMAIL_DESC_BOB + ADDRESS_DESC_BOB
                 + VALID_BIRTHDAY_BOB + TIMETABLE_DESC_BOB, expectedMessage);
 
+        //@@author
         // all prefixes missing
         assertParseFailure(parser, AddCommand.COMMAND_WORD + VALID_NAME_BOB + VALID_GENDER_BOB
                 + VALID_MATRIC_NO_BOB + VALID_PHONE_BOB + VALID_EMAIL_BOB + VALID_ADDRESS_BOB
