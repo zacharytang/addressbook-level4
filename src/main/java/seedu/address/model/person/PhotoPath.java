@@ -1,6 +1,7 @@
 package seedu.address.model.person;
 
 import static java.util.Objects.requireNonNull;
+import static seedu.address.logic.commands.PhotoCommand.DEFAULT_PHOTO_PATH;
 
 import seedu.address.commons.exceptions.IllegalValueException;
 
@@ -29,7 +30,7 @@ public class PhotoPath {
      * Returns if a given string is a valid photo path.
      */
     public static boolean isValidPhotoPath(String test) {
-        if (test.equals("")) {
+        if (test.equals(DEFAULT_PHOTO_PATH)) {
             return true;
         }
         String[] parts = test.split("\\.");

@@ -55,7 +55,7 @@ public class PhotoCommand extends UndoableCommand {
             "Photo Path should be the absolute path in your PC. It should be a string started with the name of "
                     + "your disk, followed by several groups of backslash and string, like c:\\desktop\\happy.jpg";
     public static final String FILE_SAVED_PARENT_PATH = "src/main/resources/images/contactPhotos/";
-    //copy the photo in in project directory
+    public static final String DEFAULT_PHOTO_PATH = "src/main/resources/images/help_icon.png";
 
     private final Index targetIndex;
     private final String localPhotoPath;
@@ -71,7 +71,7 @@ public class PhotoCommand extends UndoableCommand {
 
         String trimmedPhotoPath = localPhotoPath.trim();
 
-        if (trimmedPhotoPath.equals("")) {
+        if (trimmedPhotoPath.equals("")) { //not specified yet
             this.localPhotoPath = "";
             this.targetIndex = targetIndex;
             this.photoPath = new PhotoPath("");
@@ -113,7 +113,7 @@ public class PhotoCommand extends UndoableCommand {
 
         //if the command is 'ph/' or the contact has one original photo, then delete it.
         String originAppPhotoPath = personToPhoto.getPhotoPath().value;
-        if (localPhotoPath.equals("") || !(originAppPhotoPath.equals(""))) {
+        if (localPhotoPath.equals("") || !(originAppPhotoPath.equals(DEFAULT_PHOTO_PATH))) {
             removeAppFile(originAppPhotoPath);
         }
 
