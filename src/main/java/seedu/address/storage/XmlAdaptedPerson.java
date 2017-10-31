@@ -57,7 +57,6 @@ public class XmlAdaptedPerson {
      */
     public XmlAdaptedPerson() {}
 
-
     /**
      * Converts a given Person into this class for JAXB use.
      *

@@ -154,7 +154,7 @@ public class EditCommand extends UndoableCommand {
         }
     }
 
-    //@@author
+    //@@author April0616
     /**
      * Creates and returns a {@code Person} with the details of {@code personToEdit}
      * edited with {@code editPersonDescriptor}.
@@ -253,6 +253,7 @@ public class EditCommand extends UndoableCommand {
             return Optional.ofNullable(name);
         }
 
+        //@@author April0616
         public void setGender(Gender gender) {
             this.gender = gender;
         }
@@ -268,6 +269,7 @@ public class EditCommand extends UndoableCommand {
         public Optional<MatricNo> getMatricNo() {
             return Optional.ofNullable(matricNo);
         }
+        //@@author
 
         public void setPhone(Phone phone) {
             this.phone = phone;

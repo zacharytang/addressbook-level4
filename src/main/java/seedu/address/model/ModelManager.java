@@ -89,7 +89,7 @@ public class ModelManager extends ComponentManager implements Model {
         raise(new PersonAddressDisplayDirectionsEvent(target, address));
     }
 
-    //@@author
+    //@@author April0616
     @Override
     public synchronized void deletePerson(ReadOnlyPerson target) throws PersonNotFoundException {
         addressBook.removePerson(target);
@@ -98,6 +98,7 @@ public class ModelManager extends ComponentManager implements Model {
         checkMasterTagListHasAllTagsUsed();
     }
 
+    //@@author April0616
     @Override
     public synchronized void deletePersons(ArrayList<ReadOnlyPerson> targets) throws PersonNotFoundException {
         addressBook.removePersons(targets);
