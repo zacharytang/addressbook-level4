@@ -5,6 +5,7 @@ import java.util.Set;
 import seedu.address.commons.events.BaseEvent;
 import seedu.address.model.tag.Tag;
 
+//author@@ nbriannl
 /** Indicates that the master tag list has an unused tag not used by any person*/
 public class MasterTagListHasAnUnusedTagEvent extends BaseEvent {
 

@@ -52,11 +52,13 @@ public class DeleteCommand extends UndoableCommand {
         this.targetTags = null;
     }
 
+    //@@author nbriannl
     public DeleteCommand(Set<Tag> targetTags) {
         this.targetIndexes = null;
         this.targetTags = targetTags;
     }
 
+    //@@author nbriannl
     @Override
     public CommandResult executeUndoableCommand() throws CommandException {
         // this code block is command execution for delete [indexes]
@@ -105,6 +107,7 @@ public class DeleteCommand extends UndoableCommand {
         }
     }
 
+    //@@author
     /**
      * Generate the command result of the deletePersonList.
      * @param deletePersonList
