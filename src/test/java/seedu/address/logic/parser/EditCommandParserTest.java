@@ -144,6 +144,7 @@ public class EditCommandParserTest {
                 + VALID_PHONE_AMY + INVALID_BIRTHDAY_DESC, Name.MESSAGE_NAME_CONSTRAINTS);
     }
 
+    //@aauthor nbriannl
     @Test
     public void parseTagEdit_invalidValue_failure() {
         assertParseFailure(parser, " old/ new/", Tag.MESSAGE_TAG_CONSTRAINTS);
@@ -159,7 +160,7 @@ public class EditCommandParserTest {
         assertParseSuccess(parser, " old/old new/new ", expectedCommand);
     }
 
-
+    //@aauthor
     @Test
     public void parse_allFieldsSpecified_success() {
         Index targetIndex = INDEX_SECOND_PERSON;

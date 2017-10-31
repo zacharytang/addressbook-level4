@@ -149,6 +149,7 @@ public class ParserUtil {
         return birthday.isPresent() ? Optional.of(new Birthday(birthday.get())) : Optional.empty();
     }
 
+    //@@author nbriannl
     /**
      * Parses a single {@code Optional<String> tag} into an {@code Optional<Tag>} if {@code tag} is present.
      * See header comment of this class regarding the use of {@code Optional} parameters.
@@ -158,6 +159,7 @@ public class ParserUtil {
         return tag.isPresent() ? Optional.of(new Tag(tag.get())) : Optional.empty();
     }
 
+    //@@author
     /**
      * Parses a {@code Optional<String> url} into an {@code Optional<Timetable>} if {@code url} is present.
      */

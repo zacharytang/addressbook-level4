@@ -35,12 +35,14 @@
     </padding>
   </StackPane>
 
+  <!-- @@author nbriannl -->
   <StackPane fx:id="tagListPanelPlaceholder" maxHeight="60" minHeight="60" prefHeight="60" styleClass="pane-with-border" VBox.vgrow="NEVER">
     <padding>
       <Insets bottom="5" left="10" right="10" top="5" />
     </padding>
   </StackPane>
 
+  <!-- @@author -->
   <SplitPane id="splitPane" fx:id="splitPane" dividerPositions="0.4" VBox.vgrow="ALWAYS">
     <VBox fx:id="personList" minWidth="335.0" prefHeight="143.0" prefWidth="335.0" SplitPane.resizableWithParent="false">
       <padding>
