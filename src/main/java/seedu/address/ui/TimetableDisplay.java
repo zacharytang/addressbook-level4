@@ -41,30 +41,11 @@ public class TimetableDisplay extends UiPart<Region> {
      * Fills the timetable grid with panes according to the timetable oject given
      */
     private void fillTimetable() {
-        // Default person
-        if (timetable == null) {
-            initializeEmptyGrid();
-            return;
-        }
 
         for (int weekType = 0; weekType < ARRAY_WEEKS.length; weekType++) {
             for (int day = 0; day < ARRAY_DAYS.length; day++) {
                 for (int time = 0; time < ARRAY_TIMES.length; time++) {
-                    markSlot(weekType, day, time, hasLesson(weekType, day, time));
-                }
-            }
-        }
-    }
-
-    /**
-     * Initializes an empty grid
-     */
-    private void initializeEmptyGrid() {
-
-        for (int weekType = 0; weekType < ARRAY_WEEKS.length; weekType++) {
-            for (int day = 0; day < ARRAY_DAYS.length; day++) {
-                for (int time = 0; time < ARRAY_TIMES.length; time++) {
-                    markSlot(weekType, day, time, false);
+                    markSlot(weekType, day, time, timetable != null ? hasLesson(weekType, day, time) : false);
                 }
             }
         }
@@ -82,6 +63,7 @@ public class TimetableDisplay extends UiPart<Region> {
         // Sets the borders such that half hour slots are combined into an hour
         String borderStyle = timeIndex % 2 == 0 ? "solid none solid solid" : "solid solid solid none";
 
+        // Fixes the widths to be even across the grid
         String topWidth = dayIndex == 0 ? "2" : "1";
         String leftWidth = timeIndex == 0 ? "2" : "1";
         String bottomWidth = dayIndex == 4 ? "2" : "1";
