@@ -366,10 +366,10 @@ Users are able to store timetables by supplying a shortened NUSMods url when add
 
 ==== Retrieval of Lesson Information
 
-NUSMods urls are in the format of `.../timetable/ACAD_YEAR/SEM?MODULE_CODE[LESSON_TYPE]=LESSON_NO&...`  We use `TimetableParserUtil : expandUrl` to get an expanded url from shortened URL provided, then parse the expanded url accordingly to obtain lesson data.
+NUSMods URLs are in the format of `.../timetable/ACAD_YEAR/SEM?MODULE_CODE[LESSON_TYPE]=LESSON_NO&...`  We use `TimetableParserUtil : expandUrl` to get an expanded url from shortened URL provided, then parse the expanded url accordingly to obtain lesson data.
 Lessons for each module are stored in `ModuleInfoFromUrl`, which is then represented in `TimetableInfoFromUrl`.
 
-https://github.com/nusmodifications/nusmods-api[NUSMods API] is used to retrieve data related to lessons parsed from urls. JSON objects representing each module is retrieved and
+https://github.com/nusmodifications/nusmods-api[NUSMods API] is used to retrieve data related to lessons parsed from URLs. JSON objects representing each module is retrieved and
 cast to a `Map` using http://wiki.fasterxml.com/JacksonHome[Jackson library]. Lesson data is then retrieved as a list of `Lesson` objects.
 
 [source,java]
@@ -386,7 +386,7 @@ for (HashMap<String, String> lesson : lessonInfo) {
 }
 ----
 
-`TimetableParserUtil` in `commons.util.timetable` contains all utility methods for parsing of NUSMods urls and conversion between terms parsed from urls and terms used in NUSMods API.
+`TimetableParserUtil` in `commons.util.timetable` contains all utility methods for parsing of NUSMods URLs and conversion between terms parsed from URLs and terms used in NUSMods API.
 
 ==== Representation of Timetables
 
@@ -715,12 +715,13 @@ The following are the main classes edited to implement this:
 The following UML diagram represents the implementation of the classes in the Model component.
 
 image::BirthdayModelComponentClassDiagram.png[width="800"]
+_Figure 4.5.1 : UML diagram for updated Model with Birthday_
 
 ==== Validation of Birthdays
-After the birthday is inputted, it will be checked if the date is valid.
-The number of digits inputted will be checked first.
+After the birthday is input, it will be checked if the date is valid.
+The number of digits input will be checked first.
 Then the year would be checked from the 20th century until now.
-Range of day inputted will then be checked according to month.
+Range of day input will then be checked according to month.
 
 [source,java]
 ----
