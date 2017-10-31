@@ -5,6 +5,7 @@ import static seedu.address.logic.commands.PhotoCommand.DEFAULT_PHOTO_PATH;
 
 import seedu.address.commons.exceptions.IllegalValueException;
 
+//@@author April0616
 /**
  * Represents the path of a person's photo in the address book.
  */

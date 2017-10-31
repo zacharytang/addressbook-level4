@@ -108,6 +108,7 @@ public class PersonInfoOverview extends UiPart<Region> {
         timetablePlaceholder.getChildren().add(timetableDisplay.getRoot());
     }
 
+    //@@author April0616
     /**
      * Set the default contact photo to the default person.
      */
@@ -135,6 +136,7 @@ public class PersonInfoOverview extends UiPart<Region> {
         contactPhoto.setImage(image);
     }
 
+    //@@author
 
     /**
      * Put the image at the center of imageView

@@ -27,6 +27,7 @@ public class DeleteCommandSystemTest extends AddressBookSystemTest {
     private static final String MESSAGE_INVALID_DELETE_COMMAND_FORMAT =
             String.format(Messages.MESSAGE_INVALID_COMMAND_FORMAT, DeleteCommand.MESSAGE_USAGE);
 
+
     @Test
     public void delete() {
         /* ----------------- Performing delete operation while an unfiltered list is being shown -------------------- */
@@ -196,6 +197,7 @@ public class DeleteCommandSystemTest extends AddressBookSystemTest {
         return targetPerson;
     }
 
+    //@@author April0616
     /**
      * Deletes the person at {@code toDelete} by creating a default {@code DeleteCommand} using {@code toDelete} and
      * performs the same verification as {@code assertCommandSuccess(String, Model, String)}.
@@ -213,6 +215,7 @@ public class DeleteCommandSystemTest extends AddressBookSystemTest {
         assertCommandSuccess(
                 DeleteCommand.COMMAND_WORD + " " + toDelete.getOneBased(), expectedModel, expectedResultMessage);
     }
+    //@@author
 
     /**
      * Executes {@code command} and in addition,<br>

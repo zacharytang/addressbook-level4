@@ -80,6 +80,7 @@ public class AddressBookParserTest {
         assertEquals(new EditCommand(INDEX_FIRST_PERSON, descriptor), command);
     }
 
+    //@@author April0616
     @Test
     public void parseCommand_remark() throws Exception {
         final Remark remark = new Remark("Likes to drink tea.");
@@ -88,6 +89,7 @@ public class AddressBookParserTest {
         assertEquals(new RemarkCommand(INDEX_FIRST_PERSON, remark), command);
     }
 
+    //@@author April0616
     @Test
     public void parseCommand_photo() throws Exception {
         final String photoPath = createTempFile();
@@ -108,6 +110,7 @@ public class AddressBookParserTest {
         removeAppFile(commandAppPath);
         removeAppFile(newCommandAppPath);
     }
+    //@@author
 
     @Test
     public void parseCommand_exit() throws Exception {

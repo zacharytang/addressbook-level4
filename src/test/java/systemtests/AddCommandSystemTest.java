@@ -154,6 +154,7 @@ public class AddCommandSystemTest extends AddressBookSystemTest {
                 + EMAIL_DESC_AMY + ADDRESS_DESC_AMY + BIRTHDAY_DESC_AMY + TIMETABLE_DESC_AMY + TAG_DESC_FRIEND;
         assertCommandSuccess(command, toAdd);
 
+        //@@author April0616
         /* Case: add a person with all fields same as another person in the address book except gender -> added */
         toAdd = new PersonBuilder().withName(VALID_NAME_AMY).withGender(VALID_GENDER_BOB)
                 .withMatricNo(VALID_MATRIC_NO_AMY).withPhone(VALID_PHONE_AMY).withEmail(VALID_EMAIL_AMY)
@@ -163,6 +164,7 @@ public class AddCommandSystemTest extends AddressBookSystemTest {
                 + EMAIL_DESC_AMY + ADDRESS_DESC_AMY + BIRTHDAY_DESC_AMY + TIMETABLE_DESC_AMY + TAG_DESC_FRIEND;
         assertCommandSuccess(command, toAdd);
 
+        //@@author April0616
         /* Case: add a person with all fields same as another person in the address book except matricNo -> added */
         toAdd = new PersonBuilder().withName(VALID_NAME_AMY).withGender(VALID_GENDER_AMY)
                 .withMatricNo(VALID_MATRIC_NO_BOB).withPhone(VALID_PHONE_AMY).withEmail(VALID_EMAIL_AMY)
@@ -171,6 +173,7 @@ public class AddCommandSystemTest extends AddressBookSystemTest {
         command = AddCommand.COMMAND_WORD + NAME_DESC_AMY + GENDER_DESC_AMY + MATRIC_NO_DESC_BOB + PHONE_DESC_AMY
                 + EMAIL_DESC_AMY + ADDRESS_DESC_AMY + BIRTHDAY_DESC_AMY + TIMETABLE_DESC_AMY + TAG_DESC_FRIEND;
         assertCommandSuccess(command, toAdd);
+        //@@author
 
         /* Case: add a person with all fields same as another person in the address book except phone -> added */
         toAdd = new PersonBuilder().withName(VALID_NAME_AMY).withGender(VALID_GENDER_AMY)
@@ -265,6 +268,7 @@ public class AddCommandSystemTest extends AddressBookSystemTest {
                 + ADDRESS_DESC_AMY + BIRTHDAY_DESC_AMY + TIMETABLE_DESC_AMY;
         assertCommandFailure(command, String.format(MESSAGE_INVALID_COMMAND_FORMAT, AddCommand.MESSAGE_USAGE));
 
+        //@@author April0616
         /* Case: missing gender -> rejected */
         command = AddCommand.COMMAND_WORD + NAME_DESC_AMY + MATRIC_NO_DESC_AMY + PHONE_DESC_AMY + EMAIL_DESC_AMY
                 + ADDRESS_DESC_AMY + BIRTHDAY_DESC_AMY + TIMETABLE_DESC_AMY;
@@ -274,6 +278,7 @@ public class AddCommandSystemTest extends AddressBookSystemTest {
         command = AddCommand.COMMAND_WORD + NAME_DESC_AMY + GENDER_DESC_AMY + PHONE_DESC_AMY + EMAIL_DESC_AMY
                 + ADDRESS_DESC_AMY + BIRTHDAY_DESC_AMY + TIMETABLE_DESC_AMY;
         assertCommandFailure(command, String.format(MESSAGE_INVALID_COMMAND_FORMAT, AddCommand.MESSAGE_USAGE));
+        //@@author
 
         /* Case: missing phone -> rejected */
         command = AddCommand.COMMAND_WORD + NAME_DESC_AMY + GENDER_DESC_AMY + MATRIC_NO_DESC_AMY + EMAIL_DESC_AMY
@@ -311,6 +316,7 @@ public class AddCommandSystemTest extends AddressBookSystemTest {
                 + EMAIL_DESC_AMY + ADDRESS_DESC_AMY + BIRTHDAY_DESC_AMY + TIMETABLE_DESC_AMY;
         assertCommandFailure(command, Name.MESSAGE_NAME_CONSTRAINTS);
 
+        //@@author April0616
         /* Case: invalid gender -> rejected */
         command = AddCommand.COMMAND_WORD + NAME_DESC_AMY + INVALID_GENDER_DESC + MATRIC_NO_DESC_AMY + PHONE_DESC_AMY
                 + EMAIL_DESC_AMY + ADDRESS_DESC_AMY + BIRTHDAY_DESC_AMY + TIMETABLE_DESC_AMY;
@@ -320,6 +326,8 @@ public class AddCommandSystemTest extends AddressBookSystemTest {
         command = AddCommand.COMMAND_WORD + NAME_DESC_AMY + GENDER_DESC_AMY + INVALID_MATRIC_NO_DESC + PHONE_DESC_AMY
                 + EMAIL_DESC_AMY + ADDRESS_DESC_AMY + BIRTHDAY_DESC_AMY + TIMETABLE_DESC_AMY;
         assertCommandFailure(command, MatricNo.MESSAGE_MATRIC_NO_CONSTRAINTS);
+        //@@author
+
 
         /* Case: invalid phone -> rejected */
         command = AddCommand.COMMAND_WORD + NAME_DESC_AMY + GENDER_DESC_AMY + MATRIC_NO_DESC_AMY + INVALID_PHONE_DESC

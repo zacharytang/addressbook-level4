@@ -178,18 +178,16 @@ public class AddressBook implements ReadOnlyAddressBook {
     }
 
 
-
+    //@@author April0616
     /**
      * Removes the photo of the specified contact.
      * @param photoPath
-     * @return
      */
     public void removeContactPhoto(PhotoPath photoPath) {
         removeAppFile(photoPath.value);
     }
 
 
-    //author@@
     /**
      * Removes {@code key} from this {@code AddressBook}, and delete the related contact photos.
      * @throws PersonNotFoundException if the {@code key} is not in this {@code AddressBook}.
@@ -210,6 +208,7 @@ public class AddressBook implements ReadOnlyAddressBook {
         }
         return true;
     }
+    //@@author
 
     //// tag-level operations
 

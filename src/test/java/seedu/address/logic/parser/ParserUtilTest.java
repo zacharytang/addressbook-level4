@@ -97,6 +97,7 @@ public class ParserUtilTest {
         assertEquals(expectedName, actualName.get());
     }
 
+    //@@author April0616
     @Test
     public void parseGender_null_throwsNullPointerException() throws Exception {
         thrown.expect(NullPointerException.class);
@@ -146,6 +147,7 @@ public class ParserUtilTest {
 
         assertEquals(expectedMatricNo, actualMatricNo.get());
     }
+    //@@author
 
     @Test
     public void parsePhone_null_throwsNullPointerException() throws Exception {

@@ -29,6 +29,7 @@ public class DeleteCommandParserTest {
 
     private DeleteCommandParser parser = new DeleteCommandParser();
 
+    //@@author April0616
     @Test
     public void parse_validArgsOnePerson_returnsDeleteCommand() {
         ArrayList<Index> deletePersonList = new ArrayList<>();
@@ -36,6 +37,7 @@ public class DeleteCommandParserTest {
         assertParseSuccess(parser, "1", new DeleteCommand(deletePersonList));
     }
 
+    //@@author April0616
     @Test
     public void parse_validArgsMultiplePersons_returnsDeleteCommand() {
         ArrayList<Index> deletePersonList = new ArrayList<>();
@@ -45,6 +47,8 @@ public class DeleteCommandParserTest {
         assertParseSuccess(parser, "1, 2, 3", new DeleteCommand(deletePersonList));
     }
 
+
+    //@@author April0616
     @Test
     public void parse_validArgsMultiplePersonsNoWhiteSpace_returnsDeleteCommand() {
         ArrayList<Index> deletePersonList = new ArrayList<>();
@@ -53,6 +57,7 @@ public class DeleteCommandParserTest {
         assertParseSuccess(parser, "1,3", new DeleteCommand(deletePersonList));
     }
 
+    //@@author April0616
     @Test
     public void parse_validArgsMultiplePersonsDuplicatedIndexes_returnsDeleteCommand() {
         ArrayList<Index> deletePersonList = new ArrayList<>();
@@ -60,7 +65,7 @@ public class DeleteCommandParserTest {
         deletePersonList.add(INDEX_THIRD_PERSON);
         assertParseSuccess(parser, "1, 1, 3, 3", new DeleteCommand(deletePersonList));
     }
-
+    //@@author April0616
     @Test
     public void parse_validArgsMultiplePersonsManyWhiteSpaces_returnsDeleteCommand() {
         ArrayList<Index> deletePersonList = new ArrayList<>();
@@ -69,7 +74,7 @@ public class DeleteCommandParserTest {
         deletePersonList.add(INDEX_THIRD_PERSON);
         assertParseSuccess(parser, "  1  ,  2  , 3 ", new DeleteCommand(deletePersonList));
     }
-
+    //@@author April0616
     @Test
     public void parse_invalidArgsMultiplePersonsNoComma_returnsDeleteCommand() {
         ArrayList<Index> deletePersonList = new ArrayList<>();
@@ -80,7 +85,7 @@ public class DeleteCommandParserTest {
         assertParseFailure(parser, "  1 2 3 ",
                 String.format(MESSAGE_INVALID_COMMAND_FORMAT, DeleteCommand.MESSAGE_USAGE));
     }
-
+    //@@author April0616
     @Test
     public void parse_invalidArgsMultiplePersonsManyWhiteSpacesLessComma_returnsDeleteCommand() {
         ArrayList<Index> deletePersonList = new ArrayList<>();

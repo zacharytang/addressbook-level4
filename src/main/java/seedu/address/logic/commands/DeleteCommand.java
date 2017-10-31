@@ -47,10 +47,12 @@ public class DeleteCommand extends UndoableCommand {
         this.targetTags = null;
     }
 
+    //@@author April0616
     public DeleteCommand(ArrayList<Index> targetIndexes) {
         this.targetIndexes = targetIndexes;
         this.targetTags = null;
     }
+
 
     //@@author nbriannl
     public DeleteCommand(Set<Tag> targetTags) {
@@ -107,7 +109,7 @@ public class DeleteCommand extends UndoableCommand {
         }
     }
 
-    //@@author
+    //@@author April0616
     /**
      * Generate the command result of the deletePersonList.
      * @param deletePersonList
@@ -135,6 +137,7 @@ public class DeleteCommand extends UndoableCommand {
 
     }
 
+    //@@author April0616
     @Override
     public boolean equals(Object other) {
         if (targetIndexes != null) {

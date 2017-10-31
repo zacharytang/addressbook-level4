@@ -55,6 +55,7 @@ public class TestUtil {
         return model.getAddressBook().getPersonList().get(index.getZeroBased());
     }
 
+    //@@author April0616
     /**
      * Remove the temporary test files and parents if they exist till the root of disk C.
      * @param path
