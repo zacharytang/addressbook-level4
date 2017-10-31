@@ -1,6 +1,7 @@
 package seedu.address.model;
 
 import static java.util.Objects.requireNonNull;
+import static seedu.address.commons.util.FileUtil.removeAppFile;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -12,6 +13,7 @@ import java.util.Set;
 
 import javafx.collections.ObservableList;
 import seedu.address.model.person.Person;
+import seedu.address.model.person.PhotoPath;
 import seedu.address.model.person.ReadOnlyPerson;
 import seedu.address.model.person.UniquePersonList;
 import seedu.address.model.person.exceptions.DuplicatePersonException;
@@ -174,20 +176,32 @@ public class AddressBook implements ReadOnlyAddressBook {
         return masterSet;
     }
 
+
     /**
-     * Removes {@code key} from this {@code AddressBook}.
+     * Removes the photo of the specified contact.
+     * @param photoPath
+     * @return
+     */
+    public void removeContactPhoto(PhotoPath photoPath) {
+        removeAppFile(photoPath.value);
+    }
+
+    /**
+     * Removes {@code key} from this {@code AddressBook}, and delete the related contact photos.
      * @throws PersonNotFoundException if the {@code key} is not in this {@code AddressBook}.
      */
     public boolean removePerson(ReadOnlyPerson key) throws PersonNotFoundException {
+        removeContactPhoto(key.getPhotoPath());
         return persons.remove(key);
     }
 
     /**
-     * Removes {@code keys} from this {@code AddressBook}.
+     * Removes {@code keys} from this {@code AddressBook}, and delete the related contact photos.
      * @throws PersonNotFoundException if one of the {@code keys} is not in this {@code AddressBook}.
      */
     public boolean removePersons(ArrayList<ReadOnlyPerson> keys) throws PersonNotFoundException {
         for (ReadOnlyPerson key : keys) {
+            removeContactPhoto(key.getPhotoPath());
             persons.remove(key);
         }
         return true;

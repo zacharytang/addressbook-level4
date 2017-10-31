@@ -4,6 +4,7 @@ import static java.util.Objects.requireNonNull;
 import static seedu.address.commons.util.FileUtil.copyFile;
 import static seedu.address.commons.util.FileUtil.getFileExtension;
 import static seedu.address.commons.util.FileUtil.haveSameContent;
+import static seedu.address.commons.util.FileUtil.removeAppFile;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_PHOTO;
 import static seedu.address.model.Model.PREDICATE_SHOW_ALL_PERSONS;
 
@@ -56,7 +57,7 @@ public class PhotoCommand extends UndoableCommand {
 
     private final Index targetIndex;
     private final String localPhotoPath;
-    private final PhotoPath photoPath;
+    private PhotoPath photoPath;
 
     /**
      * @param targetIndex of the person in the list to edit the photo path
@@ -68,8 +69,12 @@ public class PhotoCommand extends UndoableCommand {
 
         String trimmedPhotoPath = localPhotoPath.trim();
 
-        //copy the photo file in PC to the picture folders.
-        if (isValidLocalPhotoPath(trimmedPhotoPath)) {
+        if (trimmedPhotoPath.equals("")) {
+            this.localPhotoPath = "";
+            this.targetIndex = targetIndex;
+            this.photoPath = new PhotoPath("");
+
+        } else if (isValidLocalPhotoPath(trimmedPhotoPath)) {
             //not specified yet
             this.localPhotoPath = trimmedPhotoPath;
             String extension = getFileExtension(this.localPhotoPath);
@@ -100,6 +105,10 @@ public class PhotoCommand extends UndoableCommand {
         }
 
         ReadOnlyPerson personToPhoto = lastShownList.get(targetIndex.getZeroBased());
+
+        if (localPhotoPath.equals("")) {
+            removeAppFile(personToPhoto.getPhotoPath().value);
+        }
 
         Person photoedPerson = createPhotoedPerson(personToPhoto, photoPath);
 
@@ -135,22 +144,9 @@ public class PhotoCommand extends UndoableCommand {
         return num.toString() + fileExtension;
     }
 
-    /**
-     * Generate the Successful Message accordingly.
-     * @param personToPhoto
-     * @return successful message for adding photo path if the photo path string is not empty.
-     */
-    private String generateSuccessMsg(ReadOnlyPerson personToPhoto) {
-        if (photoPath.toString().isEmpty()) {
-            return String.format(MESSAGE_DELETE_PHOTO_SUCCESS, personToPhoto);
-        } else {
-            return String.format(MESSAGE_ADD_PHOTO_SUCCESS, personToPhoto);
-        }
-    }
 
     /**
-     * Creates and returns a {@code Person} with the details of {@code personToPhoto}
-     * photographed with {@code photoPersonDescriptor}.
+     * Creates and returns a {@code Person} with the details of {@code personToPhoto}.
      */
     public static Person createPhotoedPerson(ReadOnlyPerson personToPhoto,
                                               PhotoPath photoPath) {
@@ -162,6 +158,19 @@ public class PhotoCommand extends UndoableCommand {
                 personToPhoto.getRemark(), photoPath, personToPhoto.getTags(), personToPhoto.getBirthday());
 
         return photoPerson;
+    }
+
+    /**
+     * Generate the Successful Message accordingly.
+     * @param personToPhoto
+     * @return successful message for adding photo if the photo path string is not empty.
+     */
+    private String generateSuccessMsg(ReadOnlyPerson personToPhoto) {
+        if (photoPath.toString().isEmpty()) {
+            return String.format(MESSAGE_DELETE_PHOTO_SUCCESS, personToPhoto);
+        } else {
+            return String.format(MESSAGE_ADD_PHOTO_SUCCESS, personToPhoto);
+        }
     }
 
     /**

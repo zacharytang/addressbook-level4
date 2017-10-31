@@ -64,6 +64,17 @@ public class FileUtil {
     }
 
     /**
+     * If the file in the specific path in the app directory exists, delete the file in the path
+     * @param path
+     */
+    public static void removeAppFile(String path) {
+        File fileToDelete = new File(path);
+        if (fileToDelete.exists()) {
+            fileToDelete.delete();
+        }
+    }
+
+    /**
      * Compares whether two files in the specified paths have the same content.
      * @param firstPath
      * @param secondPath
