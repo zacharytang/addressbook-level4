@@ -75,7 +75,7 @@ public class PhotoCommand extends UndoableCommand {
         if (trimmedPhotoPath.equals("")) { //not specified yet
             this.localPhotoPath = "";
             this.targetIndex = targetIndex;
-            this.photoPath = new PhotoPath("");
+            this.photoPath = new PhotoPath(DEFAULT_PHOTO_PATH);
 
         } else if (isValidLocalPhotoPath(trimmedPhotoPath)) {
             //not specified yet
@@ -188,7 +188,7 @@ public class PhotoCommand extends UndoableCommand {
      * @return successful message for adding photo if the photo path string is not empty.
      */
     private String generateSuccessMsg(ReadOnlyPerson personToPhoto) {
-        if (photoPath.toString().isEmpty()) {
+        if (photoPath.toString().equals(DEFAULT_PHOTO_PATH)) {
             return String.format(MESSAGE_DELETE_PHOTO_SUCCESS, personToPhoto);
         } else {
             return String.format(MESSAGE_ADD_PHOTO_SUCCESS, personToPhoto);
