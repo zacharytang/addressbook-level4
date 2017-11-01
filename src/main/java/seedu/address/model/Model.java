@@ -31,12 +31,13 @@ public interface Model {
     /** Show direction to the given person from a given address **/
     void showDirectionsTo(ReadOnlyPerson target, Address address);
 
-    //@@author
+    //@@author April0616
     /** Deletes the given person. */
     void deletePerson(ReadOnlyPerson target) throws PersonNotFoundException;
 
     /** Deletes the given list of persons. */
     void deletePersons(ArrayList<ReadOnlyPerson> targets) throws PersonNotFoundException;
+    //@@author
 
     /** Adds the given person */
     void addPerson(ReadOnlyPerson person) throws DuplicatePersonException;

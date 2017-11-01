@@ -25,6 +25,7 @@ public class FindCommand extends Command {
     public static final String COMMAND_ALIAS = "f";
     public static final String COMMAND_SECONDARY = "search";
 
+    //@@author CindyTsai1
     public static final String MESSAGE_USAGE = COMMAND_WORD + ": Finds all persons whose information contain any of "
             + "the specified keywords (case-insensitive) and displays them as a list with index numbers.\n"
             + "Parameters: ["
@@ -117,6 +118,7 @@ public class FindCommand extends Command {
         return new CommandResult(getMessageForPersonListShownSummary(model.getFilteredPersonList().size()));
     }
 
+    //@@author
     @Override
     public boolean equals(Object other) {
         return other == this // short circuit if same object
@@ -124,6 +126,7 @@ public class FindCommand extends Command {
                 && this.predicate.equals(((FindCommand) other).predicate)); // state check
     }
 
+    //@@author CindyTsai1
     /**
      * Search for persons that contain the {@String keyword} in their name
      * @param name

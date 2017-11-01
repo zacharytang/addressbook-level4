@@ -32,7 +32,7 @@ import seedu.address.model.tag.Tag;
 public class DeleteCommandTest {
 
     private Model model = new ModelManager(getTypicalAddressBook(), new UserPrefs());
-
+    //@@author April0616
     @Test
     public void execute_validIndexUnfilteredList_success() throws Exception {
         ReadOnlyPerson personToDelete = model.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
@@ -48,6 +48,7 @@ public class DeleteCommandTest {
 
         assertCommandSuccess(deleteCommand, model, expectedMessage, expectedModel);
     }
+    //@@author
 
     //@@author nbriannl
     @Test
@@ -85,7 +86,7 @@ public class DeleteCommandTest {
         assertCommandFailure(deleteCommand2, model, Messages.MESSAGE_INVALID_TAG_PROVIDED);
     }
 
-    //@@author
+    //@@author April0616
     @Test
     public void execute_validIndexFilteredList_success() throws Exception {
         showFirstPersonOnly(model);

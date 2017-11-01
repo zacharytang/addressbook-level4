@@ -12,6 +12,7 @@ import javafx.scene.layout.Region;
 import seedu.address.commons.exceptions.IllegalValueException;
 import seedu.address.model.person.timetable.Timetable;
 
+//@@author zacharytang
 /**
  * Display for timetables in the UI
  */

@@ -5,9 +5,15 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 import static seedu.address.commons.core.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
 import static seedu.address.commons.core.Messages.MESSAGE_UNKNOWN_COMMAND;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_PHOTO;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_REMARK;
+import static seedu.address.testutil.TestUtil.createTempFile;
+import static seedu.address.testutil.TestUtil.removeAppFile;
+import static seedu.address.testutil.TestUtil.removeFileAndItsParentsTillRoot;
 import static seedu.address.testutil.TypicalIndexes.INDEX_FIRST_PERSON;
 
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -26,6 +32,7 @@ import seedu.address.logic.commands.FindCommand;
 import seedu.address.logic.commands.HelpCommand;
 import seedu.address.logic.commands.HistoryCommand;
 import seedu.address.logic.commands.ListCommand;
+import seedu.address.logic.commands.PhotoCommand;
 import seedu.address.logic.commands.RedoCommand;
 import seedu.address.logic.commands.RemarkCommand;
 import seedu.address.logic.commands.SelectCommand;
@@ -73,6 +80,7 @@ public class AddressBookParserTest {
         assertEquals(new EditCommand(INDEX_FIRST_PERSON, descriptor), command);
     }
 
+    //@@author April0616
     @Test
     public void parseCommand_remark() throws Exception {
         final Remark remark = new Remark("Likes to drink tea.");
@@ -80,6 +88,29 @@ public class AddressBookParserTest {
                 + INDEX_FIRST_PERSON.getOneBased() + " " + PREFIX_REMARK + " " + remark.value);
         assertEquals(new RemarkCommand(INDEX_FIRST_PERSON, remark), command);
     }
+
+    //@@author April0616
+    @Test
+    public void parseCommand_photo() throws Exception {
+        final String photoPath = createTempFile();
+
+        PhotoCommand command = (PhotoCommand) parser.parseCommand(PhotoCommand.COMMAND_WORD + " "
+                + INDEX_FIRST_PERSON.getOneBased() + " " + PREFIX_PHOTO + " " + photoPath);
+        String commandAppPath = command.getAppPhotoPath();
+
+        PhotoCommand newCommand = new PhotoCommand(INDEX_FIRST_PERSON, photoPath);
+        String newCommandAppPath = newCommand.getAppPhotoPath();
+
+        assertEquals(newCommand, command);
+
+        Path thisPhotoPath = Paths.get(photoPath);
+        removeFileAndItsParentsTillRoot(thisPhotoPath);
+
+        //remove the two temporary files saved in the app
+        removeAppFile(commandAppPath);
+        removeAppFile(newCommandAppPath);
+    }
+    //@@author
 
     @Test
     public void parseCommand_exit() throws Exception {
@@ -127,6 +158,7 @@ public class AddressBookParserTest {
         assertEquals(new SelectCommand(INDEX_FIRST_PERSON), command);
     }
 
+    //@@author zacharytang-reused
     @Test
     public void parseCommandAlias_add() throws Exception {
         Person person = new PersonBuilder().build();
@@ -282,6 +314,7 @@ public class AddressBookParserTest {
         assertEquals(new SelectCommand(INDEX_FIRST_PERSON), command);
     }
 
+    //@@author
     @Test
     public void parseCommand_redoCommandWord_returnsRedoCommand() throws Exception {
         assertTrue(parser.parseCommand(RedoCommand.COMMAND_WORD) instanceof RedoCommand);

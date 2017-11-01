@@ -48,6 +48,7 @@ public class ParserUtil {
         return Index.fromOneBased(Integer.parseInt(trimmedIndex));
     }
 
+    //@@author April0616
     /**
      * Parses {@code oneBasedIndexes} separated with commas into a {@Code ArrayList<Index>} and returns it.
      * Leading and trailing whitespaces will be trimmed.
@@ -73,6 +74,7 @@ public class ParserUtil {
 
         return deletePersons;
     }
+    //@@author
 
     /**
      * Parses a {@code Optional<String> name} into an {@code Optional<Name>} if {@code name} is present.
@@ -83,6 +85,7 @@ public class ParserUtil {
         return name.isPresent() ? Optional.of(new Name(name.get())) : Optional.empty();
     }
 
+    //@@author April0616
     /**
      * Parses a {@code Optional<String> gender} into an {@code Optional<Gender>} if {@code gender} is present.
      * See header comment of this class regarding the use of {@code Optional} parameters.
@@ -100,6 +103,7 @@ public class ParserUtil {
         requireNonNull(matricNo);
         return matricNo.isPresent() ? Optional.of(new MatricNo(matricNo.get())) : Optional.empty();
     }
+    //@@author
 
     /**
      * Parses a {@code Optional<String> phone} into an {@code Optional<Phone>} if {@code phone} is present.
@@ -140,6 +144,7 @@ public class ParserUtil {
         return tagSet;
     }
 
+    //@@author CindyTsai1
     /**
      * Parses {@code Optional<int> birthday} into a {@code HashMap<Birthday>} if {@code birthday} is present.
      * See header comment of this class regarding the use of {@code Optional} parameters.

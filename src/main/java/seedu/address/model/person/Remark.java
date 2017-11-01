@@ -2,6 +2,7 @@ package seedu.address.model.person;
 
 import static java.util.Objects.requireNonNull;
 
+//@@author April0616
 /**
  * Represents the remark of a person in the address book.
  */

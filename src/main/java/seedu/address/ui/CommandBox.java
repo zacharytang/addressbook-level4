@@ -95,6 +95,7 @@ public class CommandBox extends UiPart<Region> {
         commandTextField.positionCaret(commandTextField.getText().length());
     }
 
+    //@@author CindyTsai1-reused
     /**
      * Handles the Enter button pressed event.
      */

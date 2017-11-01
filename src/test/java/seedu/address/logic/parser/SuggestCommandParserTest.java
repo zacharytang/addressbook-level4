@@ -10,6 +10,7 @@ import org.junit.Test;
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.logic.parser.exceptions.ParseException;
 
+//@@author CindyTsai1
 public class SuggestCommandParserTest {
 
     private SuggestCommandParser parser = new SuggestCommandParser();

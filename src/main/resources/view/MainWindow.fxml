@@ -29,7 +29,7 @@
     </padding>
   </StackPane>
 
-  <StackPane fx:id="resultDisplayPlaceholder" maxHeight="150" minHeight="150" prefHeight="150" styleClass="pane-with-border" VBox.vgrow="NEVER">
+  <StackPane fx:id="resultDisplayPlaceholder" maxHeight="100" minHeight="100" prefHeight="100" styleClass="pane-with-border" VBox.vgrow="NEVER">
     <padding>
       <Insets bottom="5" left="10" right="10" top="5" />
     </padding>
@@ -51,11 +51,13 @@
       <StackPane fx:id="personListPanelPlaceholder" VBox.vgrow="ALWAYS" />
     </VBox>
 
+    <!-- @@author zacharytang -->
     <StackPane fx:id="infoPlaceholder" prefWidth="340" styleClass="pane-with-border">
       <padding>
         <Insets bottom="10" left="10" right="10" top="10" />
       </padding>
     </StackPane>
+    <!-- @@author -->
   </SplitPane>
 
   <StackPane fx:id="statusbarPlaceholder" VBox.vgrow="NEVER" />

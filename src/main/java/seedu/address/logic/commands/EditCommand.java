@@ -30,6 +30,7 @@ import seedu.address.model.person.MatricNo;
 import seedu.address.model.person.Name;
 import seedu.address.model.person.Person;
 import seedu.address.model.person.Phone;
+import seedu.address.model.person.PhotoPath;
 import seedu.address.model.person.ReadOnlyPerson;
 import seedu.address.model.person.Remark;
 import seedu.address.model.person.exceptions.DuplicatePersonException;
@@ -153,7 +154,7 @@ public class EditCommand extends UndoableCommand {
         }
     }
 
-    //@@author
+    //@@author April0616
     /**
      * Creates and returns a {@code Person} with the details of {@code personToEdit}
      * edited with {@code editPersonDescriptor}.
@@ -171,11 +172,12 @@ public class EditCommand extends UndoableCommand {
         Birthday updateBirthday = editPersonDescriptor.getBirthday().orElse(personToEdit.getBirthday());
         Timetable updatedTimetable = editPersonDescriptor.getTimetable().orElse(personToEdit.getTimetable());
         Remark updatedRemark = personToEdit.getRemark();
+        PhotoPath updatedPhotoPath = personToEdit.getPhotoPath();
         Set<Tag> updatedTags = editPersonDescriptor.getTags().orElse(personToEdit.getTags());
 
         return new Person(updatedName, updatedGender, updatedMatricNo,
                 updatedPhone, updatedEmail, updatedAddress,
-                updatedTimetable, updatedRemark, updatedTags, updateBirthday);
+                updatedTimetable, updatedRemark, updatedPhotoPath, updatedTags, updateBirthday);
     }
 
     //@@author nbriannl
@@ -251,6 +253,7 @@ public class EditCommand extends UndoableCommand {
             return Optional.ofNullable(name);
         }
 
+        //@@author April0616
         public void setGender(Gender gender) {
             this.gender = gender;
         }
@@ -266,6 +269,7 @@ public class EditCommand extends UndoableCommand {
         public Optional<MatricNo> getMatricNo() {
             return Optional.ofNullable(matricNo);
         }
+        //@@author
 
         public void setPhone(Phone phone) {
             this.phone = phone;

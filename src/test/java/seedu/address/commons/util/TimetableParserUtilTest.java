@@ -14,6 +14,7 @@ import seedu.address.commons.exceptions.IllegalValueException;
 import seedu.address.logic.parser.exceptions.ParseException;
 import seedu.address.model.person.timetable.TimetableInfo;
 
+//@@author zacharytang
 public class TimetableParserUtilTest {
 
     private static final String INVALID_URL = "https://www.google.com";

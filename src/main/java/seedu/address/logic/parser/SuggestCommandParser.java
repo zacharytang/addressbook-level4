@@ -9,12 +9,14 @@ import seedu.address.logic.commands.SuggestCommand;
 import seedu.address.logic.commands.UniqueCommandList;
 import seedu.address.logic.parser.exceptions.ParseException;
 
+//@@author CindyTsai1
 /**
  * Suggest user input command
  */
 public class SuggestCommandParser implements Parser<SuggestCommand> {
 
     private UniqueCommandList list;
+
     /**
      * Parses the given {@code String} of commandWord in the context of the SuggestCommand
      * and returns an SuggestCommand object for execution.

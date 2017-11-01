@@ -1,5 +1,6 @@
 package seedu.address.model.person.timetable;
 
+//@@author zacharytang
 /**
  * Represents a single slot in a timetable
  */

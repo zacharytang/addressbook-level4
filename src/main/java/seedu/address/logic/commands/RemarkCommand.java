@@ -15,6 +15,7 @@ import seedu.address.model.person.Remark;
 import seedu.address.model.person.exceptions.DuplicatePersonException;
 import seedu.address.model.person.exceptions.PersonNotFoundException;
 
+//@@author April0616
 /**
  * Edits the remark of a person to the address book.
  */
@@ -103,7 +104,7 @@ public class RemarkCommand extends UndoableCommand {
         Person remarkPerson = new Person(personToRemark.getName(), personToRemark.getGender(),
                 personToRemark.getMatricNo(), personToRemark.getPhone(),
                 personToRemark.getEmail(), personToRemark.getAddress(), personToRemark.getTimetable(),
-                remark, personToRemark.getTags(), personToRemark.getBirthday());
+                remark, personToRemark.getPhotoPath(), personToRemark.getTags(), personToRemark.getBirthday());
 
         return remarkPerson;
     }
