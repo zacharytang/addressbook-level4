@@ -52,12 +52,21 @@ public class ParserUtil {
     /**
      * Parses {@code oneBasedIndexes} separated with commas into a {@Code ArrayList<Index>} and returns it.
      * Leading and trailing whitespaces will be trimmed.
+     * @param splitString is the sign used to separate indexes, can be either comma or whitespace(s)
      * @throws IllegalValueException if one of the specified indexes is invalid (not non-zero unsigned integer).
      *
      */
-    public static ArrayList<Index> parseIndexes(String oneBasedIndexes) throws IllegalValueException {
+    public static ArrayList<Index> parseIndexes(String oneBasedIndexes, String splitString)
+            throws IllegalValueException {
         String trimmedIndexes = oneBasedIndexes.trim();
-        String[] indexes = trimmedIndexes.split(",");
+        String[] indexes;
+
+        if (splitString.equals(",")) {
+            indexes = trimmedIndexes.split(splitString);
+        } else {
+            indexes = trimmedIndexes.split(" +");
+        }
+
         ArrayList<Index> deletePersons = new ArrayList<>();
 
         for (String index : indexes) {

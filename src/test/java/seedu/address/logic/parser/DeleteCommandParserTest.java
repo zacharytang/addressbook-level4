@@ -76,14 +76,13 @@ public class DeleteCommandParserTest {
     }
     //@@author April0616
     @Test
-    public void parse_invalidArgsMultiplePersonsNoComma_returnsDeleteCommand() {
+    public void parse_validArgsMultiplePersonsSplitByWhiteSpace_returnsDeleteCommand() {
         ArrayList<Index> deletePersonList = new ArrayList<>();
         deletePersonList.add(INDEX_FIRST_PERSON);
         deletePersonList.add(INDEX_SECOND_PERSON);
         deletePersonList.add(INDEX_THIRD_PERSON);
 
-        assertParseFailure(parser, "  1 2 3 ",
-                String.format(MESSAGE_INVALID_COMMAND_FORMAT, DeleteCommand.MESSAGE_USAGE));
+        assertParseSuccess(parser, "  1 2 3 ", new DeleteCommand(deletePersonList));
     }
     //@@author April0616
     @Test

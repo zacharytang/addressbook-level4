@@ -18,7 +18,16 @@ import seedu.address.model.tag.Tag;
  */
 public class DeleteCommandParser implements Parser<DeleteCommand> {
 
-    //@@author nbriannl
+    //@@author April0616
+    public static final String DELETE_ONE_PERSON_VALIDATION_REGEX = "-?\\d+";
+
+    public static final String DELETE_MULTIPLE_PERSON_COMMA_VALIDATION_REGEX =
+            "((-?\\d([\\s+]*)\\,([\\s+]*)(?=-?\\d))|-?\\d)+";
+
+    public static final String DELETE_MULTIPLE_PERSON_WHITESPACE_VALIDATION_REGEX =
+            "(((-?\\d)([\\s]+)(?=-?\\d))|-?\\d)+";
+
+
     /**
      * Parses the given {@code String} of arguments in the context of the DeleteCommand
      * and returns an DeleteCommand object for execution.
@@ -39,7 +48,7 @@ public class DeleteCommandParser implements Parser<DeleteCommand> {
                 throw new ParseException(
                         String.format(MESSAGE_INVALID_COMMAND_FORMAT, DeleteCommand.MESSAGE_USAGE));
             }
-        } else if (preamble.matches("-?\\d+")) { // code block for delete for a person
+        } else if (preamble.matches(DELETE_ONE_PERSON_VALIDATION_REGEX)) { // code block for delete for a person
             try {
                 Index index = ParserUtil.parseIndex(args);
                 return new DeleteCommand(index);
@@ -47,16 +56,26 @@ public class DeleteCommandParser implements Parser<DeleteCommand> {
                 throw new ParseException(
                         String.format(MESSAGE_INVALID_COMMAND_FORMAT, DeleteCommand.MESSAGE_USAGE));
             }
-        } else if (preamble.matches("((-?\\d([\\s+]*)\\,([\\s+]*)(?=-?\\d))|-?\\d)+")) {
-            //code block for delete multiple persons
+        } else if (preamble.matches(DELETE_MULTIPLE_PERSON_COMMA_VALIDATION_REGEX)) {
+            //code block for delete multiple persons, input string separated by comma
             try {
-                ArrayList<Index> deletePersons = ParserUtil.parseIndexes(args);
+                ArrayList<Index> deletePersons = ParserUtil.parseIndexes(args, ",");
+                return new DeleteCommand(deletePersons);
+            } catch (IllegalValueException ive) {
+                throw new ParseException(
+                        String.format(MESSAGE_INVALID_COMMAND_FORMAT, DeleteCommand.MESSAGE_USAGE));
+            }
+        } else if (preamble.matches(DELETE_MULTIPLE_PERSON_WHITESPACE_VALIDATION_REGEX)) {
+            //code block for delete multiple persons, input indexes separated by whitespace
+            try {
+                ArrayList<Index> deletePersons = ParserUtil.parseIndexes(args, " ");
                 return new DeleteCommand(deletePersons);
             } catch (IllegalValueException ive) {
                 throw new ParseException(
                         String.format(MESSAGE_INVALID_COMMAND_FORMAT, DeleteCommand.MESSAGE_USAGE));
             }
         }
+
         throw new ParseException(
                 String.format(MESSAGE_INVALID_COMMAND_FORMAT, DeleteCommand.MESSAGE_USAGE));
     }
