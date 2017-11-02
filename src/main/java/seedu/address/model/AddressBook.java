@@ -2,6 +2,7 @@ package seedu.address.model;
 
 import static java.util.Objects.requireNonNull;
 import static seedu.address.commons.util.FileUtil.removeAppFile;
+import static seedu.address.logic.commands.PhotoCommand.DEFAULT_PHOTO_PATH;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -187,13 +188,26 @@ public class AddressBook implements ReadOnlyAddressBook {
         removeAppFile(photoPath.value);
     }
 
+    /**
+     * Check whether the contact photo is the default photo
+     * @param photoPath of the photo
+     * @return true if the photo is the default photo
+     */
+    public static boolean isDefaultPhoto(PhotoPath photoPath) {
+        String photoPathValue = photoPath.value;
+        return photoPathValue.equals(DEFAULT_PHOTO_PATH);
+    }
 
     /**
      * Removes {@code key} from this {@code AddressBook}, and delete the related contact photos.
      * @throws PersonNotFoundException if the {@code key} is not in this {@code AddressBook}.
      */
     public boolean removePerson(ReadOnlyPerson key) throws PersonNotFoundException {
-        removeContactPhoto(key.getPhotoPath());
+        PhotoPath photoPath = key.getPhotoPath();
+        if (!isDefaultPhoto(photoPath)) {
+            removeContactPhoto(photoPath);
+        }
+
         return persons.remove(key);
     }
 
@@ -203,7 +217,10 @@ public class AddressBook implements ReadOnlyAddressBook {
      */
     public boolean removePersons(ArrayList<ReadOnlyPerson> keys) throws PersonNotFoundException {
         for (ReadOnlyPerson key : keys) {
-            removeContactPhoto(key.getPhotoPath());
+            PhotoPath photoPath = key.getPhotoPath();
+            if (!isDefaultPhoto(photoPath)) {
+                removeContactPhoto(photoPath);
+            }
             persons.remove(key);
         }
         return true;

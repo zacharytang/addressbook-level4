@@ -2,6 +2,7 @@ package seedu.address.model;
 
 import static java.util.Objects.requireNonNull;
 import static seedu.address.commons.util.CollectionUtil.requireAllNonNull;
+import static seedu.address.model.AddressBook.isDefaultPhoto;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -20,6 +21,7 @@ import seedu.address.commons.events.model.PersonAddressDisplayDirectionsEvent;
 import seedu.address.commons.events.model.PersonAddressDisplayMapEvent;
 import seedu.address.model.person.Address;
 import seedu.address.model.person.Person;
+import seedu.address.model.person.PhotoPath;
 import seedu.address.model.person.ReadOnlyPerson;
 import seedu.address.model.person.exceptions.DuplicatePersonException;
 import seedu.address.model.person.exceptions.PersonNotFoundException;
@@ -93,7 +95,6 @@ public class ModelManager extends ComponentManager implements Model {
     @Override
     public synchronized void deletePerson(ReadOnlyPerson target) throws PersonNotFoundException {
         addressBook.removePerson(target);
-        addressBook.removeContactPhoto(target.getPhotoPath());
         indicateAddressBookChanged();
         checkMasterTagListHasAllTagsUsed();
     }
