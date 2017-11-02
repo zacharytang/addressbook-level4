@@ -114,7 +114,8 @@ public class PhotoCommand extends UndoableCommand {
 
         //if the command is 'ph/' or the contact has one original photo, then delete it.
         String originAppPhotoPath = personToPhoto.getPhotoPath().value;
-        if (localPhotoPath.equals("") || !(originAppPhotoPath.equals(DEFAULT_PHOTO_PATH))) {
+
+        if (!(originAppPhotoPath.equals(DEFAULT_PHOTO_PATH))) {
             removeAppFile(originAppPhotoPath);
         }
 
