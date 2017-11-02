@@ -56,7 +56,7 @@ public class PhotoCommand extends UndoableCommand {
             "Photo Path should be the absolute path in your PC. It should be a string started with the name of "
                     + "your disk, followed by several groups of backslash and string, like c:\\desktop\\happy.jpg";
     public static final String FILE_SAVED_PARENT_PATH = "src/main/resources/images/contactPhotos/";
-    public static final String DEFAULT_PHOTO_PATH = "src/main/resources/images/help_icon.png";
+    public static final String DEFAULT_PHOTO_PATH = "src/main/resources/images/defaultPhoto.jpg";
 
     private final Index targetIndex;
     private final String localPhotoPath;
