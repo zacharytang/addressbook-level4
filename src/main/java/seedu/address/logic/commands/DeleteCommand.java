@@ -32,6 +32,7 @@ public class DeleteCommand extends UndoableCommand {
             + "        OR  " + PREFIX_TAG + "TAG (case-sensitive)\n "
             + "Example: " + COMMAND_WORD + " 1\n"
             + "         " + COMMAND_WORD + " 1, 2, 3\n"
+            + "         " + COMMAND_WORD + " 2 3 4\n"
             + "         " + COMMAND_WORD + " " + PREFIX_TAG + "friend\n"
             + "         " + COMMAND_WORD + " " + PREFIX_TAG + "friend " + PREFIX_TAG + "enemy";
 
