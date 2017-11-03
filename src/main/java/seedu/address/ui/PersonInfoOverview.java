@@ -2,6 +2,7 @@ package seedu.address.ui;
 
 import java.io.File;
 import java.net.URI;
+import java.util.ArrayList;
 import java.util.logging.Logger;
 
 import com.google.common.eventbus.Subscribe;
@@ -105,7 +106,9 @@ public class PersonInfoOverview extends UiPart<Region> {
 
         timetablePlaceholder.getChildren().removeAll();
 
-        timetableDisplay = new TimetableDisplay(new Timetable[]{ person.getTimetable() });
+        ArrayList<Timetable> timetableToDisplay = new ArrayList<>();
+        timetableToDisplay.add(person.getTimetable());
+        timetableDisplay = new TimetableDisplay(timetableToDisplay);
         timetablePlaceholder.getChildren().add(timetableDisplay.getRoot());
     }
 
@@ -167,6 +170,7 @@ public class PersonInfoOverview extends UiPart<Region> {
         }
     }
 
+    //@@author zacharytang
     @Subscribe
     private void handlePersonSelectedEvent(PersonSelectedEvent event) {
         logger.info(LogsCenter.getEventHandlingLogMessage(event));

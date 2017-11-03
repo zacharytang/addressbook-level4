@@ -5,6 +5,9 @@ import static seedu.address.model.person.timetable.Timetable.ARRAY_TIMES;
 import static seedu.address.model.person.timetable.Timetable.ARRAY_WEEKS;
 import static seedu.address.model.person.timetable.Timetable.WEEK_ODD;
 
+import java.sql.Time;
+import java.util.ArrayList;
+
 import javafx.fxml.FXML;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
@@ -23,7 +26,7 @@ public class TimetableDisplay extends UiPart<Region> {
     private static final String COLOUR_BORDER = "#000000";
 
     private static final String FXML = "TimetableDisplay.fxml";
-    private Timetable[] timetables;
+    private ArrayList<Timetable> timetables;
 
     @FXML
     private GridPane oddGrid;
@@ -31,7 +34,7 @@ public class TimetableDisplay extends UiPart<Region> {
     @FXML
     private GridPane evenGrid;
 
-    public TimetableDisplay(Timetable[] timetables) {
+    public TimetableDisplay(ArrayList<Timetable> timetables) {
         super(FXML);
 
         this.timetables = timetables;
