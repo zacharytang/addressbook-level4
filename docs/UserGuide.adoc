@@ -18,7 +18,7 @@ By: `CS2103AUG2017-W09-B1`      Since: `AUG 2017`      Licence: `MIT`
 Thank you for downloading **UniFy**! We're glad that you've chosen us to help you manage your hectic university life.
 
 **UniFy** is a personal assistant to your everyday life in NUS. It helps you maintain your numerous groups,
-tells you when your friends are free for lunch and find common time for project meetings. It even helps you find directions to
+tells you when your friends are free for lunch, and finds common time for project meetings. It even helps you find directions to
 wherever your friends might be!
 
 We know that time is precious for university students, so we made **UniFy** as simple to use as possible. You only need commands
@@ -159,21 +159,23 @@ Examples:
 * `add s/facebook John Doe`
 * `add s/Instagram John Doe`
 
-=== Adding/Deleting a Photo for a person : `photo` _(Coming in v1.4)_
+=== Adding/Deleting a Photo for a person : `photo` _(Since v1.4)_
 ____
 _When you study too much, sometimes, you forget how someone looks like._
 ____
-Adds or removes a photo to an existing person in the address book. +
+You can add or remove a photo to an existing person in the address book. +
 Format: +
-(Add photo) `photo INDEX [ph/PHOTO PATH]` +
-(Delete photo) `photo INDEX [ph/]` +
+(Add photo) `photo INDEX ph/PHOTO PATH` +
+(Delete photo) `photo INDEX` +
 Alternatives: `ph`
 
 ****
 * Edits the photo of the person at the specified `INDEX`.
-* Ensure that format of the path to the photo file is correct.
 * The file path of the photo will be updated to the new path.
 ****
+
+[IMPORTANT]
+Ensure that format of the path to the photo is correct.
 
 Examples:
 
@@ -182,18 +184,18 @@ Examples:
 Add the picture 'Amy_selfie.jpg' in the specified location to the 1st person in the last shown list. +
 The photo of the 1st person will be shown while clicking on the name.
 * `list` +
-`photo 2 ph/` +
+`photo 2` +
 Removes the picture from the 2nd person in the last shown list.
 * `find n/Betsy` +
-`photo 1 ph/` +
+`photo 1` +
 Removes the picture from the 1st person in the results of the `find` command.
 
-=== Giving a remark to a person : `remark` _(Since v1.1)_
+=== Giving the remark to a person : `remark` _(Since v1.1)_
 ____
 _Sometimes you want to remind yourself how this person was like in a funny incident. Or you owe friends money for last night's supper. +
 Tags are too short, and your remarks for a person are more descriptive and unique. UniFy lets you add a remark to a person you can always look back on._
 ____
-Adds or Deletes a remark to the specified person from the address book. +
+You can add a remark to any person in UniFy, keeping any special information you might want to remember. +
 Format: +
 (Add remark) `remark INDEX r/REMARK` +
 (Delete remark): `remark INDEX r/`
@@ -216,17 +218,17 @@ ____
 _Want to list all contacts for an overview?_
 ____
 
-Shows a list of all persons in the address book. +
+Use this command to show a list of all persons stored. +
 Format: `list` +
 Alternatives: `l` , `showall`, `viewall`
 
-=== Locating persons by filters : `find`
+=== Locating persons by filters : `find` _(Since v1.4)_
 ____
 _Display your contacts how you like it. All of them? Just your classmates for a particular module? +
 Want to know who's birthday is in this month? Unify every common contact together and list them as one._
 ____
 
-Finds persons whose information contain any of the given keywords from each category. +
+You can find people whose information contains any of the given keywords from each category. +
 Format: `find [n/NAME] [t/Tag] [p/PHONE] [e/EMAIL] [b/BIRTHDAY MONTH]...` +
 Alternatives: `f` , `search`
 
@@ -255,9 +257,9 @@ Returns all persons in the address book having birthdays in `December`
 
 === Sorting all persons : `sort` _(Coming in v1.5)_
 ____
-_Sometimes, you just meet too many people in University. Do not worry, get all your contacts in order._
+_Sometimes, you just meet too many people in University. Don't worry, get all your contacts in order._
 ____
-Shows a list of all persons in the address book by arranging their names in alphabetical order. +
+Shows the list of all persons in the current list in your address book by arranging their names in alphabetical order. +
 Format: +
 (Sort by name in ascending order) `sort ASC` +
 (Sort by name in descending order) `sort DESC`
@@ -269,7 +271,7 @@ Alternatives: `s` , `sortall`, `arrange`
 ____
 _Made a mistake? Someone changed their contact details? Edit it._
 ____
-Edits an existing person in the address book. +
+Using this command, you can edit the details of an existing person in your address book +
 Format: `edit INDEX [n/NAME] [g/GENDER] [m/MATRIC_NO] [p/PHONE] [e/EMAIL] [a/ADDRESS] [b/BIRTHDAY] [tt/TIMETABLE_URL] [t/TAG]...` +
 Alternatives: `e` , `modify`, `change`
 
@@ -288,18 +290,18 @@ Edits the phone number, gender and email address of the 1st person to be `912345
 * `edit 2 n/Betsy Crower m/A0162522j b/14081998 t/` +
 Edits the name, matriculation number and birthday of the 2nd person to be `Betsy Crower`, `A0162522j`, `14081998` and clears all existing tags.
 
-==== Editing a tag _(Added since v1.2)_
+==== Editing a tag _(Since v1.2)_
 ____
 _When you need to edit module tags of classmates when advancing from a prerequisite module (e.g. CS1010 -> CS1020),
 changing each of their tag to an updated one is too tedious! UniFy lets you simply edit a particular tag for all contacts in one command._ +
 ____
 
-Replaces the specified tag word to a specified new word for all people containing the specified tag +
+You can replace a tag to a new word for all people that have the tag specified +
 Format: `edit old/OLDTAG new/NEWTAG` +
 Alternatives: `e` , `modify`, `change`
 
 ****
-* The tag that you want to replace has to already exist in the address book .
+* The tag that you want to replace has to be an existing tag.
 * Tags are case-sensitive.
 ****
 
@@ -311,17 +313,20 @@ Examples:
 [TIP]
 Editing a person's tag only edits the tag(s) for a *single* person. This command edits one tag name for *all* people.
 
-=== Deleting a person, multiple people or a tag: `delete`
-==== Deleting a person or multiple persons _(Added since v1.3)_
+=== Deleting multiple persons or tags: `delete`
+==== Deleting multiple persons _(since v1.3)_
 ____
 _Some people just have to go away in your life. Sometimes they leave you. Delete these people out of UniFy as well._
 ____
-By specifying an index or multiple indexes, deletes the specified person(s) in the most recent listing from the address book. +
-Format: `delete INDEX1, INDEX2, INDEX3...` +
+By specifying an index or multiple indexes, you can delete specified people in the most recent listing from the address book. +
+Format: +
+`delete INDEX1, INDEX2, INDEX3...`(separated by commas) +
+`delete INDEX1 INDEX2 INDEX3...` (separated by whitespaces) +
 Alternatives: `d` , `remove`
 
 ****
 * UniFy accepts duplicated indexes.
+* When you delete your contacts, their contact photos will also be deleted.
 ****
 
 Examples:
@@ -335,20 +340,19 @@ Deletes the 2nd person in the address book.
 Deletes the 2nd, 3rd, 4th persons in the address book.
 
 * `list` +
-`delete 2, 2, 4` +
+`delete 2 2 4` +
 Deletes the 2nd and 4th persons in the address book.
 
 * `find n/Betsy` +
-`delete 1, 5` +
+`delete 1 5` +
 Deletes the 1st and 5th persons in the results of the `find` command.
 
-==== Deleting old contacts
+==== Deleting old contacts (Coming in v2.0)
 ____
 _Some people you do not talk for months. Maybe a group mate from a previous module you never see ever again.
 They drift away, and out of UniFy they go as well._
 ____
-Deletes the contacts who you have not viewed/edited/listed by the 'edit', 'photo' or 'find' command
-for a certain number of months. +
+Deletes the contacts which you have not viewed/edited/listed for a certain number of months. +
 Format: `delete old/NUM_OF_MONTH` +
 Alternatives: `d` , `remove`
 
@@ -359,15 +363,16 @@ Alternatives: `d` , `remove`
 Examples:
 
 * `delete old/2` +
-Deletes all the contacts which you have not viewed/edited/listed by the 'edit', 'photo' or 'find' command for the past 2 months.
+Deletes all the contacts which you have not viewed/edited/listed for the past 2 months.
 
-==== Deleting a Tag (or multiple Tags) _(Added since v1.1)_
+==== Deleting a Tag (or multiple Tags) _(Since v1.1)_
 ____
 _You have just finished a project in a module. Having the 'groupmate' tag to your project mates seems rude for you since
 the project is alreadt over.
 Instead of going through each member one by one, delete that particular 'groupmate' tag in one go!_
 ____
-Deletes the specified tag from all people containing the tag in the address book. +
+
+Deletes a tag you specify from all people containing the tag in the address book. +
 Format: `delete t/TAG...` +
 Alternatives: `d` , `remove`
 
@@ -390,12 +395,12 @@ Deletes the tags 'module1' and 'module2' from all people containing one of the t
 
 === Selecting a person : `select`
 
-Selects the person identified by the index number used in the last person listing. +
+You can select a person, identified by the number used in the last person listing. +
 Format: `select INDEX` +
 Alternatives: `s`, `choose`
 
 ****
-* Selects the person and loads the Google search page for the person at the specified `INDEX`.
+* Selects the person and displays the information for the person at the specified `INDEX`.
 ****
 
 Examples:
@@ -412,28 +417,28 @@ Selects the 1st person in the results of the `find` command.
 ____
 _"When are all of you free?" is an extremely common question in University. Let us solve that._
 ____
-Views the combined timetables of a group of persons, selected by indexes. +
+You can view the combined timetables of a group of people, selected by indexes. +
 Format: `whenfree [INDEX]...`
 
 Examples:
 
 * `whenfree 1 2` +
-Displays a combined timetable for the 1st and 2nd person in the address book
+Displays a combined timetable for the 1st and 2nd person in the address book.
 
 * `whenfree` +
-Displays a combined timetable for all listed users
+Displays a combined timetable for all listed users.
 
 ****
-* Creates a combined timetable representing all the persons chosen
-* If no index is specified, displays the timetable representing all the persons currently listed
-* All persons specified *must have timetables added*
+* Creates a combined timetable representing all the persons chosen.
+* If no index is specified, displays the timetable representing all the persons currently listed.
+* All persons specified *must have timetables added*.
 ****
 
-=== Open a Google Maps view of a selected person's address : `gmaps` _(Added since v1.3)_
+=== Opening a Google Maps view of an address : `gmaps` _(Since v1.3)_
 ____
 _You are meeting your group mate at his house. But where is his house on the map?_
 ____
-For a person specified by an index, opens a Google Maps view of the person's address location. +
+For a person specified by an index, opens a Google Maps view of the person's address. +
 If you specify an address, gives the Google Maps directions from the given address to the person's location. +
 Format: `gmaps INDEX [a/ADDRESS]` +
 Alternatives: `g`, `map`, `maps`
@@ -454,7 +459,7 @@ Opens the Google Maps directions from Blk 632 Yishun St 61 to the address of the
 ____
 _It is Summer break. Who is there to call for late night supper near your home?_
 ____
-Shows a list of persons who's address is nearby a specified *address* within a specified radius. +
+Shows a list of persons whose addresses are nearby a specified *address* within a specified radius. +
 Format: `nearby a/ADDRESS d/DISTANCE` +
 Alternatives: `n`, `nearme`, `closeby`, `neighbours` `neighbors`
 
@@ -477,18 +482,18 @@ Alternatives: `ct`, `center`, `wheremeet`
 
 ****
 * Specifying an `ADDRESS` will include that address in calculating the central location.
-* If an `INDEX`, or multiple `INDEX` es are specified, shows the central location among the specified people with these indexes. +
+* If an `INDEX`, or more than one `INDEX` is specified, shows the central location among the specified people with these indexes. +
 ****
 
 Example:
 
 * `list` +
 `central` +
-Show the central location among the persons most recently listed.
+Shows the central location among the persons most recently listed.
 
 * `list` +
 `central a/Blk 123 Kent Ridge Drive` +
-Show the central location among the persons most recently listed and Blk 123 Kent Ridge Drive.
+Shows the central location among the persons most recently listed and Blk 123 Kent Ridge Drive.
 
 * `list` +
 `central 1 5 6` +
@@ -522,14 +527,15 @@ Alternatives: `u`
 
 [NOTE]
 ====
-Undoable commands: those commands that modify the address book's content (`add`, `delete`, `edit` and `clear`).
+Undoable commands: those commands that modify the address book's content (`add`, `delete`, `edit` and `clear`). +
+Undoing a DeleteCommand to recover the persons you deleted does not recover their deleted contact photos, you should add those photos back manually.
 ====
 
 Examples:
 
-* `delete 1, 2` +
+* `delete 1 2` +
 `list` +
-`undo` (reverses the `delete 1, 2` command) +
+`undo` (reverses the `delete 1 2` command, but will not recover their contact photos) +
 
 * `select 1` +
 `list` +
@@ -590,9 +596,9 @@ Alternatives: `p` , `code`
 Example:
 
 * `password 123456789` +
-Adds 123456789 as a password to UniFy.
+Adds 123456789 as a password.
 * `password` +
-To clear the password set in UniFy.
+To clear the password set.
 
 === Exiting the program : `exit`
 ____
@@ -648,14 +654,14 @@ Clicking on the address in the address book will open a Google Map map view of t
 *Q*: How do I transfer my data to another Computer? +
 *A*: Install the app in the other computer and overwrite the empty data file it creates with the file that contains the data of your previous Address Book folder.
 
-== Command Summary
+== Command Summary (v1.4)
 
-* *Add* : `add n/NAME g/GENDER p/PHONE_NUMBER e/EMAIL a/ADDRESS [m/MATRIC_NUMBER] [b/BIRTHDAY] [tt/TIMETABLE_URL] [t/TAG]... [tmpt/NUM_OF_MONTHS/TEMPORARY TAG]...` +
-e.g. `add n/John Doe g/Male p/98765432 e/johnd@example.com a/John street, block 123, #01-01 m/A0134232H tt/http://modsn.us/abCdE t/friend t/colleague tmpt/3/projectA`
+* *Add* : `add n/NAME g/GENDER p/PHONE_NUMBER e/EMAIL a/ADDRESS m/MATRIC_NUMBER b/BIRTHDAY tt/TIMETABLE_URL [t/TAG]...` +
+e.g. `add n/John Doe g/Male p/98765432 e/johnd@example.com a/John street, block 123, #01-01 m/A0134232H tt/http://modsn.us/abCdE t/friend t/colleague`
 * *Clear* : `clear`
-* *Delete (Person)* : `delete INDEX1, INDEX2, INDEX3` +
-e.g. `delete 1, 2, 3`
-* *Delete (Tag)* : `delete [t/TAG]...` +
+* *Delete (Person)* : `delete INDEX1 INDEX2 INDEX3` +
+e.g. `delete 1 2 3`
+* *Delete (Tag)* : `delete t/TAG...` +
 e.g. `delete t/modulemate t/colleague`
 * *Edit (Person)* : `edit INDEX [n/NAME] [g/GENDER] [m/MATRIC_NO] [p/PHONE] [e/EMAIL] [a/ADDRESS] [b/BIRTHDAY] [tt/TIMETABLE_URL] [t/TAG]...` +
 e.g. `edit 2 n/James Lee e/jameslee@example.com b/19051994`
@@ -663,16 +669,21 @@ e.g. `edit 2 n/James Lee e/jameslee@example.com b/19051994`
 e.g. `edit tag/friends tag/enemy`
 * *Photo* : `photo INDEX ph/PHOTO_PATH` +
 e.g. `photo 1 ph/ C:/desktop/photo.jpg`
+* *Delete Photo* : `photo INDEX` +
+e.g. photo 1
 * *Remark* : `remark INDEX r/REMARK ` +
 e.g. `remark 2 r/Likes to drink coffee.`
+* *Delete Remark* : `remark INDEX` +
+e.g. remark 2
 * *Find* : `find [n/NAME] [t/Tag] [p/PHONE] [e/EMAIL] [b/BIRTHDAY MONTH] [r/remark]...` +
 e.g. `find n/James Jake`
 * *Google Maps* `gmaps INDEX`
-* *Nearby* `nearby a/ADDRESS d/DISTANCE` +
-e.g. `nearby a/123, Clementi Rd, 1234665 d/500`
-* *Sort (in Ascending Order)* `sort ASC`
-* *Sort (in Descending Order)* `sort DESC`
-* *Central* `central`
+//following command not come in v1.4 yet
+//* *Nearby* `nearby a/ADDRESS d/DISTANCE` +
+//e.g. `nearby a/123, Clementi Rd, 1234665 d/500`
+//* *Sort (in Ascending Order)* `sort ASC`
+//* *Sort (in Descending Order)* `sort DESC`
+//* *Central* `central`
 * *List* : `list`
 * *Help* : `help`
 * *Select* : `select INDEX` +
@@ -689,7 +700,7 @@ e.g.`select 2`
 |help |-|-|-|-|-
 |add | a | insert |-|-|-
 |photo | ph |-|-|-|-
-|remark |-|-|-|-|-
+|remark | rm |-|-|-|-
 |list | l | showall | viewall |-|-
 |find | f | search |-|-|-
 |sort | s | sortall | arrange |-|-
@@ -726,5 +737,11 @@ e.g.`select 2`
 * `gmaps` command
 * `delete` support for multiple persons
 * Auto-correct command suggested
+* Display of person's information on `select`
 
+=== Version 1.4
+* Display of all tags
+* Display of person's timetable on `select`
+* Support for profile photo uploading
+* Support for `find` using more fields
 |=======
