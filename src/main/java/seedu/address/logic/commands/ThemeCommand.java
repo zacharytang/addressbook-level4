@@ -24,6 +24,7 @@ public class ThemeCommand extends UndoableCommand {
             + "         " + COMMAND_WORD + " light";
 
     public static final String MESSAGE_SUCCESS = "Theme switched: %1$s";
+    public static final String VIEW_PATH = "/view/";
 
     private final String themeKeyword;
 
@@ -39,6 +40,7 @@ public class ThemeCommand extends UndoableCommand {
         requireNonNull(model);
 
         String themeToSwitch;
+        String currentTheme = model.getCurrentTheme();
 
         HashMap<String, String> themes = model.getThemeMap();
 
@@ -46,6 +48,10 @@ public class ThemeCommand extends UndoableCommand {
             themeToSwitch = themes.get(themeKeyword);
         } else {
             throw new CommandException(Messages.MESSAGE_THEME_NOT_FOUND);
+        }
+
+        if (currentTheme.equals(VIEW_PATH + themeToSwitch)) {
+            throw new CommandException(Messages.MESSAGE_ALREADY_IN_THEME);
         }
 
         EventsCenter.getInstance().post(new ChangeThemeRequestEvent(themeToSwitch));
