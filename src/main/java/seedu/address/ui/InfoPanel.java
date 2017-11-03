@@ -11,6 +11,7 @@ import seedu.address.commons.core.LogsCenter;
 import seedu.address.commons.events.model.PersonAddressDisplayDirectionsEvent;
 import seedu.address.commons.events.model.PersonAddressDisplayMapEvent;
 import seedu.address.commons.events.ui.PersonSelectedEvent;
+import seedu.address.commons.events.ui.TimetableDisplayEvent;
 
 //@@author zacharytang
 /**
@@ -24,6 +25,7 @@ public class InfoPanel extends UiPart<Region> {
 
     private BrowserPanel browserPanel;
     private PersonInfoOverview infoOverview;
+    private CombinedTimetableDisplay combinedTimetableDisplay;
 
     @FXML
     private StackPane browserPlaceholder;
@@ -31,16 +33,23 @@ public class InfoPanel extends UiPart<Region> {
     @FXML
     private StackPane infoOverviewPlaceholder;
 
+    @FXML
+    private StackPane combinedTimetablePlaceholder;
 
     public InfoPanel() {
         super(FXML);
 
-        registerAsAnEventHandler(this);
         browserPanel = new BrowserPanel();
         browserPlaceholder.getChildren().add(browserPanel.getRoot());
 
         infoOverview = new PersonInfoOverview();
         infoOverviewPlaceholder.getChildren().add(infoOverview.getRoot());
+
+        combinedTimetableDisplay = new CombinedTimetableDisplay();
+        combinedTimetablePlaceholder.getChildren().add(combinedTimetableDisplay.getRoot());
+
+        infoOverviewPlaceholder.toFront();
+        registerAsAnEventHandler(this);
     }
 
     public void freeResources() {
@@ -63,5 +72,11 @@ public class InfoPanel extends UiPart<Region> {
     public void handlePersonAddressDisplayMapEvent(PersonAddressDisplayMapEvent event) {
         logger.info(LogsCenter.getEventHandlingLogMessage(event));
         browserPlaceholder.toFront();
+    }
+
+    @Subscribe
+    public void handleTimetableDisplayEvent(TimetableDisplayEvent event) {
+        logger.info(LogsCenter.getEventHandlingLogMessage(event));
+        combinedTimetablePlaceholder.toFront();
     }
 }

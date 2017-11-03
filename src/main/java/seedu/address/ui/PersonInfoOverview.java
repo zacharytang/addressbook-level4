@@ -2,6 +2,7 @@ package seedu.address.ui;
 
 import java.io.File;
 import java.net.URI;
+import java.util.ArrayList;
 import java.util.logging.Logger;
 
 import com.google.common.eventbus.Subscribe;
@@ -17,6 +18,7 @@ import seedu.address.commons.core.LogsCenter;
 import seedu.address.commons.events.ui.PersonPanelSelectionChangedEvent;
 import seedu.address.commons.events.ui.PersonSelectedEvent;
 import seedu.address.model.person.ReadOnlyPerson;
+import seedu.address.model.person.timetable.Timetable;
 
 //@@author zacharytang
 /**
@@ -60,7 +62,7 @@ public class PersonInfoOverview extends UiPart<Region> {
 
         this.person = null;
         loadDefaultPerson();
-        
+
         contactPhoto.fitWidthProperty().bind(contactPhotoPane.widthProperty());
         contactPhoto.fitHeightProperty().bind(contactPhotoPane.heightProperty());
         registerAsAnEventHandler(this);
@@ -104,7 +106,9 @@ public class PersonInfoOverview extends UiPart<Region> {
 
         timetablePlaceholder.getChildren().removeAll();
 
-        timetableDisplay = new TimetableDisplay(person.getTimetable());
+        ArrayList<Timetable> timetableToDisplay = new ArrayList<>();
+        timetableToDisplay.add(person.getTimetable());
+        timetableDisplay = new TimetableDisplay(timetableToDisplay);
         timetablePlaceholder.getChildren().add(timetableDisplay.getRoot());
     }
 
@@ -166,6 +170,7 @@ public class PersonInfoOverview extends UiPart<Region> {
         }
     }
 
+    //@@author zacharytang
     @Subscribe
     private void handlePersonSelectedEvent(PersonSelectedEvent event) {
         logger.info(LogsCenter.getEventHandlingLogMessage(event));
