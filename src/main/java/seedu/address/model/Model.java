@@ -86,6 +86,12 @@ public interface Model {
     /** Returns the theme map **/
     HashMap<String, String> getThemeMap ();
 
+    /** Sets the current theme of the app */
+    void setCurrentTheme(String theme);
+
+    /** Returns the current theme in use by the app */
+    String getCurrentTheme();
+
     //@@author nbriannl
     /** Checks if the master list of tags in the address book has every tag being used */
     void checkMasterTagListHasAllTagsUsed ();
