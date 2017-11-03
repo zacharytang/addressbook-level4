@@ -1,6 +1,7 @@
 package seedu.address.model;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.function.Predicate;
 
 import javafx.collections.ObservableList;
@@ -81,11 +82,15 @@ public interface Model {
     /** Returns an unmodifiable view of the filtered person list */
     ObservableList<ReadOnlyPerson> getFilteredPersonList();
 
-    //author@@ nbriannl
+    //@@author nbriannl
+    /** Returns the theme map **/
+    HashMap<String, String> getThemeMap ();
+
+    //@@author nbriannl
     /** Checks if the master list of tags in the address book has every tag being used */
     void checkMasterTagListHasAllTagsUsed ();
 
-    //author@@
+    //@@author
     /**
      * Updates the filter of the filtered person list to filter by the given {@code predicate}.
      * @throws NullPointerException if {@code predicate} is null.
