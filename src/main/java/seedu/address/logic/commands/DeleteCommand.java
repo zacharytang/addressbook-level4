@@ -66,48 +66,58 @@ public class DeleteCommand extends UndoableCommand {
     public CommandResult executeUndoableCommand() throws CommandException {
         // this code block is command execution for delete [indexes]
         if (targetTags == null && targetIndexes != null) {
-            List<ReadOnlyPerson> lastShownList = model.getFilteredPersonList();
-            ArrayList<ReadOnlyPerson> deletePersonList = new ArrayList<>();
-
-            for (Index index : targetIndexes) {
-                if (index.getZeroBased() >= lastShownList.size()) {
-                    throw new CommandException(Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX);
-                }
-                ReadOnlyPerson personToDelete = lastShownList.get(index.getZeroBased());
-                deletePersonList.add(personToDelete);
-            }
-
-            try {
-                model.deletePersons(deletePersonList);
-            } catch (PersonNotFoundException pnfe) {
-                assert false : "One of the target persons is missing";
-            }
-
-            //return new CommandResult(String.format(MESSAGE_DELETE_PERSON_SUCCESS));
-            return new CommandResult(generateResultMsg(deletePersonList));
+            return getCommandResultForPerson();
 
         } else { // this code block is command execution for delete t/[tag...]
-            ArrayList<Tag> arrayTags = new ArrayList<Tag>(targetTags);
-            List<Tag> listOfExistingTags = model.getAddressBook().getTagList();
-
-            if (!listOfExistingTags.containsAll(arrayTags)) {
-                throw new CommandException(Messages.MESSAGE_INVALID_TAG_PROVIDED);
-            }
-
-            for (Tag tagToBeDeleted: arrayTags) {
-                try {
-                    model.deleteTag(tagToBeDeleted);
-                } catch (TagNotFoundException tnfe) {
-                    assert false : "[Delete Tag] A tag is not found";
-                } catch (DuplicatePersonException dpe) {
-                    assert false : "[Delete Tag] A duplicate person is there";
-                } catch (PersonNotFoundException pnfe) {
-                    assert false : "[Delete Tag] A person not found";
-                }
-            }
-
-            return new CommandResult(MESSAGE_DELETE_TAG_SUCCESS);
+            return getCommandResultForTag();
         }
+    }
+
+    //@@author nbriannl
+    private CommandResult getCommandResultForPerson () throws CommandException {
+        List<ReadOnlyPerson> lastShownList = model.getFilteredPersonList();
+        ArrayList<ReadOnlyPerson> deletePersonList = new ArrayList<>();
+
+        for (Index index : targetIndexes) {
+            if (index.getZeroBased() >= lastShownList.size()) {
+                throw new CommandException(Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX);
+            }
+            ReadOnlyPerson personToDelete = lastShownList.get(index.getZeroBased());
+            deletePersonList.add(personToDelete);
+        }
+
+        try {
+            model.deletePersons(deletePersonList);
+        } catch (PersonNotFoundException pnfe) {
+            assert false : "One of the target persons is missing";
+        }
+
+        //return new CommandResult(String.format(MESSAGE_DELETE_PERSON_SUCCESS));
+        return new CommandResult(generateResultMsg(deletePersonList));
+    }
+
+    //@@author April0616
+    private CommandResult getCommandResultForTag () throws CommandException {
+        ArrayList<Tag> arrayTags = new ArrayList<Tag>(targetTags);
+        List<Tag> listOfExistingTags = model.getAddressBook().getTagList();
+
+        if (!listOfExistingTags.containsAll(arrayTags)) {
+            throw new CommandException(Messages.MESSAGE_INVALID_TAG_PROVIDED);
+        }
+
+        for (Tag tagToBeDeleted: arrayTags) {
+            try {
+                model.deleteTag(tagToBeDeleted);
+            } catch (TagNotFoundException tnfe) {
+                assert false : "[Delete Tag] A tag is not found";
+            } catch (DuplicatePersonException dpe) {
+                assert false : "[Delete Tag] A duplicate person is there";
+            } catch (PersonNotFoundException pnfe) {
+                assert false : "[Delete Tag] A person not found";
+            }
+        }
+
+        return new CommandResult(MESSAGE_DELETE_TAG_SUCCESS);
     }
 
     //@@author April0616
