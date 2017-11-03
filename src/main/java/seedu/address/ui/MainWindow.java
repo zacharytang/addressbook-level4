@@ -34,6 +34,7 @@ public class MainWindow extends UiPart<Region> {
     private static final String FXML = "MainWindow.fxml";
     private static final int MIN_HEIGHT = 600;
     private static final int MIN_WIDTH = 450;
+    private static final String VIEW_PATH = "/view/";
 
     private final Logger logger = LogsCenter.getLogger(this.getClass());
 
@@ -82,6 +83,7 @@ public class MainWindow extends UiPart<Region> {
         setIcon(ICON);
         setWindowMinSize();
         setWindowDefaultSize(prefs);
+        setWindowDefaultTheme(prefs);
         Scene scene = new Scene(getRoot());
         primaryStage.setScene(scene);
 
@@ -210,7 +212,15 @@ public class MainWindow extends UiPart<Region> {
         if (getRoot().getStylesheets().size() > 1) {
             getRoot().getStylesheets().remove(1);
         }
-        getRoot().getStylesheets().add("/view/" + theme);
+        getRoot().getStylesheets().add(VIEW_PATH + theme);
+    }
+
+    private void setWindowDefaultTheme(UserPrefs prefs) {
+        getRoot().getStylesheets().add(prefs.getCurrentTheme());
+    }
+
+    String getCurrentTheme() {
+        return getRoot().getStylesheets().get(1);
     }
 
     void show() {
@@ -243,5 +253,6 @@ public class MainWindow extends UiPart<Region> {
     private void handleChangeThemeEvent(ChangeThemeRequestEvent event) {
         logger.info(LogsCenter.getEventHandlingLogMessage(event));
         handleChangeTheme(event.themeToChangeTo);
+        logic.setCurrentTheme(getCurrentTheme());
     }
 }
