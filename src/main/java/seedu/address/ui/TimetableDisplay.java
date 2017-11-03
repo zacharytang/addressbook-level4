@@ -20,8 +20,6 @@ import seedu.address.model.person.timetable.Timetable;
  */
 public class TimetableDisplay extends UiPart<Region> {
 
-    private static final String COLOUR_FILLED = "#272727";
-    private static final String COLOUR_EMPTY = "#383838";
     private static final String COLOUR_BORDER = "#000000";
 
     private static final String FXML = "TimetableDisplay.fxml";
@@ -101,9 +99,8 @@ public class TimetableDisplay extends UiPart<Region> {
         String rightWidth = timeIndex == 31 ? "2" : "1";
         String borderWidths = topWidth + " " + rightWidth + " " + bottomWidth + " " + leftWidth;
 
-        pane.setStyle("-fx-background-color: " + (hasLesson ? COLOUR_FILLED : COLOUR_EMPTY)
-                + ";\n"
-                + "-fx-border-color: " + COLOUR_BORDER + ";\n"
+        pane.getStyleClass().add(hasLesson ? "timetable-cell-filled" : "timetable-cell-empty");
+        pane.setStyle("-fx-border-color: " + COLOUR_BORDER + ";\n"
                 + "-fx-border-width: " + borderWidths + ";\n"
                 + "-fx-border-style: " + borderStyle);
 

@@ -211,6 +211,14 @@
     -fx-background-color: #3c3e3f;
 }
 
+.timetable-cell-filled {
+    -fx-background-color: #272727;
+}
+
+.timetable-cell-empty {
+    -fx-background-color: #383838;
+}
+
 .combined-timetable-label {
     -fx-background-color: #515658;
 }
