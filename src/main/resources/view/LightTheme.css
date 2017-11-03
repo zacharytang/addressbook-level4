@@ -215,7 +215,34 @@
     -fx-background-color: #f2f9f8;
 }
 
-// end of style this
+.timetable-cell-filled {
+    -fx-background-color: #e20b61;
+}
+
+.timetable-cell-empty {
+    -fx-background-color: #e6f9e3;
+}
+
+.timetable-cell-empty, .timetable-cell-filled {
+    -fx-border-color: #000000;
+}
+
+.combined-timetable-label {
+    -fx-background-color: #d7e7ed;
+}
+
+.combined-timetable-main-label {
+    -fx-text-fill: #000000;
+    -fx-font-size: 22px;
+    -fx-font-family: "Segoe UI";
+}
+
+.combined-timetable-names {
+    -fx-text-fill: #000000;
+    -fx-font-size: 22px;
+    -fx-font-family: "Segoe UI";
+}
+
 /* @@author */
 // cch
 .anchor-pane {
