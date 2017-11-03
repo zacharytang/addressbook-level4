@@ -17,6 +17,7 @@ import seedu.address.commons.core.LogsCenter;
 import seedu.address.commons.events.ui.PersonPanelSelectionChangedEvent;
 import seedu.address.commons.events.ui.PersonSelectedEvent;
 import seedu.address.model.person.ReadOnlyPerson;
+import seedu.address.model.person.timetable.Timetable;
 
 //@@author zacharytang
 /**
@@ -60,7 +61,7 @@ public class PersonInfoOverview extends UiPart<Region> {
 
         this.person = null;
         loadDefaultPerson();
-        
+
         contactPhoto.fitWidthProperty().bind(contactPhotoPane.widthProperty());
         contactPhoto.fitHeightProperty().bind(contactPhotoPane.heightProperty());
         registerAsAnEventHandler(this);
@@ -104,7 +105,7 @@ public class PersonInfoOverview extends UiPart<Region> {
 
         timetablePlaceholder.getChildren().removeAll();
 
-        timetableDisplay = new TimetableDisplay(person.getTimetable());
+        timetableDisplay = new TimetableDisplay(new Timetable[]{ person.getTimetable() });
         timetablePlaceholder.getChildren().add(timetableDisplay.getRoot());
     }
 

@@ -23,7 +23,7 @@ public class TimetableDisplay extends UiPart<Region> {
     private static final String COLOUR_BORDER = "#000000";
 
     private static final String FXML = "TimetableDisplay.fxml";
-    private Timetable timetable;
+    private Timetable[] timetables;
 
     @FXML
     private GridPane oddGrid;
@@ -31,22 +31,50 @@ public class TimetableDisplay extends UiPart<Region> {
     @FXML
     private GridPane evenGrid;
 
-    public TimetableDisplay(Timetable timetable) {
+    public TimetableDisplay(Timetable[] timetables) {
         super(FXML);
 
-        this.timetable = timetable;
-        fillTimetable();
+        this.timetables = timetables;
+        fillInitialGrid();
+        fillTimetables();
+    }
+
+    /**
+     * Initializes the timetable grid to an empty grid not containing any lessons
+     */
+    private void fillInitialGrid() {
+        for (int weekType = 0; weekType < ARRAY_WEEKS.length; weekType++) {
+            for (int day = 0; day < ARRAY_DAYS.length; day++) {
+                for (int time = 0; time < ARRAY_TIMES.length; time++) {
+                    markSlot(weekType, day, time, false);
+                }
+            }
+        }
+    }
+
+    /**
+     * Populates the initialized grid with lessons according to timetables passed
+     */
+    private void fillTimetables() {
+        if (timetables == null) {
+            return;
+        }
+
+        for (Timetable timetable : timetables) {
+            fillSingleTimetable(timetable);
+        }
     }
 
     /**
      * Fills the timetable grid with panes according to the timetable oject given
      */
-    private void fillTimetable() {
-
+    private void fillSingleTimetable(Timetable timetable) {
         for (int weekType = 0; weekType < ARRAY_WEEKS.length; weekType++) {
             for (int day = 0; day < ARRAY_DAYS.length; day++) {
                 for (int time = 0; time < ARRAY_TIMES.length; time++) {
-                    markSlot(weekType, day, time, timetable != null ? hasLesson(weekType, day, time) : false);
+                    if (hasLesson(weekType, day, time, timetable)) {
+                        markSlot(weekType, day, time, true);
+                    }
                 }
             }
         }
@@ -87,7 +115,7 @@ public class TimetableDisplay extends UiPart<Region> {
     /**
      * Checks if a lesson exists in the timetable at the given parameters
      */
-    private boolean hasLesson(int weekIndex, int dayIndex, int timeIndex) {
+    private boolean hasLesson(int weekIndex, int dayIndex, int timeIndex, Timetable timetable) {
         try {
             return timetable.doesSlotHaveLesson(ARRAY_WEEKS[weekIndex], ARRAY_DAYS[dayIndex], ARRAY_TIMES[timeIndex]);
         } catch (IllegalValueException e) {
