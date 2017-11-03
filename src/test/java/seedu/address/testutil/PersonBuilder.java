@@ -32,7 +32,7 @@ public class PersonBuilder {
     public static final String DEFAULT_BIRTHDAY = "23051997";
     public static final String DEFAULT_TIMETABLE_URL = "http://modsn.us/HXDrJ";
     public static final String DEFAULT_REMARK = "";
-    public static final String DEFAULT_PHOTOPATH = "";
+    public static final String DEFAULT_PHOTOPATH = "src/main/resources/images/defaultPhoto.jpg";
     public static final String DEFAULT_TAGS = "friends";
 
     private Person person;
@@ -47,7 +47,7 @@ public class PersonBuilder {
             Address defaultAddress = new Address(DEFAULT_ADDRESS);
             Timetable defaultTimetable = new Timetable(DEFAULT_TIMETABLE_URL);
             Remark defaultRemark = new Remark(DEFAULT_REMARK);
-            PhotoPath defaultPhotoPath = new PhotoPath(DEFAULT_REMARK);
+            PhotoPath defaultPhotoPath = new PhotoPath(DEFAULT_PHOTOPATH);
             Set<Tag> defaultTags = SampleDataUtil.getTagSet(DEFAULT_TAGS);
             Birthday defaultBirthday = new Birthday(DEFAULT_BIRTHDAY);
             this.person = new Person(defaultName, defaultGender, defaultMatricNo, defaultPhone, defaultEmail,
