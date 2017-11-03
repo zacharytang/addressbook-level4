@@ -15,6 +15,7 @@ import seedu.address.commons.events.ui.TimetableDisplayEvent;
 import seedu.address.model.person.ReadOnlyPerson;
 import seedu.address.model.person.timetable.Timetable;
 
+//@@author zacharytang
 /**
  * Display for the combined timetable command
  */

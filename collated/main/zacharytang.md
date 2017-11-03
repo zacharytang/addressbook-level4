@@ -18,6 +18,35 @@ public class PersonSelectedEvent extends BaseEvent {
     }
 }
 ```
+###### \java\seedu\address\commons\events\ui\TimetableDisplayEvent.java
+``` java
+/**
+ * Represents a request to display timetables in the UI
+ */
+public class TimetableDisplayEvent extends BaseEvent {
+
+    public final List<ReadOnlyPerson> personsToDisplay;
+
+    public TimetableDisplayEvent(List<ReadOnlyPerson> personList) {
+        this.personsToDisplay = personList;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder msg = new StringBuilder();
+
+        msg.append("Timetables displayed for the selected people: ");
+
+        for (ReadOnlyPerson person : personsToDisplay) {
+            msg.append("[");
+            msg.append(person.getName().toString());
+            msg.append("] ");
+        }
+
+        return msg.toString();
+    }
+}
+```
 ###### \java\seedu\address\commons\util\timetable\Lesson.java
 ``` java
 /**
@@ -443,6 +472,129 @@ public class TimetableParserUtil {
     }
 }
 ```
+###### \java\seedu\address\logic\commands\TimetableCommand.java
+``` java
+/**
+ * Selects persons identified using their last displayed indexes and displays a combined timetable
+ * of the selected persons
+ */
+public class TimetableCommand extends Command {
+
+    public static final String COMMAND_WORD = "whenfree";
+    public static final String COMMAND_ALIAS = "wf";
+    public static final String COMMAND_SECONDARY = "timetable";
+
+    public static final String MESSAGE_USAGE = COMMAND_WORD
+            + ": Displays a combined timetable of persons, identified using their last displayed indexes\n"
+            + "Parameters: INDEX (must be positive integers)\n"
+            + "Example: " + COMMAND_WORD + " 1\n"
+            + "         " + COMMAND_WORD + " 1, 2, 3\n"
+            + "         " + COMMAND_WORD + " 2 4";
+
+    public static final String MESSAGE_DISPLAY_SUCCESS = "Displayed timetables: ";
+
+    private final ArrayList<Index> targetIndexes;
+
+    public TimetableCommand(ArrayList<Index> targetIndexes) {
+        this.targetIndexes = targetIndexes;
+    }
+
+    @Override
+    public CommandResult execute() throws CommandException {
+
+        List<ReadOnlyPerson> lastShownList = model.getFilteredPersonList();
+        List<ReadOnlyPerson> personsToDisplay = new ArrayList<>();
+
+        for (Index index : targetIndexes) {
+            if (index.getZeroBased() >= lastShownList.size()) {
+                throw new CommandException(Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX);
+            }
+            ReadOnlyPerson personSelected = lastShownList.get(index.getZeroBased());
+            personsToDisplay.add(personSelected);
+        }
+
+        EventsCenter.getInstance().post(new TimetableDisplayEvent(personsToDisplay));
+        return new CommandResult(generateResultMsg(personsToDisplay));
+    }
+
+    /**
+     * Generates the success message for the timetable command
+     */
+    private String generateResultMsg(List<ReadOnlyPerson> personList) {
+        StringBuilder msg = new StringBuilder();
+
+        msg.append(MESSAGE_DISPLAY_SUCCESS);
+
+        for (ReadOnlyPerson person : personList) {
+            msg.append("[");
+            msg.append(person.getName().toString());
+            msg.append("] ");
+        }
+
+        return msg.toString();
+    }
+}
+```
+###### \java\seedu\address\logic\parser\TimetableCommandParser.java
+``` java
+
+/**
+ * Parses input arguments and creates a new TimetableCommand object
+ */
+public class TimetableCommandParser implements Parser<TimetableCommand> {
+
+    public static final String DISPLAY_ONE_PERSON_VALIDATION_REGEX = "-?\\d+";
+
+    public static final String DISPLAY_MULTIPLE_PERSON_COMMA_VALIDATION_REGEX =
+            "((-?\\d([\\s+]*)\\,([\\s+]*)(?=-?\\d))|-?\\d)+";
+
+    public static final String DISPLAY_MULTIPLE_PERSON_WHITESPACE_VALIDATION_REGEX =
+            "(((-?\\d)([\\s]+)(?=-?\\d))|-?\\d)+";
+
+    /**
+     * Parses the given {@code String} of arguments in the context of the TimetableCommand
+     * and returns a TimetableCommand object for execution
+     *
+     * @throws ParseException if the user input does not conform to the expected format
+     */
+    public TimetableCommand parse(String args) throws ParseException {
+
+        String preamble = ArgumentTokenizer.tokenize(args).getPreamble();
+
+        if (preamble.matches(DISPLAY_ONE_PERSON_VALIDATION_REGEX)) {
+            try {
+                ArrayList<Index> indexList = new ArrayList<>();
+                Index index = ParserUtil.parseIndex(args);
+                indexList.add(index);
+
+                return new TimetableCommand(indexList);
+            } catch (IllegalValueException ive) {
+                throw new ParseException(
+                        String.format(MESSAGE_INVALID_COMMAND_FORMAT, TimetableCommand.MESSAGE_USAGE));
+            }
+        } else if (preamble.matches(DISPLAY_MULTIPLE_PERSON_COMMA_VALIDATION_REGEX)) {
+            try {
+                ArrayList<Index> indexesList = ParserUtil.parseIndexes(args, ",");
+                return new TimetableCommand(indexesList);
+            } catch (IllegalValueException ive) {
+                throw new ParseException(
+                        String.format(MESSAGE_INVALID_COMMAND_FORMAT, TimetableCommand.MESSAGE_USAGE));
+            }
+        } else if (preamble.matches(DISPLAY_MULTIPLE_PERSON_WHITESPACE_VALIDATION_REGEX)) {
+            try {
+                ArrayList<Index> indexesList = ParserUtil.parseIndexes(args, " ");
+                return new TimetableCommand(indexesList);
+            } catch (IllegalValueException ive) {
+                throw new ParseException(
+                        String.format(MESSAGE_INVALID_COMMAND_FORMAT, TimetableCommand.MESSAGE_USAGE));
+            }
+        }
+
+        throw new ParseException(
+                String.format(MESSAGE_INVALID_COMMAND_FORMAT, TimetableCommand.MESSAGE_USAGE));
+    }
+}
+```
 ###### \java\seedu\address\model\person\timetable\Timetable.java
 ``` java
 /**
@@ -747,6 +899,70 @@ public class TimetableWeek {
     }
 }
 ```
+###### \java\seedu\address\ui\CombinedTimetableDisplay.java
+``` java
+/**
+ * Display for the combined timetable command
+ */
+public class CombinedTimetableDisplay extends UiPart<Region> {
+
+    public static final String FXML = "CombinedTimetableDisplay.fxml";
+
+    private final Logger logger = LogsCenter.getLogger(this.getClass());
+
+    private TimetableDisplay timetableDisplay;
+
+    @FXML
+    private Label names;
+
+    @FXML
+    private AnchorPane timetablePlaceholder;
+
+    public CombinedTimetableDisplay() {
+        super(FXML);
+
+        timetableDisplay = new TimetableDisplay(null);
+        timetablePlaceholder.getChildren().add(timetableDisplay.getRoot());
+
+        registerAsAnEventHandler(this);
+    }
+
+    /**
+     * Refreshes the timetable display upon command
+     */
+    private void loadPersons(List<ReadOnlyPerson> persons) {
+        names.setText(generateNamesString(persons));
+
+        timetablePlaceholder.getChildren().removeAll();
+
+        ArrayList<Timetable> timetables = new ArrayList<>();
+        for (ReadOnlyPerson person : persons) {
+            timetables.add(person.getTimetable());
+        }
+        timetableDisplay = new TimetableDisplay(timetables);
+        timetablePlaceholder.getChildren().add(timetableDisplay.getRoot());
+    }
+
+    /**
+     * Creates a string to display all names for the combined timetable displayed
+     */
+    private String generateNamesString(List<ReadOnlyPerson> persons) {
+        StringBuilder names = new StringBuilder();
+        for (ReadOnlyPerson person : persons) {
+            names.append("[");
+            names.append(person.getName().toString());
+            names.append("] ");
+        }
+        return names.toString();
+    }
+
+    @Subscribe
+    private void handleTimetableDisplayEvent(TimetableDisplayEvent event) {
+        logger.info(LogsCenter.getEventHandlingLogMessage(event));
+        loadPersons(event.personsToDisplay);
+    }
+}
+```
 ###### \java\seedu\address\ui\InfoPanel.java
 ``` java
 /**
@@ -760,6 +976,7 @@ public class InfoPanel extends UiPart<Region> {
 
     private BrowserPanel browserPanel;
     private PersonInfoOverview infoOverview;
+    private CombinedTimetableDisplay combinedTimetableDisplay;
 
     @FXML
     private StackPane browserPlaceholder;
@@ -767,16 +984,23 @@ public class InfoPanel extends UiPart<Region> {
     @FXML
     private StackPane infoOverviewPlaceholder;
 
+    @FXML
+    private StackPane combinedTimetablePlaceholder;
 
     public InfoPanel() {
         super(FXML);
 
-        registerAsAnEventHandler(this);
         browserPanel = new BrowserPanel();
         browserPlaceholder.getChildren().add(browserPanel.getRoot());
 
         infoOverview = new PersonInfoOverview();
         infoOverviewPlaceholder.getChildren().add(infoOverview.getRoot());
+
+        combinedTimetableDisplay = new CombinedTimetableDisplay();
+        combinedTimetablePlaceholder.getChildren().add(combinedTimetableDisplay.getRoot());
+
+        infoOverviewPlaceholder.toFront();
+        registerAsAnEventHandler(this);
     }
 
     public void freeResources() {
@@ -799,6 +1023,12 @@ public class InfoPanel extends UiPart<Region> {
     public void handlePersonAddressDisplayMapEvent(PersonAddressDisplayMapEvent event) {
         logger.info(LogsCenter.getEventHandlingLogMessage(event));
         browserPlaceholder.toFront();
+    }
+
+    @Subscribe
+    public void handleTimetableDisplayEvent(TimetableDisplayEvent event) {
+        logger.info(LogsCenter.getEventHandlingLogMessage(event));
+        combinedTimetablePlaceholder.toFront();
     }
 }
 ```
@@ -832,6 +1062,10 @@ public class PersonInfoOverview extends UiPart<Region> {
     private Label birthday;
     @FXML
     private Label remark;
+    @FXML
+    private AnchorPane contactPhotoPane;
+    @FXML
+    private ImageView contactPhoto;
 
     @FXML
     private AnchorPane timetablePlaceholder;
@@ -842,6 +1076,8 @@ public class PersonInfoOverview extends UiPart<Region> {
         this.person = null;
         loadDefaultPerson();
 
+        contactPhoto.fitWidthProperty().bind(contactPhotoPane.widthProperty());
+        contactPhoto.fitHeightProperty().bind(contactPhotoPane.heightProperty());
         registerAsAnEventHandler(this);
     }
 
@@ -857,6 +1093,8 @@ public class PersonInfoOverview extends UiPart<Region> {
         email.setText("");
         birthday.setText("");
         remark.setText("");
+
+        setDefaultContactPhoto();
 
         timetableDisplay = new TimetableDisplay(null);
         timetablePlaceholder.getChildren().add(timetableDisplay.getRoot());
@@ -877,12 +1115,19 @@ public class PersonInfoOverview extends UiPart<Region> {
         birthday.textProperty().bind(Bindings.convert(person.birthdayProperty()));
         remark.textProperty().bind(Bindings.convert(person.remarkProperty()));
 
+        loadPhoto(person);
+
         timetablePlaceholder.getChildren().removeAll();
 
-        timetableDisplay = new TimetableDisplay(person.getTimetable());
+        ArrayList<Timetable> timetableToDisplay = new ArrayList<>();
+        timetableToDisplay.add(person.getTimetable());
+        timetableDisplay = new TimetableDisplay(timetableToDisplay);
         timetablePlaceholder.getChildren().add(timetableDisplay.getRoot());
     }
 
+```
+###### \java\seedu\address\ui\PersonInfoOverview.java
+``` java
     @Subscribe
     private void handlePersonSelectedEvent(PersonSelectedEvent event) {
         logger.info(LogsCenter.getEventHandlingLogMessage(event));
@@ -903,12 +1148,12 @@ public class PersonInfoOverview extends UiPart<Region> {
  */
 public class TimetableDisplay extends UiPart<Region> {
 
-    private static final String COLOUR_FILLED = "#515658";
+    private static final String COLOUR_FILLED = "#272727";
     private static final String COLOUR_EMPTY = "#383838";
     private static final String COLOUR_BORDER = "#000000";
 
     private static final String FXML = "TimetableDisplay.fxml";
-    private Timetable timetable;
+    private ArrayList<Timetable> timetables;
 
     @FXML
     private GridPane oddGrid;
@@ -916,22 +1161,50 @@ public class TimetableDisplay extends UiPart<Region> {
     @FXML
     private GridPane evenGrid;
 
-    public TimetableDisplay(Timetable timetable) {
+    public TimetableDisplay(ArrayList<Timetable> timetables) {
         super(FXML);
 
-        this.timetable = timetable;
-        fillTimetable();
+        this.timetables = timetables;
+        fillInitialGrid();
+        fillTimetables();
+    }
+
+    /**
+     * Initializes the timetable grid to an empty grid not containing any lessons
+     */
+    private void fillInitialGrid() {
+        for (int weekType = 0; weekType < ARRAY_WEEKS.length; weekType++) {
+            for (int day = 0; day < ARRAY_DAYS.length; day++) {
+                for (int time = 0; time < ARRAY_TIMES.length; time++) {
+                    markSlot(weekType, day, time, false);
+                }
+            }
+        }
+    }
+
+    /**
+     * Populates the initialized grid with lessons according to timetables passed
+     */
+    private void fillTimetables() {
+        if (timetables == null) {
+            return;
+        }
+
+        for (Timetable timetable : timetables) {
+            fillSingleTimetable(timetable);
+        }
     }
 
     /**
      * Fills the timetable grid with panes according to the timetable oject given
      */
-    private void fillTimetable() {
-
+    private void fillSingleTimetable(Timetable timetable) {
         for (int weekType = 0; weekType < ARRAY_WEEKS.length; weekType++) {
             for (int day = 0; day < ARRAY_DAYS.length; day++) {
                 for (int time = 0; time < ARRAY_TIMES.length; time++) {
-                    markSlot(weekType, day, time, timetable != null ? hasLesson(weekType, day, time) : false);
+                    if (hasLesson(weekType, day, time, timetable)) {
+                        markSlot(weekType, day, time, true);
+                    }
                 }
             }
         }
@@ -972,7 +1245,7 @@ public class TimetableDisplay extends UiPart<Region> {
     /**
      * Checks if a lesson exists in the timetable at the given parameters
      */
-    private boolean hasLesson(int weekIndex, int dayIndex, int timeIndex) {
+    private boolean hasLesson(int weekIndex, int dayIndex, int timeIndex, Timetable timetable) {
         try {
             return timetable.doesSlotHaveLesson(ARRAY_WEEKS[weekIndex], ARRAY_DAYS[dayIndex], ARRAY_TIMES[timeIndex]);
         } catch (IllegalValueException e) {
@@ -981,6 +1254,41 @@ public class TimetableDisplay extends UiPart<Region> {
         }
     }
 }
+```
+###### \resources\view\CombinedTimetableDisplay.fxml
+``` fxml
+<StackPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+    <SplitPane dividerPositions="0.2" orientation="VERTICAL" prefHeight="200.0" prefWidth="160.0">
+        <AnchorPane styleClass="combined-timetable-label">
+            <GridPane layoutX="151.0" layoutY="26.0" AnchorPane.bottomAnchor="0.0"
+                      AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                <columnConstraints>
+                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="300" minWidth="300.0"
+                                       prefWidth="300"/>
+                    <ColumnConstraints hgrow="SOMETIMES"/>
+                </columnConstraints>
+                <rowConstraints>
+                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                </rowConstraints>
+                <HBox alignment="CENTER_RIGHT">
+                    <Label styleClass="combined-timetable-main-label" alignment="CENTER" text="Timetables Displayed: ">
+                        <HBox.margin>
+                            <Insets right="2.5"/>
+                        </HBox.margin>
+                    </Label>
+                </HBox>
+                <HBox alignment="CENTER_LEFT" GridPane.columnIndex="1">
+                    <Label fx:id="names" styleClass="combined-timetable-names" text="Label">
+                        <HBox.margin>
+                            <Insets left="2.5"/>
+                        </HBox.margin>
+                    </Label>
+                </HBox>
+            </GridPane>
+        </AnchorPane>
+        <AnchorPane fx:id="timetablePlaceholder" minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0"/>
+    </SplitPane>
+</StackPane>
 ```
 ###### \resources\view\DarkTheme.css
 ``` css
@@ -1073,12 +1381,29 @@ public class TimetableDisplay extends UiPart<Region> {
     -fx-background-color: #3c3e3f;
 }
 
+.combined-timetable-label {
+    -fx-background-color: #515658;
+}
+
+.combined-timetable-main-label {
+    -fx-text-fill: #FFFFFF;
+    -fx-font-size: 22px;
+    -fx-font-family: "Segoe UI";
+}
+
+.combined-timetable-names {
+    -fx-text-fill: #000000;
+    -fx-font-size: 22px;
+    -fx-font-family: "Segoe UI";
+}
+
 ```
 ###### \resources\view\InfoPanel.fxml
 ``` fxml
 <StackPane prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
     <StackPane fx:id="browserPlaceholder" prefHeight="150.0" prefWidth="200.0" />
     <StackPane fx:id="infoOverviewPlaceholder" prefHeight="150.0" prefWidth="200.0" />
+    <StackPane fx:id="combinedTimetablePlaceholder" prefHeight="150.0" prefWidth="200.0" />
 </StackPane>
 ```
 ###### \resources\view\MainWindow.fxml
@@ -1096,12 +1421,20 @@ public class TimetableDisplay extends UiPart<Region> {
     <SplitPane dividerPositions="0.3" orientation="VERTICAL">
         <AnchorPane>
             <!--Edit dividerPositions below to adjust the divider position between the person photo and the person details-->
-            <SplitPane dividerPositions="0.5" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                <AnchorPane minHeight="0.0" minWidth="0.0" styleClass="info-name-cell">
-                    <Label fx:id="name" alignment="CENTER" contentDisplay="CENTER" prefHeight="28.0" prefWidth="43.2" styleClass="display_big_label" text="\$name" textAlignment="CENTER" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
-                </AnchorPane>
+            <SplitPane dividerPositions="0.48333333333333334" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                <AnchorPane fx:id="contactPhotoPane" minHeight="0.0" minWidth="0.0" styleClass="info-name-cell">
+               <children>
+                  <ImageView fx:id="contactPhoto" layoutX="1.0" layoutY="-1.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+
+                  </ImageView>
+               </children></AnchorPane>
+
                 <AnchorPane minHeight="0.0" minWidth="0.0" styleClass="info-cell">
                     <VBox alignment="CENTER_LEFT" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                        <HBox alignment="CENTER_LEFT" spacing="5">
+                            <Label styleClass="display_small_label" text="Name:" />
+                            <Label fx:id="name" styleClass="display_small_value" text="\$name" />
+                        </HBox>
                         <HBox alignment="CENTER_LEFT" spacing="5">
                             <Label styleClass="display_small_label" text="Gender:" />
                             <Label fx:id="gender" styleClass="display_small_value" text="\$gender" />

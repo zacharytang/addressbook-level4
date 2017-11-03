@@ -9,6 +9,8 @@ import seedu.address.commons.exceptions.IllegalValueException;
 import seedu.address.logic.commands.TimetableCommand;
 import seedu.address.logic.parser.exceptions.ParseException;
 
+//@@author zacharytang
+
 /**
  * Parses input arguments and creates a new TimetableCommand object
  */
@@ -25,6 +27,7 @@ public class TimetableCommandParser implements Parser<TimetableCommand> {
     /**
      * Parses the given {@code String} of arguments in the context of the TimetableCommand
      * and returns a TimetableCommand object for execution
+     *
      * @throws ParseException if the user input does not conform to the expected format
      */
     public TimetableCommand parse(String args) throws ParseException {

@@ -10,6 +10,7 @@ import seedu.address.commons.events.ui.TimetableDisplayEvent;
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.model.person.ReadOnlyPerson;
 
+//@@author zacharytang
 /**
  * Selects persons identified using their last displayed indexes and displays a combined timetable
  * of the selected persons
