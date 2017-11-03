@@ -5,7 +5,6 @@ import static seedu.address.model.person.timetable.Timetable.ARRAY_TIMES;
 import static seedu.address.model.person.timetable.Timetable.ARRAY_WEEKS;
 import static seedu.address.model.person.timetable.Timetable.WEEK_ODD;
 
-import java.sql.Time;
 import java.util.ArrayList;
 
 import javafx.fxml.FXML;
@@ -21,7 +20,7 @@ import seedu.address.model.person.timetable.Timetable;
  */
 public class TimetableDisplay extends UiPart<Region> {
 
-    private static final String COLOUR_FILLED = "#515658";
+    private static final String COLOUR_FILLED = "#272727";
     private static final String COLOUR_EMPTY = "#383838";
     private static final String COLOUR_BORDER = "#000000";
 

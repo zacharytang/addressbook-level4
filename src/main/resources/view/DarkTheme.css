@@ -211,6 +211,22 @@
     -fx-background-color: #3c3e3f;
 }
 
+.combined-timetable-label {
+    -fx-background-color: #515658;
+}
+
+.combined-timetable-main-label {
+    -fx-text-fill: #FFFFFF;
+    -fx-font-size: 22px;
+    -fx-font-family: "Segoe UI";
+}
+
+.combined-timetable-names {
+    -fx-text-fill: #000000;
+    -fx-font-size: 22px;
+    -fx-font-family: "Segoe UI";
+}
+
 /* @@author */
 .anchor-pane {
      -fx-background-color: derive(#1d1d1d, 20%);
