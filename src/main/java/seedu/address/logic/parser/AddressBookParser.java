@@ -21,6 +21,7 @@ import seedu.address.logic.commands.RedoCommand;
 import seedu.address.logic.commands.RemarkCommand;
 import seedu.address.logic.commands.SelectCommand;
 import seedu.address.logic.commands.ThemeCommand;
+import seedu.address.logic.commands.TimetableCommand;
 import seedu.address.logic.commands.UndoCommand;
 import seedu.address.logic.parser.exceptions.ParseException;
 
@@ -101,13 +102,18 @@ public class AddressBookParser {
         case ThemeCommand.COMMAND_SECONDARY:
             return new ThemeCommandParser().parse(arguments);
 
+        case PhotoCommand.COMMAND_WORD:
+        case PhotoCommand.COMMAND_ALIAS:
+            return new PhotoCommandParser().parse(arguments);
+
         case RemarkCommand.COMMAND_WORD:
         case RemarkCommand.COMMAND_ALIAS:
             return new RemarkCommandParser().parse(arguments);
 
-        case PhotoCommand.COMMAND_WORD:
-        case PhotoCommand.COMMAND_ALIAS:
-            return new PhotoCommandParser().parse(arguments);
+        case TimetableCommand.COMMAND_WORD:
+        case TimetableCommand.COMMAND_ALIAS:
+        case TimetableCommand.COMMAND_SECONDARY:
+            return new TimetableCommandParser().parse(arguments);
 
         case HistoryCommand.COMMAND_WORD:
         case HistoryCommand.COMMAND_ALIAS:

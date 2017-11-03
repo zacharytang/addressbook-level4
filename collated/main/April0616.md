@@ -132,7 +132,7 @@ public class PhotoCommand extends UndoableCommand {
             "Photo Path should be the absolute path in your PC. It should be a string started with the name of "
                     + "your disk, followed by several groups of backslash and string, like c:\\desktop\\happy.jpg";
     public static final String FILE_SAVED_PARENT_PATH = "src/main/resources/images/contactPhotos/";
-    public static final String DEFAULT_PHOTO_PATH = "src/main/resources/images/help_icon.png";
+    public static final String DEFAULT_PHOTO_PATH = "src/main/resources/images/defaultPhoto.jpg";
 
     private final Index targetIndex;
     private final String localPhotoPath;
@@ -151,7 +151,7 @@ public class PhotoCommand extends UndoableCommand {
         if (trimmedPhotoPath.equals("")) { //not specified yet
             this.localPhotoPath = "";
             this.targetIndex = targetIndex;
-            this.photoPath = new PhotoPath("");
+            this.photoPath = new PhotoPath(DEFAULT_PHOTO_PATH);
 
         } else if (isValidLocalPhotoPath(trimmedPhotoPath)) {
             //not specified yet
@@ -190,7 +190,8 @@ public class PhotoCommand extends UndoableCommand {
 
         //if the command is 'ph/' or the contact has one original photo, then delete it.
         String originAppPhotoPath = personToPhoto.getPhotoPath().value;
-        if (localPhotoPath.equals("") || !(originAppPhotoPath.equals(DEFAULT_PHOTO_PATH))) {
+
+        if (!(originAppPhotoPath.equals(DEFAULT_PHOTO_PATH))) {
             removeAppFile(originAppPhotoPath);
         }
 
@@ -264,7 +265,7 @@ public class PhotoCommand extends UndoableCommand {
      * @return successful message for adding photo if the photo path string is not empty.
      */
     private String generateSuccessMsg(ReadOnlyPerson personToPhoto) {
-        if (photoPath.toString().isEmpty()) {
+        if (photoPath.toString().equals(DEFAULT_PHOTO_PATH)) {
             return String.format(MESSAGE_DELETE_PHOTO_SUCCESS, personToPhoto);
         } else {
             return String.format(MESSAGE_ADD_PHOTO_SUCCESS, personToPhoto);
@@ -429,17 +430,90 @@ public class RemarkCommand extends UndoableCommand {
     }
 }
 ```
+###### \java\seedu\address\logic\parser\DeleteCommandParser.java
+``` java
+    public static final String DELETE_ONE_PERSON_VALIDATION_REGEX = "-?\\d+";
+
+    public static final String DELETE_MULTIPLE_PERSON_COMMA_VALIDATION_REGEX =
+            "((-?\\d([\\s+]*)\\,([\\s+]*)(?=-?\\d))|-?\\d)+";
+
+    public static final String DELETE_MULTIPLE_PERSON_WHITESPACE_VALIDATION_REGEX =
+            "(((-?\\d)([\\s]+)(?=-?\\d))|-?\\d)+";
+
+
+    /**
+     * Parses the given {@code String} of arguments in the context of the DeleteCommand
+     * and returns an DeleteCommand object for execution.
+     * @throws ParseException if the user input does not conform the expected format
+     */
+    public DeleteCommand parse(String args) throws ParseException {
+
+        ArgumentMultimap argMultimap = ArgumentTokenizer.tokenize(args, PREFIX_TAG);
+        String preamble = argMultimap.getPreamble();
+
+        if (preamble.equals("")) { // code block for delete for a tag
+            try {
+                if (arePrefixesPresent(argMultimap, PREFIX_TAG)) {
+                    Set<Tag> tagList = ParserUtil.parseTags(argMultimap.getAllValues(PREFIX_TAG));
+                    return new DeleteCommand(tagList);
+                }
+            } catch (IllegalValueException ive) {
+                throw new ParseException(
+                        String.format(MESSAGE_INVALID_COMMAND_FORMAT, DeleteCommand.MESSAGE_USAGE));
+            }
+        } else if (preamble.matches(DELETE_ONE_PERSON_VALIDATION_REGEX)) { // code block for delete for a person
+            try {
+                Index index = ParserUtil.parseIndex(args);
+                return new DeleteCommand(index);
+            } catch (IllegalValueException ive) {
+                throw new ParseException(
+                        String.format(MESSAGE_INVALID_COMMAND_FORMAT, DeleteCommand.MESSAGE_USAGE));
+            }
+        } else if (preamble.matches(DELETE_MULTIPLE_PERSON_COMMA_VALIDATION_REGEX)) {
+            //code block for delete multiple persons, input string separated by comma
+            try {
+                ArrayList<Index> deletePersons = ParserUtil.parseIndexes(args, ",");
+                return new DeleteCommand(deletePersons);
+            } catch (IllegalValueException ive) {
+                throw new ParseException(
+                        String.format(MESSAGE_INVALID_COMMAND_FORMAT, DeleteCommand.MESSAGE_USAGE));
+            }
+        } else if (preamble.matches(DELETE_MULTIPLE_PERSON_WHITESPACE_VALIDATION_REGEX)) {
+            //code block for delete multiple persons, input indexes separated by whitespace
+            try {
+                ArrayList<Index> deletePersons = ParserUtil.parseIndexes(args, " ");
+                return new DeleteCommand(deletePersons);
+            } catch (IllegalValueException ive) {
+                throw new ParseException(
+                        String.format(MESSAGE_INVALID_COMMAND_FORMAT, DeleteCommand.MESSAGE_USAGE));
+            }
+        }
+
+        throw new ParseException(
+                String.format(MESSAGE_INVALID_COMMAND_FORMAT, DeleteCommand.MESSAGE_USAGE));
+    }
+
+```
 ###### \java\seedu\address\logic\parser\ParserUtil.java
 ``` java
     /**
      * Parses {@code oneBasedIndexes} separated with commas into a {@Code ArrayList<Index>} and returns it.
      * Leading and trailing whitespaces will be trimmed.
+     * @param splitString is the sign used to separate indexes, can be either comma or whitespace(s)
      * @throws IllegalValueException if one of the specified indexes is invalid (not non-zero unsigned integer).
      *
      */
-    public static ArrayList<Index> parseIndexes(String oneBasedIndexes) throws IllegalValueException {
+    public static ArrayList<Index> parseIndexes(String oneBasedIndexes, String splitString)
+            throws IllegalValueException {
         String trimmedIndexes = oneBasedIndexes.trim();
-        String[] indexes = trimmedIndexes.split(",");
+        String[] indexes;
+
+        if (splitString.equals(",")) {
+            indexes = trimmedIndexes.split(splitString);
+        } else {
+            indexes = trimmedIndexes.split(" +");
+        }
+
         ArrayList<Index> deletePersons = new ArrayList<>();
 
         for (String index : indexes) {
@@ -558,13 +632,26 @@ public class RemarkCommandParser implements Parser<RemarkCommand> {
         removeAppFile(photoPath.value);
     }
 
+    /**
+     * Check whether the contact photo is the default photo
+     * @param photoPath of the photo
+     * @return true if the photo is the default photo
+     */
+    public static boolean isDefaultPhoto(PhotoPath photoPath) {
+        String photoPathValue = photoPath.value;
+        return photoPathValue.equals(DEFAULT_PHOTO_PATH);
+    }
 
     /**
      * Removes {@code key} from this {@code AddressBook}, and delete the related contact photos.
      * @throws PersonNotFoundException if the {@code key} is not in this {@code AddressBook}.
      */
     public boolean removePerson(ReadOnlyPerson key) throws PersonNotFoundException {
-        removeContactPhoto(key.getPhotoPath());
+        PhotoPath photoPath = key.getPhotoPath();
+        if (!isDefaultPhoto(photoPath)) {
+            removeContactPhoto(photoPath);
+        }
+
         return persons.remove(key);
     }
 
@@ -574,8 +661,7 @@ public class RemarkCommandParser implements Parser<RemarkCommand> {
      */
     public boolean removePersons(ArrayList<ReadOnlyPerson> keys) throws PersonNotFoundException {
         for (ReadOnlyPerson key : keys) {
-            removeContactPhoto(key.getPhotoPath());
-            persons.remove(key);
+            removePerson(key);
         }
         return true;
     }
@@ -593,7 +679,6 @@ public class RemarkCommandParser implements Parser<RemarkCommand> {
     @Override
     public synchronized void deletePerson(ReadOnlyPerson target) throws PersonNotFoundException {
         addressBook.removePerson(target);
-        addressBook.removeContactPhoto(target.getPhotoPath());
         indicateAddressBookChanged();
         checkMasterTagListHasAllTagsUsed();
     }

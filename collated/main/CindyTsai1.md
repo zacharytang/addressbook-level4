@@ -1,5 +1,5 @@
 # CindyTsai1
-###### /java/seedu/address/logic/commands/FindCommand.java
+###### \java\seedu\address\logic\commands\FindCommand.java
 ``` java
     public static final String MESSAGE_USAGE = COMMAND_WORD + ": Finds all persons whose information contain any of "
             + "the specified keywords (case-insensitive) and displays them as a list with index numbers.\n"
@@ -94,7 +94,7 @@
     }
 
 ```
-###### /java/seedu/address/logic/commands/FindCommand.java
+###### \java\seedu\address\logic\commands\FindCommand.java
 ``` java
     /**
      * Search for persons that contain the {@String keyword} in their name
@@ -217,7 +217,7 @@
     }
 }
 ```
-###### /java/seedu/address/logic/commands/SuggestCommand.java
+###### \java\seedu\address\logic\commands\SuggestCommand.java
 ``` java
 /**
  * Suggests a correct command
@@ -240,7 +240,7 @@ public class SuggestCommand extends Command {
     }
 }
 ```
-###### /java/seedu/address/logic/commands/UniqueCommandList.java
+###### \java\seedu\address\logic\commands\UniqueCommandList.java
 ``` java
 /**
  * A list of all command words, including alias and secondary word
@@ -318,7 +318,7 @@ public class UniqueCommandList {
     }
 }
 ```
-###### /java/seedu/address/logic/parser/FindCommandParser.java
+###### \java\seedu\address\logic\parser\FindCommandParser.java
 ``` java
     /**
      * Parses the given {@code String} of arguments in the context of the FindCommand
@@ -391,7 +391,7 @@ public class UniqueCommandList {
     }
 }
 ```
-###### /java/seedu/address/logic/parser/ParserUtil.java
+###### \java\seedu\address\logic\parser\ParserUtil.java
 ``` java
     /**
      * Parses {@code Optional<int> birthday} into a {@code HashMap<Birthday>} if {@code birthday} is present.
@@ -403,7 +403,7 @@ public class UniqueCommandList {
     }
 
 ```
-###### /java/seedu/address/logic/parser/SuggestCommandParser.java
+###### \java\seedu\address\logic\parser\SuggestCommandParser.java
 ``` java
 /**
  * Suggest user input command
@@ -431,7 +431,7 @@ public class SuggestCommandParser implements Parser<SuggestCommand> {
     }
 }
 ```
-###### /java/seedu/address/model/person/Birthday.java
+###### \java\seedu\address\model\person\Birthday.java
 ``` java
 /**
  * Represents a Person's birthday in the address book.
@@ -503,13 +503,13 @@ public class Birthday {
 
 }
 ```
-###### /java/seedu/address/storage/AddressBookStorage.java
+###### \java\seedu\address\storage\AddressBookStorage.java
 ``` java
     void backupAddressBook(ReadOnlyAddressBook addressBook) throws IOException;
 
 }
 ```
-###### /java/seedu/address/storage/XmlAddressBookStorage.java
+###### \java\seedu\address\storage\XmlAddressBookStorage.java
 ``` java
     public void backupAddressBook(ReadOnlyAddressBook addressBook) throws IOException {
         saveAddressBook(addressBook, filePath + "_backup.xml");
@@ -517,7 +517,7 @@ public class Birthday {
 
 }
 ```
-###### /java/seedu/address/ui/ResultDisplay.java
+###### \java\seedu\address\ui\ResultDisplay.java
 ``` java
     private void setDefaultStyle() {
         resultDisplay.getStyleClass().remove("error");
