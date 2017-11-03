@@ -20,8 +20,6 @@ import seedu.address.model.person.timetable.Timetable;
  */
 public class TimetableDisplay extends UiPart<Region> {
 
-    private static final String COLOUR_BORDER = "#000000";
-
     private static final String FXML = "TimetableDisplay.fxml";
     private ArrayList<Timetable> timetables;
 
@@ -100,8 +98,7 @@ public class TimetableDisplay extends UiPart<Region> {
         String borderWidths = topWidth + " " + rightWidth + " " + bottomWidth + " " + leftWidth;
 
         pane.getStyleClass().add(hasLesson ? "timetable-cell-filled" : "timetable-cell-empty");
-        pane.setStyle("-fx-border-color: " + COLOUR_BORDER + ";\n"
-                + "-fx-border-width: " + borderWidths + ";\n"
+        pane.setStyle("-fx-border-width: " + borderWidths + ";\n"
                 + "-fx-border-style: " + borderStyle);
 
         if (weekIndex == WEEK_ODD) {
