@@ -39,14 +39,9 @@ public class DeleteCommandParser implements Parser<DeleteCommand> {
         String preamble = argMultimap.getPreamble();
 
         if (preamble.equals("")) { // code block for delete for a tag
-            try {
-                if (arePrefixesPresent(argMultimap, PREFIX_TAG)) {
-                    Set<Tag> tagList = ParserUtil.parseTags(argMultimap.getAllValues(PREFIX_TAG));
-                    return new DeleteCommand(tagList);
-                }
-            } catch (IllegalValueException ive) {
-                throw new ParseException(
-                        String.format(MESSAGE_INVALID_COMMAND_FORMAT, DeleteCommand.MESSAGE_USAGE));
+            DeleteCommand tagList = getDeleteCommandForTags(argMultimap);
+            if (tagList != null) {
+                return tagList;
             }
         } else if (preamble.matches(DELETE_ONE_PERSON_VALIDATION_REGEX)) { // code block for delete for a person
             try {
@@ -78,6 +73,20 @@ public class DeleteCommandParser implements Parser<DeleteCommand> {
 
         throw new ParseException(
                 String.format(MESSAGE_INVALID_COMMAND_FORMAT, DeleteCommand.MESSAGE_USAGE));
+    }
+
+    //@@author nbriannl
+    private DeleteCommand getDeleteCommandForTags (ArgumentMultimap argMultimap) throws ParseException {
+        try {
+            if (arePrefixesPresent(argMultimap, PREFIX_TAG)) {
+                Set<Tag> tagList = ParserUtil.parseTags(argMultimap.getAllValues(PREFIX_TAG));
+                return new DeleteCommand(tagList);
+            }
+        } catch (IllegalValueException ive) {
+            throw new ParseException(
+                    String.format(MESSAGE_INVALID_COMMAND_FORMAT, DeleteCommand.MESSAGE_USAGE));
+        }
+        return null;
     }
 
     //@@author nbriannl-reused
