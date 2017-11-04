@@ -55,8 +55,6 @@ public class PersonCard extends UiPart<Region> {
     @FXML
     private Label remark;
     @FXML
-    private Label photoPath;
-    @FXML
     private FlowPane tags;
 
     public PersonCard(ReadOnlyPerson person, int displayedIndex) {
@@ -104,7 +102,6 @@ public class PersonCard extends UiPart<Region> {
         email.textProperty().bind(Bindings.convert(person.emailProperty()));
         birthday.textProperty().bind(Bindings.convert(person.birthdayProperty()));
         remark.textProperty().bind(Bindings.convert(person.remarkProperty()));
-        photoPath.textProperty().bind(Bindings.convert(person.photoPathProperty()));
         person.tagProperty().addListener((observable, oldValue, newValue) -> {
             tags.getChildren().clear();
             initTags(person);
