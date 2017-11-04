@@ -99,6 +99,11 @@ public class TimetableParserUtil {
 
         // Split a string of format "MODULE_CODE[CLASS_TYPE]=CLASS_NO"
         for (String classInfo : classes) {
+            // Checks if class info exists
+            if (classInfo.split(SPLIT_LEFT_SQAURE_BRACKET).length != 2) {
+                continue;
+            }
+
             String moduleCode = classInfo.split(SPLIT_LEFT_SQAURE_BRACKET)[0];
             String classType = classInfo.split(SPLIT_LEFT_SQAURE_BRACKET)[1].split(SPLIT_RIGHT_SQUARE_BRACKET)[0];
             String classNo = classInfo.split(SPLIT_EQUALS_SIGN)[1];
