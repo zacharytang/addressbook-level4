@@ -230,7 +230,7 @@
 .combined-timetable-main-label {
     -fx-text-fill: #FFFFFF;
     -fx-font-size: 22px;
-    -fx-font-family: "Segoe UI";
+    -fx-font-family: "Segoe UI Semibold";
 }
 
 .combined-timetable-names {
