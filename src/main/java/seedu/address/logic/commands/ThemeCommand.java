@@ -18,8 +18,8 @@ public class ThemeCommand extends UndoableCommand {
     public static final String COMMAND_ALIAS = "th";
     public static final String COMMAND_SECONDARY = "changetheme";
 
-    public static final String MESSAGE_USAGE = COMMAND_WORD + ": Changes the theme to the specified word. "
-            + "Possible words are: dark, light"
+    public static final String MESSAGE_USAGE = COMMAND_WORD + ": Changes the theme to the specified word.\n"
+            + "Possible words are: dark, light\n"
             + "Example: " + COMMAND_WORD + " dark\n"
             + "         " + COMMAND_WORD + " light";
 
