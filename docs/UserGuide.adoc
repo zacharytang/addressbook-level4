@@ -190,15 +190,15 @@ Removes the picture from the 2nd person in the last shown list.
 `photo 1` +
 Removes the picture from the 1st person in the results of the `find` command.
 
-=== Giving the remark to a person : `remark` _(Since v1.1)_
+=== Giving remarks to a person : `remark` _(Since v1.1)_
 ____
 _Sometimes you want to remind yourself how this person was like in a funny incident. Or you owe friends money for last night's supper. +
 Tags are too short, and your remarks for a person are more descriptive and unique. UniFy lets you add a remark to a person you can always look back on._
 ____
-You can add a remark to any person in UniFy, keeping any special information you might want to remember. +
+You can add remarks to any person in UniFy, keeping any special information you might want to remember. +
 Format: +
-(Add remark) `remark INDEX r/REMARK` +
-(Delete remark): `remark INDEX r/`
+(Add remark) `remark INDEX r/REMARK1 [r/REMARK2]...` +
+(Delete remark): `remark INDEX ` or `remark INDEX r/`
 
 ****
 * Edits the remark of the person at the specified `INDEX`.
@@ -209,6 +209,12 @@ Examples:
 * `list` +
 `remark 2 r/Likes to drink coffee.` +
 Adds 'Likes to drink coffee' remark to the 2nd person in the address book.
+* `list` +
+`remark 2 r/Likes to drink coffee. r/CAP 5.0` +
+Adds 'Likes to drink coffee' and 'CAP5.0' remarks to the 2nd person in the address book.
+* `find n/Betsy` +
+`remark 1 ` +
+Removes the remark from the 1st person in the results of the `find` command.
 * `find n/Betsy` +
 `remark 1 r/` +
 Removes the remark from the 1st person in the results of the `find` command.
@@ -671,8 +677,8 @@ e.g. `edit tag/friends tag/enemy`
 e.g. `photo 1 ph/ C:/desktop/photo.jpg`
 * *Delete Photo* : `photo INDEX` +
 e.g. photo 1
-* *Remark* : `remark INDEX r/REMARK ` +
-e.g. `remark 2 r/Likes to drink coffee.`
+* *Remark* : `remark INDEX r/REMARK1 [r/REMARK2]... ` +
+e.g. `remark 2 r/Likes to drink coffee r/CAP 5.0`
 * *Delete Remark* : `remark INDEX` +
 e.g. remark 2
 * *Find* : `find [n/NAME] [t/Tag] [p/PHONE] [e/EMAIL] [b/BIRTHDAY MONTH] [r/remark]...` +
