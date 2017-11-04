@@ -4,6 +4,8 @@ import static java.util.Objects.requireNonNull;
 import static seedu.address.commons.core.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_REMARK;
 
+import java.util.List;
+
 import seedu.address.commons.core.index.Index;
 import seedu.address.commons.exceptions.IllegalValueException;
 import seedu.address.logic.commands.RemarkCommand;
@@ -15,6 +17,7 @@ import seedu.address.model.person.Remark;
  * Parses input arguments and creates a new RemarkCommand object
  */
 public class RemarkCommandParser implements Parser<RemarkCommand> {
+
     /**
      * Parses the given {@code String} of arguments in the context of the RemarkCommand
      * and returns an RemarkCommand object for execution.
@@ -34,8 +37,26 @@ public class RemarkCommandParser implements Parser<RemarkCommand> {
             throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, RemarkCommand.MESSAGE_USAGE));
         }
 
-        remark = new Remark(argMultimap.getValue(PREFIX_REMARK).orElse(""));
+        remark = getAllRemarks(argMultimap);
 
         return new RemarkCommand(index, remark);
     }
+
+    /**
+     * Concatenates all the remarks into one string.
+     * @param argumentMultimap
+     * @return the remark contains all the remark string.
+     */
+    private Remark getAllRemarks(ArgumentMultimap argumentMultimap) {
+
+        List<String> allRemarks = argumentMultimap.getAllValues(PREFIX_REMARK);
+        String allRemarkString = "";
+
+        if (allRemarks.size() > 1 || (allRemarks.size() == 1 && (!allRemarks.get(0).equals("")))) {
+            allRemarkString = allRemarks.toString();
+        }
+
+        return new Remark(allRemarkString);
+    }
+
 }
