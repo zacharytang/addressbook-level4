@@ -28,15 +28,18 @@ public class RemarkCommand extends UndoableCommand {
             + ": If remarks the person identified by the index number used in the last person listing,"
             + " add the remark to the person.\n"
             + "If the remark field is empty, the remark is removed for the person.\n"
+            + "Accept multiple remarks at the same time.\n"
             + "Parameters: INDEX (must be a positive integer) "
-            + PREFIX_REMARK + "[REMARK] \n"
-            + "Example: (add remark) " + COMMAND_WORD + " 1 " + PREFIX_REMARK + "Likes to drink coffee.\n"
-            + "Example: (delete remark) " + COMMAND_WORD
+            + PREFIX_REMARK + "[REMARK1] " + PREFIX_REMARK + "[REMARK2]\n"
+            + "Example: (add remark) " + COMMAND_WORD + " 1 " + PREFIX_REMARK + "Likes to drink coffee\n"
+            + "Example: (add remarks) " + COMMAND_WORD + " 1 " + PREFIX_REMARK + "Likes to drink coffee "
+            + PREFIX_REMARK + "CAP5.0\n"
+            + "Example: (delete remarks) " + COMMAND_WORD
             + " 2 "
             + PREFIX_REMARK + "\n";
 
-    public static final String MESSAGE_ADD_REMARK_SUCCESS = "Added Remark to Person: %1$s";
-    public static final String MESSAGE_DELETE_REMARK_SUCCESS = "Removed Remark from Person: %1$s";
+    public static final String MESSAGE_ADD_REMARK_SUCCESS = "Added Remark(s) to Person: %1$s";
+    public static final String MESSAGE_DELETE_REMARK_SUCCESS = "Removed Remark(s) from Person: %1$s";
     public static final String MESSAGE_DUPLICATE_PERSON = "This person already exists in the address book.";
 
     private final Index targetIndex;
