@@ -7,26 +7,27 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.FlowPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.shape.Circle?>
 <?import javafx.scene.text.Font?>
 
 <!-- @@author zacharytang -->
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="250.0" prefWidth="448.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="250.0" prefWidth="550.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <HBox prefHeight="250.0" prefWidth="448.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <VBox prefHeight="200.0" prefWidth="100.0">
+            <VBox prefHeight="250.0" prefWidth="182.0" HBox.hgrow="ALWAYS">
                <children>
-                  <AnchorPane prefHeight="218.0" prefWidth="221.0">
+                  <AnchorPane prefHeight="218.0" prefWidth="221.0" VBox.vgrow="ALWAYS">
                      <children>
                         <ImageView fitHeight="210.0" fitWidth="221.0" pickOnBounds="true" preserveRatio="true">
                            <image>
                               <Image url="@../images/personInfoBg.jpg" />
                            </image>
                         </ImageView>
-                        <Circle fx:id="photoCircle" fill="WHITE" layoutX="111.0" layoutY="100.0" strokeWidth="10" radius="86.0" stroke="floralwhite" strokeType="INSIDE" />
+                        <Circle fx:id="photoCircle" fill="WHITE" layoutX="111.0" layoutY="100.0" radius="86.0" stroke="floralwhite" strokeType="INSIDE" strokeWidth="10" />
                      </children>
                   </AnchorPane>
                   <FlowPane fx:id="tags" minHeight="20.0" prefHeight="27.0" prefWidth="221.0">
@@ -35,45 +36,51 @@
                      </VBox.margin></FlowPane>
                </children>
             </VBox>
-            <VBox alignment="CENTER_LEFT" prefHeight="250.0" prefWidth="237.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-               <HBox alignment="CENTER_LEFT" spacing="5">
-                  <Label fx:id="name" styleClass="display_big_label" text="\$name">
-                     <font>
-                        <Font size="24.0" />
-                     </font>
-                  </Label>
+            <VBox alignment="CENTER_LEFT" prefHeight="250.0" prefWidth="237.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" HBox.hgrow="ALWAYS">
+               <StackPane alignment="TOP_LEFT" prefHeight="39.0" prefWidth="304.0" VBox.vgrow="ALWAYS">
+                  <children>
+                     <Label fx:id="name" styleClass="display_big_label" text="\$name">
+                        <font>
+                           <Font size="24.0" />
+                        </font>
+                     </Label>
+                  </children>
+                  <VBox.margin>
+                     <Insets top="20.0" />
+                  </VBox.margin>
+               </StackPane>
+               <HBox prefHeight="100.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
+                  <children>
+                     <VBox prefHeight="150.0" prefWidth="10.0" HBox.hgrow="ALWAYS">
+                        <children>
+                           <Label styleClass="display_small_label" text="Gender" />
+                           <Label styleClass="display_small_label" text="Matric No" />
+                           <Label styleClass="display_small_label" text="Phone" />
+                           <Label styleClass="display_small_label" text="Address" />
+                           <Label styleClass="display_small_label" text="Email" />
+                           <Label styleClass="display_small_label" text="Birthday" />
+                           <Label styleClass="display_small_label" text="Remark" />
+                        </children>
+                     </VBox>
+                     <VBox prefHeight="200.0" prefWidth="100.0" HBox.hgrow="ALWAYS">
+                        <children>
+                           <Label fx:id="gender" prefHeight="17.0" prefWidth="196.0" styleClass="display_small_value" text="\$gender" VBox.vgrow="ALWAYS" />
+                           <Label fx:id="matricNo" prefHeight="17.0" prefWidth="199.0" styleClass="display_small_value" text="\$matricNo" />
+                           <Label fx:id="phone" prefHeight="17.0" prefWidth="193.0" styleClass="display_small_value" text="\$phone" />
+                           <Label fx:id="address" prefHeight="17.0" prefWidth="196.0" styleClass="display_small_value" text="\$address" />
+                           <Label fx:id="email" prefHeight="17.0" prefWidth="188.0" styleClass="display_small_value" text="\$email" />
+                           <Label fx:id="birthday" prefHeight="17.0" prefWidth="214.0" styleClass="display_small_value" text="\$birthday" />
+                           <Label fx:id="remark" prefHeight="17.0" prefWidth="186.0" styleClass="display_small_value" text="\$remark" />
+                        </children>
+                     </VBox>
+                  </children>
+                  <VBox.margin>
+                     <Insets bottom="10.0" />
+                  </VBox.margin>
                </HBox>
-               <HBox alignment="CENTER_LEFT" spacing="5">
-                  <Label styleClass="display_small_label" text="Gender:" />
-                  <Label fx:id="gender" styleClass="display_small_value" text="\$gender" />
-               </HBox>
-               <HBox alignment="CENTER_LEFT" spacing="5">
-                  <Label styleClass="display_small_label" text="Matric No:" />
-                  <Label fx:id="matricNo" styleClass="display_small_value" text="\$matricNo" />
-               </HBox>
-               <HBox alignment="CENTER_LEFT" spacing="5">
-                  <Label styleClass="display_small_label" text="Phone No:" />
-                  <Label fx:id="phone" styleClass="display_small_value" text="\$phone" />
-               </HBox>
-               <HBox alignment="CENTER_LEFT" spacing="5">
-                  <Label styleClass="display_small_label" text="Address:" />
-                  <Label fx:id="address" styleClass="display_small_value" text="\$address" />
-               </HBox>
-               <HBox alignment="CENTER_LEFT" spacing="5">
-                  <Label styleClass="display_small_label" text="Email:" />
-                  <Label fx:id="email" styleClass="display_small_value" text="\$email" />
-               </HBox>
-               <HBox alignment="CENTER_LEFT" spacing="5">
-                  <Label styleClass="display_small_label" text="Birthday:" />
-                  <Label fx:id="birthday" styleClass="display_small_value" text="\$birthday" />
-               </HBox>
-               <HBox alignment="CENTER_LEFT" spacing="5">
-                  <Label styleClass="display_small_label" text="Remark:" />
-                  <Label fx:id="remark" styleClass="display_small_value" text="\$remark" />
-               </HBox>
-               <padding>
-                  <Insets left="25.0" />
-               </padding>
+               <HBox.margin>
+                  <Insets />
+               </HBox.margin>
             </VBox>
          </children>
       </HBox>

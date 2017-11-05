@@ -1,9 +1,5 @@
 package seedu.address.ui;
 
-//import static seedu.address.logic.commands.PhotoCommand.DEFAULT_PHOTO_PATH;
-
-import static seedu.address.logic.commands.PhotoCommand.DEFAULT_PHOTO_PATH;
-
 import java.util.logging.Logger;
 
 import com.google.common.eventbus.Subscribe;
@@ -12,6 +8,7 @@ import javafx.beans.binding.Bindings;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
+import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.Region;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Circle;
@@ -52,6 +49,8 @@ public class PersonInfoPanel extends UiPart<Region> {
     private Label birthday;
     @FXML
     private Label remark;
+    @FXML
+    private FlowPane tags;
 
 
     public PersonInfoPanel() {
@@ -92,23 +91,16 @@ public class PersonInfoPanel extends UiPart<Region> {
         email.textProperty().bind(Bindings.convert(person.emailProperty()));
         birthday.textProperty().bind(Bindings.convert(person.birthdayProperty()));
         remark.textProperty().bind(Bindings.convert(person.remarkProperty()));
+        //initTags(person);
 
         loadPhoto(person);
     }
 
     //@@author April0616
     /**
-     * Set the default contact photo to the default person.
+     * Set the default contact photo.
      */
     public void setDefaultContactPhoto() {
-        /*String defaultPhotoPath = "/images/defaultPhoto.jpg";
-        File defaultPhoto = new File(defaultPhotoPath);
-        URI defaultPhotoUri = defaultPhoto.toURI();
-        Image defaultImage = new Image(defaultPhotoUri.toString());*/
-
-        //photoCircle.setFill(new ImagePattern(defaultImage));
-
-        //File defaultPhoto = new File(defaultPhotoPath);
         Image defaultImage = new Image(MainApp.class.getResourceAsStream(DEFAULT_PHOTO_PATH));
         photoCircle.setFill(new ImagePattern(defaultImage));
 
@@ -122,8 +114,7 @@ public class PersonInfoPanel extends UiPart<Region> {
         String prefix = "src/main/resources";
         String photoPath = person.getPhotoPath().value.substring(prefix.length());
 
-        if (photoPath.equals(DEFAULT_PHOTO_PATH)) {
-            System.out.println(person.getGender().toString());
+        if (photoPath.equals(DEFAULT_PHOTO_PATH)) {  //default male and female photos
             if (person.getGender().toString().equals("Male")) {
                 photoPath = "/images/default_male.jpg";
             } else {
@@ -134,14 +125,8 @@ public class PersonInfoPanel extends UiPart<Region> {
         Image image = new Image(MainApp.class.getResourceAsStream(photoPath));
         photoCircle.setFill(new ImagePattern(image));
 
-      /*  File photo = new File(photoPath);
-        URI photoUri = photo.toURI();
-        Image image = new Image(photoUri.toString());
-
-        photoCircle.setFill(new ImagePattern(image));*/
     }
 
-    //@@author
 
 
     //@@author zacharytang
