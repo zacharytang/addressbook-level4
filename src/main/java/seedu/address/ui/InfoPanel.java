@@ -11,6 +11,7 @@ import javafx.scene.layout.StackPane;
 import seedu.address.commons.core.LogsCenter;
 import seedu.address.commons.events.model.PersonAddressDisplayDirectionsEvent;
 import seedu.address.commons.events.model.PersonAddressDisplayMapEvent;
+import seedu.address.commons.events.ui.PersonPanelSelectionChangedEvent;
 import seedu.address.commons.events.ui.PersonSelectedEvent;
 import seedu.address.commons.events.ui.TimetableDisplayEvent;
 import seedu.address.model.person.ReadOnlyPerson;
@@ -67,15 +68,17 @@ public class InfoPanel extends UiPart<Region> {
     }
 
     @Subscribe
-    public void handlePersonAddressDisplayDirectionsEvent(PersonAddressDisplayDirectionsEvent event) {
+    public void handlePersonPanelSelectionChangeEvent(PersonPanelSelectionChangedEvent event) {
         logger.info(LogsCenter.getEventHandlingLogMessage(event));
-        browserPlaceholder.toFront();
-    }
 
-    @Subscribe
-    public void handlePersonAddressDisplayMapEvent(PersonAddressDisplayMapEvent event) {
-        logger.info(LogsCenter.getEventHandlingLogMessage(event));
-        browserPlaceholder.toFront();
+        timetablePlaceholder.getChildren().removeAll();
+
+        ArrayList<Timetable> timetableToDisplay = new ArrayList<>();
+        timetableToDisplay.add(event.getNewSelection().person.getTimetable());
+        timetableDisplay = new TimetableDisplay(timetableToDisplay);
+        timetablePlaceholder.getChildren().add(timetableDisplay.getRoot());
+
+        timetablePlaceholder.toFront();
     }
 
     @Subscribe
@@ -93,5 +96,17 @@ public class InfoPanel extends UiPart<Region> {
         timetablePlaceholder.getChildren().add(timetableDisplay.getRoot());
 
         timetablePlaceholder.toFront();
+    }
+
+    @Subscribe
+    public void handlePersonAddressDisplayDirectionsEvent(PersonAddressDisplayDirectionsEvent event) {
+        logger.info(LogsCenter.getEventHandlingLogMessage(event));
+        browserPlaceholder.toFront();
+    }
+
+    @Subscribe
+    public void handlePersonAddressDisplayMapEvent(PersonAddressDisplayMapEvent event) {
+        logger.info(LogsCenter.getEventHandlingLogMessage(event));
+        browserPlaceholder.toFront();
     }
 }
