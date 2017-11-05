@@ -20,6 +20,7 @@ import seedu.address.commons.core.Messages;
 import seedu.address.commons.core.index.Index;
 import seedu.address.commons.events.ui.PersonSelectedEvent;
 import seedu.address.commons.exceptions.IllegalValueException;
+import seedu.address.commons.util.FileUtil;
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.model.person.Person;
 import seedu.address.model.person.PhotoPath;
@@ -55,8 +56,9 @@ public class PhotoCommand extends UndoableCommand {
 
     public static final String LOCAL_PHOTOPATH_VALIDATION_REGEX = "([a-zA-Z]:)?(\\\\[a-zA-Z0-9_.-]+)+\\\\?";
     public static final String MESSAGE_LOCAL_PHOTOPATH_CONSTRAINTS =
-            "Photo Path should be the absolute path in your PC. It should be a string started with the name of "
-                    + "your disk, followed by several groups of backslash and string, like c:\\desktop\\happy.jpg";
+            "Photo Path should be the absolute path of a valid file in your PC. It should be a string started with the name of "
+                    + "your disk, followed by several groups of backslash and string, like \"c:\\desktop\\happy.jpg\","
+                    + "and the file should exist.";
     public static final String FILE_SAVED_PARENT_PATH = "src/main/resources/images/contactPhotos/";
     public static final String DEFAULT_PHOTO_PATH = "src/main/resources/images/defaultPhoto.jpg";
 
@@ -80,7 +82,11 @@ public class PhotoCommand extends UndoableCommand {
             this.photoPath = new PhotoPath(DEFAULT_PHOTO_PATH);
 
         } else if (isValidLocalPhotoPath(trimmedPhotoPath)) {
-            //not specified yet
+
+            File targetFile = new File(trimmedPhotoPath);
+            if (!FileUtil.isFileExists(targetFile)) {
+                throw new FileNotFoundException(MESSAGE_LOCAL_PHOTOPATH_CONSTRAINTS);
+            }
 
             this.localPhotoPath = trimmedPhotoPath;
             String extension = getFileExtension(this.localPhotoPath);

@@ -130,11 +130,11 @@
 }
 
 .list-cell:filled:selected {
-    -fx-background-color: #9E9E9E;
+    -fx-background-color: #93a7bf;
 }
 
 .list-cell:filled:selected #cardPane {
-    -fx-border-color: #5b5b5b;
+    -fx-border-color: #60748c;
     -fx-border-width: 1;
 }
 
@@ -170,8 +170,8 @@
 }
 
 .display_small_value {
-    -fx-font-family: "Segoe UI";
-    -fx-font-size: 14px;
+    -fx-font-family: "Segoe UI Semibold";
+    -fx-font-size: 15px;
     -fx-text-fill: #262626;
 }
 
@@ -219,7 +219,7 @@
 }
 
 .timetable-cell-filled {
-    -fx-background-color: #9E9E9E;
+    -fx-background-color: #E0E0E0;
 }
 
 .timetable-cell-empty {
