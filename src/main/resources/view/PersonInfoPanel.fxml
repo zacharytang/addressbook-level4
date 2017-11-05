@@ -30,7 +30,7 @@
                         <Circle fx:id="photoCircle" fill="WHITE" layoutX="111.0" layoutY="100.0" radius="86.0" stroke="floralwhite" strokeType="INSIDE" strokeWidth="10" />
                      </children>
                   </AnchorPane>
-                  <FlowPane fx:id="tags" minHeight="20.0" prefHeight="27.0" prefWidth="221.0">
+                  <FlowPane fx:id="tags" minHeight="20.0" minWidth="190.0" prefHeight="20.0" prefWidth="223.0">
                      <VBox.margin>
                         <Insets bottom="10.0" left="3.0" right="3.0" top="3.0" />
                      </VBox.margin></FlowPane>
