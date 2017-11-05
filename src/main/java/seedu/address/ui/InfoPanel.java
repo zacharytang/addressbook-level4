@@ -1,5 +1,6 @@
 package seedu.address.ui;
 
+import java.util.ArrayList;
 import java.util.logging.Logger;
 
 import com.google.common.eventbus.Subscribe;
@@ -12,6 +13,8 @@ import seedu.address.commons.events.model.PersonAddressDisplayDirectionsEvent;
 import seedu.address.commons.events.model.PersonAddressDisplayMapEvent;
 import seedu.address.commons.events.ui.PersonSelectedEvent;
 import seedu.address.commons.events.ui.TimetableDisplayEvent;
+import seedu.address.model.person.ReadOnlyPerson;
+import seedu.address.model.person.timetable.Timetable;
 
 //@@author zacharytang
 /**
@@ -24,17 +27,13 @@ public class InfoPanel extends UiPart<Region> {
     private final Logger logger = LogsCenter.getLogger(this.getClass());
 
     private BrowserPanel browserPanel;
-    private PersonInfoOverview infoOverview;
-    private CombinedTimetableDisplay combinedTimetableDisplay;
+    private TimetableDisplay timetableDisplay;
 
     @FXML
     private StackPane browserPlaceholder;
 
     @FXML
-    private StackPane infoOverviewPlaceholder;
-
-    @FXML
-    private StackPane combinedTimetablePlaceholder;
+    private StackPane timetablePlaceholder;
 
     public InfoPanel() {
         super(FXML);
@@ -42,13 +41,10 @@ public class InfoPanel extends UiPart<Region> {
         browserPanel = new BrowserPanel();
         browserPlaceholder.getChildren().add(browserPanel.getRoot());
 
-        infoOverview = new PersonInfoOverview();
-        infoOverviewPlaceholder.getChildren().add(infoOverview.getRoot());
+        timetableDisplay = new TimetableDisplay(null);
+        timetablePlaceholder.getChildren().add(timetableDisplay.getRoot());
 
-        combinedTimetableDisplay = new CombinedTimetableDisplay();
-        combinedTimetablePlaceholder.getChildren().add(combinedTimetableDisplay.getRoot());
-
-        infoOverviewPlaceholder.toFront();
+        timetablePlaceholder.toFront();
         registerAsAnEventHandler(this);
     }
 
@@ -59,7 +55,15 @@ public class InfoPanel extends UiPart<Region> {
     @Subscribe
     public void handlePersonSelectedEvent(PersonSelectedEvent event) {
         logger.info(LogsCenter.getEventHandlingLogMessage(event));
-        infoOverviewPlaceholder.toFront();
+
+        timetablePlaceholder.getChildren().removeAll();
+
+        ArrayList<Timetable> timetableToDisplay = new ArrayList<>();
+        timetableToDisplay.add(event.person.getTimetable());
+        timetableDisplay = new TimetableDisplay(timetableToDisplay);
+        timetablePlaceholder.getChildren().add(timetableDisplay.getRoot());
+
+        timetablePlaceholder.toFront();
     }
 
     @Subscribe
@@ -75,8 +79,19 @@ public class InfoPanel extends UiPart<Region> {
     }
 
     @Subscribe
-    public void handleTimetableDisplayEvent(TimetableDisplayEvent event) {
+    private void handleTimetableDisplayEvent(TimetableDisplayEvent event) {
         logger.info(LogsCenter.getEventHandlingLogMessage(event));
-        combinedTimetablePlaceholder.toFront();
+
+        ArrayList<Timetable> timetablesToDisplay = new ArrayList<>();
+
+        for (ReadOnlyPerson person : event.personsToDisplay) {
+            timetablesToDisplay.add(person.getTimetable());
+        }
+
+        timetablePlaceholder.getChildren().removeAll();
+        timetableDisplay = new TimetableDisplay(timetablesToDisplay);
+        timetablePlaceholder.getChildren().add(timetableDisplay.getRoot());
+
+        timetablePlaceholder.toFront();
     }
 }

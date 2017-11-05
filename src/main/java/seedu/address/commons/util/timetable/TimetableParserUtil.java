@@ -296,6 +296,12 @@ public class TimetableParserUtil {
         case "REC":
             return "Recitation";
 
+        case "TUT2":
+            return "Tutorial Type 2";
+
+        case "TUT3":
+            return "Tutorial Type 3";
+
         default:
             throw new IllegalValueException(MESSAGE_INVALID_CLASS_TYPE);
         }

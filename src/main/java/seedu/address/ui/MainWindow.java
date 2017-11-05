@@ -44,14 +44,14 @@ public class MainWindow extends UiPart<Region> {
 
     // Independent Ui parts residing in this Ui container
     private PersonInfoPanel personInfoPanel;
-    private BrowserPanel browserPanel;
+    private InfoPanel infoPanel;
     private PersonListPanel personListPanel;
     private TagListPanel tagListPanel;
     private Config config;
     private UserPrefs prefs;
 
     @FXML
-    private StackPane browserPlaceholder;
+    private StackPane infoPlaceholder;
 
     @FXML
     private StackPane personInfoPlaceholder;
@@ -139,8 +139,8 @@ public class MainWindow extends UiPart<Region> {
      * Fills up all the placeholders of this window.
      */
     void fillInnerParts() {
-        browserPanel = new BrowserPanel();
-        browserPlaceholder.getChildren().add(browserPanel.getRoot());
+        infoPanel = new InfoPanel();
+        infoPlaceholder.getChildren().add(infoPanel.getRoot());
 
         personInfoPanel = new PersonInfoPanel();
         personInfoPlaceholder.getChildren().add(personInfoPanel.getRoot());
@@ -248,7 +248,7 @@ public class MainWindow extends UiPart<Region> {
     }
 
     void releaseResources() {
-        browserPanel.freeResources();
+        infoPanel.freeResources();
     }
 
     @Subscribe
