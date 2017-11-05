@@ -23,13 +23,14 @@ import seedu.address.commons.util.FxViewUtil;
 import seedu.address.logic.Logic;
 import seedu.address.model.UserPrefs;
 
+//@@author April0616
 /**
  * The Main Window. Provides the basic application layout containing
  * a menu bar and space where other JavaFX elements can be placed.
  */
 public class MainWindow extends UiPart<Region> {
 
-    private static final String ICON = "/images/address_book_32.png";
+    private static final String ICON = "/images/icon.png";
     private static final String FXML = "MainWindow.fxml";
     private static final int MIN_HEIGHT = 600;
     private static final int MIN_WIDTH = 450;
@@ -40,14 +41,18 @@ public class MainWindow extends UiPart<Region> {
     private Logic logic;
 
     // Independent Ui parts residing in this Ui container
-    private InfoPanel infoPanel;
+    private PersonInfoPanel personInfoPanel;
+    private BrowserPanel browserPanel;
     private PersonListPanel personListPanel;
     private TagListPanel tagListPanel;
     private Config config;
     private UserPrefs prefs;
 
     @FXML
-    private StackPane infoPlaceholder;
+    private StackPane browserPlaceholder;
+
+    @FXML
+    private StackPane personInfoPlaceholder;
 
     @FXML
     private StackPane commandBoxPlaceholder;
@@ -131,8 +136,11 @@ public class MainWindow extends UiPart<Region> {
      * Fills up all the placeholders of this window.
      */
     void fillInnerParts() {
-        infoPanel = new InfoPanel();
-        infoPlaceholder.getChildren().add(infoPanel.getRoot());
+        browserPanel = new BrowserPanel();
+        browserPlaceholder.getChildren().add(browserPanel.getRoot());
+
+        personInfoPanel = new PersonInfoPanel();
+        personInfoPlaceholder.getChildren().add(personInfoPanel.getRoot());
 
         personListPanel = new PersonListPanel(logic.getFilteredPersonList());
         personListPanelPlaceholder.getChildren().add(personListPanel.getRoot());
@@ -219,7 +227,7 @@ public class MainWindow extends UiPart<Region> {
     }
 
     void releaseResources() {
-        infoPanel.freeResources();
+        browserPanel.freeResources();
     }
 
     @Subscribe
