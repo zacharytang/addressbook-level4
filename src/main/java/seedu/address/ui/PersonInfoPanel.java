@@ -1,5 +1,6 @@
 package seedu.address.ui;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.logging.Logger;
 
@@ -17,6 +18,7 @@ import seedu.address.MainApp;
 import seedu.address.commons.core.LogsCenter;
 import seedu.address.commons.events.ui.PersonPanelSelectionChangedEvent;
 import seedu.address.commons.events.ui.PersonSelectedEvent;
+import seedu.address.logic.commands.PhotoCommand;
 import seedu.address.model.person.ReadOnlyPerson;
 
 //@@author April0616
@@ -155,7 +157,6 @@ public class PersonInfoPanel extends UiPart<Region> {
     public void setDefaultContactPhoto() {
         Image defaultImage = new Image(MainApp.class.getResourceAsStream(DEFAULT_PHOTO_PATH));
         photoCircle.setFill(new ImagePattern(defaultImage));
-
     }
 
     /**
@@ -164,17 +165,21 @@ public class PersonInfoPanel extends UiPart<Region> {
      */
     public void loadPhoto(ReadOnlyPerson person) {
         String prefix = "src/main/resources";
-        String photoPath = person.getPhotoPath().value.substring(prefix.length());
+        //String photoPath = person.getPhotoPath().value.substring(prefix.length());
+        String photoPath = person.getPhotoPath().value;
+        Image image;
 
-        if (photoPath.equals(DEFAULT_PHOTO_PATH)) {  //default male and female photos
+        if (photoPath.equals(PhotoCommand.DEFAULT_PHOTO_PATH)) {  //default male and female photos
             if (person.getGender().toString().equals("Male")) {
-                photoPath = "/images/default_male.jpg";
+                photoPath = prefix + "/images/default_male.jpg";
             } else {
-                photoPath = "/images/default_female.jpg";
+                photoPath = prefix + "/images/default_female.jpg";
             }
         }
 
-        Image image = new Image(MainApp.class.getResourceAsStream(photoPath));
+        File contactImg = new File(photoPath);
+        String url = contactImg.toURI().toString();
+        image = new Image(url);
         photoCircle.setFill(new ImagePattern(image));
 
     }
