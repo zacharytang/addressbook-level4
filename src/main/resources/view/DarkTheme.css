@@ -215,6 +215,10 @@
     -fx-background-color: #424242;
 }
 
+.timetable-tab-pane {
+    -fx-background-color: #383838;
+}
+
 .timetable-cell-filled {
     -fx-background-color: #272727;
 }
