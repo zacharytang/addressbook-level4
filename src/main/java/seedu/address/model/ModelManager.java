@@ -19,6 +19,7 @@ import seedu.address.commons.events.model.AddressBookChangedEvent;
 import seedu.address.commons.events.model.MasterTagListHasAnUnusedTagEvent;
 import seedu.address.commons.events.model.PersonAddressDisplayDirectionsEvent;
 import seedu.address.commons.events.model.PersonAddressDisplayMapEvent;
+import seedu.address.commons.events.ui.PersonSelectedEvent;
 import seedu.address.model.person.Address;
 import seedu.address.model.person.Person;
 import seedu.address.model.person.ReadOnlyPerson;
@@ -83,12 +84,14 @@ public class ModelManager extends ComponentManager implements Model {
     //@@author nbriannl
     @Override
     public void showMapOf(ReadOnlyPerson person) {
+        raise(new PersonSelectedEvent(person));
         raise(new PersonAddressDisplayMapEvent(person));
     }
 
     //@@author nbriannl
     @Override
     public void showDirectionsTo(ReadOnlyPerson target, Address address) {
+        raise(new PersonSelectedEvent(target));
         raise(new PersonAddressDisplayDirectionsEvent(target, address));
     }
 
