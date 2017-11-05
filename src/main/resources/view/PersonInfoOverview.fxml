@@ -42,7 +42,7 @@
                         </HBox>
                         <HBox alignment="CENTER_LEFT" spacing="5">
                             <Label styleClass="display_small_label" text="Address:" />
-                            <Label fx:id="address" styleClass="display_small_value" text="\$address" />
+                            <Label fx:id="address" styleClass="display_small_value" text="\$address" wrapText="true"/>
                         </HBox>
                         <HBox alignment="CENTER_LEFT" spacing="5">
                             <Label styleClass="display_small_label" text="Email:" />
@@ -54,7 +54,7 @@
                         </HBox>
                         <HBox alignment="CENTER_LEFT" spacing="5">
                             <Label styleClass="display_small_label" text="Remark:" />
-                            <Label fx:id="remark" styleClass="display_small_value" text="\$remark" />
+                            <Label fx:id="remark" styleClass="display_small_value" text="\$remark" wrapText="true"/>
                         </HBox>
                     </VBox>
                 </AnchorPane>
