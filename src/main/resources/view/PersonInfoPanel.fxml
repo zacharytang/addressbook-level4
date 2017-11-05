@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.FlowPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Circle?>
+<?import javafx.scene.text.Font?>
+
+<!-- @@author zacharytang -->
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="250.0" prefWidth="448.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <HBox prefHeight="250.0" prefWidth="448.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <VBox prefHeight="200.0" prefWidth="100.0">
+               <children>
+                  <AnchorPane prefHeight="218.0" prefWidth="221.0">
+                     <children>
+                        <ImageView fitHeight="210.0" fitWidth="221.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../images/personInfoBg.jpg" />
+                           </image>
+                        </ImageView>
+                        <Circle fx:id="photoCircle" fill="WHITE" layoutX="111.0" layoutY="100.0" strokeWidth="10" radius="86.0" stroke="floralwhite" strokeType="INSIDE" />
+                     </children>
+                  </AnchorPane>
+                  <FlowPane fx:id="tags" minHeight="20.0" prefHeight="27.0" prefWidth="221.0">
+                     <VBox.margin>
+                        <Insets bottom="10.0" left="3.0" right="3.0" top="3.0" />
+                     </VBox.margin></FlowPane>
+               </children>
+            </VBox>
+            <VBox alignment="CENTER_LEFT" prefHeight="250.0" prefWidth="237.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+               <HBox alignment="CENTER_LEFT" spacing="5">
+                  <Label fx:id="name" styleClass="display_big_label" text="\$name">
+                     <font>
+                        <Font size="24.0" />
+                     </font>
+                  </Label>
+               </HBox>
+               <HBox alignment="CENTER_LEFT" spacing="5">
+                  <Label styleClass="display_small_label" text="Gender:" />
+                  <Label fx:id="gender" styleClass="display_small_value" text="\$gender" />
+               </HBox>
+               <HBox alignment="CENTER_LEFT" spacing="5">
+                  <Label styleClass="display_small_label" text="Matric No:" />
+                  <Label fx:id="matricNo" styleClass="display_small_value" text="\$matricNo" />
+               </HBox>
+               <HBox alignment="CENTER_LEFT" spacing="5">
+                  <Label styleClass="display_small_label" text="Phone No:" />
+                  <Label fx:id="phone" styleClass="display_small_value" text="\$phone" />
+               </HBox>
+               <HBox alignment="CENTER_LEFT" spacing="5">
+                  <Label styleClass="display_small_label" text="Address:" />
+                  <Label fx:id="address" styleClass="display_small_value" text="\$address" />
+               </HBox>
+               <HBox alignment="CENTER_LEFT" spacing="5">
+                  <Label styleClass="display_small_label" text="Email:" />
+                  <Label fx:id="email" styleClass="display_small_value" text="\$email" />
+               </HBox>
+               <HBox alignment="CENTER_LEFT" spacing="5">
+                  <Label styleClass="display_small_label" text="Birthday:" />
+                  <Label fx:id="birthday" styleClass="display_small_value" text="\$birthday" />
+               </HBox>
+               <HBox alignment="CENTER_LEFT" spacing="5">
+                  <Label styleClass="display_small_label" text="Remark:" />
+                  <Label fx:id="remark" styleClass="display_small_value" text="\$remark" />
+               </HBox>
+               <padding>
+                  <Insets left="25.0" />
+               </padding>
+            </VBox>
+         </children>
+      </HBox>
+   </children>
+</AnchorPane>

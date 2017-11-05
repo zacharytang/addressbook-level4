@@ -1,23 +1,25 @@
 package seedu.address.ui;
 
-import java.io.File;
-import java.net.URI;
-import java.util.ArrayList;
+//import static seedu.address.logic.commands.PhotoCommand.DEFAULT_PHOTO_PATH;
+
+import static seedu.address.logic.commands.PhotoCommand.DEFAULT_PHOTO_PATH;
+
 import java.util.logging.Logger;
 
 import com.google.common.eventbus.Subscribe;
+
 import javafx.beans.binding.Bindings;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Region;
+import javafx.scene.paint.ImagePattern;
+import javafx.scene.shape.Circle;
+import seedu.address.MainApp;
 import seedu.address.commons.core.LogsCenter;
 import seedu.address.commons.events.ui.PersonPanelSelectionChangedEvent;
 import seedu.address.commons.events.ui.PersonSelectedEvent;
 import seedu.address.model.person.ReadOnlyPerson;
-import seedu.address.model.person.timetable.Timetable;
 
 //@@author April0616
 
@@ -26,11 +28,14 @@ import seedu.address.model.person.timetable.Timetable;
  */
 public class PersonInfoPanel extends UiPart<Region> {
 
-    private static final String FXML = "PersonInfoOverview.fxml";
+    private static final String FXML = "PersonInfoPanel.fxml";
+    private static String DEFAULT_PHOTO_PATH = "/images/defaultPhoto.jpg";
     private ReadOnlyPerson person;
 
     private final Logger logger = LogsCenter.getLogger(this.getClass());
 
+    @FXML
+    private Circle photoCircle;
     @FXML
     private Label name;
     @FXML
@@ -47,20 +52,13 @@ public class PersonInfoPanel extends UiPart<Region> {
     private Label birthday;
     @FXML
     private Label remark;
-    @FXML
-    private AnchorPane contactPhotoPane;
-    @FXML
-    private ImageView contactPhoto;
 
 
     public PersonInfoPanel() {
         super(FXML);
-
         this.person = null;
         loadDefaultPerson();
 
-        contactPhoto.fitWidthProperty().bind(contactPhotoPane.widthProperty());
-        contactPhoto.fitHeightProperty().bind(contactPhotoPane.heightProperty());
         registerAsAnEventHandler(this);
     }
 
@@ -68,7 +66,7 @@ public class PersonInfoPanel extends UiPart<Region> {
      * Loads the default person when the app is first started
      */
     private void loadDefaultPerson() {
-        name.setText("No person selected");
+        name.setText("Person X");
         gender.setText("");
         matricNo.setText("");
         phone.setText("");
@@ -103,12 +101,17 @@ public class PersonInfoPanel extends UiPart<Region> {
      * Set the default contact photo to the default person.
      */
     public void setDefaultContactPhoto() {
-        String defaultPhotoPath = "src/main/resources/images/defaultPhoto.jpg";
+        /*String defaultPhotoPath = "/images/defaultPhoto.jpg";
         File defaultPhoto = new File(defaultPhotoPath);
         URI defaultPhotoUri = defaultPhoto.toURI();
-        Image defaultImage = new Image(defaultPhotoUri.toString());
-        centerImage(defaultImage);
-        contactPhoto.setImage(defaultImage);
+        Image defaultImage = new Image(defaultPhotoUri.toString());*/
+
+        //photoCircle.setFill(new ImagePattern(defaultImage));
+
+        //File defaultPhoto = new File(defaultPhotoPath);
+        Image defaultImage = new Image(MainApp.class.getResourceAsStream(DEFAULT_PHOTO_PATH));
+        photoCircle.setFill(new ImagePattern(defaultImage));
+
     }
 
     /**
@@ -116,45 +119,30 @@ public class PersonInfoPanel extends UiPart<Region> {
      * @param person
      */
     public void loadPhoto(ReadOnlyPerson person) {
-        String photoPath = person.getPhotoPath().value;
-        File photo = new File(photoPath);
+        String prefix = "src/main/resources";
+        String photoPath = person.getPhotoPath().value.substring(prefix.length());
+
+        if (photoPath.equals(DEFAULT_PHOTO_PATH)) {
+            System.out.println(person.getGender().toString());
+            if (person.getGender().toString().equals("Male")) {
+                photoPath = "/images/default_male.jpg";
+            } else {
+                photoPath = "/images/default_female.jpg";
+            }
+        }
+
+        Image image = new Image(MainApp.class.getResourceAsStream(photoPath));
+        photoCircle.setFill(new ImagePattern(image));
+
+      /*  File photo = new File(photoPath);
         URI photoUri = photo.toURI();
         Image image = new Image(photoUri.toString());
 
-        contactPhoto.setPreserveRatio(true);
-        centerImage(image);
-        contactPhoto.setImage(image);
+        photoCircle.setFill(new ImagePattern(image));*/
     }
 
     //@@author
 
-    /**
-     * Put the image at the center of imageView
-     * Credit to trichetriche (Stack Overflow https://stackoverflow.com/users/4676340/trichetriche)
-     * https://stackoverflow.com/questions/32781362/centering-an-image-in-an-imageview
-     */
-    public void centerImage(Image img) {
-        if (img != null) {
-            double w = 0;
-            double h = 0;
-
-            double ratioX = contactPhoto.getFitWidth() / img.getWidth();
-            double ratioY = contactPhoto.getFitHeight() / img.getHeight();
-
-            double reducCoeff = 0;
-            if (ratioX >= ratioY) {
-                reducCoeff = ratioY;
-            } else {
-                reducCoeff = ratioX;
-            }
-
-            w = img.getWidth() * reducCoeff;
-            h = img.getHeight() * reducCoeff;
-
-            contactPhoto.setX((contactPhoto.getFitWidth() - w) / 2);
-            contactPhoto.setY((contactPhoto.getFitHeight() - h) / 2);
-        }
-    }
 
     //@@author zacharytang
     @Subscribe
