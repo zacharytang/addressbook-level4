@@ -1,5 +1,6 @@
 package seedu.address.ui;
 
+import java.util.HashMap;
 import java.util.logging.Logger;
 
 import com.google.common.eventbus.Subscribe;
@@ -27,9 +28,17 @@ public class PersonInfoPanel extends UiPart<Region> {
 
     private static final String FXML = "PersonInfoPanel.fxml";
     private static String DEFAULT_PHOTO_PATH = "/images/defaultPhoto.jpg";
+
+    private static final String[] COLORS = {"Crimson", "orange", "DarkSalmon", "LightSeaGreen",
+        "RoyalBlue", "MediumPurple", "Teal", "Sienna", "HotPink", "MediumSeaGreen",
+        "DarkSlateBlue"};
+    private static final int NUM_COLORS = COLORS.length;
+    private static int colorIndex = 0;
+
     private ReadOnlyPerson person;
 
     private final Logger logger = LogsCenter.getLogger(this.getClass());
+    private HashMap<String, String> tagColors = new HashMap<String, String>();
 
     @FXML
     private Circle photoCircle;
@@ -74,6 +83,7 @@ public class PersonInfoPanel extends UiPart<Region> {
         birthday.setText("");
         remark.setText("");
 
+
         setDefaultContactPhoto();
     }
 
@@ -82,6 +92,8 @@ public class PersonInfoPanel extends UiPart<Region> {
      */
     private void loadPerson(ReadOnlyPerson person) {
         this.person = person;
+        tags.getChildren().clear();
+        initTags(person);
 
         name.textProperty().bind(Bindings.convert(person.nameProperty()));
         gender.textProperty().bind(Bindings.convert(person.genderProperty()));
@@ -91,9 +103,49 @@ public class PersonInfoPanel extends UiPart<Region> {
         email.textProperty().bind(Bindings.convert(person.emailProperty()));
         birthday.textProperty().bind(Bindings.convert(person.birthdayProperty()));
         remark.textProperty().bind(Bindings.convert(person.remarkProperty()));
-        //initTags(person);
+        person.tagProperty().addListener((observable, oldValue, newValue) -> {
+            tags.getChildren().clear();
+            initTags(person);
+        });
 
         loadPhoto(person);
+    }
+
+    /**
+     * Initializes the tags for person list
+     * @param person
+     */
+    private void initTags(ReadOnlyPerson person) {
+        person.getTags().forEach(tag -> {
+                Label tagLabel = new Label(tag.tagName);
+                tagLabel.setStyle("-fx-background-color: " + getTagColor(tag.tagName));
+                tags.getChildren().add(tagLabel);
+            }
+        );
+    }
+
+    /**
+     * Gets a random unused color for the new tagName, or returns the corresponding color of the old tagName
+     * @param tagName
+     * @return the color of the tag
+     */
+    private String getTagColor(String tagName) {
+        if (!tagColors.containsKey(tagName)) {
+            tagColors.put(tagName, COLORS[colorIndex]);
+            updateColorIndex();
+        }
+        return tagColors.get(tagName);
+    }
+
+    /**
+     * Updates the color index to pick a new color for the new tag.
+     */
+    private static void updateColorIndex() {
+        if (colorIndex == NUM_COLORS - 1) {
+            colorIndex = 0;
+        } else {
+            colorIndex++;
+        }
     }
 
     //@@author April0616
@@ -133,6 +185,8 @@ public class PersonInfoPanel extends UiPart<Region> {
     @Subscribe
     private void handlePersonSelectedEvent(PersonSelectedEvent event) {
         logger.info(LogsCenter.getEventHandlingLogMessage(event));
+        //this.person = person;
+        //initTags(person);
         loadPerson(event.person);
     }
 
