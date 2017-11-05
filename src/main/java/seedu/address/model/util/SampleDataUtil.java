@@ -38,7 +38,7 @@ public class SampleDataUtil {
                         new Phone("99272758"), new Email("berniceyu@example.com"),
                         new Address("Blk 30 Lorong 3 Serangoon Gardens, #07-18"),
                         new Timetable("http://modsn.us/0ECRP"),
-                        new Remark("Likes to drink tea"), new PhotoPath(DEFAULT_PHOTO_PATH),
+                        new Remark("[Likes to drink tea]"), new PhotoPath(DEFAULT_PHOTO_PATH),
                         getTagSet("colleagues", "friends"), new Birthday("16021991")),
                 new Person(new Name("Charlotte Oliveiro"), new Gender("Female"), new MatricNo("A0163331N"),
                         new Phone("93210283"), new Email("charlotte@example.com"),
@@ -49,7 +49,7 @@ public class SampleDataUtil {
                         new Phone("91031282"), new Email("lidavid@example.com"),
                         new Address("Blk 436 Serangoon Gardens Street 26, #16-43"),
                         new Timetable("http://modsn.us/0ECRP"),
-                        new Remark("Likes to drink coffee"), new PhotoPath(DEFAULT_PHOTO_PATH), getTagSet("family"),
+                        new Remark("[Likes to drink coffee]"), new PhotoPath(DEFAULT_PHOTO_PATH), getTagSet("family"),
                         new Birthday("23091992")),
                 new Person(new Name("Irfan Ibrahim"), new Gender("Male"), new MatricNo("A0175531N"),
                         new Phone("92492021"), new Email("irfan@example.com"),
@@ -58,7 +58,7 @@ public class SampleDataUtil {
                 new Person(new Name("Roy Balakrishnan"), new Gender("Male"), new MatricNo("A0155531K"),
                         new Phone("92624417"), new Email("royb@example.com"),
                         new Address("Blk 45 Aljunied Street 85, #11-31"), new Timetable("http://modsn.us/0ECRP"),
-                        new Remark("CAP 5.0"), new PhotoPath(DEFAULT_PHOTO_PATH),
+                        new Remark("[CAP 5.0, likes to drink coffee]"), new PhotoPath(DEFAULT_PHOTO_PATH),
                         getTagSet("colleagues"), new Birthday("05111998"))
             };
         } catch (IllegalValueException e) {

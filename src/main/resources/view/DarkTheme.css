@@ -164,15 +164,16 @@
 }
 
 .display_small_label {
+    -fx-font-weight: 500;
     -fx-font-family: "Segoe UI Semibold";
     -fx-font-size: 15px;
     -fx-text-fill: #ffffff; //ignore
 }
 
 .display_small_value {
-    -fx-font-family: "Segoe UI";
-    -fx-font-size: 14px;
-    -fx-text-fill: #ffffff; //ignore
+    -fx-font-family: "Segoe UI Semibold";
+    -fx-font-size: 15px;
+    -fx-text-fill: #ffffff;
 }
 
 .timetable-label {
@@ -233,7 +234,7 @@
 .combined-timetable-main-label {
     -fx-text-fill: #FFFFFF;
     -fx-font-size: 22px;
-    -fx-font-family: "Segoe UI";
+    -fx-font-family: "Segoe UI Semibold";
 }
 
 .combined-timetable-names {

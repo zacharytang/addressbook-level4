@@ -10,7 +10,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
 import seedu.address.model.person.ReadOnlyPerson;
 
-
+//@@author April0616
 /**
  * An UI component that displays information of a {@code Person}.
  */
@@ -54,8 +54,6 @@ public class PersonCard extends UiPart<Region> {
     private Label birthday;
     @FXML
     private Label remark;
-    @FXML
-    private Label photoPath;
     @FXML
     private FlowPane tags;
 
@@ -104,7 +102,6 @@ public class PersonCard extends UiPart<Region> {
         email.textProperty().bind(Bindings.convert(person.emailProperty()));
         birthday.textProperty().bind(Bindings.convert(person.birthdayProperty()));
         remark.textProperty().bind(Bindings.convert(person.remarkProperty()));
-        photoPath.textProperty().bind(Bindings.convert(person.photoPathProperty()));
         person.tagProperty().addListener((observable, oldValue, newValue) -> {
             tags.getChildren().clear();
             initTags(person);
