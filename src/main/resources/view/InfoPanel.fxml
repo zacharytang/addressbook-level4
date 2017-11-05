@@ -2,8 +2,7 @@
 
 <!-- @@author zacharytang -->
 <?import javafx.scene.layout.StackPane?>
-<StackPane prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+<StackPane prefHeight="700.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
     <StackPane fx:id="browserPlaceholder" prefHeight="150.0" prefWidth="200.0" />
     <StackPane fx:id="timetablePlaceholder" prefHeight="150.0" prefWidth="200.0" />
-    <StackPane fx:id="combinedTimetablePlaceholder" prefHeight="150.0" prefWidth="200.0" />
 </StackPane>
