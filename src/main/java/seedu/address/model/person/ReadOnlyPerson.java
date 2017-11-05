@@ -60,25 +60,25 @@ public interface ReadOnlyPerson {
     default String getAsText() {
         final StringBuilder builder = new StringBuilder();
         builder.append(getName())
-                .append(" Gender: ")
+                .append("\nGender: ")
                 .append(getGender())
-                .append(" Matric No.: ")
+                .append("\nMatric No.: ")
                 .append(getMatricNo())
-                .append(" Phone: ")
+                .append("\nPhone: ")
                 .append(getPhone())
-                .append(" Email: ")
+                .append("\nEmail: ")
                 .append(getEmail())
-                .append(" Address: ")
+                .append("\nAddress: ")
                 .append(getAddress())
-                .append(" Birthday: ")
+                .append("\nBirthday: ")
                 .append(getBirthday())
-                .append(" Timetable: ")
+                .append("\nTimetable: ")
                 .append(getTimetable())
-                .append(" Remark: ")
+                .append("\nRemark: ")
                 .append(getRemark())
-                .append(" Photo Path:")
+                .append("\nPhoto Path:")
                 .append(getPhotoPath())
-                .append(" Tags: ");
+                .append("\nTags: ");
         getTags().forEach(builder::append);
         return builder.toString();
     }
