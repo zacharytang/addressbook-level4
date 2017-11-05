@@ -36,7 +36,7 @@
                </children>
             </VBox>
             <VBox alignment="TOP_LEFT" prefHeight="250.0" prefWidth="237.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" HBox.hgrow="ALWAYS">
-               <StackPane alignment="TOP_LEFT" prefHeight="20.0" prefWidth="304.0" VBox.vgrow="ALWAYS">
+               <StackPane alignment="TOP_LEFT" prefHeight="20.0" prefWidth="304.0" VBox.vgrow="NEVER">
                   <children>
                      <Label fx:id="name" prefHeight="35.0" prefWidth="300.0" styleClass="display_big_label" text="\$name">
                         <font>
