@@ -22,8 +22,9 @@ public class PersonCard extends UiPart<Region> {
         "DarkSlateBlue"};
     private static final int NUM_COLORS = COLORS.length;
     private static int colorIndex = 0;
+    private static HashMap<String, String> tagColors = new HashMap<String, String>();
     public final ReadOnlyPerson person;
-    private HashMap<String, String> tagColors = new HashMap<String, String>();
+
 
     /**
      * Note: Certain keywords such as "location" and "resources" are reserved keywords in JavaFX.
