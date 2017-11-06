@@ -202,20 +202,20 @@ public class AddressBook implements ReadOnlyAddressBook {
     }
 
     /**
-     * Removes {@code key} from this {@code AddressBook}, and delete the related contact photos.
+     * Removes {@code key} from this {@code AddressBook}
      * @throws PersonNotFoundException if the {@code key} is not in this {@code AddressBook}.
      */
     public boolean removePerson(ReadOnlyPerson key) throws PersonNotFoundException {
-        PhotoPath photoPath = key.getPhotoPath();
+        /*PhotoPath photoPath = key.getPhotoPath();
         if (!isDefaultPhoto(photoPath)) {
             removeContactPhoto(photoPath);
-        }
+        }*/
 
         return persons.remove(key);
     }
 
     /**
-     * Removes {@code keys} from this {@code AddressBook}, and delete the related contact photos.
+     * Removes {@code keys} from this {@code AddressBook}
      * @throws PersonNotFoundException if one of the {@code keys} is not in this {@code AddressBook}.
      */
     public boolean removePersons(ArrayList<ReadOnlyPerson> keys) throws PersonNotFoundException {
