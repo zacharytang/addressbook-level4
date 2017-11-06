@@ -15,12 +15,11 @@ import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Circle;
 import seedu.address.MainApp;
 import seedu.address.commons.core.LogsCenter;
-import seedu.address.commons.events.ui.CheckPersonCurrentlyViewedHasTagModifiedEvent;
+import seedu.address.commons.events.ui.PersonHasBeenModifiedEvent;
 import seedu.address.commons.events.ui.PersonPanelSelectionChangedEvent;
 import seedu.address.commons.events.ui.PersonSelectedEvent;
 import seedu.address.logic.commands.PhotoCommand;
 import seedu.address.model.person.ReadOnlyPerson;
-import seedu.address.model.tag.Tag;
 
 //@@author April0616
 
@@ -161,32 +160,26 @@ public class PersonInfoPanel extends UiPart<Region> {
     @Subscribe
     private void handlePersonSelectedEvent(PersonSelectedEvent event) {
         logger.info(LogsCenter.getEventHandlingLogMessage(event));
+        loadPerson(event.person);
         currentlyViewedPerson = event.person;
         logger.info("Currently Viewing: " + currentlyViewedPerson.getName() );
-        loadPerson(event.person);
     }
 
     @Subscribe
-    private void handleCheckPersonCurrentlyViewedHasTagModifiedEvent(
-            CheckPersonCurrentlyViewedHasTagModifiedEvent event) {
-        boolean hasModifiedTag = false;
+    private void handlePersonHasBeenModifiedEvent(PersonHasBeenModifiedEvent event) {
         logger.info(LogsCenter.getEventHandlingLogMessage(event));
-        for (Tag modifiedTag : event.tagsSet) {
-            if (currentlyViewedPerson.getTags().contains(modifiedTag) ) {
-
-                hasModifiedTag = true;
-            }
-        }
-        if (hasModifiedTag) {
-            loadPerson(currentlyViewedPerson);
+        if (currentlyViewedPerson.equals(event.oldPerson)) {
+            loadPerson(event.newPerson);
+            currentlyViewedPerson = event.newPerson;
+            logger.info("Currently Viewing: " + currentlyViewedPerson.getName() + " has been modified.");
         }
     }
 
     @Subscribe
     private void handlePersonPanelSelectionChangeEvent(PersonPanelSelectionChangedEvent event) {
         logger.info(LogsCenter.getEventHandlingLogMessage(event));
+        loadPerson(event.getNewSelection().person);
         currentlyViewedPerson = event.getNewSelection().person;
         logger.info("Currently Viewing: " + currentlyViewedPerson.getName() );
-        loadPerson(event.getNewSelection().person);
     }
 }
