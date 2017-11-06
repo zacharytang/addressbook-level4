@@ -79,7 +79,7 @@ public class PersonInfoPanel extends UiPart<Region> {
         email.setText("");
         birthday.setText("");
         remark.setText("");
-
+        tags.getChildren().clear();
 
         setDefaultContactPhoto();
     }
@@ -106,6 +106,20 @@ public class PersonInfoPanel extends UiPart<Region> {
         });
 
         loadPhoto(person);
+    }
+
+    /**
+     * Clears the binds to allow to loadDefaultPerson() again
+     */
+    private void clearBind() {
+        name.textProperty().unbind();;
+        gender.textProperty().unbind();
+        matricNo.textProperty().unbind();
+        phone.textProperty().unbind();
+        address.textProperty().unbind();
+        email.textProperty().unbind();
+        birthday.textProperty().unbind();
+        remark.textProperty().unbind();
     }
 
     /**
@@ -182,6 +196,7 @@ public class PersonInfoPanel extends UiPart<Region> {
     private void handlePersonHasBeenDeletedEvent(PersonHasBeenDeletedEvent event) {
         logger.info(LogsCenter.getEventHandlingLogMessage(event));
         if (currentlyViewedPerson != null && currentlyViewedPerson.equals(event.deletedPerson)) {
+            clearBind();
             loadDefaultPerson();
             currentlyViewedPerson = null;
             logger.info("Currently Viewing: null");
