@@ -1110,7 +1110,7 @@ Use case ends.
 .  Should be able to hold up to 1000 persons without a noticeable sluggishness in performance for typical usage.
 .  A user with above average typing speed for regular English text (i.e. not code, not system admin commands) should be able to accomplish most of the tasks faster using commands than using the mouse.
 .  Have a user interface that is visible for use indoors as well as outdoors
-.  A user who is not very tech savvy will be able to familiar in using the application within 1 day of use
+.  A user who is not very tech savvy will be able to familiar in using the application within 2 hours of use.
 .  Only the user himself can access his address book
 .  Should be able to easily find a person within a large amount of contacts in terms of robustness in searching capability (i.e. the use of multiple filters)
 .  Should be able to recover the address book data in case of loss of data
