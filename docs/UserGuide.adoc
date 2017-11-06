@@ -371,6 +371,7 @@ Examples:
 * `delete old/2` +
 Deletes all the contacts which you have not viewed/edited/listed for the past 2 months.
 
+// tag::deletetag[]
 ==== Deleting a Tag (or multiple Tags) _(Since v1.1)_
 ____
 _You have just finished a project in a module. Having the 'groupmate' tag to your project mates seems rude for you since
@@ -396,7 +397,8 @@ Deletes the tag 'friends' from all people containing the tag 'friends' in the ad
 
 * `find Betsy` +
 `delete t/module1 t/module2` +
-Deletes the tags 'module1' and 'module2' from all people containing one of the tag, or both of the tags in the address book.
+Deletes the tags 'module1' and 'module2' from all people containing one of the tag, or both of the tags in the address book. +
+// end::deletetag[]
 
 
 === Selecting a person : `select`
@@ -461,6 +463,7 @@ Opens the Google Maps view for the address of the 1st person in the results of t
 `gmaps 2 a/Blk 632 Yishun St 61` +
 Opens the Google Maps directions from Blk 632 Yishun St 61 to the address of the 2nd person listed in the address book.
 
+// tag::locations[]
 ==== Listing persons who live nearby : `nearby` _(Coming in v2.0)_
 ____
 _It is Summer break. Who is there to call for late night supper near your home?_
@@ -508,6 +511,7 @@ Shows the central location among the persons most recently listed with Index 1, 
 * `list t/jcfriends` +
 `central` +
 Shows the central locaton among the persons tagged as 'jcfriends'.
+// end::locations[]
 
 === Listing entered commands : `history`
 ____
