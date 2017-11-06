@@ -14,11 +14,12 @@ import java.util.Set;
 
 import javafx.collections.ObservableList;
 import seedu.address.model.person.Person;
-import seedu.address.model.person.PhotoPath;
+import seedu.address.model.photo.PhotoPath;
 import seedu.address.model.person.ReadOnlyPerson;
 import seedu.address.model.person.UniquePersonList;
 import seedu.address.model.person.exceptions.DuplicatePersonException;
 import seedu.address.model.person.exceptions.PersonNotFoundException;
+import seedu.address.model.photo.UniquePhotoPathList;
 import seedu.address.model.tag.Tag;
 import seedu.address.model.tag.UniqueTagList;
 import seedu.address.model.tag.exceptions.TagNotFoundException;
@@ -31,7 +32,9 @@ public class AddressBook implements ReadOnlyAddressBook {
 
     private final UniquePersonList persons;
     private final UniqueTagList tags;
+    private final UniquePhotoPathList photoPaths;
     private final HashMap<String, String> themes;
+
 
     /*
      * The 'unusual' code block below is an non-static initialization block, sometimes used to avoid duplication
@@ -43,13 +46,14 @@ public class AddressBook implements ReadOnlyAddressBook {
     {
         persons = new UniquePersonList();
         tags = new UniqueTagList();
+        photoPaths = new UniquePhotoPathList();
         themes = new HashMap<String, String>();
     }
 
     public AddressBook() {}
 
     /**
-     * Creates an AddressBook using the Persons and Tags in the {@code toBeCopied}
+     * Creates an AddressBook using the Persons, PhotoPaths and Tags in the {@code toBeCopied}
      */
     public AddressBook(ReadOnlyAddressBook toBeCopied) {
         this();
@@ -61,6 +65,14 @@ public class AddressBook implements ReadOnlyAddressBook {
 
     public void setPersons(List<? extends ReadOnlyPerson> persons) throws DuplicatePersonException {
         this.persons.setPersons(persons);
+        //reset photos
+        for (ReadOnlyPerson p : persons) {
+            p.getPhotoPath().setUsed();
+        }
+    }
+
+    public void setPhotoPaths(List<PhotoPath> photoPaths) throws UniquePhotoPathList.DuplicatePhotoPathException {
+        this.photoPaths.setPhotoPaths(photoPaths);
     }
 
     public void setTags(Set<Tag> tags) {
@@ -75,10 +87,17 @@ public class AddressBook implements ReadOnlyAddressBook {
         try {
             setPersons(newData.getPersonList());
         } catch (DuplicatePersonException e) {
-            assert false : "AddressBooks should not have duplicate persons";
+            assert false : "AddressBook should not have duplicate persons";
         }
 
         setTags(new HashSet<>(newData.getTagList()));
+
+        try {
+            setPhotoPaths(newData.getPhotoPathList());
+        } catch (UniquePhotoPathList.DuplicatePhotoPathException e) {
+            assert false : "AddressBook should not have duplicate photo paths";
+        }
+
         syncMasterTagListWith(persons);
     }
 
@@ -206,10 +225,11 @@ public class AddressBook implements ReadOnlyAddressBook {
      * @throws PersonNotFoundException if the {@code key} is not in this {@code AddressBook}.
      */
     public boolean removePerson(ReadOnlyPerson key) throws PersonNotFoundException {
-        /*PhotoPath photoPath = key.getPhotoPath();
+        PhotoPath photoPath = key.getPhotoPath();
         if (!isDefaultPhoto(photoPath)) {
-            removeContactPhoto(photoPath);
-        }*/
+            //removeContactPhoto(photoPath);
+            photoPath.setUnused();
+        }
 
         return persons.remove(key);
     }
@@ -277,6 +297,11 @@ public class AddressBook implements ReadOnlyAddressBook {
     @Override
     public ObservableList<Tag> getTagList() {
         return tags.asObservableList();
+    }
+
+    @Override
+    public ObservableList<PhotoPath> getPhotoPathList() {
+        return photoPaths.asObservableList();
     }
 
     @Override
