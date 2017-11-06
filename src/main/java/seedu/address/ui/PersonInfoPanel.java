@@ -15,10 +15,12 @@ import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Circle;
 import seedu.address.MainApp;
 import seedu.address.commons.core.LogsCenter;
+import seedu.address.commons.events.ui.CheckPersonCurrentlyViewedHasTagModifiedEvent;
 import seedu.address.commons.events.ui.PersonPanelSelectionChangedEvent;
 import seedu.address.commons.events.ui.PersonSelectedEvent;
 import seedu.address.logic.commands.PhotoCommand;
 import seedu.address.model.person.ReadOnlyPerson;
+import seedu.address.model.tag.Tag;
 
 //@@author April0616
 
@@ -31,6 +33,7 @@ public class PersonInfoPanel extends UiPart<Region> {
     private static String DEFAULT_PHOTO_PATH = "/images/defaultPhoto.jpg";
 
     private ReadOnlyPerson person;
+    private ReadOnlyPerson currentlyViewedPerson;
 
     private final Logger logger = LogsCenter.getLogger(this.getClass());
 
@@ -158,14 +161,32 @@ public class PersonInfoPanel extends UiPart<Region> {
     @Subscribe
     private void handlePersonSelectedEvent(PersonSelectedEvent event) {
         logger.info(LogsCenter.getEventHandlingLogMessage(event));
-        //this.person = person;
-        //initTags(person);
+        currentlyViewedPerson = event.person;
+        logger.info("Currently Viewing: " + currentlyViewedPerson.getName() );
         loadPerson(event.person);
+    }
+
+    @Subscribe
+    private void handleCheckPersonCurrentlyViewedHasTagModifiedEvent(
+            CheckPersonCurrentlyViewedHasTagModifiedEvent event) {
+        boolean hasModifiedTag = false;
+        logger.info(LogsCenter.getEventHandlingLogMessage(event));
+        for (Tag modifiedTag : event.tagsSet) {
+            if (currentlyViewedPerson.getTags().contains(modifiedTag) ) {
+
+                hasModifiedTag = true;
+            }
+        }
+        if (hasModifiedTag) {
+            loadPerson(currentlyViewedPerson);
+        }
     }
 
     @Subscribe
     private void handlePersonPanelSelectionChangeEvent(PersonPanelSelectionChangedEvent event) {
         logger.info(LogsCenter.getEventHandlingLogMessage(event));
+        currentlyViewedPerson = event.getNewSelection().person;
+        logger.info("Currently Viewing: " + currentlyViewedPerson.getName() );
         loadPerson(event.getNewSelection().person);
     }
 }
