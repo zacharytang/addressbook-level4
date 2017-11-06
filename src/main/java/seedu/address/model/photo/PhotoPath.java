@@ -1,4 +1,4 @@
-package seedu.address.model.person;
+package seedu.address.model.photo;
 
 import static java.util.Objects.requireNonNull;
 import static seedu.address.logic.commands.PhotoCommand.DEFAULT_PHOTO_PATH;
@@ -17,6 +17,7 @@ public class PhotoPath {
     public static final String FILE_SAVED_PARENT_PATH = "src/main/resources/images/contactPhotos/";
 
     public final String value;  //photo path
+    private boolean isUsed = false;
 
     public PhotoPath(String photoPath) throws IllegalValueException {
         requireNonNull(photoPath);
@@ -25,6 +26,7 @@ public class PhotoPath {
             throw new IllegalValueException(MESSAGE_APP_PHOTOPATH_CONSTRAINTS);
         }
         this.value = photoPath;
+        this.isUsed = true;
     }
 
     /**
@@ -37,6 +39,20 @@ public class PhotoPath {
         String[] parts = test.split("\\.");
         Boolean isFileSpecified = (parts.length == 2);
         return test.startsWith(FILE_SAVED_PARENT_PATH) && isFileSpecified;
+    }
+
+    /**
+     * Indicates that the photo specified the photo path is used.
+     */
+    public void setUsed() {
+        this.isUsed = true;
+    }
+
+    /**
+     * Indicates that the photo specified the photo path is unused.
+     */
+    public void setUnused() {
+        this.isUsed = false;
     }
 
     @Override
