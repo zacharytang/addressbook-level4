@@ -165,10 +165,11 @@ public class PersonInfoPanel extends UiPart<Region> {
         logger.info("Currently Viewing: " + currentlyViewedPerson.getName() );
     }
 
+    //@@author nbriannl
     @Subscribe
     private void handlePersonHasBeenModifiedEvent(PersonHasBeenModifiedEvent event) {
         logger.info(LogsCenter.getEventHandlingLogMessage(event));
-        if (currentlyViewedPerson.equals(event.oldPerson)) {
+        if (currentlyViewedPerson != null && currentlyViewedPerson.equals(event.oldPerson)) {
             loadPerson(event.newPerson);
             currentlyViewedPerson = event.newPerson;
             logger.info("Currently Viewing: " + currentlyViewedPerson.getName() + " has been modified.");
