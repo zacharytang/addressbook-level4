@@ -15,6 +15,7 @@ import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Circle;
 import seedu.address.MainApp;
 import seedu.address.commons.core.LogsCenter;
+import seedu.address.commons.events.ui.PersonHasBeenDeletedEvent;
 import seedu.address.commons.events.ui.PersonHasBeenModifiedEvent;
 import seedu.address.commons.events.ui.PersonPanelSelectionChangedEvent;
 import seedu.address.commons.events.ui.PersonSelectedEvent;
@@ -175,6 +176,19 @@ public class PersonInfoPanel extends UiPart<Region> {
             logger.info("Currently Viewing: " + currentlyViewedPerson.getName() + " has been modified.");
         }
     }
+
+    //@@author nbriannl
+    @Subscribe
+    private void handlePersonHasBeenDeletedEvent(PersonHasBeenDeletedEvent event) {
+        logger.info(LogsCenter.getEventHandlingLogMessage(event));
+        if (currentlyViewedPerson != null && currentlyViewedPerson.equals(event.deletedPerson)) {
+            loadDefaultPerson();
+            currentlyViewedPerson = null;
+            logger.info("Currently Viewing: null");
+        }
+    }
+
+
 
     @Subscribe
     private void handlePersonPanelSelectionChangeEvent(PersonPanelSelectionChangedEvent event) {

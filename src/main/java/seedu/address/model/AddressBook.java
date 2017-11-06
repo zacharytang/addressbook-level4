@@ -13,6 +13,8 @@ import java.util.Objects;
 import java.util.Set;
 
 import javafx.collections.ObservableList;
+import seedu.address.commons.core.EventsCenter;
+import seedu.address.commons.events.ui.PersonHasBeenDeletedEvent;
 import seedu.address.model.person.Person;
 import seedu.address.model.person.PhotoPath;
 import seedu.address.model.person.ReadOnlyPerson;
@@ -211,7 +213,12 @@ public class AddressBook implements ReadOnlyAddressBook {
             removeContactPhoto(photoPath);
         }
 
-        return persons.remove(key);
+        if (persons.remove(key)) {
+            EventsCenter.getInstance().post(new PersonHasBeenDeletedEvent(key));
+            return true;
+        } else {
+            return false;
+        }
     }
 
     /**
