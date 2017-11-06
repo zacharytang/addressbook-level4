@@ -73,8 +73,8 @@ public class DeleteCommand extends UndoableCommand {
         }
     }
 
-    //@@author nbriannl
-    private CommandResult getCommandResultForPerson () throws CommandException {
+    //@@author April0616
+    private CommandResult getCommandResultForPerson() throws CommandException {
         List<ReadOnlyPerson> lastShownList = model.getFilteredPersonList();
         ArrayList<ReadOnlyPerson> deletePersonList = new ArrayList<>();
 
@@ -96,7 +96,7 @@ public class DeleteCommand extends UndoableCommand {
         return new CommandResult(generateResultMsg(deletePersonList));
     }
 
-    //@@author April0616
+    //@@author nbriannl
     private CommandResult getCommandResultForTag () throws CommandException {
         ArrayList<Tag> arrayTags = new ArrayList<Tag>(targetTags);
         List<Tag> listOfExistingTags = model.getAddressBook().getTagList();
