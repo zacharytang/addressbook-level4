@@ -43,6 +43,7 @@ public class MainWindow extends UiPart<Region> {
     private Logic logic;
 
     // Independent Ui parts residing in this Ui container
+    private TagColorMap tagColorMap;
     private PersonInfoPanel personInfoPanel;
     private InfoPanel infoPanel;
     private PersonListPanel personListPanel;
