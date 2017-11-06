@@ -15,6 +15,7 @@ import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Circle;
 import seedu.address.MainApp;
 import seedu.address.commons.core.LogsCenter;
+import seedu.address.commons.events.model.AddressBookChangedEvent;
 import seedu.address.commons.events.ui.PersonHasBeenDeletedEvent;
 import seedu.address.commons.events.ui.PersonHasBeenModifiedEvent;
 import seedu.address.commons.events.ui.PersonPanelSelectionChangedEvent;
@@ -82,6 +83,8 @@ public class PersonInfoPanel extends UiPart<Region> {
         tags.getChildren().clear();
 
         setDefaultContactPhoto();
+        currentlyViewedPerson = null;
+        logger.info("Currently Viewing: Default Person" );
     }
 
     /**
@@ -106,8 +109,12 @@ public class PersonInfoPanel extends UiPart<Region> {
         });
 
         loadPhoto(person);
+
+        currentlyViewedPerson = person;
+        logger.info("Currently Viewing: " + currentlyViewedPerson.getName() );
     }
 
+    //@@author nbriannl
     /**
      * Clears the binds to allow to loadDefaultPerson() again
      */
@@ -122,6 +129,7 @@ public class PersonInfoPanel extends UiPart<Region> {
         remark.textProperty().unbind();
     }
 
+    //@@author
     /**
      * Initializes the tags for person list
      * @param person
@@ -169,15 +177,11 @@ public class PersonInfoPanel extends UiPart<Region> {
 
     }
 
-
-
     //@@author zacharytang
     @Subscribe
     private void handlePersonSelectedEvent(PersonSelectedEvent event) {
         logger.info(LogsCenter.getEventHandlingLogMessage(event));
         loadPerson(event.person);
-        currentlyViewedPerson = event.person;
-        logger.info("Currently Viewing: " + currentlyViewedPerson.getName() );
     }
 
     //@@author nbriannl
@@ -186,8 +190,6 @@ public class PersonInfoPanel extends UiPart<Region> {
         logger.info(LogsCenter.getEventHandlingLogMessage(event));
         if (currentlyViewedPerson != null && currentlyViewedPerson.equals(event.oldPerson)) {
             loadPerson(event.newPerson);
-            currentlyViewedPerson = event.newPerson;
-            logger.info("Currently Viewing: " + currentlyViewedPerson.getName() + " has been modified.");
         }
     }
 
@@ -198,18 +200,23 @@ public class PersonInfoPanel extends UiPart<Region> {
         if (currentlyViewedPerson != null && currentlyViewedPerson.equals(event.deletedPerson)) {
             clearBind();
             loadDefaultPerson();
-            currentlyViewedPerson = null;
-            logger.info("Currently Viewing: null");
         }
     }
 
+    //@@author nbriannl
+    @Subscribe
+    private void handleAddressBookChangedEvent(AddressBookChangedEvent event) {
+        logger.info(LogsCenter.getEventHandlingLogMessage(event));
+        if (event.data.getPersonList().size() == 0 && event.data.getTagList().size() == 0) {
+            clearBind();
+            loadDefaultPerson();
+        }
+    }
 
-
+    //@@author
     @Subscribe
     private void handlePersonPanelSelectionChangeEvent(PersonPanelSelectionChangedEvent event) {
         logger.info(LogsCenter.getEventHandlingLogMessage(event));
         loadPerson(event.getNewSelection().person);
-        currentlyViewedPerson = event.getNewSelection().person;
-        logger.info("Currently Viewing: " + currentlyViewedPerson.getName() );
     }
 }

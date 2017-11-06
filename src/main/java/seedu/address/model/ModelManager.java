@@ -19,7 +19,6 @@ import seedu.address.commons.events.model.AddressBookChangedEvent;
 import seedu.address.commons.events.model.MasterTagListHasAnUnusedTagEvent;
 import seedu.address.commons.events.model.PersonAddressDisplayDirectionsEvent;
 import seedu.address.commons.events.model.PersonAddressDisplayMapEvent;
-import seedu.address.commons.events.ui.PersonHasBeenModifiedEvent;
 import seedu.address.commons.events.ui.PersonSelectedEvent;
 import seedu.address.model.person.Address;
 import seedu.address.model.person.Person;
@@ -133,7 +132,6 @@ public class ModelManager extends ComponentManager implements Model {
             newTags.remove(tag);
             newPerson.setTags(newTags);
             addressBook.updatePerson(oldPerson, newPerson);
-            raise(new PersonHasBeenModifiedEvent(oldPerson, newPerson));
         }
         indicateAddressBookChanged();
         checkMasterTagListHasAllTagsUsed();
@@ -153,7 +151,6 @@ public class ModelManager extends ComponentManager implements Model {
                 newTags.add(newTag);
                 newPerson.setTags(newTags);
                 addressBook.updatePerson(oldPerson, newPerson);
-                raise(new PersonHasBeenModifiedEvent(oldPerson, newPerson));
             }
         }
         try {
@@ -180,7 +177,6 @@ public class ModelManager extends ComponentManager implements Model {
             throws DuplicatePersonException, PersonNotFoundException {
         requireAllNonNull(target, editedPerson);
         addressBook.updatePerson(target, editedPerson);
-        raise(new PersonHasBeenModifiedEvent(target, editedPerson));
         indicateAddressBookChanged();
         checkMasterTagListHasAllTagsUsed();
     }
