@@ -5,7 +5,6 @@ import static seedu.address.commons.util.FileUtil.copyFile;
 import static seedu.address.commons.util.FileUtil.createIfMissing;
 import static seedu.address.commons.util.FileUtil.getFileExtension;
 import static seedu.address.commons.util.FileUtil.haveSameContent;
-import static seedu.address.commons.util.FileUtil.removeAppFile;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_PHOTO;
 import static seedu.address.model.Model.PREDICATE_SHOW_ALL_PERSONS;
 
@@ -23,7 +22,7 @@ import seedu.address.commons.exceptions.IllegalValueException;
 import seedu.address.commons.util.FileUtil;
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.model.person.Person;
-import seedu.address.model.person.PhotoPath;
+import seedu.address.model.photo.PhotoPath;
 import seedu.address.model.person.ReadOnlyPerson;
 import seedu.address.model.person.exceptions.DuplicatePersonException;
 import seedu.address.model.person.exceptions.PersonNotFoundException;
@@ -76,9 +75,10 @@ public class PhotoCommand extends UndoableCommand {
 
         String trimmedPhotoPath = localPhotoPath.trim();
 
-        if (trimmedPhotoPath.equals("")) { //not specified yet
+        if (trimmedPhotoPath.equals("")) { //not specified yet, delete photo
             this.localPhotoPath = "";
             this.targetIndex = targetIndex;
+
             this.photoPath = new PhotoPath(DEFAULT_PHOTO_PATH);
 
         } else if (isValidLocalPhotoPath(trimmedPhotoPath)) {
@@ -101,6 +101,8 @@ public class PhotoCommand extends UndoableCommand {
             }
 
             this.targetIndex = targetIndex;
+
+            //update photo path
             this.photoPath = new PhotoPath(savePath);
 
         } else {
@@ -121,10 +123,11 @@ public class PhotoCommand extends UndoableCommand {
         ReadOnlyPerson personToPhoto = lastShownList.get(targetIndex.getZeroBased());
 
         //if the command is 'ph/' or the contact has one original photo, then delete it.
-        String originAppPhotoPath = personToPhoto.getPhotoPath().value;
+        PhotoPath originAppPhotoPath = personToPhoto.getPhotoPath();
 
-        if (!(originAppPhotoPath.equals(DEFAULT_PHOTO_PATH))) {
-            removeAppFile(originAppPhotoPath);
+        if (!(originAppPhotoPath.value.equals(DEFAULT_PHOTO_PATH))) {
+            //removeAppFile(originAppPhotoPath);
+            originAppPhotoPath.setUnused();
         }
 
         Person photoedPerson = createPhotoedPerson(personToPhoto, photoPath);

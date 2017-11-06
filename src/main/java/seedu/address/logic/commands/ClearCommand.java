@@ -2,7 +2,12 @@ package seedu.address.logic.commands;
 
 import static java.util.Objects.requireNonNull;
 
+import java.util.ArrayList;
+
+import javafx.collections.ObservableList;
 import seedu.address.model.AddressBook;
+import seedu.address.model.person.Person;
+import seedu.address.model.person.ReadOnlyPerson;
 
 /**
  * Clears the address book.
@@ -18,7 +23,18 @@ public class ClearCommand extends UndoableCommand {
     @Override
     public CommandResult executeUndoableCommand() {
         requireNonNull(model);
+        setAllPhotoUnused();
         model.resetData(new AddressBook());
         return new CommandResult(MESSAGE_SUCCESS);
+    }
+
+    /**
+     * Sets all the profile photos of the original person list unused.
+     */
+    private void setAllPhotoUnused() {
+        ObservableList<ReadOnlyPerson> persons = model.getAddressBook().getPersonList();
+        for (ReadOnlyPerson p : persons) {
+            p.getPhotoPath().setUnused();
+        }
     }
 }
