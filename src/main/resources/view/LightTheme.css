@@ -131,6 +131,7 @@
 
 .list-cell:filled:selected {
     -fx-background-color: #93a7bf;
+    -fx-effect: dropshadow( gaussian , rgba(0,0,0,0.7) , 10,0,5,5 );
 }
 
 .list-cell:filled:selected #cardPane {
@@ -467,4 +468,5 @@
     -fx-border-radius: 2;
     -fx-background-radius: 2;
     -fx-font-size: 11;
+    -fx-effect: dropshadow( gaussian , rgba(0,0,0,0.7) , 5,0,1,1 );
 }
