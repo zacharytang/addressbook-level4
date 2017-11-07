@@ -425,6 +425,7 @@ _Figure 4.2.1 : Timetable class diagram (XYZComponent refers to all other compon
 **Pros:** More user friendly as any type of NUSMods URL is accepted +
 **Cons:** Much harder to detect malformed URL as parsing data does not detect errors in lesson tokens in URL. Shortened URL gives 403 response on bad URL.
 
+// tag::deletetag[]
 === Delete Tag Mechanism
 
 To delete a tag means to delete a specified tag in all persons who contain that tag, as well as in the master list of tags in the Address Book.
@@ -565,8 +566,7 @@ Users may try `delete t/tag` out of instinct and we would need to inform or prom
 **Alternative 2:** On the `Logic` level, invokes a method `deleteTags(tagSet)` on a Set<Tag>. Implement `deleteTags(Set<Tag> tagSet)` in the Model component. +
 **Pros:** The code will be easier for future contributors to understand. +
 **Cons:** Does not maintain consistency of the API
-
----
+// end::deletetag[]
 
 === Remark Command Mechanism
 
