@@ -69,7 +69,7 @@ include::../UserGuide.adoc[tag=oldContact]
 
 ---
 
-=== Other contributions
+=== Other enhancements and contributions
 
 * Add gender & matric No. attribute to addCommand (Pull request https://github.com/CS2103AUG2017-W09-B1/main/pull/68[#68])
 * Delete multiple persons (Pull requests https://github.com/CS2103AUG2017-W09-B1/main/pull/79[#79])
@@ -80,7 +80,18 @@ include::../UserGuide.adoc[tag=oldContact]
 * help form team in Github and setup the team repository
 
 ---
-== Project: FisheryApp
+== Other Projects
 
-*FisheryApp*: [https://github.com/April0616/fishery-app[FisheryApp for LSM4255]]
+=== FisheryApp
 
+Build a software application for LSM4255 (Methods in Mathematical Biology) class in a team.
+This application allows students to participate in a fisheries management game to demonstrate the concepts of resource use,
+co-operation, and the tragedy of the commons.
+
+*Github Link*: [https://github.com/April0616/fishery-app[FisheryApp for LSM4255]]
+
+=== Algorithm Design Project
+
+Analyze the application of Game theory and Nash-equilibrium for a dynamic multiplayer competition.
+Design and implement the basic algorithm for evaluating the value of choices and providing the theoretically
+best strategy in the competition. Write the basic source code for this mathematical tool for “iyingdi” website and its mobile app.
