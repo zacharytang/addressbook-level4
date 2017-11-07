@@ -58,7 +58,7 @@ public class TagListPanel extends UiPart<Region> {
         Set<Tag> tagSet = tagList.stream().collect(Collectors.toSet());
         tagSet.forEach(tag -> {
             Label tagLabel = new Label(tag.tagName);
-            tagLabel.setStyle("-fx-background-color: Gray ");
+            tagLabel.setStyle("-fx-background-color: " + TagColorMap.getInstance().getTagColor(tag.tagName));
             tags.getChildren().add(tagLabel);
         }
         );
@@ -80,15 +80,20 @@ public class TagListPanel extends UiPart<Region> {
      */
     private void initTagsWithUnusedTags (Set<Tag> outdatedTags, Set<Tag> tagSet) {
         tagSet.forEach(tag -> {
-            Label tagLabel = new Label(tag.tagName);
-            if (outdatedTags.contains(tag)) {
-                tagLabel.setStyle("-fx-background-color: LightCoral  ");
-            } else {
-                tagLabel.setStyle("-fx-background-color: Gray ");
+            if (!outdatedTags.contains(tag)) {
+                Label tagLabel = new Label(tag.tagName);
+                tagLabel.setStyle("-fx-background-color: " + TagColorMap.getInstance().getTagColor(tag.tagName));
+                tags.getChildren().add(tagLabel);
             }
+        }
+        );
+        outdatedTags.forEach(tag -> {
+            Label tagLabel = new Label(tag.tagName);
+            tagLabel.setStyle("-fx-background-color: Gray  ");
             tags.getChildren().add(tagLabel);
         }
         );
+
     }
 
     @Subscribe

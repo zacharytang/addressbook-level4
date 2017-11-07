@@ -15,6 +15,9 @@ import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Circle;
 import seedu.address.MainApp;
 import seedu.address.commons.core.LogsCenter;
+import seedu.address.commons.events.model.AddressBookChangedEvent;
+import seedu.address.commons.events.ui.PersonHasBeenDeletedEvent;
+import seedu.address.commons.events.ui.PersonHasBeenModifiedEvent;
 import seedu.address.commons.events.ui.PersonPanelSelectionChangedEvent;
 import seedu.address.commons.events.ui.PersonSelectedEvent;
 import seedu.address.logic.commands.PhotoCommand;
@@ -31,6 +34,7 @@ public class PersonInfoPanel extends UiPart<Region> {
     private static String DEFAULT_PHOTO_PATH = "/images/defaultPhoto.jpg";
 
     private ReadOnlyPerson person;
+    private ReadOnlyPerson currentlyViewedPerson;
 
     private final Logger logger = LogsCenter.getLogger(this.getClass());
 
@@ -76,9 +80,11 @@ public class PersonInfoPanel extends UiPart<Region> {
         email.setText("");
         birthday.setText("");
         remark.setText("");
-
+        tags.getChildren().clear();
 
         setDefaultContactPhoto();
+        currentlyViewedPerson = null;
+        logger.info("Currently Viewing: Default Person" );
     }
 
     /**
@@ -103,8 +109,27 @@ public class PersonInfoPanel extends UiPart<Region> {
         });
 
         loadPhoto(person);
+
+        currentlyViewedPerson = person;
+        logger.info("Currently Viewing: " + currentlyViewedPerson.getName() );
     }
 
+    //@@author nbriannl
+    /**
+     * Clears the binds to allow to loadDefaultPerson() again
+     */
+    private void clearBind() {
+        name.textProperty().unbind();;
+        gender.textProperty().unbind();
+        matricNo.textProperty().unbind();
+        phone.textProperty().unbind();
+        address.textProperty().unbind();
+        email.textProperty().unbind();
+        birthday.textProperty().unbind();
+        remark.textProperty().unbind();
+    }
+
+    //@@author
     /**
      * Initializes the tags for person list
      * @param person
@@ -154,17 +179,43 @@ public class PersonInfoPanel extends UiPart<Region> {
 
     }
 
-
-
     //@@author zacharytang
     @Subscribe
     private void handlePersonSelectedEvent(PersonSelectedEvent event) {
         logger.info(LogsCenter.getEventHandlingLogMessage(event));
-        //this.person = person;
-        //initTags(person);
         loadPerson(event.person);
     }
 
+    //@@author nbriannl
+    @Subscribe
+    private void handlePersonHasBeenModifiedEvent(PersonHasBeenModifiedEvent event) {
+        logger.info(LogsCenter.getEventHandlingLogMessage(event));
+        if (currentlyViewedPerson != null && currentlyViewedPerson.equals(event.oldPerson)) {
+            loadPerson(event.newPerson);
+        }
+    }
+
+    //@@author nbriannl
+    @Subscribe
+    private void handlePersonHasBeenDeletedEvent(PersonHasBeenDeletedEvent event) {
+        logger.info(LogsCenter.getEventHandlingLogMessage(event));
+        if (currentlyViewedPerson != null && currentlyViewedPerson.equals(event.deletedPerson)) {
+            clearBind();
+            loadDefaultPerson();
+        }
+    }
+
+    //@@author nbriannl
+    @Subscribe
+    private void handleAddressBookChangedEvent(AddressBookChangedEvent event) {
+        logger.info(LogsCenter.getEventHandlingLogMessage(event));
+        if (event.data.getPersonList().size() == 0 && event.data.getTagList().size() == 0) {
+            clearBind();
+            loadDefaultPerson();
+        }
+    }
+
+    //@@author
     @Subscribe
     private void handlePersonPanelSelectionChangeEvent(PersonPanelSelectionChangedEvent event) {
         logger.info(LogsCenter.getEventHandlingLogMessage(event));

@@ -10,7 +10,7 @@ public class TagColorMap {
     private static TagColorMap instance;
     private static final String[] COLORS = {"Crimson", "orange", "DarkSalmon", "LightSeaGreen",
         "RoyalBlue", "MediumPurple", "Teal", "Sienna", "HotPink", "MediumSeaGreen",
-        "DarkSlateBlue"};
+        "DarkSlateBlue", "CadetBlue", "MidnightBlue", "LightPink", "LightSalmon", "LightSkyBlue", "PaleVioletRed "};
     private static final int NUM_COLORS = COLORS.length;
     private static int colorIndex = 0;
 

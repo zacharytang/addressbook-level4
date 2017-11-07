@@ -89,7 +89,8 @@ ____
 Views the User Guide for Help +
 Format: `help`
 
-// tag::add[]
+
+// tag::birthday[]
 === Adding a person: `add`
 ____
 _First thing to do with UniFy is to start adding the various people you've met in University, as well as important people like your family._
@@ -102,6 +103,7 @@ module mates with appropriate tags too!_
 ____
 
 Adds a person to the address book +
+
 Format: `add n/NAME g/GENDER p/PHONE_NUMBER e/EMAIL a/ADDRESS [m/MATRIC_NUMBER] [b/BIRTHDAY] [tt/TIMETABLE_URL] [t/TAG]...` +
 Alternatives: `a` , `insert` +
  +
@@ -138,6 +140,8 @@ Examples:
 * `add n/Betsy Crowe g/Female p/1234567 e/betsycrowe@example.com a/Newgate Prison t/friend t/criminal`
 * `add n/Amy Tan g/F p/82974823 tt/4/CS2101classmates e/amy_tan@example.com a/PGP m/a0142323T`
 * `add n/Betty g/F p/12345678 e/betty@example.com b/23051998`
+* `add n/Jasmine p/12345678`
+// end::birthday[]
 
 // end::add[]
 
@@ -283,8 +287,8 @@ Returns all persons in the address book containing *either* 'JCfriends' or 'comp
 * `find b/12` +
 Returns all persons in the address book having birthdays in `December`
 
-// tag::sortCommand[]
-=== Sorting all persons : `sort` _(Coming in v1.5)_
+
+=== Sorting all persons : `sort` _(Coming in v2.0)_
 ____
 _Sometimes, you just meet too many people in University. Don't worry, get all your contacts in order._
 ____
