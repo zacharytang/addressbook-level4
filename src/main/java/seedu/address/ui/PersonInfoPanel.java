@@ -162,21 +162,25 @@ public class PersonInfoPanel extends UiPart<Region> {
         String photoPath = person.getPhotoPath().value;
         Image image;
 
+        logger.info("Is default path? : " + photoPath.equals(PhotoCommand.DEFAULT_PHOTO_PATH) );
+
         if (photoPath.equals(PhotoCommand.DEFAULT_PHOTO_PATH)) {  //default male and female photos
             if (person.getGender().toString().equals("Male")) {
-                photoPath = prefix + "/images/default_male.jpg";
+                photoPath = "/images/default_male.jpg";
             } else if (person.getGender().toString().equals("Female")) {
-                photoPath = prefix + "/images/default_female.jpg";
+                photoPath = "/images/default_female.jpg";
             } else {
-                photoPath = prefix + "/images/defaultPhoto.jpg";
+                photoPath = "/images/defaultPhoto.jpg";
             }
+            image = new Image(MainApp.class.getResourceAsStream(photoPath));
+
+        } else{
+            File contactImg = new File(photoPath);
+            String url = contactImg.toURI().toString();
+            image = new Image(url);
         }
 
-        File contactImg = new File(photoPath);
-        String url = contactImg.toURI().toString();
-        image = new Image(url);
         photoCircle.setFill(new ImagePattern(image));
-
     }
 
     //@@author zacharytang
