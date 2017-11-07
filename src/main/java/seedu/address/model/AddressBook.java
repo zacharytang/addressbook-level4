@@ -13,6 +13,9 @@ import java.util.Objects;
 import java.util.Set;
 
 import javafx.collections.ObservableList;
+import seedu.address.commons.core.EventsCenter;
+import seedu.address.commons.events.ui.PersonHasBeenDeletedEvent;
+import seedu.address.commons.events.ui.PersonHasBeenModifiedEvent;
 import seedu.address.model.person.Person;
 import seedu.address.model.person.PhotoPath;
 import seedu.address.model.person.ReadOnlyPerson;
@@ -120,6 +123,7 @@ public class AddressBook implements ReadOnlyAddressBook {
         // This can cause the tags master list to have additional tags that are not tagged to any person
         // in the person list.
         persons.setPerson(target, editedPerson);
+        EventsCenter.getInstance().post(new PersonHasBeenModifiedEvent(target, editedPerson));
     }
 
     /**
@@ -211,7 +215,12 @@ public class AddressBook implements ReadOnlyAddressBook {
             removeContactPhoto(photoPath);
         }*/
 
-        return persons.remove(key);
+        if (persons.remove(key)) {
+            EventsCenter.getInstance().post(new PersonHasBeenDeletedEvent(key));
+            return true;
+        } else {
+            return false;
+        }
     }
 
     /**
