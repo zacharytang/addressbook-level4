@@ -1,5 +1,5 @@
 # CindyTsai1
-###### \java\seedu\address\logic\commands\FindCommand.java
+###### /java/seedu/address/logic/commands/FindCommand.java
 ``` java
     public static final String MESSAGE_USAGE = COMMAND_WORD + ": Finds all persons whose information contain any of "
             + "the specified keywords (case-insensitive) and displays them as a list with index numbers.\n"
@@ -94,7 +94,7 @@
     }
 
 ```
-###### \java\seedu\address\logic\commands\FindCommand.java
+###### /java/seedu/address/logic/commands/FindCommand.java
 ``` java
     /**
      * Search for persons that contain the {@String keyword} in their name
@@ -217,7 +217,7 @@
     }
 }
 ```
-###### \java\seedu\address\logic\commands\SuggestCommand.java
+###### /java/seedu/address/logic/commands/SuggestCommand.java
 ``` java
 /**
  * Suggests a correct command
@@ -240,7 +240,7 @@ public class SuggestCommand extends Command {
     }
 }
 ```
-###### \java\seedu\address\logic\commands\UniqueCommandList.java
+###### /java/seedu/address/logic/commands/UniqueCommandList.java
 ``` java
 /**
  * A list of all command words, including alias and secondary word
@@ -318,7 +318,53 @@ public class UniqueCommandList {
     }
 }
 ```
-###### \java\seedu\address\logic\parser\FindCommandParser.java
+###### /java/seedu/address/logic/parser/AddCommandParser.java
+``` java
+    /**
+     * Parses the given {@code String} of arguments in the context of the AddCommand
+     * and returns an AddCommand object for execution.
+     * @throws ParseException if the user input does not conform the expected format
+     */
+    public AddCommand parse(String args) throws ParseException {
+        ArgumentMultimap argMultimap =
+                ArgumentTokenizer.tokenize(args, PREFIX_NAME, PREFIX_GENDER, PREFIX_MATRIC_NO,
+                        PREFIX_PHONE, PREFIX_EMAIL,
+                        PREFIX_ADDRESS, PREFIX_TAG, PREFIX_BIRTHDAY, PREFIX_TIMETABLE);
+        if (!arePrefixesPresent(argMultimap, PREFIX_NAME)) {
+            throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, AddCommand.MESSAGE_USAGE));
+        }
+
+        try {
+            Name name = ParserUtil.parseName(argMultimap.getValue(PREFIX_NAME)).get();
+            Gender gender = (arePrefixesPresent(argMultimap, PREFIX_GENDER))
+                    ? ParserUtil.parseGender(argMultimap.getValue(PREFIX_GENDER)).get() : new Gender("");
+            MatricNo matricNo = (arePrefixesPresent(argMultimap, PREFIX_MATRIC_NO))
+                    ? ParserUtil.parseMatricNo(argMultimap.getValue(PREFIX_MATRIC_NO)).get() : new MatricNo("");
+            Phone phone = (arePrefixesPresent(argMultimap, PREFIX_PHONE))
+                    ? ParserUtil.parsePhone(argMultimap.getValue(PREFIX_PHONE)).get() : new Phone("");
+            Email email = (arePrefixesPresent(argMultimap, PREFIX_EMAIL))
+                    ? ParserUtil.parseEmail(argMultimap.getValue(PREFIX_EMAIL)).get() : new Email("");
+            Address address = (arePrefixesPresent(argMultimap, PREFIX_ADDRESS))
+                    ? ParserUtil.parseAddress(argMultimap.getValue(PREFIX_ADDRESS)).get() : new Address("");
+            Timetable timetable = (arePrefixesPresent(argMultimap, PREFIX_TIMETABLE))
+                    ? ParserUtil.parseTimetable(argMultimap.getValue(PREFIX_TIMETABLE)).get() : new Timetable("");
+            Remark remark = new Remark("");
+            PhotoPath photoPath = new PhotoPath(DEFAULT_PHOTO_PATH);
+            Set<Tag> tagList = ParserUtil.parseTags(argMultimap.getAllValues(PREFIX_TAG));
+            Birthday birthday = (arePrefixesPresent(argMultimap, PREFIX_BIRTHDAY))
+                    ? ParserUtil.parseBirthday(argMultimap.getValue(PREFIX_BIRTHDAY)).get() : new Birthday("");
+
+            ReadOnlyPerson person = new Person(name, gender, matricNo, phone, email, address, timetable,
+                    remark, photoPath, tagList, birthday);
+
+            return new AddCommand(person);
+        } catch (IllegalValueException ive) {
+            throw new ParseException(ive.getMessage(), ive);
+        }
+    }
+
+```
+###### /java/seedu/address/logic/parser/FindCommandParser.java
 ``` java
     /**
      * Parses the given {@code String} of arguments in the context of the FindCommand
@@ -391,7 +437,7 @@ public class UniqueCommandList {
     }
 }
 ```
-###### \java\seedu\address\logic\parser\ParserUtil.java
+###### /java/seedu/address/logic/parser/ParserUtil.java
 ``` java
     /**
      * Parses {@code Optional<int> birthday} into a {@code HashMap<Birthday>} if {@code birthday} is present.
@@ -403,7 +449,7 @@ public class UniqueCommandList {
     }
 
 ```
-###### \java\seedu\address\logic\parser\SuggestCommandParser.java
+###### /java/seedu/address/logic/parser/SuggestCommandParser.java
 ``` java
 /**
  * Suggest user input command
@@ -431,7 +477,7 @@ public class SuggestCommandParser implements Parser<SuggestCommand> {
     }
 }
 ```
-###### \java\seedu\address\model\person\Birthday.java
+###### /java/seedu/address/model/person/Birthday.java
 ``` java
 /**
  * Represents a Person's birthday in the address book.
@@ -470,6 +516,9 @@ public class Birthday {
      * Returns true if a given string is a valid person birthday.
      */
     public static boolean isValidBirthday(String test) {
+        if (test.equals("")) {
+            return true;
+        }
         if (test.matches(BIRTHDAY_VALIDATION_REGEX)) {
             try {
                 DateFormat df = new SimpleDateFormat(DATE_FORMAT);
@@ -503,13 +552,13 @@ public class Birthday {
 
 }
 ```
-###### \java\seedu\address\storage\AddressBookStorage.java
+###### /java/seedu/address/storage/AddressBookStorage.java
 ``` java
     void backupAddressBook(ReadOnlyAddressBook addressBook) throws IOException;
 
 }
 ```
-###### \java\seedu\address\storage\XmlAddressBookStorage.java
+###### /java/seedu/address/storage/XmlAddressBookStorage.java
 ``` java
     public void backupAddressBook(ReadOnlyAddressBook addressBook) throws IOException {
         saveAddressBook(addressBook, filePath + "_backup.xml");
@@ -517,7 +566,24 @@ public class Birthday {
 
 }
 ```
-###### \java\seedu\address\ui\ResultDisplay.java
+###### /java/seedu/address/ui/CommandBox.java
+``` java
+    /**
+     * Sets the command box style to indicate a failed command.
+     */
+    private void setStyleToIndicateCommandFailure() {
+        ObservableList<String> styleClass = commandTextField.getStyleClass();
+
+        if (styleClass.contains(ERROR_STYLE_CLASS)) {
+            return;
+        }
+
+        styleClass.add(ERROR_STYLE_CLASS);
+    }
+
+}
+```
+###### /java/seedu/address/ui/ResultDisplay.java
 ``` java
     private void setDefaultStyle() {
         resultDisplay.getStyleClass().remove("error");

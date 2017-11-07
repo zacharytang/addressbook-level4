@@ -1,5 +1,5 @@
 # April0616
-###### \java\seedu\address\logic\commands\DeleteCommand.java
+###### /java/seedu/address/logic/commands/DeleteCommand.java
 ``` java
     public DeleteCommand(ArrayList<Index> targetIndexes) {
         this.targetIndexes = targetIndexes;
@@ -8,7 +8,7 @@
 
 
 ```
-###### \java\seedu\address\logic\commands\DeleteCommand.java
+###### /java/seedu/address/logic/commands/DeleteCommand.java
 ``` java
     private CommandResult getCommandResultForPerson() throws CommandException {
         List<ReadOnlyPerson> lastShownList = model.getFilteredPersonList();
@@ -33,7 +33,7 @@
     }
 
 ```
-###### \java\seedu\address\logic\commands\DeleteCommand.java
+###### /java/seedu/address/logic/commands/DeleteCommand.java
 ``` java
     /**
      * Generate the command result of the deletePersonList.
@@ -63,7 +63,7 @@
     }
 
 ```
-###### \java\seedu\address\logic\commands\DeleteCommand.java
+###### /java/seedu/address/logic/commands/DeleteCommand.java
 ``` java
     @Override
     public boolean equals(Object other) {
@@ -79,7 +79,7 @@
     }
 }
 ```
-###### \java\seedu\address\logic\commands\EditCommand.java
+###### /java/seedu/address/logic/commands/EditCommand.java
 ``` java
     /**
      * Creates and returns a {@code Person} with the details of {@code personToEdit}
@@ -107,7 +107,7 @@
     }
 
 ```
-###### \java\seedu\address\logic\commands\EditCommand.java
+###### /java/seedu/address/logic/commands/EditCommand.java
 ``` java
         public void setGender(Gender gender) {
             this.gender = gender;
@@ -125,7 +125,7 @@
             return Optional.ofNullable(matricNo);
         }
 ```
-###### \java\seedu\address\logic\commands\PhotoCommand.java
+###### /java/seedu/address/logic/commands/PhotoCommand.java
 ``` java
 /**
  * Edits the photo path of a person to the address book.
@@ -347,7 +347,7 @@ public class PhotoCommand extends UndoableCommand {
 }
 
 ```
-###### \java\seedu\address\logic\commands\RemarkCommand.java
+###### /java/seedu/address/logic/commands/RemarkCommand.java
 ``` java
 /**
  * Edits the remark of a person to the address book.
@@ -417,7 +417,7 @@ public class RemarkCommand extends UndoableCommand {
     }
 
     /**
-     * Generate the Successful Message accordingly.
+     * Generates the successful Message accordingly.
      * @param personToRemark
      * @return successful message for adding remark if the remark string is not empty.
      */
@@ -464,7 +464,7 @@ public class RemarkCommand extends UndoableCommand {
     }
 }
 ```
-###### \java\seedu\address\logic\parser\DeleteCommandParser.java
+###### /java/seedu/address/logic/parser/DeleteCommandParser.java
 ``` java
     public static final String DELETE_ONE_PERSON_VALIDATION_REGEX = "-?\\d+";
 
@@ -523,7 +523,7 @@ public class RemarkCommand extends UndoableCommand {
     }
 
 ```
-###### \java\seedu\address\logic\parser\ParserUtil.java
+###### /java/seedu/address/logic/parser/ParserUtil.java
 ``` java
     /**
      * Parses {@code oneBasedIndexes} separated with commas into a {@Code ArrayList<Index>} and returns it.
@@ -560,7 +560,7 @@ public class RemarkCommand extends UndoableCommand {
         return deletePersons;
     }
 ```
-###### \java\seedu\address\logic\parser\ParserUtil.java
+###### /java/seedu/address/logic/parser/ParserUtil.java
 ``` java
     /**
      * Parses a {@code Optional<String> gender} into an {@code Optional<Gender>} if {@code gender} is present.
@@ -580,7 +580,7 @@ public class RemarkCommand extends UndoableCommand {
         return matricNo.isPresent() ? Optional.of(new MatricNo(matricNo.get())) : Optional.empty();
     }
 ```
-###### \java\seedu\address\logic\parser\PhotoCommandParser.java
+###### /java/seedu/address/logic/parser/PhotoCommandParser.java
 ``` java
 /**
  * Parses input arguments and creates a new PhotoCommand object
@@ -620,7 +620,7 @@ public class PhotoCommandParser implements Parser<PhotoCommand> {
     }
 }
 ```
-###### \java\seedu\address\logic\parser\RemarkCommandParser.java
+###### /java/seedu/address/logic/parser/RemarkCommandParser.java
 ``` java
 /**
  * Parses input arguments and creates a new RemarkCommand object
@@ -670,7 +670,7 @@ public class RemarkCommandParser implements Parser<RemarkCommand> {
 
 }
 ```
-###### \java\seedu\address\model\AddressBook.java
+###### /java/seedu/address/model/AddressBook.java
 ``` java
     /**
      * Removes the photo of the specified contact.
@@ -700,7 +700,12 @@ public class RemarkCommandParser implements Parser<RemarkCommand> {
             removeContactPhoto(photoPath);
         }*/
 
-        return persons.remove(key);
+        if (persons.remove(key)) {
+            EventsCenter.getInstance().post(new PersonHasBeenDeletedEvent(key));
+            return true;
+        } else {
+            return false;
+        }
     }
 
     /**
@@ -714,7 +719,7 @@ public class RemarkCommandParser implements Parser<RemarkCommand> {
         return true;
     }
 ```
-###### \java\seedu\address\model\Model.java
+###### /java/seedu/address/model/Model.java
 ``` java
     /** Deletes the given person. */
     void deletePerson(ReadOnlyPerson target) throws PersonNotFoundException;
@@ -722,7 +727,7 @@ public class RemarkCommandParser implements Parser<RemarkCommand> {
     /** Deletes the given list of persons. */
     void deletePersons(ArrayList<ReadOnlyPerson> targets) throws PersonNotFoundException;
 ```
-###### \java\seedu\address\model\ModelManager.java
+###### /java/seedu/address/model/ModelManager.java
 ``` java
     @Override
     public synchronized void deletePerson(ReadOnlyPerson target) throws PersonNotFoundException {
@@ -732,7 +737,7 @@ public class RemarkCommandParser implements Parser<RemarkCommand> {
     }
 
 ```
-###### \java\seedu\address\model\ModelManager.java
+###### /java/seedu/address/model/ModelManager.java
 ``` java
     @Override
     public synchronized void deletePersons(ArrayList<ReadOnlyPerson> targets) throws PersonNotFoundException {
@@ -750,7 +755,7 @@ public class RemarkCommandParser implements Parser<RemarkCommand> {
     }
 
 ```
-###### \java\seedu\address\model\person\Gender.java
+###### /java/seedu/address/model/person/Gender.java
 ``` java
 /**
  * Represents a Person's gender in the address book.
@@ -790,7 +795,7 @@ public class Gender {
      * Returns if a given string is a valid person gender.
      */
     public static boolean isValidGender(String test) {
-        return test.equals(GENDER_VALIDATION_WORD1) || test.equals(GENDER_VALIDATION_WORD2);
+        return test.equals(GENDER_VALIDATION_WORD1) || test.equals(GENDER_VALIDATION_WORD2) || test.equals("");
     }
 
     @Override
@@ -812,7 +817,7 @@ public class Gender {
 
 }
 ```
-###### \java\seedu\address\model\person\MatricNo.java
+###### /java/seedu/address/model/person/MatricNo.java
 ``` java
 /**
  * Represents a Person's Matriculation Number in the address book.
@@ -845,7 +850,7 @@ public class MatricNo {
      */
     public static boolean isValidMatricNo(String test) {
         //return test.matches(MATRIC_NO_VALIDATION_REGEX) && test.length() == 9;
-        return test.matches(MATRIC_NO_VALIDATION_REGEX);
+        return test.matches(MATRIC_NO_VALIDATION_REGEX) || test.equals("");
     }
 
     @Override
@@ -871,7 +876,7 @@ public class MatricNo {
 
 }
 ```
-###### \java\seedu\address\model\person\PhotoPath.java
+###### /java/seedu/address/model/person/PhotoPath.java
 ``` java
 /**
  * Represents the path of a person's photo in the address book.
@@ -924,7 +929,7 @@ public class PhotoPath {
     }
 }
 ```
-###### \java\seedu\address\model\person\Remark.java
+###### /java/seedu/address/model/person/Remark.java
 ``` java
 /**
  * Represents the remark of a person in the address book.
@@ -959,7 +964,7 @@ public class Remark {
     }
 }
 ```
-###### \java\seedu\address\ui\MainWindow.java
+###### /java/seedu/address/ui/MainWindow.java
 ``` java
 /**
  * The Main Window. Provides the basic application layout containing
@@ -1202,7 +1207,7 @@ public class MainWindow extends UiPart<Region> {
     }
 }
 ```
-###### \java\seedu\address\ui\PersonInfoOverview.java
+###### /java/seedu/address/ui/PersonInfoOverview.java
 ``` java
     /**
      * Set the default contact photo to the default person.
@@ -1232,7 +1237,7 @@ public class MainWindow extends UiPart<Region> {
     }
 
 ```
-###### \java\seedu\address\ui\PersonInfoPanel.java
+###### /java/seedu/address/ui/PersonInfoPanel.java
 ``` java
 
 /**
@@ -1244,6 +1249,7 @@ public class PersonInfoPanel extends UiPart<Region> {
     private static String DEFAULT_PHOTO_PATH = "/images/defaultPhoto.jpg";
 
     private ReadOnlyPerson person;
+    private ReadOnlyPerson currentlyViewedPerson;
 
     private final Logger logger = LogsCenter.getLogger(this.getClass());
 
@@ -1289,9 +1295,11 @@ public class PersonInfoPanel extends UiPart<Region> {
         email.setText("");
         birthday.setText("");
         remark.setText("");
-
+        tags.getChildren().clear();
 
         setDefaultContactPhoto();
+        currentlyViewedPerson = null;
+        logger.info("Currently Viewing: Default Person" );
     }
 
     /**
@@ -1316,23 +1324,13 @@ public class PersonInfoPanel extends UiPart<Region> {
         });
 
         loadPhoto(person);
-    }
 
-    /**
-     * Initializes the tags for person list
-     * @param person
-     */
-    private void initTags(ReadOnlyPerson person) {
-        person.getTags().forEach(tag -> {
-                Label tagLabel = new Label(tag.tagName);
-                tagLabel.setStyle("-fx-background-color: " + TagColorMap.getInstance().getTagColor(tag.tagName));
-                tags.getChildren().add(tagLabel);
-            }
-        );
+        currentlyViewedPerson = person;
+        logger.info("Currently Viewing: " + currentlyViewedPerson.getName() );
     }
 
 ```
-###### \java\seedu\address\ui\PersonInfoPanel.java
+###### /java/seedu/address/ui/PersonInfoPanel.java
 ``` java
     /**
      * Set the default contact photo.
@@ -1355,8 +1353,10 @@ public class PersonInfoPanel extends UiPart<Region> {
         if (photoPath.equals(PhotoCommand.DEFAULT_PHOTO_PATH)) {  //default male and female photos
             if (person.getGender().toString().equals("Male")) {
                 photoPath = prefix + "/images/default_male.jpg";
-            } else {
+            } else if (person.getGender().toString().equals("Female")) {
                 photoPath = prefix + "/images/default_female.jpg";
+            } else {
+                photoPath = prefix + "/images/defaultPhoto.jpg";
             }
         }
 
@@ -1367,10 +1367,8 @@ public class PersonInfoPanel extends UiPart<Region> {
 
     }
 
-
-
 ```
-###### \java\seedu\address\ui\TagColorMap.java
+###### /java/seedu/address/ui/TagColorMap.java
 ``` java
     /**
      * Updates the color index to pick a new color for the new tag.
@@ -1384,7 +1382,7 @@ public class PersonInfoPanel extends UiPart<Region> {
     }
 }
 ```
-###### \resources\view\MainWindow.fxml
+###### /resources/view/MainWindow.fxml
 ``` fxml
 <VBox xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1">
     <stylesheets>
@@ -1408,7 +1406,23 @@ public class PersonInfoPanel extends UiPart<Region> {
                        AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
 
 ```
-###### \resources\view\PersonInfoPanel.fxml
+###### /resources/view/PersonInfoPanel.fxml
+``` fxml
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.FlowPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Circle?>
+<?import javafx.scene.text.Font?>
+
+```
+###### /resources/view/PersonInfoPanel.fxml
 ``` fxml
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="250.0"
             prefWidth="550.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1">

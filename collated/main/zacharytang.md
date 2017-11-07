@@ -1,5 +1,5 @@
 # zacharytang
-###### \java\seedu\address\commons\events\ui\PersonSelectedEvent.java
+###### /java/seedu/address/commons/events/ui/PersonSelectedEvent.java
 ``` java
 /**
  * Represents a person being selected
@@ -18,7 +18,7 @@ public class PersonSelectedEvent extends BaseEvent {
     }
 }
 ```
-###### \java\seedu\address\commons\events\ui\TimetableDisplayEvent.java
+###### /java/seedu/address/commons/events/ui/TimetableDisplayEvent.java
 ``` java
 /**
  * Represents a request to display timetables in the UI
@@ -47,7 +47,7 @@ public class TimetableDisplayEvent extends BaseEvent {
     }
 }
 ```
-###### \java\seedu\address\commons\util\timetable\Lesson.java
+###### /java/seedu/address/commons/util/timetable/Lesson.java
 ``` java
 /**
  * Represents a lesson that a module has
@@ -96,7 +96,7 @@ public class Lesson {
     }
 }
 ```
-###### \java\seedu\address\commons\util\timetable\ModuleInfoFromUrl.java
+###### /java/seedu/address/commons/util/timetable/ModuleInfoFromUrl.java
 ``` java
 /**
  * Represents lesson for a specific module parsed from a NUSMods url
@@ -142,7 +142,7 @@ public class ModuleInfoFromUrl {
     }
 }
 ```
-###### \java\seedu\address\commons\util\timetable\TimetableInfoFromUrl.java
+###### /java/seedu/address/commons/util/timetable/TimetableInfoFromUrl.java
 ``` java
 /**
  * Represents all timetable information parsed from a NUSMods url
@@ -184,7 +184,7 @@ public class TimetableInfoFromUrl {
     }
 }
 ```
-###### \java\seedu\address\commons\util\timetable\TimetableParserUtil.java
+###### /java/seedu/address/commons/util/timetable/TimetableParserUtil.java
 ``` java
 /**
  * Helper class that contains utilities to parse NUSMods urls.
@@ -483,7 +483,7 @@ public class TimetableParserUtil {
     }
 }
 ```
-###### \java\seedu\address\logic\commands\TimetableCommand.java
+###### /java/seedu/address/logic/commands/TimetableCommand.java
 ``` java
 /**
  * Selects persons identified using their last displayed indexes and displays a combined timetable
@@ -546,7 +546,7 @@ public class TimetableCommand extends Command {
     }
 }
 ```
-###### \java\seedu\address\logic\parser\TimetableCommandParser.java
+###### /java/seedu/address/logic/parser/TimetableCommandParser.java
 ``` java
 
 /**
@@ -606,7 +606,7 @@ public class TimetableCommandParser implements Parser<TimetableCommand> {
     }
 }
 ```
-###### \java\seedu\address\model\person\timetable\Timetable.java
+###### /java/seedu/address/model/person/timetable/Timetable.java
 ``` java
 /**
  * Represents a person's timetable in the address book
@@ -658,6 +658,9 @@ public class Timetable {
     public Timetable(String url) throws IllegalValueException {
         requireNonNull(url);
         String trimmedUrl = url.trim();
+        if (trimmedUrl == "") {
+            trimmedUrl = "http://modsn.us/5tN3z";
+        }
         if (!isValidUrl(trimmedUrl)) {
             throw new IllegalValueException(MESSAGE_TIMETABLE_URL_CONSTRAINTS);
         }
@@ -706,7 +709,7 @@ public class Timetable {
 
 }
 ```
-###### \java\seedu\address\model\person\timetable\TimetableDay.java
+###### /java/seedu/address/model/person/timetable/TimetableDay.java
 ``` java
 /**
  * Represents a single day in a timetable
@@ -764,7 +767,7 @@ public class TimetableDay {
     }
 }
 ```
-###### \java\seedu\address\model\person\timetable\TimetableInfo.java
+###### /java/seedu/address/model/person/timetable/TimetableInfo.java
 ``` java
 /**
  * Fully represents all information about a person's timetable slots
@@ -831,7 +834,7 @@ public class TimetableInfo {
     }
 }
 ```
-###### \java\seedu\address\model\person\timetable\TimetableSlot.java
+###### /java/seedu/address/model/person/timetable/TimetableSlot.java
 ``` java
 /**
  * Represents a single slot in a timetable
@@ -860,7 +863,7 @@ public class TimetableSlot {
     }
 }
 ```
-###### \java\seedu\address\model\person\timetable\TimetableWeek.java
+###### /java/seedu/address/model/person/timetable/TimetableWeek.java
 ``` java
 /**
  * Represents a full timetable for a week
@@ -910,7 +913,7 @@ public class TimetableWeek {
     }
 }
 ```
-###### \java\seedu\address\ui\CombinedTimetableDisplay.java
+###### /java/seedu/address/ui/CombinedTimetableDisplay.java
 ``` java
 /**
  * Display for the combined timetable command
@@ -974,7 +977,7 @@ public class CombinedTimetableDisplay extends UiPart<Region> {
     }
 }
 ```
-###### \java\seedu\address\ui\InfoPanel.java
+###### /java/seedu/address/ui/InfoPanel.java
 ``` java
 /**
  * Container for both browser panel and person information panel
@@ -1069,7 +1072,7 @@ public class InfoPanel extends UiPart<Region> {
     }
 }
 ```
-###### \java\seedu\address\ui\PersonInfoOverview.java
+###### /java/seedu/address/ui/PersonInfoOverview.java
 ``` java
 /**
  * A UI component that displays a person's data on the main panel
@@ -1163,7 +1166,7 @@ public class PersonInfoOverview extends UiPart<Region> {
     }
 
 ```
-###### \java\seedu\address\ui\PersonInfoOverview.java
+###### /java/seedu/address/ui/PersonInfoOverview.java
 ``` java
     @Subscribe
     private void handlePersonSelectedEvent(PersonSelectedEvent event) {
@@ -1178,24 +1181,16 @@ public class PersonInfoOverview extends UiPart<Region> {
     }
 }
 ```
-###### \java\seedu\address\ui\PersonInfoPanel.java
+###### /java/seedu/address/ui/PersonInfoPanel.java
 ``` java
     @Subscribe
     private void handlePersonSelectedEvent(PersonSelectedEvent event) {
         logger.info(LogsCenter.getEventHandlingLogMessage(event));
-        //this.person = person;
-        //initTags(person);
         loadPerson(event.person);
     }
 
-    @Subscribe
-    private void handlePersonPanelSelectionChangeEvent(PersonPanelSelectionChangedEvent event) {
-        logger.info(LogsCenter.getEventHandlingLogMessage(event));
-        loadPerson(event.getNewSelection().person);
-    }
-}
 ```
-###### \java\seedu\address\ui\TimetableDisplay.java
+###### /java/seedu/address/ui/TimetableDisplay.java
 ``` java
 /**
  * Display for timetables in the UI
@@ -1303,7 +1298,7 @@ public class TimetableDisplay extends UiPart<Region> {
     }
 }
 ```
-###### \resources\view\CombinedTimetableDisplay.fxml
+###### /resources/view/CombinedTimetableDisplay.fxml
 ``` fxml
 
 <?import javafx.geometry.Insets?>
@@ -1351,7 +1346,7 @@ public class TimetableDisplay extends UiPart<Region> {
     </SplitPane>
 </StackPane>
 ```
-###### \resources\view\DarkTheme.css
+###### /resources/view/DarkTheme.css
 ``` css
 .split-pane:horizontal .split-pane-divider {
     -fx-background-color: #383838;
@@ -1382,7 +1377,7 @@ public class TimetableDisplay extends UiPart<Region> {
 }
 
 ```
-###### \resources\view\DarkTheme.css
+###### /resources/view/DarkTheme.css
 ``` css
 .display_big_label {
     -fx-font-family: "Segoe UI";
@@ -1476,7 +1471,7 @@ public class TimetableDisplay extends UiPart<Region> {
 }
 
 ```
-###### \resources\view\InfoPanel.fxml
+###### /resources/view/InfoPanel.fxml
 ``` fxml
 <?import javafx.scene.layout.StackPane?>
 <StackPane prefHeight="700.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
@@ -1484,7 +1479,7 @@ public class TimetableDisplay extends UiPart<Region> {
     <StackPane fx:id="timetablePlaceholder" prefHeight="150.0" prefWidth="200.0" />
 </StackPane>
 ```
-###### \resources\view\LightTheme.css
+###### /resources/view/LightTheme.css
 ``` css
 .split-pane:horizontal .split-pane-divider {
     -fx-background-color: #FAFAFA;
@@ -1515,7 +1510,7 @@ public class TimetableDisplay extends UiPart<Region> {
 }
 
 ```
-###### \resources\view\LightTheme.css
+###### /resources/view/LightTheme.css
 ``` css
 .display_big_label {
     -fx-font-family: "Segoe UI";
@@ -1608,7 +1603,7 @@ public class TimetableDisplay extends UiPart<Region> {
 }
 
 ```
-###### \resources\view\MainWindow.fxml
+###### /resources/view/MainWindow.fxml
 ``` fxml
                 <StackPane fx:id="infoPlaceholder" styleClass="pane-with-border">
                     <padding>
@@ -1621,7 +1616,7 @@ public class TimetableDisplay extends UiPart<Region> {
     <StackPane fx:id="statusbarPlaceholder" VBox.vgrow="NEVER"/>
 </VBox>
 ```
-###### \resources\view\PersonInfoOverview.fxml
+###### /resources/view/PersonInfoOverview.fxml
 ``` fxml
 <StackPane styleClass="info-panel" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
     <!--Edit dividerPositions below to adjust vertical divider position between the person info and the timetable area -->
@@ -1678,7 +1673,7 @@ public class TimetableDisplay extends UiPart<Region> {
     </SplitPane>
 </StackPane>
 ```
-###### \resources\view\TimetableDisplay.fxml
+###### /resources/view/TimetableDisplay.fxml
 ``` fxml
 
 <StackPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
