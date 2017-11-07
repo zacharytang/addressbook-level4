@@ -36,7 +36,7 @@ public class MatricNo {
      */
     public static boolean isValidMatricNo(String test) {
         //return test.matches(MATRIC_NO_VALIDATION_REGEX) && test.length() == 9;
-        return test.matches(MATRIC_NO_VALIDATION_REGEX);
+        return test.matches(MATRIC_NO_VALIDATION_REGEX) || test.equals("");
     }
 
     @Override
