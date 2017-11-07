@@ -36,6 +36,8 @@ public class TagColorMap {
         return tagColors.get(tagName);
     }
 
+
+    //@@author April0616
     /**
      * Updates the color index to pick a new color for the new tag.
      */
