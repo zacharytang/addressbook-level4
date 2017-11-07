@@ -84,7 +84,7 @@ public class RemarkCommand extends UndoableCommand {
     }
 
     /**
-     * Generate the Successful Message accordingly.
+     * Generates the successful Message accordingly.
      * @param personToRemark
      * @return successful message for adding remark if the remark string is not empty.
      */
