@@ -1,5 +1,5 @@
 # nbriannl-reused
-###### \java\seedu\address\logic\commands\EditCommandTest.java
+###### /java/seedu/address/logic/commands/EditCommandTest.java
 ``` java
     @Test
     public void equals() throws Exception {
