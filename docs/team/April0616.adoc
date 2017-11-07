@@ -1,4 +1,6 @@
 = Fan Yuting - Project Portfolio
+
+---
 ifdef::env-github,env-browser[:outfilesuffix: .adoc]
 :imagesDir: ../images
 :stylesDir: ../stylesheets
@@ -11,19 +13,6 @@ It is written in Java, and has about 10 kLoC.
 
 *Code contributed*: [https://github.com/CS2103AUG2017-W09-B1/main/blob/master/collated/main/April0616.md[Functional code]] [https://github.com/CS2103AUG2017-W09-B1/main/blob/master/collated/test/April0616.md[Test code]] {give links to collated code files}
 
-=== Enhancement Added List
----
-v1.0 Implement colorful tags
-
-v1.1 Remark Command: add remark to persons
-
-v1.2 Add gender & matric No. attribute to addCommand
-
-v1.3 Delete multiple persons
-
-v1.4 PhotoCommand: add display pictures of contacts
-
-v1.5 Improve UI
 
 === Enhancement Added: RemarkCommand
 
@@ -47,6 +36,8 @@ if the user key in the select command.
 
 ==== Implementation
 
+(Pull requests https://github.com/CS2103AUG2017-W09-B1/main/pull/50[#50], https://github.com/CS2103AUG2017-W09-B1/main/pull/131[#131])
+
 ---
 #Start of Extract [from: Developer Guide]#
 
@@ -56,35 +47,40 @@ include::../DeveloperGuide.adoc[tag=remarkCommand]
 
 ---
 
-=== Enhancement Proposed: Add Password
+=== Enhancement Proposed: Temporary Tags
 
----
 #Start of Extract [from: User Guide]#
 
-include::../UserGuide.adoc[tag=password]
+include::../UserGuide.adoc[tag=tempTag]
 
 #End of Extract#
 
 ---
 
-=== Enhancement Proposed: sort Command
+=== Enhancement Proposed: Delete Old Contacts
 
----
+
 #Start of Extract [from: User Guide]#
 
-include::../UserGuide.adoc[tag=sortCommand]
+include::../UserGuide.adoc[tag=oldContact]
 
 #End of Extract#
+
 
 ---
 
 === Other contributions
 
-* Updated the GUI color scheme (Pull requests https://github.com[#33], https://github.com[#34])
-* Wrote additional tests to increase coverage from 88% to 92% (Pull requests https://github.com[#36], https://github.com[#38])
+* Add gender & matric No. attribute to addCommand (Pull request https://github.com/CS2103AUG2017-W09-B1/main/pull/68[#68])
+* Delete multiple persons (Pull requests https://github.com/CS2103AUG2017-W09-B1/main/pull/79[#79])
+* PhotoCommand: add display pictures of contacts (Pull requests https://github.com/CS2103AUG2017-W09-B1/main/pull/96[#96], https://github.com/CS2103AUG2017-W09-B1/main/pull/150[#150])
+* Improve UI (Pull request https://github.com/CS2103AUG2017-W09-B1/main/pull/133[#133])
+* Fix some bugs (Pull requests https://github.com/CS2103AUG2017-W09-B1/main/pull/108/files[#108], https://github.com/CS2103AUG2017-W09-B1/main/pull/64[#64])
+* Improve styles (Pull requests https://github.com/CS2103AUG2017-W09-B1/main/pull/140/files[#140], https://github.com/CS2103AUG2017-W09-B1/main/pull/107[#107], https://github.com/CS2103AUG2017-W09-B1/main/pull/131[#131])
+* help form team in Github and setup the team repository
 
-== Project: FisheryApp
 ---
+== Project: FisheryApp
 
 *FisheryApp*: [https://github.com/April0616/fishery-app[FisheryApp for LSM4255]]
 
