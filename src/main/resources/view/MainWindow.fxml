@@ -11,6 +11,7 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 
+<!-- @@author April0616 -->
 <VBox xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1">
     <stylesheets>
         <URL value="@Extensions.css"/>
@@ -69,7 +70,6 @@
                             </padding>
                         </StackPane>
                     </VBox>
-                    <!-- @@author -->
                 </SplitPane>
                 <!-- @@author zacharytang -->
                 <StackPane fx:id="infoPlaceholder" styleClass="pane-with-border">
