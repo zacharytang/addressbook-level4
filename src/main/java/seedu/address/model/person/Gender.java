@@ -43,7 +43,7 @@ public class Gender {
      * Returns if a given string is a valid person gender.
      */
     public static boolean isValidGender(String test) {
-        return test.equals(GENDER_VALIDATION_WORD1) || test.equals(GENDER_VALIDATION_WORD2);
+        return test.equals(GENDER_VALIDATION_WORD1) || test.equals(GENDER_VALIDATION_WORD2) || test.equals("");
     }
 
     @Override
