@@ -566,6 +566,7 @@ _Figure 4.3.3 : How each tag is removed from the Address Book and each Person's 
 **Cons:** This does not maintain consistency of the API.
 // end::deletetag[]
 
+// tag::remarkCommand[]
 === Remark Command Mechanism
 
 The remark command allows user to modify the remark of a contact, and it supports adding, editing and deleting remarks.
@@ -683,6 +684,7 @@ public class Person implements ReadOnlyPerson {
 **Alternative 2:** AddCommand and EditCommand are used for adding and editing of the remark. +
 **Pros:** The command lines are more intuitive for the user. +
 **Cons:** The remark is perceived as a compulsory field of personal information for that contact, but this is not true.
+// end::remarkCommand[]
 
 // tag::birthday[]
 === Birthday Attribute
