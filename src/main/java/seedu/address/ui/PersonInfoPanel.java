@@ -84,7 +84,7 @@ public class PersonInfoPanel extends UiPart<Region> {
 
         setDefaultContactPhoto();
         currentlyViewedPerson = null;
-        logger.info("Currently Viewing: Default Person" );
+        logger.info("Currently Viewing: Default Person");
     }
 
     /**
@@ -111,7 +111,7 @@ public class PersonInfoPanel extends UiPart<Region> {
         loadPhoto(person);
 
         currentlyViewedPerson = person;
-        logger.info("Currently Viewing: " + currentlyViewedPerson.getName() );
+        logger.info("Currently Viewing: " + currentlyViewedPerson.getName());
     }
 
     //@@author nbriannl
@@ -162,7 +162,7 @@ public class PersonInfoPanel extends UiPart<Region> {
         String photoPath = person.getPhotoPath().value;
         Image image;
 
-        logger.info("Is default path? : " + photoPath.equals(PhotoCommand.DEFAULT_PHOTO_PATH) );
+        logger.info("Is default path? : " + photoPath.equals(PhotoCommand.DEFAULT_PHOTO_PATH));
 
         if (photoPath.equals(PhotoCommand.DEFAULT_PHOTO_PATH)) {  //default male and female photos
             if (person.getGender().toString().equals("Male")) {
@@ -174,7 +174,7 @@ public class PersonInfoPanel extends UiPart<Region> {
             }
             image = new Image(MainApp.class.getResourceAsStream(photoPath));
 
-        } else{
+        } else {
             File contactImg = new File(photoPath);
             String url = contactImg.toURI().toString();
             image = new Image(url);
