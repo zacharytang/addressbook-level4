@@ -159,6 +159,7 @@ Examples:
 * `add s/facebook John Doe`
 * `add s/Instagram John Doe`
 
+// tag::photoCommand[]
 === Adding/Deleting a Photo for a person : `photo` _(Since v1.4)_
 ____
 _When you study too much, sometimes, you forget how someone looks like._
@@ -189,7 +190,9 @@ Removes the picture from the 2nd person in the last shown list.
 * `find n/Betsy` +
 `photo 1` +
 Removes the picture from the 1st person in the results of the `find` command.
+// end::photoCommand[]
 
+// tag::remarkCommand[]
 === Giving remarks to a person : `remark` _(Since v1.1)_
 ____
 _Sometimes you want to remind yourself how this person was like in a funny incident. Or you owe friends money for last night's supper. +
@@ -218,6 +221,8 @@ Removes the remark from the 1st person in the results of the `find` command.
 * `find n/Betsy` +
 `remark 1 r/` +
 Removes the remark from the 1st person in the results of the `find` command.
+
+// end::remarkCommand[]
 
 === Listing all people : `list`
 ____
@@ -261,6 +266,7 @@ Returns all persons in the address book containing *either* 'JCfriends' or 'comp
 * `find b/12` +
 Returns all persons in the address book having birthdays in `December`
 
+// tag::sortCommand[]
 === Sorting all persons : `sort` _(Coming in v1.5)_
 ____
 _Sometimes, you just meet too many people in University. Don't worry, get all your contacts in order._
@@ -270,7 +276,7 @@ Format: +
 (Sort by name in ascending order) `sort ASC` +
 (Sort by name in descending order) `sort DESC`
 Alternatives: `s` , `sortall`, `arrange`
-
+// end::sortCommand[]
 
 === Editing a person or a tag: `edit`
 ==== Editing a person
@@ -537,8 +543,7 @@ Alternatives: `u`
 
 [NOTE]
 ====
-Undoable commands: those commands that modify the address book's content (`add`, `delete`, `edit` and `clear`). +
-Undoing a DeleteCommand to recover the persons you deleted does not recover their deleted contact photos, you should add those photos back manually.
+Undoable commands: those commands that modify the address book's content (`add`, `delete`, `edit` and `clear`).
 ====
 
 Examples:
@@ -589,6 +594,7 @@ Clears all entries from the address book. +
 Format: `clear` +
 Alternatives: `c`, `wipe`
 
+// tag::password[]
 === Setting a password for your address book : `password` _(Coming in v2.0)_
 ____
 _Your privacy is important. Prevent others from viewing the contact details you possess._
@@ -609,6 +615,7 @@ Example:
 Adds 123456789 as a password.
 * `password` +
 To clear the password set.
+// end::password[]
 
 === Exiting the program : `exit`
 ____
