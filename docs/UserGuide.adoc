@@ -450,6 +450,7 @@ Selects the 2nd person in the address book.
 `select 1` +
 Selects the 1st person in the results of the `find` command.
 
+// tag::timetable[]
 === Viewing combined timetables : `whenfree` _(Since v1.5)_
 ____
 _"When are all of you free?" is an extremely common question in University. Let us solve that._
@@ -470,6 +471,7 @@ Displays a combined timetable for all listed users.
 * If no index is specified, displays the timetable representing all the persons currently listed.
 * All persons specified *must have timetables added*.
 ****
+// end::timetable[]
 
 === Opening a Google Maps view of an address : `gmaps` _(Since v1.3)_
 ____
@@ -662,9 +664,11 @@ _Here are some features in UniFy that are not in the form of commands, but good 
 To change the theme of the app, click on *Appearance* -> *Themes*, at the top of the window. +
 Several themes are available, such as *Day Mode* and *Night Mode*.
 
+// tag::fontsize[]
 === Font Size _(Coming in v2.0)_
 
 If you find the font too big or too small, the font size can be changed in *Appearance* -> *Themes*
+// end::fontsize[]
 
 === Command Suggestion _(Coming in v2.0)_
 
