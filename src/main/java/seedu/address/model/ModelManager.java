@@ -131,7 +131,6 @@ public class ModelManager extends ComponentManager implements Model {
             Set<Tag> newTags = new HashSet<Tag>(newPerson.getTags());
             newTags.remove(tag);
             newPerson.setTags(newTags);
-
             addressBook.updatePerson(oldPerson, newPerson);
         }
         indicateAddressBookChanged();
@@ -177,7 +176,6 @@ public class ModelManager extends ComponentManager implements Model {
     public void updatePerson(ReadOnlyPerson target, ReadOnlyPerson editedPerson)
             throws DuplicatePersonException, PersonNotFoundException {
         requireAllNonNull(target, editedPerson);
-
         addressBook.updatePerson(target, editedPerson);
         indicateAddressBookChanged();
         checkMasterTagListHasAllTagsUsed();

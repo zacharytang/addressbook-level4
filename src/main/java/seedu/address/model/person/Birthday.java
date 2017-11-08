@@ -46,6 +46,9 @@ public class Birthday {
      * Returns true if a given string is a valid person birthday.
      */
     public static boolean isValidBirthday(String test) {
+        if (test.equals("")) {
+            return true;
+        }
         if (test.matches(BIRTHDAY_VALIDATION_REGEX)) {
             try {
                 DateFormat df = new SimpleDateFormat(DATE_FORMAT);

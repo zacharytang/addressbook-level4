@@ -1,5 +1,5 @@
 # nbriannl
-###### \java\seedu\address\logic\commands\AddCommandTest.java
+###### /java/seedu/address/logic/commands/AddCommandTest.java
 ``` java
         @Override
         public void showMapOf(ReadOnlyPerson person) {
@@ -7,7 +7,7 @@
         }
 
 ```
-###### \java\seedu\address\logic\commands\AddCommandTest.java
+###### /java/seedu/address/logic/commands/AddCommandTest.java
 ``` java
         @Override
         public void showDirectionsTo(ReadOnlyPerson target, Address address) {
@@ -15,7 +15,7 @@
         }
 
 ```
-###### \java\seedu\address\logic\commands\AddCommandTest.java
+###### /java/seedu/address/logic/commands/AddCommandTest.java
 ``` java
         @Override
         public void deleteTag(Tag tag) throws DuplicatePersonException, PersonNotFoundException {
@@ -23,7 +23,7 @@
         }
 
 ```
-###### \java\seedu\address\logic\commands\AddCommandTest.java
+###### /java/seedu/address/logic/commands/AddCommandTest.java
 ``` java
         @Override
         public void editTag(Tag oldTag, Tag newTag) throws DuplicatePersonException,
@@ -32,15 +32,33 @@
         }
 
 ```
-###### \java\seedu\address\logic\commands\AddCommandTest.java
+###### /java/seedu/address/logic/commands/AddCommandTest.java
 ``` java
         @Override
         public void checkMasterTagListHasAllTagsUsed () {
             fail("This method should not be called.");
         }
 
+        @Override
+        public HashMap<String, String> getThemeMap () {
+            fail("This method should not be called.");
+            return null;
+        }
+
+        @Override
+        public void setCurrentTheme(String theme) {
+            fail("This method should not be called.");
+        }
+
+        @Override
+        /** Returns the current theme in use by the app */
+        public String getCurrentTheme() {
+            fail("This method should not be called.");
+            return null;
+        }
+
 ```
-###### \java\seedu\address\logic\commands\DeleteCommandTest.java
+###### /java/seedu/address/logic/commands/DeleteCommandTest.java
 ``` java
     @Test
     public void execute_validTagUnfilteredList_success() throws Exception {
@@ -56,7 +74,7 @@
     }
 
 ```
-###### \java\seedu\address\logic\commands\DeleteCommandTest.java
+###### /java/seedu/address/logic/commands/DeleteCommandTest.java
 ``` java
     @Test
     public void execute_invalidTagUnfilteredList_throwsCommandException() throws Exception {
@@ -71,7 +89,7 @@
     }
 
 ```
-###### \java\seedu\address\logic\commands\DeleteCommandTest.java
+###### /java/seedu/address/logic/commands/DeleteCommandTest.java
 ``` java
     @Test
     public void execute_validTagFilteredList_success() throws Exception {
@@ -90,7 +108,7 @@
     }
 
 ```
-###### \java\seedu\address\logic\commands\DeleteCommandTest.java
+###### /java/seedu/address/logic/commands/DeleteCommandTest.java
 ``` java
     @Test
     public void execute_invalidTagFilteredList_throwsCommandException() throws Exception {
@@ -107,7 +125,7 @@
     }
 
 ```
-###### \java\seedu\address\logic\commands\DeleteCommandTest.java
+###### /java/seedu/address/logic/commands/DeleteCommandTest.java
 ``` java
     @Test
     public void equals() throws Exception {
@@ -157,7 +175,7 @@
     }
 
 ```
-###### \java\seedu\address\logic\commands\DeleteCommandTest.java
+###### /java/seedu/address/logic/commands/DeleteCommandTest.java
 ``` java
     /**
      * Returns a {@code DeleteCommand} with the parameter {@code tagSet}.
@@ -169,7 +187,7 @@
     }
 
 ```
-###### \java\seedu\address\logic\commands\EditCommandTest.java
+###### /java/seedu/address/logic/commands/EditCommandTest.java
 ``` java
     @Test
     public void executeForTags_unfilteredList_success() throws Exception {
@@ -186,7 +204,7 @@
     }
 
 ```
-###### \java\seedu\address\logic\commands\EditCommandTest.java
+###### /java/seedu/address/logic/commands/EditCommandTest.java
 ``` java
     @Test
     public void executeForTags_filteredList_success() throws Exception {
@@ -205,7 +223,7 @@
     }
 
 ```
-###### \java\seedu\address\logic\commands\EditCommandTest.java
+###### /java/seedu/address/logic/commands/EditCommandTest.java
 ``` java
     @Test
     public void executeForTags_invalidTagUnfilteredList_failure() throws Exception {
@@ -227,7 +245,7 @@
     }
 
 ```
-###### \java\seedu\address\logic\commands\EditCommandTest.java
+###### /java/seedu/address/logic/commands/EditCommandTest.java
 ``` java
     /**
      * Returns an {@code EditCommand} for tag with parameters {@code oldTag} and {@code newTag}
@@ -239,7 +257,7 @@
     }
 }
 ```
-###### \java\seedu\address\logic\commands\GMapsCommandTest.java
+###### /java/seedu/address/logic/commands/GMapsCommandTest.java
 ``` java
 /**
  * Contains integration tests (interaction with the Model) and unit tests for {@code GMapsCommand}.
@@ -383,7 +401,7 @@ public class GMapsCommandTest {
     }
 }
 ```
-###### \java\seedu\address\logic\parser\DeleteCommandParserTest.java
+###### /java/seedu/address/logic/parser/DeleteCommandParserTest.java
 ``` java
     @Test
     public void parse_validArgsTag_returnsDeleteCommand() throws Exception {
@@ -394,7 +412,7 @@ public class GMapsCommandTest {
     }
 
 ```
-###### \java\seedu\address\logic\parser\DeleteCommandParserTest.java
+###### /java/seedu/address/logic/parser/DeleteCommandParserTest.java
 ``` java
     @Test
     public void parse_invalidArgsTag_failure() throws Exception {
@@ -407,7 +425,7 @@ public class GMapsCommandTest {
     }
 
 ```
-###### \java\seedu\address\logic\parser\DeleteCommandParserTest.java
+###### /java/seedu/address/logic/parser/DeleteCommandParserTest.java
 ``` java
     @Test
     public void parse_invalidArgs_throwsParseException() {
@@ -421,7 +439,7 @@ public class GMapsCommandTest {
 
 }
 ```
-###### \java\seedu\address\logic\parser\GMapsCommandParserTest.java
+###### /java/seedu/address/logic/parser/GMapsCommandParserTest.java
 ``` java
 public class GMapsCommandParserTest {
 
@@ -476,7 +494,7 @@ public class GMapsCommandParserTest {
     }
 }
 ```
-###### \java\seedu\address\ui\BrowserPanelTest.java
+###### /java/seedu/address/ui/BrowserPanelTest.java
 ``` java
     @Before
     public void setUp() throws Exception {

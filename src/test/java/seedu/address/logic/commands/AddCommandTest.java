@@ -7,6 +7,7 @@ import static org.junit.Assert.fail;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.function.Predicate;
 
 import org.junit.Rule;
@@ -163,6 +164,24 @@ public class AddCommandTest {
         @Override
         public void checkMasterTagListHasAllTagsUsed () {
             fail("This method should not be called.");
+        }
+
+        @Override
+        public HashMap<String, String> getThemeMap () {
+            fail("This method should not be called.");
+            return null;
+        }
+
+        @Override
+        public void setCurrentTheme(String theme) {
+            fail("This method should not be called.");
+        }
+
+        @Override
+        /** Returns the current theme in use by the app */
+        public String getCurrentTheme() {
+            fail("This method should not be called.");
+            return null;
         }
 
         //@@author

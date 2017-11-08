@@ -1,5 +1,5 @@
 # zacharytang
-###### \java\seedu\address\commons\events\ui\PersonSelectedEvent.java
+###### /java/seedu/address/commons/events/ui/PersonSelectedEvent.java
 ``` java
 /**
  * Represents a person being selected
@@ -18,7 +18,7 @@ public class PersonSelectedEvent extends BaseEvent {
     }
 }
 ```
-###### \java\seedu\address\commons\events\ui\TimetableDisplayEvent.java
+###### /java/seedu/address/commons/events/ui/TimetableDisplayEvent.java
 ``` java
 /**
  * Represents a request to display timetables in the UI
@@ -47,7 +47,7 @@ public class TimetableDisplayEvent extends BaseEvent {
     }
 }
 ```
-###### \java\seedu\address\commons\util\timetable\Lesson.java
+###### /java/seedu/address/commons/util/timetable/Lesson.java
 ``` java
 /**
  * Represents a lesson that a module has
@@ -96,7 +96,7 @@ public class Lesson {
     }
 }
 ```
-###### \java\seedu\address\commons\util\timetable\ModuleInfoFromUrl.java
+###### /java/seedu/address/commons/util/timetable/ModuleInfoFromUrl.java
 ``` java
 /**
  * Represents lesson for a specific module parsed from a NUSMods url
@@ -142,7 +142,7 @@ public class ModuleInfoFromUrl {
     }
 }
 ```
-###### \java\seedu\address\commons\util\timetable\TimetableInfoFromUrl.java
+###### /java/seedu/address/commons/util/timetable/TimetableInfoFromUrl.java
 ``` java
 /**
  * Represents all timetable information parsed from a NUSMods url
@@ -184,7 +184,7 @@ public class TimetableInfoFromUrl {
     }
 }
 ```
-###### \java\seedu\address\commons\util\timetable\TimetableParserUtil.java
+###### /java/seedu/address/commons/util/timetable/TimetableParserUtil.java
 ``` java
 /**
  * Helper class that contains utilities to parse NUSMods urls.
@@ -258,6 +258,11 @@ public class TimetableParserUtil {
 
         // Split a string of format "MODULE_CODE[CLASS_TYPE]=CLASS_NO"
         for (String classInfo : classes) {
+            // Checks if class info exists
+            if (classInfo.split(SPLIT_LEFT_SQAURE_BRACKET).length != 2) {
+                continue;
+            }
+
             String moduleCode = classInfo.split(SPLIT_LEFT_SQAURE_BRACKET)[0];
             String classType = classInfo.split(SPLIT_LEFT_SQAURE_BRACKET)[1].split(SPLIT_RIGHT_SQUARE_BRACKET)[0];
             String classNo = classInfo.split(SPLIT_EQUALS_SIGN)[1];
@@ -450,6 +455,12 @@ public class TimetableParserUtil {
         case "REC":
             return "Recitation";
 
+        case "TUT2":
+            return "Tutorial Type 2";
+
+        case "TUT3":
+            return "Tutorial Type 3";
+
         default:
             throw new IllegalValueException(MESSAGE_INVALID_CLASS_TYPE);
         }
@@ -472,7 +483,7 @@ public class TimetableParserUtil {
     }
 }
 ```
-###### \java\seedu\address\logic\commands\TimetableCommand.java
+###### /java/seedu/address/logic/commands/TimetableCommand.java
 ``` java
 /**
  * Selects persons identified using their last displayed indexes and displays a combined timetable
@@ -535,7 +546,7 @@ public class TimetableCommand extends Command {
     }
 }
 ```
-###### \java\seedu\address\logic\parser\TimetableCommandParser.java
+###### /java/seedu/address/logic/parser/TimetableCommandParser.java
 ``` java
 
 /**
@@ -595,7 +606,7 @@ public class TimetableCommandParser implements Parser<TimetableCommand> {
     }
 }
 ```
-###### \java\seedu\address\model\person\timetable\Timetable.java
+###### /java/seedu/address/model/person/timetable/Timetable.java
 ``` java
 /**
  * Represents a person's timetable in the address book
@@ -647,6 +658,9 @@ public class Timetable {
     public Timetable(String url) throws IllegalValueException {
         requireNonNull(url);
         String trimmedUrl = url.trim();
+        if (trimmedUrl == "") {
+            trimmedUrl = "http://modsn.us/5tN3z";
+        }
         if (!isValidUrl(trimmedUrl)) {
             throw new IllegalValueException(MESSAGE_TIMETABLE_URL_CONSTRAINTS);
         }
@@ -695,7 +709,7 @@ public class Timetable {
 
 }
 ```
-###### \java\seedu\address\model\person\timetable\TimetableDay.java
+###### /java/seedu/address/model/person/timetable/TimetableDay.java
 ``` java
 /**
  * Represents a single day in a timetable
@@ -753,7 +767,7 @@ public class TimetableDay {
     }
 }
 ```
-###### \java\seedu\address\model\person\timetable\TimetableInfo.java
+###### /java/seedu/address/model/person/timetable/TimetableInfo.java
 ``` java
 /**
  * Fully represents all information about a person's timetable slots
@@ -820,7 +834,7 @@ public class TimetableInfo {
     }
 }
 ```
-###### \java\seedu\address\model\person\timetable\TimetableSlot.java
+###### /java/seedu/address/model/person/timetable/TimetableSlot.java
 ``` java
 /**
  * Represents a single slot in a timetable
@@ -849,7 +863,7 @@ public class TimetableSlot {
     }
 }
 ```
-###### \java\seedu\address\model\person\timetable\TimetableWeek.java
+###### /java/seedu/address/model/person/timetable/TimetableWeek.java
 ``` java
 /**
  * Represents a full timetable for a week
@@ -899,7 +913,7 @@ public class TimetableWeek {
     }
 }
 ```
-###### \java\seedu\address\ui\CombinedTimetableDisplay.java
+###### /java/seedu/address/ui/CombinedTimetableDisplay.java
 ``` java
 /**
  * Display for the combined timetable command
@@ -963,7 +977,7 @@ public class CombinedTimetableDisplay extends UiPart<Region> {
     }
 }
 ```
-###### \java\seedu\address\ui\InfoPanel.java
+###### /java/seedu/address/ui/InfoPanel.java
 ``` java
 /**
  * Container for both browser panel and person information panel
@@ -975,17 +989,13 @@ public class InfoPanel extends UiPart<Region> {
     private final Logger logger = LogsCenter.getLogger(this.getClass());
 
     private BrowserPanel browserPanel;
-    private PersonInfoOverview infoOverview;
-    private CombinedTimetableDisplay combinedTimetableDisplay;
+    private TimetableDisplay timetableDisplay;
 
     @FXML
     private StackPane browserPlaceholder;
 
     @FXML
-    private StackPane infoOverviewPlaceholder;
-
-    @FXML
-    private StackPane combinedTimetablePlaceholder;
+    private StackPane timetablePlaceholder;
 
     public InfoPanel() {
         super(FXML);
@@ -993,13 +1003,10 @@ public class InfoPanel extends UiPart<Region> {
         browserPanel = new BrowserPanel();
         browserPlaceholder.getChildren().add(browserPanel.getRoot());
 
-        infoOverview = new PersonInfoOverview();
-        infoOverviewPlaceholder.getChildren().add(infoOverview.getRoot());
+        timetableDisplay = new TimetableDisplay(null);
+        timetablePlaceholder.getChildren().add(timetableDisplay.getRoot());
 
-        combinedTimetableDisplay = new CombinedTimetableDisplay();
-        combinedTimetablePlaceholder.getChildren().add(combinedTimetableDisplay.getRoot());
-
-        infoOverviewPlaceholder.toFront();
+        timetablePlaceholder.toFront();
         registerAsAnEventHandler(this);
     }
 
@@ -1010,7 +1017,46 @@ public class InfoPanel extends UiPart<Region> {
     @Subscribe
     public void handlePersonSelectedEvent(PersonSelectedEvent event) {
         logger.info(LogsCenter.getEventHandlingLogMessage(event));
-        infoOverviewPlaceholder.toFront();
+
+        timetablePlaceholder.getChildren().removeAll();
+
+        ArrayList<Timetable> timetableToDisplay = new ArrayList<>();
+        timetableToDisplay.add(event.person.getTimetable());
+        timetableDisplay = new TimetableDisplay(timetableToDisplay);
+        timetablePlaceholder.getChildren().add(timetableDisplay.getRoot());
+
+        timetablePlaceholder.toFront();
+    }
+
+    @Subscribe
+    public void handlePersonPanelSelectionChangeEvent(PersonPanelSelectionChangedEvent event) {
+        logger.info(LogsCenter.getEventHandlingLogMessage(event));
+
+        timetablePlaceholder.getChildren().removeAll();
+
+        ArrayList<Timetable> timetableToDisplay = new ArrayList<>();
+        timetableToDisplay.add(event.getNewSelection().person.getTimetable());
+        timetableDisplay = new TimetableDisplay(timetableToDisplay);
+        timetablePlaceholder.getChildren().add(timetableDisplay.getRoot());
+
+        timetablePlaceholder.toFront();
+    }
+
+    @Subscribe
+    private void handleTimetableDisplayEvent(TimetableDisplayEvent event) {
+        logger.info(LogsCenter.getEventHandlingLogMessage(event));
+
+        ArrayList<Timetable> timetablesToDisplay = new ArrayList<>();
+
+        for (ReadOnlyPerson person : event.personsToDisplay) {
+            timetablesToDisplay.add(person.getTimetable());
+        }
+
+        timetablePlaceholder.getChildren().removeAll();
+        timetableDisplay = new TimetableDisplay(timetablesToDisplay);
+        timetablePlaceholder.getChildren().add(timetableDisplay.getRoot());
+
+        timetablePlaceholder.toFront();
     }
 
     @Subscribe
@@ -1024,15 +1070,9 @@ public class InfoPanel extends UiPart<Region> {
         logger.info(LogsCenter.getEventHandlingLogMessage(event));
         browserPlaceholder.toFront();
     }
-
-    @Subscribe
-    public void handleTimetableDisplayEvent(TimetableDisplayEvent event) {
-        logger.info(LogsCenter.getEventHandlingLogMessage(event));
-        combinedTimetablePlaceholder.toFront();
-    }
 }
 ```
-###### \java\seedu\address\ui\PersonInfoOverview.java
+###### /java/seedu/address/ui/PersonInfoOverview.java
 ``` java
 /**
  * A UI component that displays a person's data on the main panel
@@ -1126,7 +1166,7 @@ public class PersonInfoOverview extends UiPart<Region> {
     }
 
 ```
-###### \java\seedu\address\ui\PersonInfoOverview.java
+###### /java/seedu/address/ui/PersonInfoOverview.java
 ``` java
     @Subscribe
     private void handlePersonSelectedEvent(PersonSelectedEvent event) {
@@ -1141,16 +1181,21 @@ public class PersonInfoOverview extends UiPart<Region> {
     }
 }
 ```
-###### \java\seedu\address\ui\TimetableDisplay.java
+###### /java/seedu/address/ui/PersonInfoPanel.java
+``` java
+    @Subscribe
+    private void handlePersonSelectedEvent(PersonSelectedEvent event) {
+        logger.info(LogsCenter.getEventHandlingLogMessage(event));
+        loadPerson(event.person);
+    }
+
+```
+###### /java/seedu/address/ui/TimetableDisplay.java
 ``` java
 /**
  * Display for timetables in the UI
  */
 public class TimetableDisplay extends UiPart<Region> {
-
-    private static final String COLOUR_FILLED = "#272727";
-    private static final String COLOUR_EMPTY = "#383838";
-    private static final String COLOUR_BORDER = "#000000";
 
     private static final String FXML = "TimetableDisplay.fxml";
     private ArrayList<Timetable> timetables;
@@ -1229,10 +1274,8 @@ public class TimetableDisplay extends UiPart<Region> {
         String rightWidth = timeIndex == 31 ? "2" : "1";
         String borderWidths = topWidth + " " + rightWidth + " " + bottomWidth + " " + leftWidth;
 
-        pane.setStyle("-fx-background-color: " + (hasLesson ? COLOUR_FILLED : COLOUR_EMPTY)
-                + ";\n"
-                + "-fx-border-color: " + COLOUR_BORDER + ";\n"
-                + "-fx-border-width: " + borderWidths + ";\n"
+        pane.getStyleClass().add(hasLesson ? "timetable-cell-filled" : "timetable-cell-empty");
+        pane.setStyle("-fx-border-width: " + borderWidths + ";\n"
                 + "-fx-border-style: " + borderStyle);
 
         if (weekIndex == WEEK_ODD) {
@@ -1255,23 +1298,36 @@ public class TimetableDisplay extends UiPart<Region> {
     }
 }
 ```
-###### \resources\view\CombinedTimetableDisplay.fxml
+###### /resources/view/CombinedTimetableDisplay.fxml
 ``` fxml
-<StackPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
-    <SplitPane dividerPositions="0.2" orientation="VERTICAL" prefHeight="200.0" prefWidth="160.0">
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.StackPane?>
+
+<StackPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8"
+           xmlns:fx="http://javafx.com/fxml/1">
+    <SplitPane dividerPositions="0.2" orientation="VERTICAL" prefHeight="400.0" prefWidth="600.0"
+               AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
+               AnchorPane.topAnchor="0.0">
         <AnchorPane styleClass="combined-timetable-label">
-            <GridPane layoutX="151.0" layoutY="26.0" AnchorPane.bottomAnchor="0.0"
-                      AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <GridPane layoutX="151.0" layoutY="26.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0"
+                      AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                 <columnConstraints>
-                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="300" minWidth="300.0"
-                                       prefWidth="300"/>
+                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="300" minWidth="300.0" prefWidth="300"/>
                     <ColumnConstraints hgrow="SOMETIMES"/>
                 </columnConstraints>
                 <rowConstraints>
                     <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
                 </rowConstraints>
                 <HBox alignment="CENTER_RIGHT">
-                    <Label styleClass="combined-timetable-main-label" alignment="CENTER" text="Timetables Displayed: ">
+                    <Label alignment="CENTER" styleClass="combined-timetable-main-label" text="Timetables Displayed: ">
                         <HBox.margin>
                             <Insets right="2.5"/>
                         </HBox.margin>
@@ -1290,62 +1346,63 @@ public class TimetableDisplay extends UiPart<Region> {
     </SplitPane>
 </StackPane>
 ```
-###### \resources\view\DarkTheme.css
+###### /resources/view/DarkTheme.css
 ``` css
 .split-pane:horizontal .split-pane-divider {
-    -fx-background-color: derive(#1d1d1d, 20%);
+    -fx-background-color: #383838;
     -fx-border-color: transparent transparent transparent transparent;
 }
 
 .split-pane:vertical .split-pane-divider {
-    -fx-background-color: derive(#1d1d1d, 20%);
-    -fx-border-color: #4d4d4d transparent transparent transparent;
+    -fx-background-color: #383838;
+    -fx-border-color: transparent transparent transparent transparent;
 }
 
 .split-pane {
     -fx-border-radius: 0;
     -fx-border-width: 0;
-    -fx-background-color: derive(#1d1d1d, 20%);
+    -fx-background-color: #383838;
 }
 
 .info-panel {
-    -fx-border-radius: 2;
-    -fx-border-width: 2;
-    -fx-border-color: #4d4d4d;
+    -fx-border-radius: 0;
+    -fx-border-width: 0;
+    -fx-border-color: #383838;
 }
 
 .browser-panel {
-    -fx-border-radius: 2;
-    -fx-border-width: 2;
-    -fx-border-color: #4d4d4d;
+    -fx-border-radius: 0;
+    -fx-border-width: 0;
+    -fx-border-color: #383838;
 }
 
 ```
-###### \resources\view\DarkTheme.css
+###### /resources/view/DarkTheme.css
 ``` css
 .display_big_label {
     -fx-font-family: "Segoe UI";
     -fx-font-size: 24px;
     -fx-font-weight: bold;
-    -fx-text-fill: #ffffff;
+    -fx-text-fill: #ffffff; //ignore
 }
 
 .display_small_label {
+    -fx-font-weight: 500;
+    -fx-font-family: "Segoe UI Semibold";
+    -fx-font-size: 15px;
+    -fx-text-fill: #ffffff; //ignore
+}
+
+.display_small_value {
     -fx-font-family: "Segoe UI Semibold";
     -fx-font-size: 15px;
     -fx-text-fill: #ffffff;
 }
 
-.display_small_value {
-    -fx-font-family: "Segoe UI";
-    -fx-font-size: 14px;
-    -fx-text-fill: #ffffff;
-}
-
 .timetable-label {
     -fx-font-family: "Segoe UI Semibold";
-    -fx-font-weight: 500;
-    -fx-text-fill: #FFFFFF;
+    -fx-font-weight: 700; // font weight aka boldness of the font
+    -fx-text-fill: #FFFFFF; // Mon-Fri and Time Labels of The Timetable
 }
 
 .tab-pane .tab-header-area .tab-header-background {
@@ -1357,12 +1414,12 @@ public class TimetableDisplay extends UiPart<Region> {
 }
 
 .tab-pane .tab:selected {
-    -fx-background-color: #515658;
+    -fx-background-color: #303030;
 }
 
 .tab .tab-label {
     -fx-alignment: CENTER;
-    -fx-text-fill: #FFFFFF;
+    -fx-text-fill: #FFFFFF; //
     -fx-font-size: 12px;
     -fx-font-family: "Segoe UI";
 }
@@ -1374,47 +1431,192 @@ public class TimetableDisplay extends UiPart<Region> {
 }
 
 .info-name-cell {
-    -fx-background-color: #515658;
+    -fx-background-color: #303030;
 }
 
 .info-cell {
-    -fx-background-color: #3c3e3f;
+    -fx-background-color: #424242;
+}
+
+.timetable-tab-pane {
+    -fx-background-color: #383838;
+}
+
+.timetable-cell-filled {
+    -fx-background-color: #272727;
+}
+
+.timetable-cell-empty {
+    -fx-background-color: #383838;
+}
+
+.timetable-cell-empty, .timetable-cell-filled {
+    -fx-border-color: #9E9E9E;
 }
 
 .combined-timetable-label {
-    -fx-background-color: #515658;
+    -fx-background-color: #303030;
 }
 
 .combined-timetable-main-label {
     -fx-text-fill: #FFFFFF;
     -fx-font-size: 22px;
-    -fx-font-family: "Segoe UI";
+    -fx-font-family: "Segoe UI Semibold";
 }
 
 .combined-timetable-names {
-    -fx-text-fill: #000000;
+    -fx-text-fill: #BDBDBD;
     -fx-font-size: 22px;
     -fx-font-family: "Segoe UI";
 }
 
 ```
-###### \resources\view\InfoPanel.fxml
+###### /resources/view/InfoPanel.fxml
 ``` fxml
-<StackPane prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+<?import javafx.scene.layout.StackPane?>
+<StackPane prefHeight="700.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
     <StackPane fx:id="browserPlaceholder" prefHeight="150.0" prefWidth="200.0" />
-    <StackPane fx:id="infoOverviewPlaceholder" prefHeight="150.0" prefWidth="200.0" />
-    <StackPane fx:id="combinedTimetablePlaceholder" prefHeight="150.0" prefWidth="200.0" />
+    <StackPane fx:id="timetablePlaceholder" prefHeight="150.0" prefWidth="200.0" />
 </StackPane>
 ```
-###### \resources\view\MainWindow.fxml
-``` fxml
-    <StackPane fx:id="infoPlaceholder" prefWidth="340" styleClass="pane-with-border">
-      <padding>
-        <Insets bottom="10" left="10" right="10" top="10" />
-      </padding>
-    </StackPane>
+###### /resources/view/LightTheme.css
+``` css
+.split-pane:horizontal .split-pane-divider {
+    -fx-background-color: #FAFAFA;
+    -fx-border-color: transparent transparent transparent transparent;
+}
+
+.split-pane:vertical .split-pane-divider {
+    -fx-background-color: #FAFAFA;
+    -fx-border-color: transparent transparent transparent transparent;
+}
+
+.split-pane {
+    -fx-border-radius: 0;
+    -fx-border-width: 0;
+    -fx-background-color: #FAFAFA;
+}
+
+.info-panel {
+    -fx-border-radius: 0;
+    -fx-border-width: 0;
+    -fx-border-color: #FAFAFA;
+}
+
+.browser-panel {
+    -fx-border-radius: 0;
+    -fx-border-width: 0;
+    -fx-border-color: #FAFAFA;
+}
+
 ```
-###### \resources\view\PersonInfoOverview.fxml
+###### /resources/view/LightTheme.css
+``` css
+.display_big_label {
+    -fx-font-family: "Segoe UI";
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #262626;
+}
+
+.display_small_label {
+    -fx-font-family: "Segoe UI Semibold";
+    -fx-font-size: 15px;
+    -fx-text-fill: #262626;
+}
+
+.display_small_value {
+    -fx-font-family: "Segoe UI Semibold";
+    -fx-font-size: 15px;
+    -fx-text-fill: #262626;
+}
+
+.timetable-label {
+    -fx-font-family: "Segoe UI Semibold";
+    -fx-font-weight: 700; // font weight aka boldness of the font
+    -fx-text-fill: #232323; // Mon-Fri and Time Labels of The Timetable
+}
+
+.tab-pane .tab-header-area .tab-header-background {
+    -fx-opacity: 0;
+}
+
+.tab-pane .tab {
+    -fx-background-color: #FAFAFA;
+}
+
+.tab-pane .tab:selected {
+    -fx-background-color: #E0E0E0;
+}
+
+.tab .tab-label {
+    -fx-alignment: CENTER;
+    -fx-text-fill: #232323;
+    -fx-font-size: 12px;
+    -fx-font-family: "Segoe UI";
+}
+
+.tab:selected .tab-label {
+    -fx-alignment: CENTER;
+    -fx-font-family: "Segoe UI Semibold";
+    -fx-text-fill: #232323;
+}
+
+.info-name-cell {
+    -fx-background-color: #E0E0E0;
+}
+
+.info-cell {
+    -fx-background-color: #BDBDBD;
+}
+
+.timetable-tab-pane {
+    -fx-background-color: #FAFAFA;
+}
+
+.timetable-cell-filled {
+    -fx-background-color: #E0E0E0;
+}
+
+.timetable-cell-empty {
+    -fx-background-color: #FAFAFA;
+}
+
+.timetable-cell-empty, .timetable-cell-filled {
+    -fx-border-color: #BDBDBD;
+}
+
+.combined-timetable-label {
+    -fx-background-color: #E0E0E0;
+}
+
+.combined-timetable-main-label {
+    -fx-text-fill: #212121;
+    -fx-font-size: 22px;
+    -fx-font-family: "Segoe UI";
+}
+
+.combined-timetable-names {
+    -fx-text-fill: #565656;
+    -fx-font-size: 22px;
+    -fx-font-family: "Segoe UI";
+}
+
+```
+###### /resources/view/MainWindow.fxml
+``` fxml
+                <StackPane fx:id="infoPlaceholder" styleClass="pane-with-border">
+                    <padding>
+                        <Insets bottom="10" left="10" right="10" top="10"/>
+                    </padding>
+                </StackPane>
+            </SplitPane>
+        </AnchorPane>
+    </HBox>
+    <StackPane fx:id="statusbarPlaceholder" VBox.vgrow="NEVER"/>
+</VBox>
+```
+###### /resources/view/PersonInfoOverview.fxml
 ``` fxml
 <StackPane styleClass="info-panel" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
     <!--Edit dividerPositions below to adjust vertical divider position between the person info and the timetable area -->
@@ -1449,7 +1651,7 @@ public class TimetableDisplay extends UiPart<Region> {
                         </HBox>
                         <HBox alignment="CENTER_LEFT" spacing="5">
                             <Label styleClass="display_small_label" text="Address:" />
-                            <Label fx:id="address" styleClass="display_small_value" text="\$address" />
+                            <Label fx:id="address" styleClass="display_small_value" text="\$address" wrapText="true"/>
                         </HBox>
                         <HBox alignment="CENTER_LEFT" spacing="5">
                             <Label styleClass="display_small_label" text="Email:" />
@@ -1461,7 +1663,7 @@ public class TimetableDisplay extends UiPart<Region> {
                         </HBox>
                         <HBox alignment="CENTER_LEFT" spacing="5">
                             <Label styleClass="display_small_label" text="Remark:" />
-                            <Label fx:id="remark" styleClass="display_small_value" text="\$remark" />
+                            <Label fx:id="remark" styleClass="display_small_value" text="\$remark" wrapText="true"/>
                         </HBox>
                     </VBox>
                 </AnchorPane>
@@ -1471,270 +1673,273 @@ public class TimetableDisplay extends UiPart<Region> {
     </SplitPane>
 </StackPane>
 ```
-###### \resources\view\TimetableDisplay.fxml
+###### /resources/view/TimetableDisplay.fxml
 ``` fxml
-<AnchorPane AnchorPane.topAnchor="0.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" >
-    <TabPane styleClass="timetable-tab-pane" layoutX="-1.600000023841858" layoutY="-2.4000000953674316" tabClosingPolicy="UNAVAILABLE"
-             AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
-             AnchorPane.topAnchor="0.0">
-        <Tab fx:id="oddWeekTab" closable="false" text="Odd Week">
-            <GridPane fx:id="oddGrid" alignment="CENTER">
-                <columnConstraints>
-                    <ColumnConstraints hgrow="SOMETIMES" minWidth="65.0" prefWidth="100.0"/>
-                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
-                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
-                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
-                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
-                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
-                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
-                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
-                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
-                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
-                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
-                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
-                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
-                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
-                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
-                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
-                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
-                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
-                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
-                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
-                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
-                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
-                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
-                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
-                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
-                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
-                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
-                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
-                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
-                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
-                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
-                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
-                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
-                </columnConstraints>
-                <rowConstraints>
-                    <RowConstraints minHeight="10.0" prefHeight="10.0" vgrow="SOMETIMES"/>
-                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
-                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
-                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
-                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
-                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
-                </rowConstraints>
-                <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" GridPane.rowIndex="5">
-                    <Label styleClass="timetable-label" text="Fri"/>
-                </VBox>
-                <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" GridPane.rowIndex="1">
-                    <Label styleClass="timetable-label" text="Mon"/>
-                </VBox>
-                <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" GridPane.rowIndex="4">
-                    <Label styleClass="timetable-label" text="Thur"/>
-                </VBox>
-                <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" GridPane.rowIndex="3">
-                    <Label styleClass="timetable-label" text="Wed"/>
-                </VBox>
-                <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" GridPane.rowIndex="2">
-                    <Label styleClass="timetable-label" text="Tues"/>
-                </VBox>
-                <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1"
-                      GridPane.columnSpan="2">
-                    <Label styleClass="timetable-label" text="0800"/>
-                </HBox>
-                <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="3"
-                      GridPane.columnSpan="2">
-                    <Label styleClass="timetable-label" text="0900"/>
-                </HBox>
-                <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="5"
-                      GridPane.columnSpan="2">
-                    <Label styleClass="timetable-label" text="1000"/>
-                </HBox>
-                <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="7"
-                      GridPane.columnSpan="2">
-                    <Label styleClass="timetable-label" text="1100"/>
-                </HBox>
-                <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="9"
-                      GridPane.columnSpan="2">
-                    <Label styleClass="timetable-label" text="1200"/>
-                </HBox>
-                <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="11"
-                      GridPane.columnSpan="2">
-                    <Label styleClass="timetable-label" text="1300"/>
-                </HBox>
-                <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="13"
-                      GridPane.columnSpan="2">
-                    <Label styleClass="timetable-label" text="1400"/>
-                </HBox>
-                <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="15"
-                      GridPane.columnSpan="2">
-                    <Label styleClass="timetable-label" text="1500"/>
-                </HBox>
-                <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="17"
-                      GridPane.columnSpan="2">
-                    <Label styleClass="timetable-label" text="1600"/>
-                </HBox>
-                <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="19"
-                      GridPane.columnSpan="2">
-                    <Label styleClass="timetable-label" text="1700"/>
-                </HBox>
-                <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="21"
-                      GridPane.columnSpan="2">
-                    <Label styleClass="timetable-label" text="1800"/>
-                </HBox>
-                <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="23"
-                      GridPane.columnSpan="2">
-                    <Label styleClass="timetable-label" text="1900"/>
-                </HBox>
-                <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="25"
-                      GridPane.columnSpan="2">
-                    <Label styleClass="timetable-label" text="2000"/>
-                </HBox>
-                <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="27"
-                      GridPane.columnSpan="2">
-                    <Label styleClass="timetable-label" text="2100"/>
-                </HBox>
-                <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="29"
-                      GridPane.columnSpan="2">
-                    <Label styleClass="timetable-label" text="2200"/>
-                </HBox>
-                <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="31"
-                      GridPane.columnSpan="2">
-                    <Label styleClass="timetable-label" text="2300"/>
-                </HBox>
-                <padding>
-                    <Insets bottom="10.0" left="0.0" right="10.0" top="0.0"/>
-                </padding>
-            </GridPane>
-        </Tab>
-        <Tab fx:id="evenWeekTab" closable="false" text="Even Week">
-            <GridPane fx:id="evenGrid" alignment="CENTER">
-                <columnConstraints>
-                    <ColumnConstraints hgrow="SOMETIMES" minWidth="65.0" prefWidth="100.0"/>
-                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
-                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
-                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
-                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
-                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
-                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
-                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
-                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
-                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
-                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
-                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
-                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
-                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
-                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
-                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
-                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
-                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
-                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
-                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
-                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
-                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
-                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
-                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
-                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
-                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
-                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
-                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
-                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
-                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
-                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
-                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
-                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
-                </columnConstraints>
-                <rowConstraints>
-                    <RowConstraints minHeight="10.0" prefHeight="10.0" vgrow="SOMETIMES"/>
-                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
-                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
-                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
-                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
-                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
-                </rowConstraints>
-                <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" GridPane.rowIndex="5">
-                    <Label styleClass="timetable-label" text="Fri"/>
-                </VBox>
-                <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" GridPane.rowIndex="1">
-                    <Label styleClass="timetable-label" text="Mon"/>
-                </VBox>
-                <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" GridPane.rowIndex="4">
-                    <Label styleClass="timetable-label" text="Thur"/>
-                </VBox>
-                <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" GridPane.rowIndex="3">
-                    <Label styleClass="timetable-label" text="Wed"/>
-                </VBox>
-                <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" GridPane.rowIndex="2">
-                    <Label styleClass="timetable-label" text="Tues"/>
-                </VBox>
-                <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1"
-                      GridPane.columnSpan="2">
-                    <Label styleClass="timetable-label" text="0800"/>
-                </HBox>
-                <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="3"
-                      GridPane.columnSpan="2">
-                    <Label styleClass="timetable-label" text="0900"/>
-                </HBox>
-                <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="5"
-                      GridPane.columnSpan="2">
-                    <Label styleClass="timetable-label" text="1000"/>
-                </HBox>
-                <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="7"
-                      GridPane.columnSpan="2">
-                    <Label styleClass="timetable-label" text="1100"/>
-                </HBox>
-                <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="9"
-                      GridPane.columnSpan="2">
-                    <Label styleClass="timetable-label" text="1200"/>
-                </HBox>
-                <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="11"
-                      GridPane.columnSpan="2">
-                    <Label styleClass="timetable-label" text="1300"/>
-                </HBox>
-                <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="13"
-                      GridPane.columnSpan="2">
-                    <Label styleClass="timetable-label" text="1400"/>
-                </HBox>
-                <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="15"
-                      GridPane.columnSpan="2">
-                    <Label styleClass="timetable-label" text="1500"/>
-                </HBox>
-                <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="17"
-                      GridPane.columnSpan="2">
-                    <Label styleClass="timetable-label" text="1600"/>
-                </HBox>
-                <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="19"
-                      GridPane.columnSpan="2">
-                    <Label styleClass="timetable-label" text="1700"/>
-                </HBox>
-                <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="21"
-                      GridPane.columnSpan="2">
-                    <Label styleClass="timetable-label" text="1800"/>
-                </HBox>
-                <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="23"
-                      GridPane.columnSpan="2">
-                    <Label styleClass="timetable-label" text="1900"/>
-                </HBox>
-                <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="25"
-                      GridPane.columnSpan="2">
-                    <Label styleClass="timetable-label" text="2000"/>
-                </HBox>
-                <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="27"
-                      GridPane.columnSpan="2">
-                    <Label styleClass="timetable-label" text="2100"/>
-                </HBox>
-                <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="29"
-                      GridPane.columnSpan="2">
-                    <Label styleClass="timetable-label" text="2200"/>
-                </HBox>
-                <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="31"
-                      GridPane.columnSpan="2">
-                    <Label styleClass="timetable-label" text="2300"/>
-                </HBox>
-                <padding>
-                    <Insets bottom="10.0" left="0.0" right="10.0" top="0.0"/>
-                </padding>
-            </GridPane>
-        </Tab>
-    </TabPane>
-</AnchorPane>
+
+<StackPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+    <AnchorPane styleClass="timetable-display">
+        <TabPane layoutX="-1.600000023841858" layoutY="-2.4000000953674316" styleClass="timetable-tab-pane"
+                 tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0"
+                 AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <Tab fx:id="oddWeekTab" closable="false" text="Odd Week">
+                <GridPane fx:id="oddGrid" alignment="CENTER">
+                    <columnConstraints>
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="65.0" prefWidth="100.0"/>
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+                    </columnConstraints>
+                    <rowConstraints>
+                        <RowConstraints minHeight="10.0" prefHeight="10.0" vgrow="SOMETIMES"/>
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                    </rowConstraints>
+                    <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" GridPane.rowIndex="5">
+                        <Label styleClass="timetable-label" text="Fri"/>
+                    </VBox>
+                    <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" GridPane.rowIndex="1">
+                        <Label styleClass="timetable-label" text="Mon"/>
+                    </VBox>
+                    <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" GridPane.rowIndex="4">
+                        <Label styleClass="timetable-label" text="Thur"/>
+                    </VBox>
+                    <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" GridPane.rowIndex="3">
+                        <Label styleClass="timetable-label" text="Wed"/>
+                    </VBox>
+                    <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" GridPane.rowIndex="2">
+                        <Label styleClass="timetable-label" text="Tues"/>
+                    </VBox>
+                    <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1"
+                          GridPane.columnSpan="2">
+                        <Label styleClass="timetable-label" text="0800"/>
+                    </HBox>
+                    <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="3"
+                          GridPane.columnSpan="2">
+                        <Label styleClass="timetable-label" text="0900"/>
+                    </HBox>
+                    <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="5"
+                          GridPane.columnSpan="2">
+                        <Label styleClass="timetable-label" text="1000"/>
+                    </HBox>
+                    <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="7"
+                          GridPane.columnSpan="2">
+                        <Label styleClass="timetable-label" text="1100"/>
+                    </HBox>
+                    <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="9"
+                          GridPane.columnSpan="2">
+                        <Label styleClass="timetable-label" text="1200"/>
+                    </HBox>
+                    <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="11"
+                          GridPane.columnSpan="2">
+                        <Label styleClass="timetable-label" text="1300"/>
+                    </HBox>
+                    <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="13"
+                          GridPane.columnSpan="2">
+                        <Label styleClass="timetable-label" text="1400"/>
+                    </HBox>
+                    <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="15"
+                          GridPane.columnSpan="2">
+                        <Label styleClass="timetable-label" text="1500"/>
+                    </HBox>
+                    <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="17"
+                          GridPane.columnSpan="2">
+                        <Label styleClass="timetable-label" text="1600"/>
+                    </HBox>
+                    <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="19"
+                          GridPane.columnSpan="2">
+                        <Label styleClass="timetable-label" text="1700"/>
+                    </HBox>
+                    <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="21"
+                          GridPane.columnSpan="2">
+                        <Label styleClass="timetable-label" text="1800"/>
+                    </HBox>
+                    <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="23"
+                          GridPane.columnSpan="2">
+                        <Label styleClass="timetable-label" text="1900"/>
+                    </HBox>
+                    <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="25"
+                          GridPane.columnSpan="2">
+                        <Label styleClass="timetable-label" text="2000"/>
+                    </HBox>
+                    <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="27"
+                          GridPane.columnSpan="2">
+                        <Label styleClass="timetable-label" text="2100"/>
+                    </HBox>
+                    <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="29"
+                          GridPane.columnSpan="2">
+                        <Label styleClass="timetable-label" text="2200"/>
+                    </HBox>
+                    <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="31"
+                          GridPane.columnSpan="2">
+                        <Label styleClass="timetable-label" text="2300"/>
+                    </HBox>
+                    <padding>
+                        <Insets bottom="10.0" left="0.0" right="10.0" top="0.0"/>
+                    </padding>
+                </GridPane>
+            </Tab>
+            <Tab fx:id="evenWeekTab" closable="false" text="Even Week">
+                <GridPane fx:id="evenGrid" alignment="CENTER">
+                    <columnConstraints>
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="65.0" prefWidth="100.0"/>
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+                    </columnConstraints>
+                    <rowConstraints>
+                        <RowConstraints minHeight="10.0" prefHeight="10.0" vgrow="SOMETIMES"/>
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                    </rowConstraints>
+                    <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" GridPane.rowIndex="5">
+                        <Label styleClass="timetable-label" text="Fri"/>
+                    </VBox>
+                    <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" GridPane.rowIndex="1">
+                        <Label styleClass="timetable-label" text="Mon"/>
+                    </VBox>
+                    <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" GridPane.rowIndex="4">
+                        <Label styleClass="timetable-label" text="Thur"/>
+                    </VBox>
+                    <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" GridPane.rowIndex="3">
+                        <Label styleClass="timetable-label" text="Wed"/>
+                    </VBox>
+                    <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" GridPane.rowIndex="2">
+                        <Label styleClass="timetable-label" text="Tues"/>
+                    </VBox>
+                    <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1"
+                          GridPane.columnSpan="2">
+                        <Label styleClass="timetable-label" text="0800"/>
+                    </HBox>
+                    <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="3"
+                          GridPane.columnSpan="2">
+                        <Label styleClass="timetable-label" text="0900"/>
+                    </HBox>
+                    <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="5"
+                          GridPane.columnSpan="2">
+                        <Label styleClass="timetable-label" text="1000"/>
+                    </HBox>
+                    <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="7"
+                          GridPane.columnSpan="2">
+                        <Label styleClass="timetable-label" text="1100"/>
+                    </HBox>
+                    <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="9"
+                          GridPane.columnSpan="2">
+                        <Label styleClass="timetable-label" text="1200"/>
+                    </HBox>
+                    <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="11"
+                          GridPane.columnSpan="2">
+                        <Label styleClass="timetable-label" text="1300"/>
+                    </HBox>
+                    <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="13"
+                          GridPane.columnSpan="2">
+                        <Label styleClass="timetable-label" text="1400"/>
+                    </HBox>
+                    <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="15"
+                          GridPane.columnSpan="2">
+                        <Label styleClass="timetable-label" text="1500"/>
+                    </HBox>
+                    <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="17"
+                          GridPane.columnSpan="2">
+                        <Label styleClass="timetable-label" text="1600"/>
+                    </HBox>
+                    <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="19"
+                          GridPane.columnSpan="2">
+                        <Label styleClass="timetable-label" text="1700"/>
+                    </HBox>
+                    <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="21"
+                          GridPane.columnSpan="2">
+                        <Label styleClass="timetable-label" text="1800"/>
+                    </HBox>
+                    <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="23"
+                          GridPane.columnSpan="2">
+                        <Label styleClass="timetable-label" text="1900"/>
+                    </HBox>
+                    <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="25"
+                          GridPane.columnSpan="2">
+                        <Label styleClass="timetable-label" text="2000"/>
+                    </HBox>
+                    <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="27"
+                          GridPane.columnSpan="2">
+                        <Label styleClass="timetable-label" text="2100"/>
+                    </HBox>
+                    <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="29"
+                          GridPane.columnSpan="2">
+                        <Label styleClass="timetable-label" text="2200"/>
+                    </HBox>
+                    <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="31"
+                          GridPane.columnSpan="2">
+                        <Label styleClass="timetable-label" text="2300"/>
+                    </HBox>
+                    <padding>
+                        <Insets bottom="10.0" left="0.0" right="10.0" top="0.0"/>
+                    </padding>
+                </GridPane>
+            </Tab>
+        </TabPane>
+    </AnchorPane>
+</StackPane>
 ```

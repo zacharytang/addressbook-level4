@@ -1,5 +1,5 @@
 # zacharytang-reused
-###### \java\seedu\address\logic\parser\AddressBookParserTest.java
+###### /java/seedu/address/logic/parser/AddressBookParserTest.java
 ``` java
     @Test
     public void parseCommandAlias_add() throws Exception {

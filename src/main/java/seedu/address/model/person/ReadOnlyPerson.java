@@ -74,11 +74,12 @@ public interface ReadOnlyPerson {
                 .append("\nBirthday: ")
                 .append(getBirthday())
                 .append("\nTimetable: ")
-                .append(getTimetable())
+                .append((getTimetable().toString().equals("http://modsn.us/5tN3z")) ? "" : getTimetable())
                 .append("\nRemark: ")
                 .append(getRemark())
                 .append("\nPhoto Path:")
-                .append(getPhotoPath())
+                .append((getPhotoPath().toString().equals("src/main/resources/images/defaultPhoto.jpg"))
+                        ? "" : getPhotoPath())
                 .append("\nTags: ");
         getTags().forEach(builder::append);
         return builder.toString();

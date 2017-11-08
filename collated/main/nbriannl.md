@@ -1,5 +1,5 @@
 # nbriannl
-###### \java\seedu\address\commons\events\model\PersonAddressDisplayDirectionsEvent.java
+###### /java/seedu/address/commons/events/model/PersonAddressDisplayDirectionsEvent.java
 ``` java
 /** Indicates a person's address as a map is to be displayed*/
 public class PersonAddressDisplayDirectionsEvent extends BaseEvent {
@@ -19,7 +19,7 @@ public class PersonAddressDisplayDirectionsEvent extends BaseEvent {
     }
 }
 ```
-###### \java\seedu\address\commons\events\model\PersonAddressDisplayMapEvent.java
+###### /java/seedu/address/commons/events/model/PersonAddressDisplayMapEvent.java
 ``` java
 /** Indicates a person's address as a map is to be displayed*/
 public class PersonAddressDisplayMapEvent extends BaseEvent {
@@ -36,7 +36,49 @@ public class PersonAddressDisplayMapEvent extends BaseEvent {
     }
 }
 ```
-###### \java\seedu\address\logic\commands\DeleteCommand.java
+###### /java/seedu/address/commons/events/ui/PersonHasBeenDeletedEvent.java
+``` java
+
+/**
+ * Represents a deletion of a person.
+ */
+public class PersonHasBeenDeletedEvent extends BaseEvent {
+
+    public final ReadOnlyPerson deletedPerson;
+
+    public PersonHasBeenDeletedEvent (ReadOnlyPerson deletedPerson) {
+        this.deletedPerson = deletedPerson;
+    }
+
+    @Override
+    public String toString() {
+        return "Person has been deleted: " + deletedPerson.getName().toString();
+    }
+}
+```
+###### /java/seedu/address/commons/events/ui/PersonHasBeenModifiedEvent.java
+``` java
+
+/**
+ * Represents a modification to a person.
+ */
+public class PersonHasBeenModifiedEvent extends BaseEvent {
+
+    public final ReadOnlyPerson oldPerson;
+    public final ReadOnlyPerson newPerson;
+
+    public PersonHasBeenModifiedEvent (ReadOnlyPerson oldPerson, ReadOnlyPerson newPerson) {
+        this.oldPerson = oldPerson;
+        this.newPerson = newPerson;
+    }
+
+    @Override
+    public String toString() {
+        return "Person has been modified: " + newPerson.getName().toString();
+    }
+}
+```
+###### /java/seedu/address/logic/commands/DeleteCommand.java
 ``` java
     public DeleteCommand(Set<Tag> targetTags) {
         this.targetIndexes = null;
@@ -44,58 +86,47 @@ public class PersonAddressDisplayMapEvent extends BaseEvent {
     }
 
 ```
-###### \java\seedu\address\logic\commands\DeleteCommand.java
+###### /java/seedu/address/logic/commands/DeleteCommand.java
 ``` java
     @Override
     public CommandResult executeUndoableCommand() throws CommandException {
         // this code block is command execution for delete [indexes]
         if (targetTags == null && targetIndexes != null) {
-            List<ReadOnlyPerson> lastShownList = model.getFilteredPersonList();
-            ArrayList<ReadOnlyPerson> deletePersonList = new ArrayList<>();
-
-            for (Index index : targetIndexes) {
-                if (index.getZeroBased() >= lastShownList.size()) {
-                    throw new CommandException(Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX);
-                }
-                ReadOnlyPerson personToDelete = lastShownList.get(index.getZeroBased());
-                deletePersonList.add(personToDelete);
-            }
-
-            try {
-                model.deletePersons(deletePersonList);
-            } catch (PersonNotFoundException pnfe) {
-                assert false : "One of the target persons is missing";
-            }
-
-            //return new CommandResult(String.format(MESSAGE_DELETE_PERSON_SUCCESS));
-            return new CommandResult(generateResultMsg(deletePersonList));
+            return getCommandResultForPerson();
 
         } else { // this code block is command execution for delete t/[tag...]
-            ArrayList<Tag> arrayTags = new ArrayList<Tag>(targetTags);
-            List<Tag> listOfExistingTags = model.getAddressBook().getTagList();
-
-            if (!listOfExistingTags.containsAll(arrayTags)) {
-                throw new CommandException(Messages.MESSAGE_INVALID_TAG_PROVIDED);
-            }
-
-            for (Tag tagToBeDeleted: arrayTags) {
-                try {
-                    model.deleteTag(tagToBeDeleted);
-                } catch (TagNotFoundException tnfe) {
-                    assert false : "[Delete Tag] A tag is not found";
-                } catch (DuplicatePersonException dpe) {
-                    assert false : "[Delete Tag] A duplicate person is there";
-                } catch (PersonNotFoundException pnfe) {
-                    assert false : "[Delete Tag] A person not found";
-                }
-            }
-
-            return new CommandResult(MESSAGE_DELETE_TAG_SUCCESS);
+            return getCommandResultForTag();
         }
     }
 
 ```
-###### \java\seedu\address\logic\commands\EditCommand.java
+###### /java/seedu/address/logic/commands/DeleteCommand.java
+``` java
+    private CommandResult getCommandResultForTag () throws CommandException {
+        ArrayList<Tag> arrayTags = new ArrayList<Tag>(targetTags);
+        List<Tag> listOfExistingTags = model.getAddressBook().getTagList();
+
+        if (!listOfExistingTags.containsAll(arrayTags)) {
+            throw new CommandException(Messages.MESSAGE_INVALID_TAG_PROVIDED);
+        }
+
+        for (Tag tagToBeDeleted: arrayTags) {
+            try {
+                model.deleteTag(tagToBeDeleted);
+            } catch (TagNotFoundException tnfe) {
+                assert false : "[Delete Tag] A tag is not found";
+            } catch (DuplicatePersonException dpe) {
+                assert false : "[Delete Tag] A duplicate person is there";
+            } catch (PersonNotFoundException pnfe) {
+                assert false : "[Delete Tag] A person not found";
+            }
+        }
+
+        return new CommandResult(MESSAGE_DELETE_TAG_SUCCESS);
+    }
+
+```
+###### /java/seedu/address/logic/commands/EditCommand.java
 ``` java
     /**
      * @param index of the person in the filtered person list to edit
@@ -113,7 +144,7 @@ public class PersonAddressDisplayMapEvent extends BaseEvent {
     }
 
 ```
-###### \java\seedu\address\logic\commands\EditCommand.java
+###### /java/seedu/address/logic/commands/EditCommand.java
 ``` java
     /**
      *
@@ -132,7 +163,7 @@ public class PersonAddressDisplayMapEvent extends BaseEvent {
     }
 
 ```
-###### \java\seedu\address\logic\commands\EditCommand.java
+###### /java/seedu/address/logic/commands/EditCommand.java
 ``` java
     @Override
     public CommandResult executeUndoableCommand() throws CommandException {
@@ -173,7 +204,7 @@ public class PersonAddressDisplayMapEvent extends BaseEvent {
     }
 
 ```
-###### \java\seedu\address\logic\commands\EditCommand.java
+###### /java/seedu/address/logic/commands/EditCommand.java
 ``` java
     @Override
     public boolean equals(Object other) {
@@ -202,7 +233,7 @@ public class PersonAddressDisplayMapEvent extends BaseEvent {
     }
 
 ```
-###### \java\seedu\address\logic\commands\GMapsCommand.java
+###### /java/seedu/address/logic/commands/GMapsCommand.java
 ``` java
 /**
  * Selects a person identified using it's last displayed index from the address book.
@@ -275,7 +306,23 @@ public class GMapsCommand extends Command {
     }
 }
 ```
-###### \java\seedu\address\logic\parser\GMapsCommandParser.java
+###### /java/seedu/address/logic/parser/DeleteCommandParser.java
+``` java
+    private DeleteCommand getDeleteCommandForTags (ArgumentMultimap argMultimap) throws ParseException {
+        try {
+            if (arePrefixesPresent(argMultimap, PREFIX_TAG)) {
+                Set<Tag> tagList = ParserUtil.parseTags(argMultimap.getAllValues(PREFIX_TAG));
+                return new DeleteCommand(tagList);
+            }
+        } catch (IllegalValueException ive) {
+            throw new ParseException(
+                    String.format(MESSAGE_INVALID_COMMAND_FORMAT, DeleteCommand.MESSAGE_USAGE));
+        }
+        return null;
+    }
+
+```
+###### /java/seedu/address/logic/parser/GMapsCommandParser.java
 ``` java
 /**
  * Parses input arguments and creates a new GMapsCommand object
@@ -321,7 +368,7 @@ public class GMapsCommandParser implements Parser<GMapsCommand> {
 
 }
 ```
-###### \java\seedu\address\logic\parser\ParserUtil.java
+###### /java/seedu/address/logic/parser/ParserUtil.java
 ``` java
     /**
      * Parses a single {@code Optional<String> tag} into an {@code Optional<Tag>} if {@code tag} is present.
@@ -333,7 +380,40 @@ public class GMapsCommandParser implements Parser<GMapsCommand> {
     }
 
 ```
-###### \java\seedu\address\model\AddressBook.java
+###### /java/seedu/address/logic/parser/ThemeCommandParser.java
+``` java
+
+/**
+ * Parses input arguments and creates a new GMapsCommand object
+ */
+public class ThemeCommandParser implements Parser<ThemeCommand> {
+
+    /**
+     * Parses the given {@code String} of arguments in the context of the GMapsCommand
+     * and returns an GMapsCommand object for execution.
+     * @throws ParseException if the user input does not conform the expected format
+     */
+    public ThemeCommand parse(String args) throws ParseException {
+        String trimmedArgs = args.trim();
+        if (trimmedArgs.isEmpty()) {
+            throw new ParseException(
+                    String.format(MESSAGE_INVALID_COMMAND_FORMAT, ThemeCommand.MESSAGE_USAGE));
+        }
+
+        return new ThemeCommand(trimmedArgs);
+    }
+
+    /**
+     * Returns true if none of the prefixes contains empty {@code Optional} values in the given
+     * {@code ArgumentMultimap}.
+     */
+    private static boolean arePrefixesPresent(ArgumentMultimap argumentMultimap, Prefix... prefixes) {
+        return Stream.of(prefixes).allMatch(prefix -> argumentMultimap.getValue(prefix).isPresent());
+    }
+
+}
+```
+###### /java/seedu/address/model/AddressBook.java
 ``` java
     /**
      * Removes {@code tag} from this {@code AddressBook}.
@@ -347,8 +427,25 @@ public class GMapsCommandParser implements Parser<GMapsCommand> {
         }
     }
 
+    //// Theme-level operations
+
 ```
-###### \java\seedu\address\model\Model.java
+###### /java/seedu/address/model/AddressBook.java
+``` java
+    /**
+     * Initialises the themes in the address book.
+     */
+    private void initialiseThemes() {
+        themes.put("dark", "DarkTheme.css");
+        themes.put("light", "LightTheme.css");
+    }
+
+    HashMap<String, String> getThemeMap () {
+        return themes;
+    }
+
+```
+###### /java/seedu/address/model/Model.java
 ``` java
     /** Show map of the given person **/
     void showMapOf(ReadOnlyPerson person);
@@ -357,7 +454,7 @@ public class GMapsCommandParser implements Parser<GMapsCommand> {
     void showDirectionsTo(ReadOnlyPerson target, Address address);
 
 ```
-###### \java\seedu\address\model\Model.java
+###### /java/seedu/address/model/Model.java
 ``` java
     /**
      * Deletes the specified tag from everyone in the address book
@@ -371,7 +468,7 @@ public class GMapsCommandParser implements Parser<GMapsCommand> {
     void deleteTag(Tag tag) throws DuplicatePersonException, PersonNotFoundException, TagNotFoundException;
 
 ```
-###### \java\seedu\address\model\Model.java
+###### /java/seedu/address/model/Model.java
 ``` java
     /**
      * Deletes the specified tag from everyone in the address book
@@ -386,23 +483,43 @@ public class GMapsCommandParser implements Parser<GMapsCommand> {
             TagNotFoundException;
 
 ```
-###### \java\seedu\address\model\ModelManager.java
+###### /java/seedu/address/model/Model.java
+``` java
+    /** Returns the theme map **/
+    HashMap<String, String> getThemeMap ();
+
+    /** Sets the current theme of the app */
+    void setCurrentTheme(String theme);
+
+    /** Returns the current theme in use by the app */
+    String getCurrentTheme();
+
+```
+###### /java/seedu/address/model/Model.java
+``` java
+    /** Checks if the master list of tags in the address book has every tag being used */
+    void checkMasterTagListHasAllTagsUsed ();
+
+```
+###### /java/seedu/address/model/ModelManager.java
 ``` java
     @Override
     public void showMapOf(ReadOnlyPerson person) {
+        raise(new PersonSelectedEvent(person));
         raise(new PersonAddressDisplayMapEvent(person));
     }
 
 ```
-###### \java\seedu\address\model\ModelManager.java
+###### /java/seedu/address/model/ModelManager.java
 ``` java
     @Override
     public void showDirectionsTo(ReadOnlyPerson target, Address address) {
+        raise(new PersonSelectedEvent(target));
         raise(new PersonAddressDisplayDirectionsEvent(target, address));
     }
 
 ```
-###### \java\seedu\address\model\ModelManager.java
+###### /java/seedu/address/model/ModelManager.java
 ``` java
     @Override
     public synchronized void deleteTag(Tag tag) throws DuplicatePersonException, PersonNotFoundException,
@@ -415,7 +532,6 @@ public class GMapsCommandParser implements Parser<GMapsCommand> {
             Set<Tag> newTags = new HashSet<Tag>(newPerson.getTags());
             newTags.remove(tag);
             newPerson.setTags(newTags);
-
             addressBook.updatePerson(oldPerson, newPerson);
         }
         indicateAddressBookChanged();
@@ -423,7 +539,7 @@ public class GMapsCommandParser implements Parser<GMapsCommand> {
     }
 
 ```
-###### \java\seedu\address\model\ModelManager.java
+###### /java/seedu/address/model/ModelManager.java
 ``` java
     @Override
     public void editTag(Tag oldTag, Tag newTag) throws DuplicatePersonException, PersonNotFoundException,
@@ -451,14 +567,14 @@ public class GMapsCommandParser implements Parser<GMapsCommand> {
     }
 
 ```
-###### \java\seedu\address\ui\BrowserPanel.java
+###### /java/seedu/address/ui/BrowserPanel.java
 ``` java
     private void loadGoogleMapDirections(ReadOnlyPerson person, Address address) {
         loadPage("https://www.google.com.sg/maps/dir/" + address.toString() + "/" + person.getAddress());
     }
 
 ```
-###### \java\seedu\address\ui\BrowserPanel.java
+###### /java/seedu/address/ui/BrowserPanel.java
 ``` java
     @Subscribe
     private void handlePersonAddressDisplayMapEvent(PersonAddressDisplayMapEvent event) {
@@ -467,7 +583,7 @@ public class GMapsCommandParser implements Parser<GMapsCommand> {
     }
 
 ```
-###### \java\seedu\address\ui\BrowserPanel.java
+###### /java/seedu/address/ui/BrowserPanel.java
 ``` java
     @Subscribe
     private void handlePersonAddressDisplayDirectionsEvent(PersonAddressDisplayDirectionsEvent event) {
@@ -476,25 +592,310 @@ public class GMapsCommandParser implements Parser<GMapsCommand> {
     }
 }
 ```
-###### \resources\view\DarkTheme.css
+###### /java/seedu/address/ui/PersonInfoPanel.java
+``` java
+    /**
+     * Clears the binds to allow to loadDefaultPerson() again
+     */
+    private void clearBind() {
+        name.textProperty().unbind();;
+        gender.textProperty().unbind();
+        matricNo.textProperty().unbind();
+        phone.textProperty().unbind();
+        address.textProperty().unbind();
+        email.textProperty().unbind();
+        birthday.textProperty().unbind();
+        remark.textProperty().unbind();
+    }
+
+```
+###### /java/seedu/address/ui/PersonInfoPanel.java
+``` java
+    @Subscribe
+    private void handlePersonHasBeenModifiedEvent(PersonHasBeenModifiedEvent event) {
+        logger.info(LogsCenter.getEventHandlingLogMessage(event));
+        if (currentlyViewedPerson != null && currentlyViewedPerson.equals(event.oldPerson)) {
+            loadPerson(event.newPerson);
+        }
+    }
+
+```
+###### /java/seedu/address/ui/PersonInfoPanel.java
+``` java
+    @Subscribe
+    private void handlePersonHasBeenDeletedEvent(PersonHasBeenDeletedEvent event) {
+        logger.info(LogsCenter.getEventHandlingLogMessage(event));
+        if (currentlyViewedPerson != null && currentlyViewedPerson.equals(event.deletedPerson)) {
+            clearBind();
+            loadDefaultPerson();
+        }
+    }
+
+```
+###### /java/seedu/address/ui/PersonInfoPanel.java
+``` java
+    @Subscribe
+    private void handleAddressBookChangedEvent(AddressBookChangedEvent event) {
+        logger.info(LogsCenter.getEventHandlingLogMessage(event));
+        if (event.data.getPersonList().size() == 0 && event.data.getTagList().size() == 0) {
+            clearBind();
+            loadDefaultPerson();
+        }
+    }
+
+```
+###### /java/seedu/address/ui/TagColorMap.java
+``` java
+/**
+ * The mapping of the tag colors to be shared across any UI components containing tags
+ */
+public class TagColorMap {
+    private static TagColorMap instance;
+    private static final String[] COLORS = {"Crimson", "orange", "DarkSalmon", "LightSeaGreen",
+        "RoyalBlue", "MediumPurple", "Teal", "Sienna", "HotPink", "MediumSeaGreen",
+        "DarkSlateBlue", "CadetBlue", "MidnightBlue", "LightPink", "LightSalmon", "LightSkyBlue", "PaleVioletRed "};
+    private static final int NUM_COLORS = COLORS.length;
+    private static int colorIndex = 0;
+
+    private HashMap<String, String> tagColors = new HashMap<String, String>();
+
+    public static TagColorMap getInstance() {
+        if (instance == null) {
+            instance = new TagColorMap();
+        }
+        return instance;
+    }
+
+    /**
+     * Gets a random unused color for the new tagName, or returns the corresponding color of the old tagName
+     * @param tagName
+     * @return the color of the tag
+     */
+    public String getTagColor(String tagName) {
+        if (!tagColors.containsKey(tagName)) {
+            tagColors.put(tagName, COLORS[colorIndex]);
+            updateColorIndex();
+        }
+        return tagColors.get(tagName);
+    }
+
+
+```
+###### /resources/view/DarkTheme.css
+``` css
+.background {
+    -fx-background-color: #383838;
+    background-color: #383838; /* Used in the default.html file */
+}
+
+// affects the tags
+.label {
+    -fx-font-size: 11pt;
+    -fx-font-family: "Segoe UI Semibold";
+    -fx-text-fill: #555555;
+    -fx-opacity: 0.9;
+}
+
+.label-bright {
+    -fx-font-size: 11pt;
+    -fx-font-family: "Segoe UI Semibold";
+    -fx-text-fill: white;
+    -fx-opacity: 1;
+}
+
+.label-header {
+    -fx-font-size: 32pt;
+    -fx-font-family: "Segoe UI Light";
+    -fx-text-fill: white;
+    -fx-opacity: 1;
+}
+
+.text-field {
+    -fx-font-size: 12pt;
+    -fx-font-family: "Segoe UI Semibold";
+}
+
+.tab-pane {
+    -fx-padding: 0 0 0 1;
+}
+
+.tab-pane .tab-header-area {
+    -fx-padding: 0 0 0 0;
+    -fx-min-height: 0;
+    -fx-max-height: 0;
+}
+
+.table-view {
+    -fx-base: #1d1d1d;
+    -fx-control-inner-background: #1d1d1d;
+    -fx-background-color: #1d1d1d;
+    -fx-table-cell-border-color: transparent;
+    -fx-table-header-border-color: transparent;
+    -fx-padding: 5;
+}
+
+.table-view .column-header-background {
+    -fx-background-color: transparent;
+}
+
+.table-view .column-header, .table-view .filler {
+    -fx-size: 35;
+    -fx-border-width: 0 0 1 0;
+    -fx-background-color: transparent;
+    -fx-border-color:
+        transparent
+        transparent
+        derive(-fx-base, 80%)
+        transparent;
+    -fx-border-insets: 0 10 1 0;
+}
+
+.table-view .column-header .label {
+    -fx-font-size: 20pt;
+    -fx-font-family: "Segoe UI Light";
+    -fx-text-fill: white;
+    -fx-alignment: center-left;
+    -fx-opacity: 1;
+}
+
+.table-view:focused .table-row-cell:filled:focused:selected {
+    -fx-background-color: -fx-focus-color;
+}
+
+```
+###### /resources/view/DarkTheme.css
 ``` css
 .list-view {
     -fx-background-insets: 0;
     -fx-padding: 0;
-    -fx-background-color: derive(#1d1d1d, 20%);
+    -fx-background-color: #383838;
 }
 
 ```
-###### \resources\view\MainWindow.fxml
-``` fxml
-  <StackPane fx:id="tagListPanelPlaceholder" maxHeight="60" minHeight="60" prefHeight="60" styleClass="pane-with-border" VBox.vgrow="NEVER">
-    <padding>
-      <Insets bottom="5" left="10" right="10" top="5" />
-    </padding>
-  </StackPane>
+###### /resources/view/LightTheme.css
+``` css
+.background {
+    -fx-background-color: #FAFAFA;
+    background-color: #FAFAFA; /* Used in the default.html file */
+}
+
+// affects the tags
+.label {
+    -fx-font-size: 11pt;
+    -fx-font-family: "Segoe UI Semibold";
+    -fx-text-fill: #555555;
+    -fx-opacity: 0.9;
+}
+
+.label-bright {
+    -fx-font-size: 11pt;
+    -fx-font-family: "Segoe UI Semibold";
+    -fx-text-fill: #232323;
+    -fx-opacity: 1;
+}
+
+.label-header {
+    -fx-font-size: 32pt;
+    -fx-font-family: "Segoe UI Light";
+    -fx-text-fill: #232323;
+    -fx-opacity: 1;
+}
+
+.text-field {
+    -fx-font-size: 12pt;
+    -fx-font-family: "Segoe UI Semibold";
+}
+
+.tab-pane {
+    -fx-padding: 0 0 0 1;
+}
+
+.tab-pane .tab-header-area {
+    -fx-padding: 0 0 0 0;
+    -fx-min-height: 0;
+    -fx-max-height: 0;
+}
+
+.table-view {
+    -fx-base: #1d1d1d;
+    -fx-control-inner-background: #1d1d1d;
+    -fx-background-color: #1d1d1d;
+    -fx-table-cell-border-color: transparent;
+    -fx-table-header-border-color: transparent;
+    -fx-padding: 5;
+}
+
+.table-view .column-header-background {
+    -fx-background-color: transparent;
+}
+
+.table-view .column-header, .table-view .filler {
+    -fx-size: 35;
+    -fx-border-width: 0 0 1 0;
+    -fx-background-color: transparent;
+    -fx-border-color:
+        transparent
+        transparent
+        derive(-fx-base, 80%)
+        transparent;
+    -fx-border-insets: 0 10 1 0;
+}
+
+.table-view .column-header .label {
+    -fx-font-size: 20pt;
+    -fx-font-family: "Segoe UI Light";
+    -fx-text-fill: #232323;
+    -fx-alignment: center-left;
+    -fx-opacity: 1;
+}
+
+.table-view:focused .table-row-cell:filled:focused:selected {
+    -fx-background-color: -fx-focus-color;
+}
 
 ```
-###### \resources\view\TagListPanel.fxml
+###### /resources/view/LightTheme.css
+``` css
+.list-view {
+    -fx-background-insets: 0;
+    -fx-padding: 0;
+    -fx-background-color: #FAFAFA;
+}
+
+```
+###### /resources/view/MainWindow.fxml
+``` fxml
+                        <StackPane fx:id="tagListPanelPlaceholder" maxHeight="80.0" minHeight="20.0" prefHeight="40.0"
+                                   prefWidth="549.0" styleClass="pane-with-border">
+                            <padding>
+                                <Insets bottom="5" left="10" right="10" top="5"/>
+                            </padding>
+                        </StackPane>
+                        <StackPane fx:id="personInfoPlaceholder" VBox.vgrow="ALWAYS">
+                            <padding>
+                                <Insets left="10" right="5" top="5"/>
+                            </padding>
+                        </StackPane>
+
+                    </VBox>
+                    <VBox minWidth="200" prefWidth="323.0">
+
+                        <StackPane fx:id="commandBoxPlaceholder" minWidth="100" prefWidth="305.0"
+                                   styleClass="pane-with-border">
+                            <padding>
+                                <Insets bottom="5" left="10" right="10" top="5"/>
+                            </padding>
+                        </StackPane>
+                        <StackPane fx:id="resultDisplayPlaceholder" minWidth="100" prefWidth="320.0"
+                                   styleClass="pane-with-border" VBox.vgrow="ALWAYS">
+                            <padding>
+                                <Insets bottom="5" left="10" right="10" top="5"/>
+                            </padding>
+                        </StackPane>
+                    </VBox>
+                </SplitPane>
+```
+###### /resources/view/TagListPanel.fxml
 ``` fxml
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.layout.ColumnConstraints?>

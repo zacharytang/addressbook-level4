@@ -37,7 +37,7 @@ import seedu.address.model.tag.Tag;
  */
 public class AddCommandParser implements Parser<AddCommand> {
 
-
+    //@@author CindyTsai1
     /**
      * Parses the given {@code String} of arguments in the context of the AddCommand
      * and returns an AddCommand object for execution.
@@ -48,23 +48,29 @@ public class AddCommandParser implements Parser<AddCommand> {
                 ArgumentTokenizer.tokenize(args, PREFIX_NAME, PREFIX_GENDER, PREFIX_MATRIC_NO,
                         PREFIX_PHONE, PREFIX_EMAIL,
                         PREFIX_ADDRESS, PREFIX_TAG, PREFIX_BIRTHDAY, PREFIX_TIMETABLE);
-        if (!arePrefixesPresent(argMultimap, PREFIX_NAME, PREFIX_GENDER, PREFIX_MATRIC_NO, PREFIX_ADDRESS, PREFIX_PHONE,
-                PREFIX_EMAIL, PREFIX_TIMETABLE, PREFIX_BIRTHDAY)) {
+        if (!arePrefixesPresent(argMultimap, PREFIX_NAME)) {
             throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, AddCommand.MESSAGE_USAGE));
         }
 
         try {
             Name name = ParserUtil.parseName(argMultimap.getValue(PREFIX_NAME)).get();
-            Gender gender = ParserUtil.parseGender(argMultimap.getValue(PREFIX_GENDER)).get();
-            MatricNo matricNo = ParserUtil.parseMatricNo(argMultimap.getValue(PREFIX_MATRIC_NO)).get();
-            Phone phone = ParserUtil.parsePhone(argMultimap.getValue(PREFIX_PHONE)).get();
-            Email email = ParserUtil.parseEmail(argMultimap.getValue(PREFIX_EMAIL)).get();
-            Address address = ParserUtil.parseAddress(argMultimap.getValue(PREFIX_ADDRESS)).get();
-            Timetable timetable = ParserUtil.parseTimetable(argMultimap.getValue(PREFIX_TIMETABLE)).get();
+            Gender gender = (arePrefixesPresent(argMultimap, PREFIX_GENDER))
+                    ? ParserUtil.parseGender(argMultimap.getValue(PREFIX_GENDER)).get() : new Gender("");
+            MatricNo matricNo = (arePrefixesPresent(argMultimap, PREFIX_MATRIC_NO))
+                    ? ParserUtil.parseMatricNo(argMultimap.getValue(PREFIX_MATRIC_NO)).get() : new MatricNo("");
+            Phone phone = (arePrefixesPresent(argMultimap, PREFIX_PHONE))
+                    ? ParserUtil.parsePhone(argMultimap.getValue(PREFIX_PHONE)).get() : new Phone("");
+            Email email = (arePrefixesPresent(argMultimap, PREFIX_EMAIL))
+                    ? ParserUtil.parseEmail(argMultimap.getValue(PREFIX_EMAIL)).get() : new Email("");
+            Address address = (arePrefixesPresent(argMultimap, PREFIX_ADDRESS))
+                    ? ParserUtil.parseAddress(argMultimap.getValue(PREFIX_ADDRESS)).get() : new Address("");
+            Timetable timetable = (arePrefixesPresent(argMultimap, PREFIX_TIMETABLE))
+                    ? ParserUtil.parseTimetable(argMultimap.getValue(PREFIX_TIMETABLE)).get() : new Timetable("");
             Remark remark = new Remark("");
             PhotoPath photoPath = new PhotoPath(DEFAULT_PHOTO_PATH);
             Set<Tag> tagList = ParserUtil.parseTags(argMultimap.getAllValues(PREFIX_TAG));
-            Birthday birthday = ParserUtil.parseBirthday(argMultimap.getValue(PREFIX_BIRTHDAY)).get();
+            Birthday birthday = (arePrefixesPresent(argMultimap, PREFIX_BIRTHDAY))
+                    ? ParserUtil.parseBirthday(argMultimap.getValue(PREFIX_BIRTHDAY)).get() : new Birthday("");
 
             ReadOnlyPerson person = new Person(name, gender, matricNo, phone, email, address, timetable,
                     remark, photoPath, tagList, birthday);
@@ -75,6 +81,7 @@ public class AddCommandParser implements Parser<AddCommand> {
         }
     }
 
+    //@@author
     /**
      * Returns true if none of the prefixes contains empty {@code Optional} values in the given
      * {@code ArgumentMultimap}.

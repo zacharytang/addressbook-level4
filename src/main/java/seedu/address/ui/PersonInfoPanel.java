@@ -1,7 +1,6 @@
 package seedu.address.ui;
 
 import java.io.File;
-import java.util.HashMap;
 import java.util.logging.Logger;
 
 import com.google.common.eventbus.Subscribe;
@@ -16,6 +15,9 @@ import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Circle;
 import seedu.address.MainApp;
 import seedu.address.commons.core.LogsCenter;
+import seedu.address.commons.events.model.AddressBookChangedEvent;
+import seedu.address.commons.events.ui.PersonHasBeenDeletedEvent;
+import seedu.address.commons.events.ui.PersonHasBeenModifiedEvent;
 import seedu.address.commons.events.ui.PersonPanelSelectionChangedEvent;
 import seedu.address.commons.events.ui.PersonSelectedEvent;
 import seedu.address.logic.commands.PhotoCommand;
@@ -31,16 +33,10 @@ public class PersonInfoPanel extends UiPart<Region> {
     private static final String FXML = "PersonInfoPanel.fxml";
     private static String DEFAULT_PHOTO_PATH = "/images/defaultPhoto.jpg";
 
-    private static final String[] COLORS = {"Crimson", "orange", "DarkSalmon", "LightSeaGreen",
-        "RoyalBlue", "MediumPurple", "Teal", "Sienna", "HotPink", "MediumSeaGreen",
-        "DarkSlateBlue"};
-    private static final int NUM_COLORS = COLORS.length;
-    private static int colorIndex = 0;
-
     private ReadOnlyPerson person;
+    private ReadOnlyPerson currentlyViewedPerson;
 
     private final Logger logger = LogsCenter.getLogger(this.getClass());
-    private HashMap<String, String> tagColors = new HashMap<String, String>();
 
     @FXML
     private Circle photoCircle;
@@ -84,9 +80,11 @@ public class PersonInfoPanel extends UiPart<Region> {
         email.setText("");
         birthday.setText("");
         remark.setText("");
-
+        tags.getChildren().clear();
 
         setDefaultContactPhoto();
+        currentlyViewedPerson = null;
+        logger.info("Currently Viewing: Default Person" );
     }
 
     /**
@@ -111,8 +109,27 @@ public class PersonInfoPanel extends UiPart<Region> {
         });
 
         loadPhoto(person);
+
+        currentlyViewedPerson = person;
+        logger.info("Currently Viewing: " + currentlyViewedPerson.getName() );
     }
 
+    //@@author nbriannl
+    /**
+     * Clears the binds to allow to loadDefaultPerson() again
+     */
+    private void clearBind() {
+        name.textProperty().unbind();;
+        gender.textProperty().unbind();
+        matricNo.textProperty().unbind();
+        phone.textProperty().unbind();
+        address.textProperty().unbind();
+        email.textProperty().unbind();
+        birthday.textProperty().unbind();
+        remark.textProperty().unbind();
+    }
+
+    //@@author
     /**
      * Initializes the tags for person list
      * @param person
@@ -120,34 +137,10 @@ public class PersonInfoPanel extends UiPart<Region> {
     private void initTags(ReadOnlyPerson person) {
         person.getTags().forEach(tag -> {
                 Label tagLabel = new Label(tag.tagName);
-                tagLabel.setStyle("-fx-background-color: " + getTagColor(tag.tagName));
+                tagLabel.setStyle("-fx-background-color: " + TagColorMap.getInstance().getTagColor(tag.tagName));
                 tags.getChildren().add(tagLabel);
             }
         );
-    }
-
-    /**
-     * Gets a random unused color for the new tagName, or returns the corresponding color of the old tagName
-     * @param tagName
-     * @return the color of the tag
-     */
-    private String getTagColor(String tagName) {
-        if (!tagColors.containsKey(tagName)) {
-            tagColors.put(tagName, COLORS[colorIndex]);
-            updateColorIndex();
-        }
-        return tagColors.get(tagName);
-    }
-
-    /**
-     * Updates the color index to pick a new color for the new tag.
-     */
-    private static void updateColorIndex() {
-        if (colorIndex == NUM_COLORS - 1) {
-            colorIndex = 0;
-        } else {
-            colorIndex++;
-        }
     }
 
     //@@author April0616
@@ -169,32 +162,64 @@ public class PersonInfoPanel extends UiPart<Region> {
         String photoPath = person.getPhotoPath().value;
         Image image;
 
+        logger.info("Is default path? : " + photoPath.equals(PhotoCommand.DEFAULT_PHOTO_PATH) );
+
         if (photoPath.equals(PhotoCommand.DEFAULT_PHOTO_PATH)) {  //default male and female photos
             if (person.getGender().toString().equals("Male")) {
-                photoPath = prefix + "/images/default_male.jpg";
+                photoPath = "/images/default_male.jpg";
+            } else if (person.getGender().toString().equals("Female")) {
+                photoPath = "/images/default_female.jpg";
             } else {
-                photoPath = prefix + "/images/default_female.jpg";
+                photoPath = "/images/defaultPhoto.jpg";
             }
+            image = new Image(MainApp.class.getResourceAsStream(photoPath));
+
+        } else{
+            File contactImg = new File(photoPath);
+            String url = contactImg.toURI().toString();
+            image = new Image(url);
         }
 
-        File contactImg = new File(photoPath);
-        String url = contactImg.toURI().toString();
-        image = new Image(url);
         photoCircle.setFill(new ImagePattern(image));
-
     }
-
-
 
     //@@author zacharytang
     @Subscribe
     private void handlePersonSelectedEvent(PersonSelectedEvent event) {
         logger.info(LogsCenter.getEventHandlingLogMessage(event));
-        //this.person = person;
-        //initTags(person);
         loadPerson(event.person);
     }
 
+    //@@author nbriannl
+    @Subscribe
+    private void handlePersonHasBeenModifiedEvent(PersonHasBeenModifiedEvent event) {
+        logger.info(LogsCenter.getEventHandlingLogMessage(event));
+        if (currentlyViewedPerson != null && currentlyViewedPerson.equals(event.oldPerson)) {
+            loadPerson(event.newPerson);
+        }
+    }
+
+    //@@author nbriannl
+    @Subscribe
+    private void handlePersonHasBeenDeletedEvent(PersonHasBeenDeletedEvent event) {
+        logger.info(LogsCenter.getEventHandlingLogMessage(event));
+        if (currentlyViewedPerson != null && currentlyViewedPerson.equals(event.deletedPerson)) {
+            clearBind();
+            loadDefaultPerson();
+        }
+    }
+
+    //@@author nbriannl
+    @Subscribe
+    private void handleAddressBookChangedEvent(AddressBookChangedEvent event) {
+        logger.info(LogsCenter.getEventHandlingLogMessage(event));
+        if (event.data.getPersonList().size() == 0 && event.data.getTagList().size() == 0) {
+            clearBind();
+            loadDefaultPerson();
+        }
+    }
+
+    //@@author
     @Subscribe
     private void handlePersonPanelSelectionChangeEvent(PersonPanelSelectionChangedEvent event) {
         logger.info(LogsCenter.getEventHandlingLogMessage(event));

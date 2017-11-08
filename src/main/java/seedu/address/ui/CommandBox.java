@@ -95,7 +95,7 @@ public class CommandBox extends UiPart<Region> {
         commandTextField.positionCaret(commandTextField.getText().length());
     }
 
-    //@@author CindyTsai1-reused
+
     /**
      * Handles the Enter button pressed event.
      */
@@ -137,6 +137,7 @@ public class CommandBox extends UiPart<Region> {
         commandTextField.getStyleClass().remove(ERROR_STYLE_CLASS);
     }
 
+    //@@author CindyTsai1
     /**
      * Sets the command box style to indicate a failed command.
      */

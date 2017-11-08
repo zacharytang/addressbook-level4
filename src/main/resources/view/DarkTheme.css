@@ -1,3 +1,4 @@
+//@@author nbriannl
 .background {
     -fx-background-color: #383838;
     background-color: #383838; /* Used in the default.html file */
@@ -131,6 +132,7 @@
 
 .list-cell:filled:selected {
     -fx-background-color: #3f5e70;
+    -fx-effect: dropshadow( gaussian , rgba(0,0,0,0.7) , 10,0,5,5 );
 }
 
 .list-cell:filled:selected #cardPane {
@@ -468,4 +470,5 @@
     -fx-border-radius: 2;
     -fx-background-radius: 2;
     -fx-font-size: 11;
+    -fx-effect: dropshadow( gaussian , rgba(0,0,0,0.7) , 5,0,1,1 );
 }

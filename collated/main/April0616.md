@@ -1,5 +1,5 @@
 # April0616
-###### \java\seedu\address\logic\commands\DeleteCommand.java
+###### /java/seedu/address/logic/commands/DeleteCommand.java
 ``` java
     public DeleteCommand(ArrayList<Index> targetIndexes) {
         this.targetIndexes = targetIndexes;
@@ -8,7 +8,32 @@
 
 
 ```
-###### \java\seedu\address\logic\commands\DeleteCommand.java
+###### /java/seedu/address/logic/commands/DeleteCommand.java
+``` java
+    private CommandResult getCommandResultForPerson() throws CommandException {
+        List<ReadOnlyPerson> lastShownList = model.getFilteredPersonList();
+        ArrayList<ReadOnlyPerson> deletePersonList = new ArrayList<>();
+
+        for (Index index : targetIndexes) {
+            if (index.getZeroBased() >= lastShownList.size()) {
+                throw new CommandException(Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX);
+            }
+            ReadOnlyPerson personToDelete = lastShownList.get(index.getZeroBased());
+            deletePersonList.add(personToDelete);
+        }
+
+        try {
+            model.deletePersons(deletePersonList);
+        } catch (PersonNotFoundException pnfe) {
+            assert false : "One of the target persons is missing";
+        }
+
+        //return new CommandResult(String.format(MESSAGE_DELETE_PERSON_SUCCESS));
+        return new CommandResult(generateResultMsg(deletePersonList));
+    }
+
+```
+###### /java/seedu/address/logic/commands/DeleteCommand.java
 ``` java
     /**
      * Generate the command result of the deletePersonList.
@@ -38,7 +63,7 @@
     }
 
 ```
-###### \java\seedu\address\logic\commands\DeleteCommand.java
+###### /java/seedu/address/logic/commands/DeleteCommand.java
 ``` java
     @Override
     public boolean equals(Object other) {
@@ -54,7 +79,7 @@
     }
 }
 ```
-###### \java\seedu\address\logic\commands\EditCommand.java
+###### /java/seedu/address/logic/commands/EditCommand.java
 ``` java
     /**
      * Creates and returns a {@code Person} with the details of {@code personToEdit}
@@ -82,7 +107,7 @@
     }
 
 ```
-###### \java\seedu\address\logic\commands\EditCommand.java
+###### /java/seedu/address/logic/commands/EditCommand.java
 ``` java
         public void setGender(Gender gender) {
             this.gender = gender;
@@ -100,7 +125,7 @@
             return Optional.ofNullable(matricNo);
         }
 ```
-###### \java\seedu\address\logic\commands\PhotoCommand.java
+###### /java/seedu/address/logic/commands/PhotoCommand.java
 ``` java
 /**
  * Edits the photo path of a person to the address book.
@@ -129,8 +154,9 @@ public class PhotoCommand extends UndoableCommand {
 
     public static final String LOCAL_PHOTOPATH_VALIDATION_REGEX = "([a-zA-Z]:)?(\\\\[a-zA-Z0-9_.-]+)+\\\\?";
     public static final String MESSAGE_LOCAL_PHOTOPATH_CONSTRAINTS =
-            "Photo Path should be the absolute path in your PC. It should be a string started with the name of "
-                    + "your disk, followed by several groups of backslash and string, like c:\\desktop\\happy.jpg";
+            "Photo Path should be the absolute path of a valid file in your PC. It should be a string started with the name of "
+                    + "your disk, followed by several groups of backslash and string, like \"c:\\desktop\\happy.jpg\","
+                    + "and the file should exist.";
     public static final String FILE_SAVED_PARENT_PATH = "src/main/resources/images/contactPhotos/";
     public static final String DEFAULT_PHOTO_PATH = "src/main/resources/images/defaultPhoto.jpg";
 
@@ -154,7 +180,11 @@ public class PhotoCommand extends UndoableCommand {
             this.photoPath = new PhotoPath(DEFAULT_PHOTO_PATH);
 
         } else if (isValidLocalPhotoPath(trimmedPhotoPath)) {
-            //not specified yet
+
+            File targetFile = new File(trimmedPhotoPath);
+            if (!FileUtil.isFileExists(targetFile)) {
+                throw new FileNotFoundException(MESSAGE_LOCAL_PHOTOPATH_CONSTRAINTS);
+            }
 
             this.localPhotoPath = trimmedPhotoPath;
             String extension = getFileExtension(this.localPhotoPath);
@@ -206,6 +236,7 @@ public class PhotoCommand extends UndoableCommand {
         }
         model.updateFilteredPersonList(PREDICATE_SHOW_ALL_PERSONS);
 
+        EventsCenter.getInstance().post(new PersonSelectedEvent(photoedPerson));
         return new CommandResult(generateSuccessMsg(photoedPerson));
     }
 
@@ -316,7 +347,7 @@ public class PhotoCommand extends UndoableCommand {
 }
 
 ```
-###### \java\seedu\address\logic\commands\RemarkCommand.java
+###### /java/seedu/address/logic/commands/RemarkCommand.java
 ``` java
 /**
  * Edits the remark of a person to the address book.
@@ -330,15 +361,18 @@ public class RemarkCommand extends UndoableCommand {
             + ": If remarks the person identified by the index number used in the last person listing,"
             + " add the remark to the person.\n"
             + "If the remark field is empty, the remark is removed for the person.\n"
+            + "Accept multiple remarks at the same time.\n"
             + "Parameters: INDEX (must be a positive integer) "
-            + PREFIX_REMARK + "[REMARK] \n"
-            + "Example: (add remark) " + COMMAND_WORD + " 1 " + PREFIX_REMARK + "Likes to drink coffee.\n"
-            + "Example: (delete remark) " + COMMAND_WORD
+            + PREFIX_REMARK + "[REMARK1] " + PREFIX_REMARK + "[REMARK2]\n"
+            + "Example: (add remark) " + COMMAND_WORD + " 1 " + PREFIX_REMARK + "Likes to drink coffee\n"
+            + "Example: (add remarks) " + COMMAND_WORD + " 1 " + PREFIX_REMARK + "Likes to drink coffee "
+            + PREFIX_REMARK + "CAP5.0\n"
+            + "Example: (delete remarks) " + COMMAND_WORD
             + " 2 "
             + PREFIX_REMARK + "\n";
 
-    public static final String MESSAGE_ADD_REMARK_SUCCESS = "Added Remark to Person: %1$s";
-    public static final String MESSAGE_DELETE_REMARK_SUCCESS = "Removed Remark from Person: %1$s";
+    public static final String MESSAGE_ADD_REMARK_SUCCESS = "Added Remark(s) to Person: %1$s";
+    public static final String MESSAGE_DELETE_REMARK_SUCCESS = "Removed Remark(s) from Person: %1$s";
     public static final String MESSAGE_DUPLICATE_PERSON = "This person already exists in the address book.";
 
     private final Index targetIndex;
@@ -383,7 +417,7 @@ public class RemarkCommand extends UndoableCommand {
     }
 
     /**
-     * Generate the Successful Message accordingly.
+     * Generates the successful Message accordingly.
      * @param personToRemark
      * @return successful message for adding remark if the remark string is not empty.
      */
@@ -430,7 +464,7 @@ public class RemarkCommand extends UndoableCommand {
     }
 }
 ```
-###### \java\seedu\address\logic\parser\DeleteCommandParser.java
+###### /java/seedu/address/logic/parser/DeleteCommandParser.java
 ``` java
     public static final String DELETE_ONE_PERSON_VALIDATION_REGEX = "-?\\d+";
 
@@ -452,14 +486,9 @@ public class RemarkCommand extends UndoableCommand {
         String preamble = argMultimap.getPreamble();
 
         if (preamble.equals("")) { // code block for delete for a tag
-            try {
-                if (arePrefixesPresent(argMultimap, PREFIX_TAG)) {
-                    Set<Tag> tagList = ParserUtil.parseTags(argMultimap.getAllValues(PREFIX_TAG));
-                    return new DeleteCommand(tagList);
-                }
-            } catch (IllegalValueException ive) {
-                throw new ParseException(
-                        String.format(MESSAGE_INVALID_COMMAND_FORMAT, DeleteCommand.MESSAGE_USAGE));
+            DeleteCommand tagList = getDeleteCommandForTags(argMultimap);
+            if (tagList != null) {
+                return tagList;
             }
         } else if (preamble.matches(DELETE_ONE_PERSON_VALIDATION_REGEX)) { // code block for delete for a person
             try {
@@ -494,7 +523,7 @@ public class RemarkCommand extends UndoableCommand {
     }
 
 ```
-###### \java\seedu\address\logic\parser\ParserUtil.java
+###### /java/seedu/address/logic/parser/ParserUtil.java
 ``` java
     /**
      * Parses {@code oneBasedIndexes} separated with commas into a {@Code ArrayList<Index>} and returns it.
@@ -531,7 +560,7 @@ public class RemarkCommand extends UndoableCommand {
         return deletePersons;
     }
 ```
-###### \java\seedu\address\logic\parser\ParserUtil.java
+###### /java/seedu/address/logic/parser/ParserUtil.java
 ``` java
     /**
      * Parses a {@code Optional<String> gender} into an {@code Optional<Gender>} if {@code gender} is present.
@@ -551,7 +580,7 @@ public class RemarkCommand extends UndoableCommand {
         return matricNo.isPresent() ? Optional.of(new MatricNo(matricNo.get())) : Optional.empty();
     }
 ```
-###### \java\seedu\address\logic\parser\PhotoCommandParser.java
+###### /java/seedu/address/logic/parser/PhotoCommandParser.java
 ``` java
 /**
  * Parses input arguments and creates a new PhotoCommand object
@@ -591,12 +620,13 @@ public class PhotoCommandParser implements Parser<PhotoCommand> {
     }
 }
 ```
-###### \java\seedu\address\logic\parser\RemarkCommandParser.java
+###### /java/seedu/address/logic/parser/RemarkCommandParser.java
 ``` java
 /**
  * Parses input arguments and creates a new RemarkCommand object
  */
 public class RemarkCommandParser implements Parser<RemarkCommand> {
+
     /**
      * Parses the given {@code String} of arguments in the context of the RemarkCommand
      * and returns an RemarkCommand object for execution.
@@ -616,13 +646,31 @@ public class RemarkCommandParser implements Parser<RemarkCommand> {
             throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, RemarkCommand.MESSAGE_USAGE));
         }
 
-        remark = new Remark(argMultimap.getValue(PREFIX_REMARK).orElse(""));
+        remark = getAllRemarks(argMultimap);
 
         return new RemarkCommand(index, remark);
     }
+
+    /**
+     * Concatenates all the remarks into one string.
+     * @param argumentMultimap
+     * @return the remark contains all the remark string.
+     */
+    private Remark getAllRemarks(ArgumentMultimap argumentMultimap) {
+
+        List<String> allRemarks = argumentMultimap.getAllValues(PREFIX_REMARK);
+        String allRemarkString = "";
+
+        if (allRemarks.size() > 1 || (allRemarks.size() == 1 && (!allRemarks.get(0).equals("")))) {
+            allRemarkString = allRemarks.toString();
+        }
+
+        return new Remark(allRemarkString);
+    }
+
 }
 ```
-###### \java\seedu\address\model\AddressBook.java
+###### /java/seedu/address/model/AddressBook.java
 ``` java
     /**
      * Removes the photo of the specified contact.
@@ -643,20 +691,25 @@ public class RemarkCommandParser implements Parser<RemarkCommand> {
     }
 
     /**
-     * Removes {@code key} from this {@code AddressBook}, and delete the related contact photos.
+     * Removes {@code key} from this {@code AddressBook}
      * @throws PersonNotFoundException if the {@code key} is not in this {@code AddressBook}.
      */
     public boolean removePerson(ReadOnlyPerson key) throws PersonNotFoundException {
-        PhotoPath photoPath = key.getPhotoPath();
+        /*PhotoPath photoPath = key.getPhotoPath();
         if (!isDefaultPhoto(photoPath)) {
             removeContactPhoto(photoPath);
-        }
+        }*/
 
-        return persons.remove(key);
+        if (persons.remove(key)) {
+            EventsCenter.getInstance().post(new PersonHasBeenDeletedEvent(key));
+            return true;
+        } else {
+            return false;
+        }
     }
 
     /**
-     * Removes {@code keys} from this {@code AddressBook}, and delete the related contact photos.
+     * Removes {@code keys} from this {@code AddressBook}
      * @throws PersonNotFoundException if one of the {@code keys} is not in this {@code AddressBook}.
      */
     public boolean removePersons(ArrayList<ReadOnlyPerson> keys) throws PersonNotFoundException {
@@ -666,7 +719,7 @@ public class RemarkCommandParser implements Parser<RemarkCommand> {
         return true;
     }
 ```
-###### \java\seedu\address\model\Model.java
+###### /java/seedu/address/model/Model.java
 ``` java
     /** Deletes the given person. */
     void deletePerson(ReadOnlyPerson target) throws PersonNotFoundException;
@@ -674,7 +727,7 @@ public class RemarkCommandParser implements Parser<RemarkCommand> {
     /** Deletes the given list of persons. */
     void deletePersons(ArrayList<ReadOnlyPerson> targets) throws PersonNotFoundException;
 ```
-###### \java\seedu\address\model\ModelManager.java
+###### /java/seedu/address/model/ModelManager.java
 ``` java
     @Override
     public synchronized void deletePerson(ReadOnlyPerson target) throws PersonNotFoundException {
@@ -684,7 +737,7 @@ public class RemarkCommandParser implements Parser<RemarkCommand> {
     }
 
 ```
-###### \java\seedu\address\model\ModelManager.java
+###### /java/seedu/address/model/ModelManager.java
 ``` java
     @Override
     public synchronized void deletePersons(ArrayList<ReadOnlyPerson> targets) throws PersonNotFoundException {
@@ -702,7 +755,7 @@ public class RemarkCommandParser implements Parser<RemarkCommand> {
     }
 
 ```
-###### \java\seedu\address\model\person\Gender.java
+###### /java/seedu/address/model/person/Gender.java
 ``` java
 /**
  * Represents a Person's gender in the address book.
@@ -742,7 +795,7 @@ public class Gender {
      * Returns if a given string is a valid person gender.
      */
     public static boolean isValidGender(String test) {
-        return test.equals(GENDER_VALIDATION_WORD1) || test.equals(GENDER_VALIDATION_WORD2);
+        return test.equals(GENDER_VALIDATION_WORD1) || test.equals(GENDER_VALIDATION_WORD2) || test.equals("");
     }
 
     @Override
@@ -764,7 +817,7 @@ public class Gender {
 
 }
 ```
-###### \java\seedu\address\model\person\MatricNo.java
+###### /java/seedu/address/model/person/MatricNo.java
 ``` java
 /**
  * Represents a Person's Matriculation Number in the address book.
@@ -797,7 +850,7 @@ public class MatricNo {
      */
     public static boolean isValidMatricNo(String test) {
         //return test.matches(MATRIC_NO_VALIDATION_REGEX) && test.length() == 9;
-        return test.matches(MATRIC_NO_VALIDATION_REGEX);
+        return test.matches(MATRIC_NO_VALIDATION_REGEX) || test.equals("");
     }
 
     @Override
@@ -823,7 +876,7 @@ public class MatricNo {
 
 }
 ```
-###### \java\seedu\address\model\person\PhotoPath.java
+###### /java/seedu/address/model/person/PhotoPath.java
 ``` java
 /**
  * Represents the path of a person's photo in the address book.
@@ -876,7 +929,7 @@ public class PhotoPath {
     }
 }
 ```
-###### \java\seedu\address\model\person\Remark.java
+###### /java/seedu/address/model/person/Remark.java
 ``` java
 /**
  * Represents the remark of a person in the address book.
@@ -911,7 +964,250 @@ public class Remark {
     }
 }
 ```
-###### \java\seedu\address\ui\PersonInfoOverview.java
+###### /java/seedu/address/ui/MainWindow.java
+``` java
+/**
+ * The Main Window. Provides the basic application layout containing
+ * a menu bar and space where other JavaFX elements can be placed.
+ */
+public class MainWindow extends UiPart<Region> {
+
+    private static final String ICON = "/images/icon.png";
+    private static final String FXML = "MainWindow.fxml";
+    private static final int MIN_HEIGHT = 600;
+    private static final int MIN_WIDTH = 450;
+    private static final String VIEW_PATH = "/view/";
+
+    private final Logger logger = LogsCenter.getLogger(this.getClass());
+
+    private Stage primaryStage;
+    private Logic logic;
+
+    // Independent Ui parts residing in this Ui container
+    private TagColorMap tagColorMap;
+    private PersonInfoPanel personInfoPanel;
+    private InfoPanel infoPanel;
+    private PersonListPanel personListPanel;
+    private TagListPanel tagListPanel;
+    private Config config;
+    private UserPrefs prefs;
+
+    @FXML
+    private StackPane infoPlaceholder;
+
+    @FXML
+    private StackPane personInfoPlaceholder;
+
+    @FXML
+    private StackPane commandBoxPlaceholder;
+
+    @FXML
+    private MenuItem helpMenuItem;
+
+    @FXML
+    private StackPane personListPanelPlaceholder;
+
+    @FXML
+    private StackPane tagListPanelPlaceholder;
+
+    @FXML
+    private StackPane resultDisplayPlaceholder;
+
+    @FXML
+    private StackPane statusbarPlaceholder;
+
+    public MainWindow(Stage primaryStage, Config config, UserPrefs prefs, Logic logic) {
+        super(FXML);
+
+        // Set dependencies
+        this.primaryStage = primaryStage;
+        this.logic = logic;
+        this.config = config;
+        this.prefs = prefs;
+
+        // Configure the UI
+        setTitle(config.getAppTitle());
+        setIcon(ICON);
+        setWindowMinSize();
+        setWindowDefaultSize(prefs);
+        setWindowDefaultTheme(prefs);
+        Scene scene = new Scene(getRoot());
+        primaryStage.setScene(scene);
+
+        setAccelerators();
+        registerAsAnEventHandler(this);
+    }
+
+    public Stage getPrimaryStage() {
+        return primaryStage;
+    }
+
+    private void setAccelerators() {
+        setAccelerator(helpMenuItem, KeyCombination.valueOf("F1"));
+    }
+
+    /**
+     * Sets the accelerator of a MenuItem.
+     * @param keyCombination the KeyCombination value of the accelerator
+     */
+    private void setAccelerator(MenuItem menuItem, KeyCombination keyCombination) {
+        menuItem.setAccelerator(keyCombination);
+
+        /*
+         * TODO: the code below can be removed once the bug reported here
+         * https://bugs.openjdk.java.net/browse/JDK-8131666
+         * is fixed in later version of SDK.
+         *
+         * According to the bug report, TextInputControl (TextField, TextArea) will
+         * consume function-key events. Because CommandBox contains a TextField, and
+         * ResultDisplay contains a TextArea, thus some accelerators (e.g F1) will
+         * not work when the focus is in them because the key event is consumed by
+         * the TextInputControl(s).
+         *
+         * For now, we add following event filter to capture such key events and open
+         * help window purposely so to support accelerators even when focus is
+         * in CommandBox or ResultDisplay.
+         */
+        getRoot().addEventFilter(KeyEvent.KEY_PRESSED, event -> {
+            if (event.getTarget() instanceof TextInputControl && keyCombination.match(event)) {
+                menuItem.getOnAction().handle(new ActionEvent());
+                event.consume();
+            }
+        });
+    }
+
+    //author@@ nbriannl
+    /**
+     * Fills up all the placeholders of this window.
+     */
+    void fillInnerParts() {
+        infoPanel = new InfoPanel();
+        infoPlaceholder.getChildren().add(infoPanel.getRoot());
+
+        personInfoPanel = new PersonInfoPanel();
+        personInfoPlaceholder.getChildren().add(personInfoPanel.getRoot());
+
+        personListPanel = new PersonListPanel(logic.getFilteredPersonList());
+        personListPanelPlaceholder.getChildren().add(personListPanel.getRoot());
+
+        tagListPanel = new TagListPanel(logic.getTagList());
+        tagListPanelPlaceholder.getChildren().add(tagListPanel.getRoot());
+        logic.checkAllMasterListTagsAreBeingUsed();
+
+        ResultDisplay resultDisplay = new ResultDisplay();
+        resultDisplayPlaceholder.getChildren().add(resultDisplay.getRoot());
+
+        StatusBarFooter statusBarFooter = new StatusBarFooter(prefs.getAddressBookFilePath(),
+                logic.getFilteredPersonList().size());
+        statusbarPlaceholder.getChildren().add(statusBarFooter.getRoot());
+
+        CommandBox commandBox = new CommandBox(logic);
+        commandBoxPlaceholder.getChildren().add(commandBox.getRoot());
+    }
+
+    void hide() {
+        primaryStage.hide();
+    }
+
+    private void setTitle(String appTitle) {
+        primaryStage.setTitle(appTitle);
+    }
+
+    /**
+     * Sets the given image as the icon of the main window.
+     * @param iconSource e.g. {@code "/images/help_icon.png"}
+     */
+    private void setIcon(String iconSource) {
+        FxViewUtil.setStageIcon(primaryStage, iconSource);
+    }
+
+    /**
+     * Sets the default size based on user preferences.
+     */
+    private void setWindowDefaultSize(UserPrefs prefs) {
+        primaryStage.setHeight(prefs.getGuiSettings().getWindowHeight());
+        primaryStage.setWidth(prefs.getGuiSettings().getWindowWidth());
+        if (prefs.getGuiSettings().getWindowCoordinates() != null) {
+            primaryStage.setX(prefs.getGuiSettings().getWindowCoordinates().getX());
+            primaryStage.setY(prefs.getGuiSettings().getWindowCoordinates().getY());
+        }
+    }
+
+    private void setWindowMinSize() {
+        primaryStage.setMinHeight(MIN_HEIGHT);
+        primaryStage.setMinWidth(MIN_WIDTH);
+    }
+
+    /**
+     * Returns the current size and the position of the main Window.
+     */
+    GuiSettings getCurrentGuiSetting() {
+        return new GuiSettings(primaryStage.getWidth(), primaryStage.getHeight(),
+                (int) primaryStage.getX(), (int) primaryStage.getY());
+    }
+
+    /**
+     * Opens the help window.
+     */
+    @FXML
+    public void handleHelp() {
+        HelpWindow helpWindow = new HelpWindow();
+        helpWindow.show();
+    }
+
+    /**
+     * Changes the current theme to the given theme.
+     */
+    public void handleChangeTheme(String theme) {
+        if (getRoot().getStylesheets().size() > 1) {
+            getRoot().getStylesheets().remove(1);
+        }
+        getRoot().getStylesheets().add(VIEW_PATH + theme);
+    }
+
+    private void setWindowDefaultTheme(UserPrefs prefs) {
+        getRoot().getStylesheets().add(prefs.getCurrentTheme());
+    }
+
+    String getCurrentTheme() {
+        return getRoot().getStylesheets().get(1);
+    }
+
+    void show() {
+        primaryStage.show();
+    }
+
+    /**
+     * Closes the application.
+     */
+    @FXML
+    private void handleExit() {
+        raise(new ExitAppRequestEvent());
+    }
+
+    public PersonListPanel getPersonListPanel() {
+        return this.personListPanel;
+    }
+
+    void releaseResources() {
+        infoPanel.freeResources();
+    }
+
+    @Subscribe
+    private void handleShowHelpEvent(ShowHelpRequestEvent event) {
+        logger.info(LogsCenter.getEventHandlingLogMessage(event));
+        handleHelp();
+    }
+
+    @Subscribe
+    private void handleChangeThemeEvent(ChangeThemeRequestEvent event) {
+        logger.info(LogsCenter.getEventHandlingLogMessage(event));
+        handleChangeTheme(event.themeToChangeTo);
+        logic.setCurrentTheme(getCurrentTheme());
+    }
+}
+```
+###### /java/seedu/address/ui/PersonInfoOverview.java
 ``` java
     /**
      * Set the default contact photo to the default person.
@@ -940,4 +1236,265 @@ public class Remark {
         contactPhoto.setImage(image);
     }
 
+```
+###### /java/seedu/address/ui/PersonInfoPanel.java
+``` java
+
+/**
+ * A UI component that displays a person's data on the main panel
+ */
+public class PersonInfoPanel extends UiPart<Region> {
+
+    private static final String FXML = "PersonInfoPanel.fxml";
+    private static String DEFAULT_PHOTO_PATH = "/images/defaultPhoto.jpg";
+
+    private ReadOnlyPerson person;
+    private ReadOnlyPerson currentlyViewedPerson;
+
+    private final Logger logger = LogsCenter.getLogger(this.getClass());
+
+    @FXML
+    private Circle photoCircle;
+    @FXML
+    private Label name;
+    @FXML
+    private Label gender;
+    @FXML
+    private Label matricNo;
+    @FXML
+    private Label phone;
+    @FXML
+    private Label address;
+    @FXML
+    private Label email;
+    @FXML
+    private Label birthday;
+    @FXML
+    private Label remark;
+    @FXML
+    private FlowPane tags;
+
+
+    public PersonInfoPanel() {
+        super(FXML);
+        this.person = null;
+        loadDefaultPerson();
+
+        registerAsAnEventHandler(this);
+    }
+
+    /**
+     * Loads the default person when the app is first started
+     */
+    private void loadDefaultPerson() {
+        name.setText("Person X");
+        gender.setText("");
+        matricNo.setText("");
+        phone.setText("");
+        address.setText("");
+        email.setText("");
+        birthday.setText("");
+        remark.setText("");
+        tags.getChildren().clear();
+
+        setDefaultContactPhoto();
+        currentlyViewedPerson = null;
+        logger.info("Currently Viewing: Default Person" );
+    }
+
+    /**
+     * Updates info with person selected
+     */
+    private void loadPerson(ReadOnlyPerson person) {
+        this.person = person;
+        tags.getChildren().clear();
+        initTags(person);
+
+        name.textProperty().bind(Bindings.convert(person.nameProperty()));
+        gender.textProperty().bind(Bindings.convert(person.genderProperty()));
+        matricNo.textProperty().bind(Bindings.convert(person.matricNoProperty()));
+        phone.textProperty().bind(Bindings.convert(person.phoneProperty()));
+        address.textProperty().bind(Bindings.convert(person.addressProperty()));
+        email.textProperty().bind(Bindings.convert(person.emailProperty()));
+        birthday.textProperty().bind(Bindings.convert(person.birthdayProperty()));
+        remark.textProperty().bind(Bindings.convert(person.remarkProperty()));
+        person.tagProperty().addListener((observable, oldValue, newValue) -> {
+            tags.getChildren().clear();
+            initTags(person);
+        });
+
+        loadPhoto(person);
+
+        currentlyViewedPerson = person;
+        logger.info("Currently Viewing: " + currentlyViewedPerson.getName() );
+    }
+
+```
+###### /java/seedu/address/ui/PersonInfoPanel.java
+``` java
+    /**
+     * Set the default contact photo.
+     */
+    public void setDefaultContactPhoto() {
+        Image defaultImage = new Image(MainApp.class.getResourceAsStream(DEFAULT_PHOTO_PATH));
+        photoCircle.setFill(new ImagePattern(defaultImage));
+    }
+
+    /**
+     * Load the photo of the specified person.
+     * @param person
+     */
+    public void loadPhoto(ReadOnlyPerson person) {
+        String prefix = "src/main/resources";
+        //String photoPath = person.getPhotoPath().value.substring(prefix.length());
+        String photoPath = person.getPhotoPath().value;
+        Image image;
+
+        if (photoPath.equals(PhotoCommand.DEFAULT_PHOTO_PATH)) {  //default male and female photos
+            if (person.getGender().toString().equals("Male")) {
+                photoPath = prefix + "/images/default_male.jpg";
+            } else if (person.getGender().toString().equals("Female")) {
+                photoPath = prefix + "/images/default_female.jpg";
+            } else {
+                photoPath = prefix + "/images/defaultPhoto.jpg";
+            }
+        }
+
+        File contactImg = new File(photoPath);
+        String url = contactImg.toURI().toString();
+        image = new Image(url);
+        photoCircle.setFill(new ImagePattern(image));
+
+    }
+
+```
+###### /java/seedu/address/ui/TagColorMap.java
+``` java
+    /**
+     * Updates the color index to pick a new color for the new tag.
+     */
+    private static void updateColorIndex() {
+        if (colorIndex == NUM_COLORS - 1) {
+            colorIndex = 0;
+        } else {
+            colorIndex++;
+        }
+    }
+}
+```
+###### /resources/view/MainWindow.fxml
+``` fxml
+<VBox xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1">
+    <stylesheets>
+        <URL value="@Extensions.css"/>
+    </stylesheets>
+    <MenuBar fx:id="menuBar" maxHeight="22.0" prefHeight="22.0" prefWidth="2000.0" VBox.vgrow="NEVER">
+        <Menu mnemonicParsing="false" text="File">
+            <MenuItem mnemonicParsing="false" onAction="#handleExit" text="Exit"/>
+        </Menu>
+        <Menu mnemonicParsing="false" text="Help">
+            <MenuItem fx:id="helpMenuItem" mnemonicParsing="false" onAction="#handleHelp" text="Help"/>
+        </Menu>
+    </MenuBar>
+    <HBox prefWidth="1020.0">
+        <VBox fx:id="personList" minWidth="200" prefWidth="250.0">
+            <StackPane fx:id="personListPanelPlaceholder" prefWidth="145.0" VBox.vgrow="ALWAYS"/>
+        </VBox>
+        <AnchorPane>
+
+            <SplitPane dividerPositions="0.2" orientation="VERTICAL" prefWidth="2000" AnchorPane.bottomAnchor="0.0"
+                       AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+
+```
+###### /resources/view/PersonInfoPanel.fxml
+``` fxml
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.FlowPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Circle?>
+<?import javafx.scene.text.Font?>
+
+```
+###### /resources/view/PersonInfoPanel.fxml
+``` fxml
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="250.0"
+            prefWidth="550.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1">
+
+    <HBox prefHeight="250.0" prefWidth="448.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0"
+          AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+        <VBox prefHeight="250.0" prefWidth="198.0">
+            <AnchorPane prefHeight="216.0" prefWidth="210.0" VBox.vgrow="ALWAYS">
+                <ImageView fitHeight="210.0" fitWidth="221.0" pickOnBounds="true" preserveRatio="true">
+                    <image>
+                        <Image url="@../images/personInfoBg.jpg"/>
+                    </image>
+                </ImageView>
+                <Circle fx:id="photoCircle" fill="WHITE" layoutX="111.0" layoutY="100.0" radius="86.0"
+                        stroke="floralwhite" strokeType="INSIDE" strokeWidth="10"/>
+                <VBox.margin>
+                    <Insets/>
+                </VBox.margin>
+            </AnchorPane>
+        </VBox>
+        <VBox alignment="TOP_LEFT" prefHeight="250.0" prefWidth="237.0" AnchorPane.bottomAnchor="0.0"
+              AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" HBox.hgrow="ALWAYS">
+            <StackPane alignment="TOP_LEFT" prefHeight="20.0" prefWidth="304.0" VBox.vgrow="NEVER">
+                <Label fx:id="name" prefHeight="35.0" prefWidth="300.0" styleClass="display_big_label" text="\$name">
+                    <font>
+                        <Font size="24.0"/>
+                    </font>
+                </Label>
+                <VBox.margin>
+                    <Insets left="15.0" top="20.0"/>
+                </VBox.margin>
+            </StackPane>
+            <FlowPane fx:id="tags" columnHalignment="CENTER" minHeight="20.0" minWidth="100.0" prefHeight="15.0"
+                      prefWidth="207.0" VBox.vgrow="ALWAYS">
+                <VBox.margin>
+                    <Insets bottom="0.0" left="15.0" right="10.0" top="0.0"/>
+                </VBox.margin>
+            </FlowPane>
+            <HBox prefHeight="100.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
+                <VBox prefHeight="150.0" prefWidth="10.0" HBox.hgrow="ALWAYS">
+                    <Label styleClass="display_small_label" text="Gender"/>
+                    <Label styleClass="display_small_label" text="Matric No"/>
+                    <Label styleClass="display_small_label" text="Phone"/>
+                    <Label styleClass="display_small_label" text="Address"/>
+                    <Label styleClass="display_small_label" text="Email"/>
+                    <Label styleClass="display_small_label" text="Birthday"/>
+                    <Label styleClass="display_small_label" text="Remark"/>
+                </VBox>
+                <VBox prefHeight="200.0" prefWidth="100.0" HBox.hgrow="ALWAYS">
+                    <Label fx:id="gender" prefHeight="17.0" prefWidth="196.0" styleClass="display_small_value"
+                           text="\$gender" VBox.vgrow="ALWAYS"/>
+                    <Label fx:id="matricNo" prefHeight="17.0" prefWidth="199.0" styleClass="display_small_value"
+                           text="\$matricNo"/>
+                    <Label fx:id="phone" prefHeight="17.0" prefWidth="193.0" styleClass="display_small_value"
+                           text="\$phone"/>
+                    <Label fx:id="address" prefHeight="17.0" prefWidth="196.0" styleClass="display_small_value"
+                           text="\$address"/>
+                    <Label fx:id="email" prefHeight="17.0" prefWidth="188.0" styleClass="display_small_value"
+                           text="\$email"/>
+                    <Label fx:id="birthday" prefHeight="17.0" prefWidth="214.0" styleClass="display_small_value"
+                           text="\$birthday"/>
+                    <Label fx:id="remark" prefHeight="17.0" prefWidth="186.0" styleClass="display_small_value"
+                           text="\$remark"/>
+                </VBox>
+                <VBox.margin>
+                    <Insets bottom="10.0" left="15.0"/>
+                </VBox.margin>
+            </HBox>
+            <HBox.margin>
+                <Insets/>
+            </HBox.margin>
+        </VBox>
+    </HBox>
+</AnchorPane>
 ```
