@@ -7,6 +7,8 @@ import java.util.List;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+
+import org.fxmisc.easybind.EasyBind;
 import seedu.address.model.photo.exceptions.DuplicatePhotoPathException;
 import seedu.address.model.photo.exceptions.PhotoPathNotFoundException;
 
@@ -20,6 +22,8 @@ import seedu.address.model.photo.exceptions.PhotoPathNotFoundException;
 public class UniquePhotoPathList implements Iterable<PhotoPath> {
 
     private final ObservableList<PhotoPath> internalList = FXCollections.observableArrayList();
+    // used by asObservableList()
+    private final ObservableList<PhotoPath> mappedList = EasyBind.map(internalList, (photoPath) -> photoPath);
     
     /**
      * Returns true if the list contains an equivalent PhotoPath as the given argument.
@@ -78,12 +82,23 @@ public class UniquePhotoPathList implements Iterable<PhotoPath> {
         return photoPathFoundAndDeleted;
     }
 
+    public void setPhotoPaths(UniquePhotoPathList replacement) {
+        this.internalList.setAll(replacement.internalList);
+    }
+
     public void setPhotoPaths(List<PhotoPath> photoPaths) throws DuplicatePhotoPathException {
         final UniquePhotoPathList replacement = new UniquePhotoPathList();
         for (final PhotoPath photoPath : photoPaths) {
             replacement.add(photoPath);
         }
         setPhotoPaths(replacement);
+    }
+
+    /**
+     * Returns the backing list as an unmodifiable {@code ObservableList}.
+     */
+    public ObservableList<PhotoPath> asObservableList() {
+        return FXCollections.unmodifiableObservableList(mappedList);
     }
     
 

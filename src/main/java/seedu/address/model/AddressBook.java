@@ -20,6 +20,7 @@ import seedu.address.model.person.UniquePersonList;
 import seedu.address.model.person.exceptions.DuplicatePersonException;
 import seedu.address.model.person.exceptions.PersonNotFoundException;
 import seedu.address.model.photo.UniquePhotoPathList;
+import seedu.address.model.photo.exceptions.DuplicatePhotoPathException;
 import seedu.address.model.tag.Tag;
 import seedu.address.model.tag.UniqueTagList;
 import seedu.address.model.tag.exceptions.TagNotFoundException;
@@ -71,7 +72,7 @@ public class AddressBook implements ReadOnlyAddressBook {
         }
     }
 
-    public void setPhotoPaths(List<PhotoPath> photoPaths) throws UniquePhotoPathList.DuplicatePhotoPathException {
+    public void setPhotoPaths(List<PhotoPath> photoPaths) throws DuplicatePhotoPathException {
         this.photoPaths.setPhotoPaths(photoPaths);
     }
 
@@ -94,7 +95,7 @@ public class AddressBook implements ReadOnlyAddressBook {
 
         try {
             setPhotoPaths(newData.getPhotoPathList());
-        } catch (UniquePhotoPathList.DuplicatePhotoPathException e) {
+        } catch (DuplicatePhotoPathException e) {
             assert false : "AddressBook should not have duplicate photo paths";
         }
 
