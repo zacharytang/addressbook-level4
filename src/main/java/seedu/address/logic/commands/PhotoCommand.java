@@ -26,6 +26,7 @@ import seedu.address.model.photo.PhotoPath;
 import seedu.address.model.person.ReadOnlyPerson;
 import seedu.address.model.person.exceptions.DuplicatePersonException;
 import seedu.address.model.person.exceptions.PersonNotFoundException;
+import seedu.address.model.photo.exceptions.DuplicatePhotoPathException;
 
 //@@author April0616
 /**
@@ -78,8 +79,7 @@ public class PhotoCommand extends UndoableCommand {
         if (trimmedPhotoPath.equals("")) { //not specified yet, delete photo
             this.localPhotoPath = "";
             this.targetIndex = targetIndex;
-
-            this.photoPath = new PhotoPath(DEFAULT_PHOTO_PATH);
+            this.photoPath = new PhotoPath("");
 
         } else if (isValidLocalPhotoPath(trimmedPhotoPath)) {
 
@@ -97,7 +97,7 @@ public class PhotoCommand extends UndoableCommand {
             try {
                 copyFile(this.localPhotoPath, savePath);
             } catch (IOException e) {
-                e.printStackTrace();
+                assert false : "Cannot copy the file!";
             }
 
             this.targetIndex = targetIndex;
@@ -121,16 +121,14 @@ public class PhotoCommand extends UndoableCommand {
         }
 
         ReadOnlyPerson personToPhoto = lastShownList.get(targetIndex.getZeroBased());
-
-        //if the command is 'ph/' or the contact has one original photo, then delete it.
-        PhotoPath originAppPhotoPath = personToPhoto.getPhotoPath();
-
-        if (!(originAppPhotoPath.value.equals(DEFAULT_PHOTO_PATH))) {
-            //removeAppFile(originAppPhotoPath);
-            originAppPhotoPath.setUnused();
-        }
-
         Person photoedPerson = createPhotoedPerson(personToPhoto, photoPath);
+
+        try {
+            model.addPhotoPath(photoPath);
+
+        } catch (DuplicatePhotoPathException e) {
+            assert false : "Duplicated photo path!";
+        }
 
         try {
             model.updatePerson(personToPhoto, photoedPerson);
@@ -201,7 +199,7 @@ public class PhotoCommand extends UndoableCommand {
      * @return successful message for adding photo if the photo path string is not empty.
      */
     private String generateSuccessMsg(ReadOnlyPerson personToPhoto) {
-        if (photoPath.toString().equals(DEFAULT_PHOTO_PATH)) {
+        if (photoPath.toString().equals("")) {
             return String.format(MESSAGE_DELETE_PHOTO_SUCCESS, personToPhoto);
         } else {
             return String.format(MESSAGE_ADD_PHOTO_SUCCESS, personToPhoto);

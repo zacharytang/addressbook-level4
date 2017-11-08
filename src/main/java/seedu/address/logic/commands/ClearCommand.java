@@ -23,18 +23,8 @@ public class ClearCommand extends UndoableCommand {
     @Override
     public CommandResult executeUndoableCommand() {
         requireNonNull(model);
-        setAllPhotoUnused();
         model.resetData(new AddressBook());
         return new CommandResult(MESSAGE_SUCCESS);
     }
 
-    /**
-     * Sets all the profile photos of the original person list unused.
-     */
-    private void setAllPhotoUnused() {
-        ObservableList<ReadOnlyPerson> persons = model.getAddressBook().getPersonList();
-        for (ReadOnlyPerson p : persons) {
-            p.getPhotoPath().setUnused();
-        }
-    }
 }
