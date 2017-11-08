@@ -2,6 +2,7 @@ package seedu.address.model.photo;
 
 import static java.util.Objects.requireNonNull;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
@@ -9,6 +10,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 import org.fxmisc.easybind.EasyBind;
+import seedu.address.commons.util.CollectionUtil;
 import seedu.address.model.photo.exceptions.DuplicatePhotoPathException;
 import seedu.address.model.photo.exceptions.PhotoPathNotFoundException;
 
@@ -92,6 +94,15 @@ public class UniquePhotoPathList implements Iterable<PhotoPath> {
             replacement.add(photoPath);
         }
         setPhotoPaths(replacement);
+    }
+
+    /**
+     * Returns all photo paths in this list as a list.
+     * This list is mutable and change-insulated against the internal list.
+     */
+    public List<PhotoPath> toList() {
+        assert CollectionUtil.elementsAreUnique(internalList);
+        return new ArrayList<>(internalList);
     }
 
     /**

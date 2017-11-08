@@ -11,22 +11,25 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
+import java.util.logging.Logger;
 
 import javafx.collections.ObservableList;
 import seedu.address.commons.core.EventsCenter;
+import seedu.address.commons.core.LogsCenter;
 import seedu.address.commons.events.ui.PersonHasBeenDeletedEvent;
 import seedu.address.commons.events.ui.PersonHasBeenModifiedEvent;
 import seedu.address.model.person.Person;
+import seedu.address.model.person.exceptions.DuplicatePersonException;
 import seedu.address.model.photo.PhotoPath;
 import seedu.address.model.person.ReadOnlyPerson;
 import seedu.address.model.person.UniquePersonList;
-import seedu.address.model.person.exceptions.DuplicatePersonException;
 import seedu.address.model.person.exceptions.PersonNotFoundException;
 import seedu.address.model.photo.UniquePhotoPathList;
 import seedu.address.model.photo.exceptions.DuplicatePhotoPathException;
 import seedu.address.model.tag.Tag;
 import seedu.address.model.tag.UniqueTagList;
 import seedu.address.model.tag.exceptions.TagNotFoundException;
+import sun.rmi.runtime.Log;
 
 /**
  * Wraps all data at the address-book level
@@ -38,6 +41,8 @@ public class AddressBook implements ReadOnlyAddressBook {
     private final UniqueTagList tags;
     private final UniquePhotoPathList photoPaths;
     private final HashMap<String, String> themes;
+
+    private final Logger logger = LogsCenter.getLogger(this.getClass());
 
 
     /*
@@ -75,9 +80,6 @@ public class AddressBook implements ReadOnlyAddressBook {
         }
     }
 
-    public void setPhotoPaths(List<PhotoPath> photoPaths) throws DuplicatePhotoPathException {
-        this.photoPaths.setPhotoPaths(photoPaths);
-    }
 
     public void setTags(Set<Tag> tags) {
         this.tags.setTags(tags);
@@ -122,6 +124,7 @@ public class AddressBook implements ReadOnlyAddressBook {
         // in the person list.
         persons.add(newPerson);
     }
+
 
     /**
      * Replaces the given person {@code target} in the list with {@code editedReadOnlyPerson}.
@@ -207,6 +210,60 @@ public class AddressBook implements ReadOnlyAddressBook {
 
 
     //@@author April0616
+
+    public void setPhotoPaths(List<PhotoPath> photoPaths) throws DuplicatePhotoPathException {
+        this.photoPaths.setPhotoPaths(photoPaths);
+    }
+
+    /**
+     * Adds a photopath to the address book.
+     *
+     * @throws DuplicatePhotoPathException if an equivalent photo path already exists.
+     */
+    public void addPhotoPath(PhotoPath newPhotoPath) throws DuplicatePhotoPathException {
+        photoPaths.add(newPhotoPath);
+    }
+
+    /**
+     * Checks if the master list {@link #photoPaths} has every photo path being used.
+     *  @return true if all photo paths in the master list are being used
+     */
+    public boolean hasAllPhotoPathsInUse () {
+        List<PhotoPath> masterList = new ArrayList<>();
+        for (ReadOnlyPerson person: persons) {
+            masterList.add(person.getPhotoPath());
+        }
+        return masterList.containsAll(photoPaths.toList());
+    }
+
+    /**
+     *  Gets the unused photo paths in the master list {@link #photoPaths}
+     *  @return {@code List<PhotoPath>} of photo paths not being used by any person
+     *  @see #hasAllPhotoPathsInUse()
+     */
+    public List<PhotoPath> getUnusedPhotoPaths () {
+        List<PhotoPath> actualList = new ArrayList<>();
+        for (ReadOnlyPerson person: persons) {
+            actualList.add(person.getPhotoPath());
+        }
+        List<PhotoPath> masterList = photoPaths.toList();
+
+        masterList.removeAll(actualList);
+        return masterList;
+    }
+
+    /**
+     * Removes all the unused photos specified by the unused photo paths
+     * @see #getUnusedPhotoPaths()
+     */
+    public void removeAllUnusedPhotos() {
+        List<PhotoPath> unusedPhotoPathList = getUnusedPhotoPaths();
+        for (PhotoPath unusedPhotoPath : unusedPhotoPathList) {
+            removeContactPhoto(unusedPhotoPath);
+            logger.info("Delete photo: " + unusedPhotoPath);
+        }
+    }
+
     /**
      * Removes the photo of the specified contact.
      * @param photoPath
