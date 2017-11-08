@@ -26,6 +26,7 @@ import seedu.address.model.person.UniquePersonList;
 import seedu.address.model.person.exceptions.PersonNotFoundException;
 import seedu.address.model.photo.UniquePhotoPathList;
 import seedu.address.model.photo.exceptions.DuplicatePhotoPathException;
+import seedu.address.model.photo.exceptions.PhotoPathNotFoundException;
 import seedu.address.model.tag.Tag;
 import seedu.address.model.tag.UniqueTagList;
 import seedu.address.model.tag.exceptions.TagNotFoundException;
@@ -74,10 +75,6 @@ public class AddressBook implements ReadOnlyAddressBook {
 
     public void setPersons(List<? extends ReadOnlyPerson> persons) throws DuplicatePersonException {
         this.persons.setPersons(persons);
-        //reset photos
-        for (ReadOnlyPerson p : persons) {
-            p.getPhotoPath().setUsed();
-        }
     }
 
 
@@ -244,7 +241,10 @@ public class AddressBook implements ReadOnlyAddressBook {
     public List<PhotoPath> getUnusedPhotoPaths () {
         List<PhotoPath> actualList = new ArrayList<>();
         for (ReadOnlyPerson person: persons) {
-            actualList.add(person.getPhotoPath());
+            PhotoPath thisPhotoPath = person.getPhotoPath();
+            if (!thisPhotoPath.value.equals("")) {
+                actualList.add(thisPhotoPath);
+            }
         }
         List<PhotoPath> masterList = photoPaths.toList();
 
@@ -256,11 +256,12 @@ public class AddressBook implements ReadOnlyAddressBook {
      * Removes all the unused photos specified by the unused photo paths
      * @see #getUnusedPhotoPaths()
      */
-    public void removeAllUnusedPhotos() {
+    public void removeAllUnusedPhotosAndPaths() throws PhotoPathNotFoundException {
         List<PhotoPath> unusedPhotoPathList = getUnusedPhotoPaths();
         for (PhotoPath unusedPhotoPath : unusedPhotoPathList) {
             removeContactPhoto(unusedPhotoPath);
-            logger.info("Delete photo: " + unusedPhotoPath);
+            this.photoPaths.remove(unusedPhotoPath);
+            logger.info("Delete photo and its path: " + unusedPhotoPath);
         }
     }
 
@@ -287,12 +288,6 @@ public class AddressBook implements ReadOnlyAddressBook {
      * @throws PersonNotFoundException if the {@code key} is not in this {@code AddressBook}.
      */
     public boolean removePerson(ReadOnlyPerson key) throws PersonNotFoundException {
-        PhotoPath photoPath = key.getPhotoPath();
-        if (!isDefaultPhoto(photoPath)) {
-            //removeContactPhoto(photoPath);
-            photoPath.setUnused();
-        }
-
         if (persons.remove(key)) {
             EventsCenter.getInstance().post(new PersonHasBeenDeletedEvent(key));
             return true;
