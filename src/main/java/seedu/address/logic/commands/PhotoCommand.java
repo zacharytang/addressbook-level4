@@ -56,8 +56,9 @@ public class PhotoCommand extends UndoableCommand {
 
     public static final String LOCAL_PHOTOPATH_VALIDATION_REGEX = "([a-zA-Z]:)?(\\\\[a-zA-Z0-9_.-]+)+\\\\?";
     public static final String MESSAGE_LOCAL_PHOTOPATH_CONSTRAINTS =
-            "Photo Path should be the absolute path of a valid file in your PC. It should be a string started with the name of "
-                    + "your disk, followed by several groups of backslash and string, like \"c:\\desktop\\happy.jpg\","
+            "Photo Path should be the absolute path of a valid file in your PC. It should be a string started "
+                    + "with the name of your disk, "
+                    + "followed by several groups of backslash and string, like \"c:\\desktop\\happy.jpg\","
                     + "and the file should exist.";
     public static final String FILE_SAVED_PARENT_PATH = "src/main/resources/images/contactPhotos/";
     public static final String DEFAULT_PHOTO_PATH = "src/main/resources/images/defaultPhoto.jpg";
