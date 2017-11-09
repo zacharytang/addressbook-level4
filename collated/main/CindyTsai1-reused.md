@@ -1,5 +1,5 @@
 # CindyTsai1-reused
-###### /java/seedu/address/commons/events/ui/NewResultAvailableEvent.java
+###### \java\seedu\address\commons\events\ui\NewResultAvailableEvent.java
 ``` java
     public NewResultAvailableEvent(String message, boolean isError) {
         this.message = message;
@@ -13,7 +13,7 @@
 
 }
 ```
-###### /java/seedu/address/ui/ResultDisplay.java
+###### \java\seedu\address\ui\ResultDisplay.java
 ``` java
     @Subscribe
     private void handleNewResultAvailableEvent(NewResultAvailableEvent event) {

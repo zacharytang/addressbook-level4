@@ -1,5 +1,5 @@
 # CindyTsai1
-###### /java/seedu/address/logic/commands/SuggestCommandTest.java
+###### \java\seedu\address\logic\commands\SuggestCommandTest.java
 ``` java
 /**
  * Contains integration tests (interaction with the Model) for {@code SuggestCommand}.
@@ -21,7 +21,7 @@ public class SuggestCommandTest {
 }
 
 ```
-###### /java/seedu/address/logic/parser/AddCommandParserTest.java
+###### \java\seedu\address\logic\parser\AddCommandParserTest.java
 ``` java
         // multiple birthdays - last birthday accepted
         assertParseSuccess(parser, AddCommand.COMMAND_WORD + NAME_DESC_BOB + GENDER_DESC_BOB
@@ -30,7 +30,7 @@ public class SuggestCommandTest {
                 + TAG_DESC_FRIEND, new AddCommand(expectedPerson));
 
 ```
-###### /java/seedu/address/logic/parser/AddCommandParserTest.java
+###### \java\seedu\address\logic\parser\AddCommandParserTest.java
 ``` java
         // missing birthday prefix
         assertParseFailure(parser, AddCommand.COMMAND_WORD + NAME_DESC_BOB + GENDER_DESC_BOB
@@ -38,7 +38,7 @@ public class SuggestCommandTest {
                 + VALID_BIRTHDAY_BOB + TIMETABLE_DESC_BOB, expectedMessage);
 
 ```
-###### /java/seedu/address/logic/parser/AddCommandParserTest.java
+###### \java\seedu\address\logic\parser\AddCommandParserTest.java
 ``` java
         // invalid birthday
         assertParseFailure(parser, AddCommand.COMMAND_WORD + NAME_DESC_BOB + GENDER_DESC_BOB
@@ -47,13 +47,13 @@ public class SuggestCommandTest {
                 Birthday.MESSAGE_BIRTHDAY_CONSTRAINTS);
 
 ```
-###### /java/seedu/address/logic/parser/EditCommandParserTest.java
+###### \java\seedu\address\logic\parser\EditCommandParserTest.java
 ``` java
         assertParseFailure(parser, "1" + INVALID_BIRTHDAY_DESC,
                 Birthday.MESSAGE_BIRTHDAY_CONSTRAINTS); // invalid birthday
 
 ```
-###### /java/seedu/address/logic/parser/EditCommandParserTest.java
+###### \java\seedu\address\logic\parser\EditCommandParserTest.java
 ``` java
         // birthday
         userInput = targetIndex.getOneBased() + BIRTHDAY_DESC_AMY;
@@ -63,7 +63,7 @@ public class SuggestCommandTest {
     }
 
 ```
-###### /java/seedu/address/logic/parser/SuggestCommandParserTest.java
+###### \java\seedu\address\logic\parser\SuggestCommandParserTest.java
 ``` java
 public class SuggestCommandParserTest {
 
@@ -132,7 +132,7 @@ public class SuggestCommandParserTest {
     }
 }
 ```
-###### /java/seedu/address/model/person/BirthdayTest.java
+###### \java\seedu\address\model\person\BirthdayTest.java
 ``` java
 public class BirthdayTest {
 
@@ -153,7 +153,7 @@ public class BirthdayTest {
     }
 }
 ```
-###### /java/seedu/address/testutil/PersonBuilder.java
+###### \java\seedu\address\testutil\PersonBuilder.java
 ``` java
     /**
      * Sets the {@code Birthday} of the {@code Person} that we are building.
@@ -168,7 +168,7 @@ public class BirthdayTest {
     }
 
 ```
-###### /java/systemtests/AddCommandSystemTest.java
+###### \java\systemtests\AddCommandSystemTest.java
 ``` java
         /* Case: add a person with all fields same as another person in the address book except birthday -> added */
         toAdd = new PersonBuilder().withName(VALID_NAME_AMY).withGender(VALID_GENDER_AMY)
@@ -181,7 +181,7 @@ public class BirthdayTest {
         assertCommandSuccess(command, toAdd);
 
 ```
-###### /java/systemtests/EditCommandSystemTest.java
+###### \java\systemtests\EditCommandSystemTest.java
 ``` java
         /* Case: invalid birthday -> rejected */
         assertCommandFailure(EditCommand.COMMAND_WORD + " " + INDEX_FIRST_PERSON.getOneBased() + INVALID_BIRTHDAY_DESC,

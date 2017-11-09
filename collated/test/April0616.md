@@ -1,12 +1,12 @@
 # April0616
-###### /java/seedu/address/logic/commands/AddCommandTest.java
+###### \java\seedu\address\logic\commands\AddCommandTest.java
 ``` java
         @Override
         public void deletePersons(ArrayList<ReadOnlyPerson> targets) throws PersonNotFoundException {
             fail("This method should not be called.");
         }
 ```
-###### /java/seedu/address/logic/commands/DeleteCommandTest.java
+###### \java\seedu\address\logic\commands\DeleteCommandTest.java
 ``` java
     @Test
     public void execute_validIndexUnfilteredList_success() throws Exception {
@@ -24,7 +24,7 @@
         assertCommandSuccess(deleteCommand, model, expectedMessage, expectedModel);
     }
 ```
-###### /java/seedu/address/logic/commands/DeleteCommandTest.java
+###### \java\seedu\address\logic\commands\DeleteCommandTest.java
 ``` java
     @Test
     public void execute_validIndexFilteredList_success() throws Exception {
@@ -46,7 +46,7 @@
     }
 
 ```
-###### /java/seedu/address/logic/commands/PhotoCommandTest.java
+###### \java\seedu\address\logic\commands\PhotoCommandTest.java
 ``` java
 public class PhotoCommandTest {
 
@@ -96,7 +96,7 @@ public class PhotoCommandTest {
     }
 }
 ```
-###### /java/seedu/address/logic/commands/RemarkCommandTest.java
+###### \java\seedu\address\logic\commands\RemarkCommandTest.java
 ``` java
 /**
  * Contains integration tests (interaction with the Model) and unit tests for RemarkCommand.
@@ -208,7 +208,7 @@ public class RemarkCommandTest {
     }
 }
 ```
-###### /java/seedu/address/logic/parser/AddressBookParserTest.java
+###### \java\seedu\address\logic\parser\AddressBookParserTest.java
 ``` java
     @Test
     public void parseCommand_remark() throws Exception {
@@ -219,7 +219,7 @@ public class RemarkCommandTest {
     }
 
 ```
-###### /java/seedu/address/logic/parser/AddressBookParserTest.java
+###### \java\seedu\address\logic\parser\AddressBookParserTest.java
 ``` java
     @Test
     public void parseCommand_photo() throws Exception {
@@ -242,7 +242,7 @@ public class RemarkCommandTest {
         removeAppFile(newCommandAppPath);
     }
 ```
-###### /java/seedu/address/logic/parser/DeleteCommandParserTest.java
+###### \java\seedu\address\logic\parser\DeleteCommandParserTest.java
 ``` java
     @Test
     public void parse_validArgsOnePerson_returnsDeleteCommand() {
@@ -252,7 +252,7 @@ public class RemarkCommandTest {
     }
 
 ```
-###### /java/seedu/address/logic/parser/DeleteCommandParserTest.java
+###### \java\seedu\address\logic\parser\DeleteCommandParserTest.java
 ``` java
     @Test
     public void parse_validArgsMultiplePersons_returnsDeleteCommand() {
@@ -265,7 +265,7 @@ public class RemarkCommandTest {
 
 
 ```
-###### /java/seedu/address/logic/parser/DeleteCommandParserTest.java
+###### \java\seedu\address\logic\parser\DeleteCommandParserTest.java
 ``` java
     @Test
     public void parse_validArgsMultiplePersonsNoWhiteSpace_returnsDeleteCommand() {
@@ -276,7 +276,7 @@ public class RemarkCommandTest {
     }
 
 ```
-###### /java/seedu/address/logic/parser/DeleteCommandParserTest.java
+###### \java\seedu\address\logic\parser\DeleteCommandParserTest.java
 ``` java
     @Test
     public void parse_validArgsMultiplePersonsDuplicatedIndexes_returnsDeleteCommand() {
@@ -286,7 +286,7 @@ public class RemarkCommandTest {
         assertParseSuccess(parser, "1, 1, 3, 3", new DeleteCommand(deletePersonList));
     }
 ```
-###### /java/seedu/address/logic/parser/DeleteCommandParserTest.java
+###### \java\seedu\address\logic\parser\DeleteCommandParserTest.java
 ``` java
     @Test
     public void parse_validArgsMultiplePersonsManyWhiteSpaces_returnsDeleteCommand() {
@@ -297,7 +297,7 @@ public class RemarkCommandTest {
         assertParseSuccess(parser, "  1  ,  2  , 3 ", new DeleteCommand(deletePersonList));
     }
 ```
-###### /java/seedu/address/logic/parser/DeleteCommandParserTest.java
+###### \java\seedu\address\logic\parser\DeleteCommandParserTest.java
 ``` java
     @Test
     public void parse_validArgsMultiplePersonsSplitByWhiteSpace_returnsDeleteCommand() {
@@ -309,7 +309,7 @@ public class RemarkCommandTest {
         assertParseSuccess(parser, "  1 2 3 ", new DeleteCommand(deletePersonList));
     }
 ```
-###### /java/seedu/address/logic/parser/DeleteCommandParserTest.java
+###### \java\seedu\address\logic\parser\DeleteCommandParserTest.java
 ``` java
     @Test
     public void parse_invalidArgsMultiplePersonsManyWhiteSpacesLessComma_returnsDeleteCommand() {
@@ -322,7 +322,7 @@ public class RemarkCommandTest {
     }
 
 ```
-###### /java/seedu/address/logic/parser/ParserUtilTest.java
+###### \java\seedu\address\logic\parser\ParserUtilTest.java
 ``` java
     @Test
     public void parseGender_null_throwsNullPointerException() throws Exception {
@@ -374,7 +374,7 @@ public class RemarkCommandTest {
         assertEquals(expectedMatricNo, actualMatricNo.get());
     }
 ```
-###### /java/seedu/address/logic/parser/RemarkCommandParserTest.java
+###### \java\seedu\address\logic\parser\RemarkCommandParserTest.java
 ``` java
 
 public class RemarkCommandParserTest {
@@ -403,7 +403,7 @@ public class RemarkCommandParserTest {
     }
 }
 ```
-###### /java/seedu/address/model/person/GenderTest.java
+###### \java\seedu\address\model\person\GenderTest.java
 ``` java
 public class GenderTest {
 
@@ -423,7 +423,7 @@ public class GenderTest {
     }
 }
 ```
-###### /java/seedu/address/model/person/MatricNoTest.java
+###### \java\seedu\address\model\person\MatricNoTest.java
 ``` java
 public class MatricNoTest {
 
@@ -448,7 +448,7 @@ public class MatricNoTest {
     }
 }
 ```
-###### /java/seedu/address/model/person/PhotoPathTest.java
+###### \java\seedu\address\model\person\PhotoPathTest.java
 ``` java
 public class PhotoPathTest {
 
@@ -501,7 +501,7 @@ public class PhotoPathTest {
     */
 }
 ```
-###### /java/seedu/address/model/person/RemarkTest.java
+###### \java\seedu\address\model\person\RemarkTest.java
 ``` java
 public class RemarkTest {
 
@@ -528,7 +528,7 @@ public class RemarkTest {
     }
 }
 ```
-###### /java/seedu/address/testutil/TestUtil.java
+###### \java\seedu\address\testutil\TestUtil.java
 ``` java
     /**
      * Remove the temporary test files and parents if they exist till the root of disk C.
@@ -586,7 +586,7 @@ public class RemarkTest {
     }
 }
 ```
-###### /java/systemtests/AddCommandSystemTest.java
+###### \java\systemtests\AddCommandSystemTest.java
 ``` java
         /* Case: add a person with all fields same as another person in the address book except gender -> added */
         toAdd = new PersonBuilder().withName(VALID_NAME_AMY).withGender(VALID_GENDER_BOB)
@@ -598,7 +598,7 @@ public class RemarkTest {
         assertCommandSuccess(command, toAdd);
 
 ```
-###### /java/systemtests/AddCommandSystemTest.java
+###### \java\systemtests\AddCommandSystemTest.java
 ``` java
         /* Case: add a person with all fields same as another person in the address book except matricNo -> added */
         toAdd = new PersonBuilder().withName(VALID_NAME_AMY).withGender(VALID_GENDER_AMY)
@@ -609,7 +609,7 @@ public class RemarkTest {
                 + EMAIL_DESC_AMY + ADDRESS_DESC_AMY + BIRTHDAY_DESC_AMY + TIMETABLE_DESC_AMY + TAG_DESC_FRIEND;
         assertCommandSuccess(command, toAdd);
 ```
-###### /java/systemtests/AddCommandSystemTest.java
+###### \java\systemtests\AddCommandSystemTest.java
 ``` java
         /* Case: missing gender -> rejected */
         command = AddCommand.COMMAND_WORD + NAME_DESC_AMY + MATRIC_NO_DESC_AMY + PHONE_DESC_AMY + EMAIL_DESC_AMY
@@ -621,7 +621,7 @@ public class RemarkTest {
                 + ADDRESS_DESC_AMY + BIRTHDAY_DESC_AMY + TIMETABLE_DESC_AMY;
         assertCommandFailure(command, String.format(MESSAGE_INVALID_COMMAND_FORMAT, AddCommand.MESSAGE_USAGE));
 ```
-###### /java/systemtests/AddCommandSystemTest.java
+###### \java\systemtests\AddCommandSystemTest.java
 ``` java
         /* Case: invalid gender -> rejected */
         command = AddCommand.COMMAND_WORD + NAME_DESC_AMY + INVALID_GENDER_DESC + MATRIC_NO_DESC_AMY + PHONE_DESC_AMY
@@ -633,7 +633,7 @@ public class RemarkTest {
                 + EMAIL_DESC_AMY + ADDRESS_DESC_AMY + BIRTHDAY_DESC_AMY + TIMETABLE_DESC_AMY;
         assertCommandFailure(command, MatricNo.MESSAGE_MATRIC_NO_CONSTRAINTS);
 ```
-###### /java/systemtests/DeleteCommandSystemTest.java
+###### \java\systemtests\DeleteCommandSystemTest.java
 ``` java
     /**
      * Deletes the person at {@code toDelete} by creating a default {@code DeleteCommand} using {@code toDelete} and
