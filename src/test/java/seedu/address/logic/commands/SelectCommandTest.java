@@ -96,8 +96,8 @@ public class SelectCommandTest {
     }
 
     /**
-     * Executes a {@code SelectCommand} with the given {@code targetIndex}, and checks that {@code JumpToListRequestEvent}
-     * is raised with the correct targetIndex.
+     * Executes a {@code SelectCommand} with the given {@code index}, and checks that {@code JumpToListRequestEvent}
+     * is raised with the correct index.
      */
     private void assertExecutionSuccess(Index index) {
         SelectCommand selectCommand = prepareCommand(index);
@@ -115,7 +115,7 @@ public class SelectCommandTest {
     }
 
     /**
-     * Executes a {@code SelectCommand} with the given {@code targetIndex}, and checks that a {@code CommandException}
+     * Executes a {@code SelectCommand} with the given {@code index}, and checks that a {@code CommandException}
      * is thrown with the {@code expectedMessage}.
      */
     private void assertExecutionFailure(Index index, String expectedMessage) {
@@ -131,7 +131,7 @@ public class SelectCommandTest {
     }
 
     /**
-     * Returns a {@code SelectCommand} with parameters {@code targetIndex}.
+     * Returns a {@code SelectCommand} with parameters {@code index}.
      */
     private SelectCommand prepareCommand(Index index) {
         SelectCommand selectCommand = new SelectCommand(index);

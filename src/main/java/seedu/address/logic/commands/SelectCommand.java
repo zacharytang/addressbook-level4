@@ -11,7 +11,7 @@ import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.model.person.ReadOnlyPerson;
 
 /**
- * Selects a person identified using it's last displayed targetIndex from the address book.
+ * Selects a person identified using it's last displayed index from the address book.
  */
 public class SelectCommand extends Command {
 
@@ -20,7 +20,7 @@ public class SelectCommand extends Command {
     public static final String COMMAND_SECONDARY = "choose";
 
     public static final String MESSAGE_USAGE = COMMAND_WORD
-            + ": Selects the person identified by the targetIndex number used in the last person listing.\n"
+            + ": Selects the person identified by the index number used in the last person listing.\n"
             + "Parameters: INDEX (must be a positive integer)\n"
             + "Example: " + COMMAND_WORD + " 1";
 

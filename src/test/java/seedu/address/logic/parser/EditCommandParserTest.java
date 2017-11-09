@@ -72,25 +72,25 @@ public class EditCommandParserTest {
 
     @Test
     public void parse_missingParts_failure() {
-        // no targetIndex specified
+        // no index specified
         assertParseFailure(parser, VALID_NAME_AMY, MESSAGE_INVALID_FORMAT);
 
         // no field specified
         assertParseFailure(parser, "1", EditCommand.MESSAGE_NOT_EDITED);
 
-        // no targetIndex and no field specified
+        // no index and no field specified
         assertParseFailure(parser, "", MESSAGE_INVALID_FORMAT);
     }
 
     /** Only Edit Command on a Person considers the preamble.
-     *  The preamble is the text before the first valid prefix, which in this case, is the targetIndex.
+     *  The preamble is the text before the first valid prefix, which in this case, is the index.
      */
     @Test
     public void parse_invalidPreamble_failure() {
-        // negative targetIndex
+        // negative index
         assertParseFailure(parser, "-5" + NAME_DESC_AMY, MESSAGE_INVALID_FORMAT);
 
-        // zero targetIndex
+        // zero index
         assertParseFailure(parser, "0" + NAME_DESC_AMY, MESSAGE_INVALID_FORMAT);
 
         // invalid arguments being parsed as preamble

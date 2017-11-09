@@ -194,7 +194,7 @@ public class EditCommandTest {
 
     //@@author
     /**
-     * Edit filtered list where targetIndex is larger than size of filtered list,
+     * Edit filtered list where index is larger than size of filtered list,
      * but smaller than size of address book
      */
     @Test
@@ -229,7 +229,7 @@ public class EditCommandTest {
         // different types -> returns false
         assertFalse(standardCommand.equals(new ClearCommand()));
 
-        // different targetIndex -> returns false
+        // different index -> returns false
         assertFalse(standardCommand.equals(new EditCommand(INDEX_SECOND_PERSON, DESC_AMY)));
 
         // different descriptor -> returns false
@@ -261,7 +261,7 @@ public class EditCommandTest {
 
     //@@author
     /**
-     * Returns an {@code EditCommand} for person with parameters {@code targetIndex} and {@code descriptor}
+     * Returns an {@code EditCommand} for person with parameters {@code index} and {@code descriptor}
      */
     private EditCommand prepareCommand(Index index, EditPersonDescriptor descriptor) {
         EditCommand editCommand = new EditCommand(index, descriptor);

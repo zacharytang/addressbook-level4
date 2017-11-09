@@ -90,7 +90,7 @@ public class ListElementPointerTest {
         ListElementPointer differentElementPointer = new ListElementPointer(Collections.singletonList(SECOND_ELEMENT));
         assertFalse(firstPointer.equals(differentElementPointer));
 
-        // different targetIndex -> returns false
+        // different index -> returns false
         firstPointerCopy.previous();
         assertFalse(firstPointer.equals(firstPointerCopy));
     }

@@ -282,7 +282,7 @@ public class TimetableParserUtil {
     }
 
     /**
-     * Takes in String representing start/end timing of lessons, and returns respective targetIndex to be used for array
+     * Takes in String representing start/end timing of lessons, and returns respective index to be used for array
      */
     public static int parseStartEndTime(String timing) throws IllegalValueException {
         try {
@@ -327,7 +327,7 @@ public class TimetableParserUtil {
     }
 
     /**
-     * Converts week type from string used in api to integer targetIndex for use in URL
+     * Converts week type from string used in api to integer index for use in URL
      */
     public static int parseWeekType(String weekType) throws IllegalValueException {
         switch (weekType) {

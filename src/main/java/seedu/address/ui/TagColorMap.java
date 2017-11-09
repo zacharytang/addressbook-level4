@@ -39,7 +39,7 @@ public class TagColorMap {
 
     //@@author April0616
     /**
-     * Updates the color targetIndex to pick a new color for the new tag.
+     * Updates the color index to pick a new color for the new tag.
      */
     private static void updateColorIndex() {
         if (colorIndex == NUM_COLORS - 1) {

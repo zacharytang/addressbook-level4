@@ -475,8 +475,8 @@ public DeleteCommand parse(String args) throws ParseException {
         return new DeleteCommand(tagList); # <1>
 
     } else if (preamble.matches("-?\\d+")) {
-        // parsing of the targetIndex
-        return new DeleteCommand(targetIndex); # <2>
+        // parsing of the index
+        return new DeleteCommand(index); # <2>
     }
     // ...
 }
@@ -488,7 +488,7 @@ public DeleteCommand parse(String args) throws ParseException {
 With reference to the previous code snippet the type of `DeleteCommand` returned during the parse are also different.
 
 <1> a `new DeleteCommand(tagList)` is returned when deleting one or more tags.
-<2> a `new DeleteCommand(targetIndex)` is returned when deleting a person.
+<2> a `new DeleteCommand(index)` is returned when deleting a person.
 
 The following code shows the respective object construction of both types of DeleteCommand.
 
@@ -904,7 +904,7 @@ Priorities: High (must have) - `* * \*`, Medium (nice to have) - `* \*`, Low (un
 
 |`* * *` |user |list all the people in the address book  |see all the contacts I have
 
-|`* * *` |user |select a person from a list by the targetIndex  |easily select a person from a list I have just seen
+|`* * *` |user |select a person from a list by the index  |easily select a person from a list I have just seen
 
 |`* * *` |user |find a person by name |locate details of persons without having to go through the entire list
 
@@ -1057,7 +1057,7 @@ Use case ends.
 
 1.  User requests to list persons
 2.  AddressBook shows a list of persons
-3.  User requests to edit the details of the person identified by the targetIndex number in the listing
+3.  User requests to edit the details of the person identified by the index number in the listing
 4.  AddressBook edits the details of the identified person
 
 +

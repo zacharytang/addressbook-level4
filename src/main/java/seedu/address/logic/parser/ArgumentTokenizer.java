@@ -60,8 +60,8 @@ public class ArgumentTokenizer {
     }
 
     /**
-     * Returns the targetIndex of the first occurrence of {@code prefix} in
-     * {@code argsString} starting from targetIndex {@code fromIndex}. An occurrence
+     * Returns the index of the first occurrence of {@code prefix} in
+     * {@code argsString} starting from index {@code fromIndex}. An occurrence
      * is valid if there is a whitespace before {@code prefix}. Returns -1 if no
      * such occurrence can be found.
      *
