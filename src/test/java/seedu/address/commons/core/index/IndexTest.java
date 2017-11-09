@@ -11,28 +11,28 @@ public class IndexTest {
 
     @Test
     public void createOneBasedIndex() {
-        // invalid targetIndex
+        // invalid index
         assertCreateOneBasedFailure(0);
 
         // check equality using the same base
         assertEquals(1, Index.fromOneBased(1).getOneBased());
         assertEquals(5, Index.fromOneBased(5).getOneBased());
 
-        // convert from one-based targetIndex to zero-based targetIndex
+        // convert from one-based index to zero-based index
         assertEquals(0, Index.fromOneBased(1).getZeroBased());
         assertEquals(4, Index.fromOneBased(5).getZeroBased());
     }
 
     @Test
     public void createZeroBasedIndex() {
-        // invalid targetIndex
+        // invalid index
         assertCreateZeroBasedFailure(-1);
 
         // check equality using the same base
         assertEquals(0, Index.fromZeroBased(0).getZeroBased());
         assertEquals(5, Index.fromZeroBased(5).getZeroBased());
 
-        // convert from zero-based targetIndex to one-based targetIndex
+        // convert from zero-based index to one-based index
         assertEquals(1, Index.fromZeroBased(0).getOneBased());
         assertEquals(6, Index.fromZeroBased(5).getOneBased());
     }
@@ -87,7 +87,7 @@ public class IndexTest {
         // different types -> returns false
         assertFalse(fifthPersonIndex.equals(5.0f));
 
-        // different targetIndex -> returns false
+        // different index -> returns false
         assertFalse(fifthPersonIndex.equals(Index.fromOneBased(1)));
     }
 }

@@ -25,7 +25,7 @@ public class RemarkCommand extends UndoableCommand {
     public static final String COMMAND_ALIAS = "rm";
 
     public static final String MESSAGE_USAGE = COMMAND_WORD
-            + ": If remarks the person identified by the targetIndex number used in the last person listing,"
+            + ": If remarks the person identified by the index number used in the last person listing,"
             + " add the remark to the person.\n"
             + "If the remark field is empty, the remark is removed for the person.\n"
             + "Accept multiple remarks at the same time.\n"

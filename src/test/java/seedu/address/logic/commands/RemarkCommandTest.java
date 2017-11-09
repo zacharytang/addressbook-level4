@@ -92,7 +92,7 @@ public class RemarkCommandTest {
     }
 
     /**
-     * Edit filtered list where targetIndex is larger than size of filtered list,
+     * Edit filtered list where index is larger than size of filtered list,
      * but smaller than size of address book
      */
     @Test
@@ -121,7 +121,7 @@ public class RemarkCommandTest {
         // null -> returns false
         assertFalse(addFirstPersonCapRemark == null);
 
-        // different targetIndex -> returns false
+        // different index -> returns false
         assertFalse(addFirstPersonCoffeeRemark.equals(addSecondPersonCoffeeRemark));
 
         // different types -> returns false
@@ -129,7 +129,7 @@ public class RemarkCommandTest {
     }
 
     /**
-     * Returns an {@code RemarkCommand} with parameters {@code targetIndex} and {@code descriptor}
+     * Returns an {@code RemarkCommand} with parameters {@code index} and {@code descriptor}
      */
     private RemarkCommand prepareCommand(Index index, Remark remark) {
         RemarkCommand remarkCommand = new RemarkCommand(index, remark);

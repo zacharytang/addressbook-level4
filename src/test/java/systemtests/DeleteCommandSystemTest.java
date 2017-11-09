@@ -84,13 +84,13 @@ public class DeleteCommandSystemTest extends AddressBookSystemTest {
 
         /* ------------------ Performing delete operation while a filtered list is being shown ---------------------- */
 
-        /* Case: filtered person list, delete targetIndex within bounds of address book and person list -> deleted */
+        /* Case: filtered person list, delete index within bounds of address book and person list -> deleted */
         showPersonsWithName(KEYWORD_MATCHING_MEIER);
         Index index = INDEX_FIRST_PERSON;
         assertTrue(index.getZeroBased() < getModel().getFilteredPersonList().size());
         assertCommandSuccess(index);
 
-        /* Case: filtered person list, delete targetIndex within bounds of address book but out of bounds of person list
+        /* Case: filtered person list, delete index within bounds of address book but out of bounds of person list
          * -> rejected
          */
         showPersonsWithName(KEYWORD_MATCHING_MEIER);
@@ -116,15 +116,15 @@ public class DeleteCommandSystemTest extends AddressBookSystemTest {
 
         /* --------------------------------- Performing invalid delete operation ------------------------------------ */
 
-        /* Case: invalid targetIndex (0) -> rejected */
+        /* Case: invalid index (0) -> rejected */
         command = DeleteCommand.COMMAND_WORD + " 0";
         assertCommandFailure(command, MESSAGE_INVALID_DELETE_COMMAND_FORMAT);
 
-        /* Case: invalid targetIndex (-1) -> rejected */
+        /* Case: invalid index (-1) -> rejected */
         command = DeleteCommand.COMMAND_WORD + " -1";
         assertCommandFailure(command, MESSAGE_INVALID_DELETE_COMMAND_FORMAT);
 
-        /* Case: invalid targetIndex (size + 1) -> rejected */
+        /* Case: invalid index (size + 1) -> rejected */
         Index outOfBoundsIndex = Index.fromOneBased(
                 getModel().getAddressBook().getPersonList().size() + 1);
         command = DeleteCommand.COMMAND_WORD + " " + outOfBoundsIndex.getOneBased();
@@ -138,15 +138,15 @@ public class DeleteCommandSystemTest extends AddressBookSystemTest {
 
         /* Invalid commands with aliases */
 
-        /* Case: invalid targetIndex (0) -> rejected */
+        /* Case: invalid index (0) -> rejected */
         command = DeleteCommand.COMMAND_ALIAS + " 0";
         assertCommandFailure(command, MESSAGE_INVALID_DELETE_COMMAND_FORMAT);
 
-        /* Case: invalid targetIndex (-1) -> rejected */
+        /* Case: invalid index (-1) -> rejected */
         command = DeleteCommand.COMMAND_ALIAS + " -1";
         assertCommandFailure(command, MESSAGE_INVALID_DELETE_COMMAND_FORMAT);
 
-        /* Case: invalid targetIndex (size + 1) -> rejected */
+        /* Case: invalid index (size + 1) -> rejected */
         outOfBoundsIndex = Index.fromOneBased(
                 getModel().getAddressBook().getPersonList().size() + 1);
         command = DeleteCommand.COMMAND_ALIAS + " " + outOfBoundsIndex.getOneBased();
@@ -160,15 +160,15 @@ public class DeleteCommandSystemTest extends AddressBookSystemTest {
 
         /* Invalid commands with secondary keyword */
 
-        /* Case: invalid targetIndex (0) -> rejected */
+        /* Case: invalid index (0) -> rejected */
         command = DeleteCommand.COMMAND_SECONDARY + " 0";
         assertCommandFailure(command, MESSAGE_INVALID_DELETE_COMMAND_FORMAT);
 
-        /* Case: invalid targetIndex (-1) -> rejected */
+        /* Case: invalid index (-1) -> rejected */
         command = DeleteCommand.COMMAND_SECONDARY + " -1";
         assertCommandFailure(command, MESSAGE_INVALID_DELETE_COMMAND_FORMAT);
 
-        /* Case: invalid targetIndex (size + 1) -> rejected */
+        /* Case: invalid index (size + 1) -> rejected */
         outOfBoundsIndex = Index.fromOneBased(
                 getModel().getAddressBook().getPersonList().size() + 1);
         command = DeleteCommand.COMMAND_SECONDARY + " " + outOfBoundsIndex.getOneBased();
@@ -186,7 +186,7 @@ public class DeleteCommandSystemTest extends AddressBookSystemTest {
     }
 
     /**
-     * Removes the {@code ReadOnlyPerson} at the specified {@code targetIndex} in {@code model}'s address book.
+     * Removes the {@code ReadOnlyPerson} at the specified {@code index} in {@code model}'s address book.
      * @return the removed person
      */
     private ReadOnlyPerson removePerson(Model model, Index index) {

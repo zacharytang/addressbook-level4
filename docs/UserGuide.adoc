@@ -63,7 +63,7 @@ Understanding the Command Format is easy! Let us explain:
 
 * Commands always start with a command word.
 ** Example: `add`, `delete`, `clear`, `edit`
-* `INDEX` refers to the targetIndex number shown in the last generated listing of people.
+* `INDEX` refers to the index number shown in the last generated listing of people.
 ** `INDEX` *must be a positive integer* e.g.: 1, 2, 3, ...
 * Words in `UPPER_CASE` are *parameters* you have to give to the command. Each *parameter* is assigned and preceded by a *prefix*: a letter followed by a `/` +
 ** Example: `add n/*NAME*` +
@@ -351,7 +351,7 @@ Editing a person's tag only edits the tag(s) for a *single* person. This command
 ____
 _Some people just have to go away in your life. Sometimes they leave you. Delete these people out of UniFy as well._
 ____
-By specifying an targetIndex or multiple indexes, you can delete specified people in the most recent listing from the address book. +
+By specifying an index or multiple indexes, you can delete specified people in the most recent listing from the address book. +
 Format: +
 `delete INDEX1, INDEX2, INDEX3...`(separated by commas) +
 `delete INDEX1 INDEX2 INDEX3...` (separated by whitespaces) +
@@ -468,7 +468,7 @@ Displays a combined timetable for all listed users.
 
 ****
 * Creates a combined timetable representing all the persons chosen.
-* If no targetIndex is specified, displays the timetable representing all the persons currently listed.
+* If no index is specified, displays the timetable representing all the persons currently listed.
 * All persons specified *must have timetables added*.
 ****
 // end::timetable[]
@@ -477,7 +477,7 @@ Displays a combined timetable for all listed users.
 ____
 _You are meeting your group mate at his house. But where is his house on the map?_
 ____
-For a person specified by an targetIndex, opens a Google Maps view of the person's address. +
+For a person specified by an index, opens a Google Maps view of the person's address. +
 If you specify an address, gives the Google Maps directions from the given address to the person's location. +
 Format: `gmaps INDEX [a/ADDRESS]` +
 Alternatives: `g`, `map`, `maps`

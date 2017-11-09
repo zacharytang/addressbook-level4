@@ -21,31 +21,31 @@ public class GMapsCommandParserTest {
 
     @Test
     public void parse_invalidIndex_failure() {
-        // wrong targetIndex
+        // wrong index
         assertParseFailure(parser, "-1", MESSAGE_INVALID_FORMAT);
     }
 
     @Test
     public void parse_invalidIndexValidAddress_failure() {
-        // wrong targetIndex
+        // wrong index
         assertParseFailure(parser, "-1 a/NUS", MESSAGE_INVALID_FORMAT);
     }
 
     @Test
     public void parse_invalidIndexInvalidAddress_failure() {
-        // wrong targetIndex
+        // wrong index
         assertParseFailure(parser, "-1 a/", MESSAGE_INVALID_FORMAT);
     }
 
     @Test
     public void parse_missingParts_failure() {
-        // no targetIndex specified
+        // no index specified
         assertParseFailure(parser, "a/", MESSAGE_INVALID_FORMAT);
     }
 
     @Test
     public void parse_invalidAddress_failure() {
-        // no targetIndex specified
+        // no index specified
         assertParseFailure(parser, "1 a/ ", Address.MESSAGE_ADDRESS_CONSTRAINTS);
     }
 
