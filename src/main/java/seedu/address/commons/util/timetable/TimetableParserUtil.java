@@ -65,6 +65,7 @@ public class TimetableParserUtil {
         } catch (IOException e) {
             throw new ParseException("Url cannot be accessed");
         } catch (NoInternetConnectionException nice) {
+            // No internet connection, return empty timetable
             return new TimetableInfo();
         }
     }
@@ -83,6 +84,7 @@ public class TimetableParserUtil {
         String[] modInfo = toParse.split(SPLIT_QUESTION_MARK);
 
         if (modInfo.length != 2) {
+            // No lesson info in url, return empty timetable
             return new TimetableInfo();
         }
 
@@ -93,6 +95,7 @@ public class TimetableParserUtil {
         try {
             return constructTimetable(acadYear, semester, timetableInfo);
         } catch (JsonMappingException e) {
+            // Cannot retrieve info from NUSMODS API, return empty timetable
             return new TimetableInfo();
         }
     }
@@ -116,6 +119,7 @@ public class TimetableParserUtil {
             String classType = classInfo.split(SPLIT_LEFT_SQAURE_BRACKET)[1].split(SPLIT_RIGHT_SQUARE_BRACKET)[0];
             String classNo = classInfo.split(SPLIT_EQUALS_SIGN)[1];
 
+            // Add lesson to existing module information
             ModuleInfoFromUrl moduleInfo = modules.getModuleInfo(moduleCode);
             moduleInfo.addLesson(classType, classNo);
             modules.addModuleInfo(moduleInfo);
@@ -135,6 +139,7 @@ public class TimetableParserUtil {
         ObjectMapper mapper = new ObjectMapper();
 
         try {
+            // Grab lesson info from API and store as map
             URL url = new URL(uri);
             @SuppressWarnings("unchecked")
             Map<String, Object> mappedJson = mapper.readValue(url, HashMap.class);
@@ -142,6 +147,7 @@ public class TimetableParserUtil {
             ArrayList<HashMap<String, String>> lessonInfo = (ArrayList<HashMap<String, String>>)
                     mappedJson.get("Timetable");
 
+            // Parse info from API and creates arraylist of all lessons
             ArrayList<Lesson> lessons = new ArrayList<>();
             for (HashMap<String, String> lesson : lessonInfo) {
                 Lesson lessonToAdd = new Lesson(lesson.get("ClassNo"), lesson.get("LessonType"),
@@ -195,7 +201,7 @@ public class TimetableParserUtil {
         ArrayList<ModuleInfoFromUrl> lessonInfoByModules = timetableInfo.getModuleInfoList();
 
         for (ModuleInfoFromUrl moduleInfoFromTimetable : lessonInfoByModules) {
-            constructTimetableForModule(acadYear, semester, timetable, moduleInfoFromTimetable);
+            addModuleToTimetable(acadYear, semester, timetable, moduleInfoFromTimetable);
         }
 
         return timetable;
@@ -209,15 +215,15 @@ public class TimetableParserUtil {
      * @param timetable timetable to be updated
      * @param moduleInfo lessons for a module parsed from url
      */
-    private static void constructTimetableForModule(String acadYear, String semester, TimetableInfo timetable,
-                                                    ModuleInfoFromUrl moduleInfo)
+    private static void addModuleToTimetable(String acadYear, String semester, TimetableInfo timetable,
+                                             ModuleInfoFromUrl moduleInfo)
             throws IllegalValueException, JsonMappingException {
         ArrayList<Lesson> lessons = getLessonInfoFromApi(acadYear, semester, moduleInfo.getModCode());
         HashMap<String, String> lessonsForModule = moduleInfo.getLessonInfo();
 
         for (String classType : lessonsForModule.keySet()) {
+            // Get all class type/number pairs and add to timetable
             String classNo = lessonsForModule.get(classType);
-
             addLessonToTimetable(timetable, lessons, classType, classNo);
         }
     }
