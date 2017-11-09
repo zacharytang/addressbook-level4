@@ -30,7 +30,7 @@ public class SampleDataUtil {
                 new Person(new Name("Select Me"), new Gender("Male"),
                         new MatricNo("A1234567X"), new Phone("91234567"), new Email("example@example.com"),
                         new Address("Blk 123 Orchard Road"), new Timetable("http://modsn.us/FX3uR"),
-                        new Remark("Type \"clear\" to clear address book"), new PhotoPath(DEFAULT_PHOTO_PATH),
+                        new Remark("Type \"clear\" to clear address book"), new PhotoPath(""),
                         getTagSet("Science", "NUSSU"), new Birthday("25101996")),
                 new Person(new Name("Labayna Neil Brian Narido"), new Gender("Male"), new MatricNo("A0155006R"),
                         new Phone("96474278"), new Email("neilbrian.nl@gmail.com"),
