@@ -52,6 +52,7 @@ public class PhotoCommand extends UndoableCommand {
     public static final String MESSAGE_ADD_PHOTO_SUCCESS =
             "Successfully saved photo and added the photo path to Person: %1$s";
     public static final String MESSAGE_DELETE_PHOTO_SUCCESS = "Removed photo path from Person: %1$s";
+    public static final String MESSAGE_NO_PHOTO_TO_DELETE = "No photo path to remove from Person: %1$s";
     public static final String MESSAGE_DUPLICATE_PERSON = "This person already exists in the address book.";
 
     public static final String LOCAL_PHOTOPATH_VALIDATION_REGEX = "([a-zA-Z]:)?(\\\\[a-zA-Z0-9_.-]+)+\\\\?";
@@ -201,7 +202,11 @@ public class PhotoCommand extends UndoableCommand {
      */
     private String generateSuccessMsg(ReadOnlyPerson personToPhoto) {
         if (photoPath.toString().equals("")) {
-            return String.format(MESSAGE_DELETE_PHOTO_SUCCESS, personToPhoto);
+            if (personToPhoto.getPhotoPath().value.equals("")) {
+                return String.format(MESSAGE_NO_PHOTO_TO_DELETE, personToPhoto);
+            } else {
+                return String.format(MESSAGE_DELETE_PHOTO_SUCCESS, personToPhoto);
+            }
         } else {
             return String.format(MESSAGE_ADD_PHOTO_SUCCESS, personToPhoto);
         }
