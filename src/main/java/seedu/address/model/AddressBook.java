@@ -22,18 +22,17 @@ import seedu.address.commons.events.ui.PersonHasBeenDeletedEvent;
 import seedu.address.commons.events.ui.PersonHasBeenModifiedEvent;
 import seedu.address.commons.exceptions.IllegalValueException;
 import seedu.address.model.person.Person;
-import seedu.address.model.person.exceptions.DuplicatePersonException;
-import seedu.address.model.photo.PhotoPath;
 import seedu.address.model.person.ReadOnlyPerson;
 import seedu.address.model.person.UniquePersonList;
+import seedu.address.model.person.exceptions.DuplicatePersonException;
 import seedu.address.model.person.exceptions.PersonNotFoundException;
+import seedu.address.model.photo.PhotoPath;
 import seedu.address.model.photo.UniquePhotoPathList;
 import seedu.address.model.photo.exceptions.DuplicatePhotoPathException;
 import seedu.address.model.photo.exceptions.PhotoPathNotFoundException;
 import seedu.address.model.tag.Tag;
 import seedu.address.model.tag.UniqueTagList;
 import seedu.address.model.tag.exceptions.TagNotFoundException;
-import sun.rmi.runtime.Log;
 
 /**
  * Wraps all data at the address-book level
