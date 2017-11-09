@@ -1,7 +1,9 @@
 package seedu.address.model;
 
 import javafx.collections.ObservableList;
+import seedu.address.model.person.Phone;
 import seedu.address.model.person.ReadOnlyPerson;
+import seedu.address.model.photo.PhotoPath;
 import seedu.address.model.tag.Tag;
 
 /**
@@ -20,5 +22,11 @@ public interface ReadOnlyAddressBook {
      * This list will not contain any duplicate tags.
      */
     ObservableList<Tag> getTagList();
+
+    /**
+     * Returns an unmodifiable view of the photo paths list.
+     * This list will not contain any duplicate photo paths.
+     */
+    ObservableList<PhotoPath> getPhotoPathList();
 
 }

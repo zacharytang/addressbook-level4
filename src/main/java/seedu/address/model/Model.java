@@ -9,6 +9,9 @@ import seedu.address.model.person.Address;
 import seedu.address.model.person.ReadOnlyPerson;
 import seedu.address.model.person.exceptions.DuplicatePersonException;
 import seedu.address.model.person.exceptions.PersonNotFoundException;
+import seedu.address.model.photo.PhotoPath;
+import seedu.address.model.photo.exceptions.DuplicatePhotoPathException;
+import seedu.address.model.photo.exceptions.PhotoPathNotFoundException;
 import seedu.address.model.tag.Tag;
 import seedu.address.model.tag.exceptions.TagNotFoundException;
 
@@ -38,6 +41,10 @@ public interface Model {
 
     /** Deletes the given list of persons. */
     void deletePersons(ArrayList<ReadOnlyPerson> targets) throws PersonNotFoundException;
+
+    /** Adds the given photo path */
+    void addPhotoPath(PhotoPath photoPath) throws DuplicatePhotoPathException;
+
     //@@author
 
     /** Adds the given person */

@@ -1,7 +1,6 @@
-package seedu.address.model.person;
+package seedu.address.model.photo;
 
 import static java.util.Objects.requireNonNull;
-import static seedu.address.logic.commands.PhotoCommand.DEFAULT_PHOTO_PATH;
 
 import seedu.address.commons.exceptions.IllegalValueException;
 
@@ -11,10 +10,10 @@ import seedu.address.commons.exceptions.IllegalValueException;
  */
 public class PhotoPath {
 
-    public static final String MESSAGE_APP_PHOTOPATH_CONSTRAINTS =
-            "The app photo path should be a string starting with 'docs/images/contactPhotos/',"
-                    + "following by the file name, like'photo.jpg'.";
     public static final String FILE_SAVED_PARENT_PATH = "src/main/resources/images/contactPhotos/";
+    public static final String MESSAGE_APP_PHOTOPATH_CONSTRAINTS =
+            "The app photo path should be a string starting with '" + FILE_SAVED_PARENT_PATH
+                    + "', following by the file name, like'photo.jpg'.";
 
     public final String value;  //photo path
 
@@ -31,7 +30,7 @@ public class PhotoPath {
      * Returns if a given string is a valid photo path.
      */
     public static boolean isValidPhotoPath(String test) {
-        if (test.equals(DEFAULT_PHOTO_PATH)) {
+        if (test.equals("")) {
             return true;
         }
         String[] parts = test.split("\\.");
