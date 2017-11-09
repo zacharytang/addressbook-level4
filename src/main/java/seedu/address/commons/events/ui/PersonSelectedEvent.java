@@ -10,9 +10,11 @@ import seedu.address.model.person.ReadOnlyPerson;
 public class PersonSelectedEvent extends BaseEvent {
 
     public final ReadOnlyPerson person;
+    public final int targetIndex;
 
-    public PersonSelectedEvent(ReadOnlyPerson person) {
+    public PersonSelectedEvent(ReadOnlyPerson person, int targetIndex) {
         this.person = person;
+        this.targetIndex = targetIndex;
     }
 
     @Override

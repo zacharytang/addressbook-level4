@@ -51,7 +51,7 @@ public class PersonCardTest extends GuiUnitTest {
         Person person = new PersonBuilder().build();
         PersonCard personCard = new PersonCard(person, 0);
 
-        // same person, same index -> returns true
+        // same person, same targetIndex -> returns true
         PersonCard copy = new PersonCard(person, 0);
         assertTrue(personCard.equals(copy));
 
@@ -64,11 +64,11 @@ public class PersonCardTest extends GuiUnitTest {
         // different types -> returns false
         assertFalse(personCard.equals(0));
 
-        // different person, same index -> returns false
+        // different person, same targetIndex -> returns false
         Person differentPerson = new PersonBuilder().withName("differentName").build();
         assertFalse(personCard.equals(new PersonCard(differentPerson, 0)));
 
-        // same person, different index -> returns false
+        // same person, different targetIndex -> returns false
         assertFalse(personCard.equals(new PersonCard(person, 1)));
     }
 

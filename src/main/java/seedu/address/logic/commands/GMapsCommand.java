@@ -11,7 +11,7 @@ import seedu.address.model.person.ReadOnlyPerson;
 
 //@@author nbriannl
 /**
- * Selects a person identified using it's last displayed index from the address book.
+ * Selects a person identified using it's last displayed targetIndex from the address book.
  */
 public class GMapsCommand extends Command {
 
@@ -49,10 +49,10 @@ public class GMapsCommand extends Command {
         ReadOnlyPerson personToShowMap = lastShownList.get(targetIndex.getZeroBased());
 
         if (targetAddress != null) {
-            model.showDirectionsTo(personToShowMap, targetAddress);
+            model.showDirectionsTo(personToShowMap, targetAddress, targetIndex);
             return new CommandResult(String.format(MESSAGE_DIRECTIONS_TO_PERSON_SUCCESS, personToShowMap.getName()));
         } else {
-            model.showMapOf(personToShowMap);
+            model.showMapOf(personToShowMap, targetIndex);
             return new CommandResult(String.format(MESSAGE_SELECT_PERSON_SUCCESS, personToShowMap.getName()));
         }
 

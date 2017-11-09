@@ -73,31 +73,31 @@ public class SelectCommandSystemTest extends AddressBookSystemTest {
         command = SelectCommand.COMMAND_WORD + " " + middleIndex.getOneBased();
         assertCommandSuccess(command, middleIndex);
 
-        /* Case: invalid index (size + 1) -> rejected */
+        /* Case: invalid targetIndex (size + 1) -> rejected */
         int invalidIndex = getModel().getFilteredPersonList().size() + 1;
         assertCommandFailure(SelectCommand.COMMAND_WORD + " " + invalidIndex, MESSAGE_INVALID_PERSON_DISPLAYED_INDEX);
 
         /* Case: select the current selected card -> selected */
         assertCommandSuccess(command, middleIndex);
 
-        /* Case: filtered person list, select index within bounds of address book but out of bounds of person list
+        /* Case: filtered person list, select targetIndex within bounds of address book but out of bounds of person list
          * -> rejected
          */
         showPersonsWithName(KEYWORD_MATCHING_MEIER);
         invalidIndex = getModel().getAddressBook().getPersonList().size();
         assertCommandFailure(SelectCommand.COMMAND_WORD + " " + invalidIndex, MESSAGE_INVALID_PERSON_DISPLAYED_INDEX);
 
-        /* Case: filtered person list, select index within bounds of address book and person list -> selected */
+        /* Case: filtered person list, select targetIndex within bounds of address book and person list -> selected */
         Index validIndex = Index.fromOneBased(1);
         assert validIndex.getZeroBased() < getModel().getFilteredPersonList().size();
         command = SelectCommand.COMMAND_WORD + " " + validIndex.getOneBased();
         assertCommandSuccess(command, validIndex);
 
-        /* Case: invalid index (0) -> rejected */
+        /* Case: invalid targetIndex (0) -> rejected */
         assertCommandFailure(SelectCommand.COMMAND_WORD + " " + 0,
                 String.format(MESSAGE_INVALID_COMMAND_FORMAT, SelectCommand.MESSAGE_USAGE));
 
-        /* Case: invalid index (-1) -> rejected */
+        /* Case: invalid targetIndex (-1) -> rejected */
         assertCommandFailure(SelectCommand.COMMAND_WORD + " " + -1,
                 String.format(MESSAGE_INVALID_COMMAND_FORMAT, SelectCommand.MESSAGE_USAGE));
 

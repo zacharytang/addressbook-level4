@@ -5,13 +5,13 @@ import java.util.HashMap;
 import java.util.function.Predicate;
 
 import javafx.collections.ObservableList;
+import seedu.address.commons.core.index.Index;
 import seedu.address.model.person.Address;
 import seedu.address.model.person.ReadOnlyPerson;
 import seedu.address.model.person.exceptions.DuplicatePersonException;
 import seedu.address.model.person.exceptions.PersonNotFoundException;
 import seedu.address.model.photo.PhotoPath;
 import seedu.address.model.photo.exceptions.DuplicatePhotoPathException;
-import seedu.address.model.photo.exceptions.PhotoPathNotFoundException;
 import seedu.address.model.tag.Tag;
 import seedu.address.model.tag.exceptions.TagNotFoundException;
 
@@ -30,10 +30,10 @@ public interface Model {
 
     //@@author nbriannl
     /** Show map of the given person **/
-    void showMapOf(ReadOnlyPerson person);
+    void showMapOf(ReadOnlyPerson person, Index index);
 
     /** Show direction to the given person from a given address **/
-    void showDirectionsTo(ReadOnlyPerson target, Address address);
+    void showDirectionsTo(ReadOnlyPerson target, Address address, Index index);
 
     //@@author April0616
     /** Deletes the given person. */

@@ -168,7 +168,7 @@ public class EditCommandSystemTest extends AddressBookSystemTest {
 
         /* ------------------ Performing edit operation while a filtered list is being shown ------------------------ */
 
-        /* Case: filtered person list, edit index within bounds of address book and person list -> edited */
+        /* Case: filtered person list, edit targetIndex within bounds of address book and person list -> edited */
         showPersonsWithName(KEYWORD_MATCHING_MEIER);
         index = INDEX_FIRST_PERSON;
         assertTrue(index.getZeroBased() < getModel().getFilteredPersonList().size());
@@ -177,7 +177,7 @@ public class EditCommandSystemTest extends AddressBookSystemTest {
         editedPerson = new PersonBuilder(personToEdit).withName(VALID_NAME_BOB).build();
         assertCommandSuccess(command, index, editedPerson);
 
-        /* Case: filtered person list, edit index within bounds of address book but out of bounds of person list
+        /* Case: filtered person list, edit targetIndex within bounds of address book but out of bounds of person list
          * -> rejected
          */
         showPersonsWithName(KEYWORD_MATCHING_MEIER);
@@ -202,20 +202,20 @@ public class EditCommandSystemTest extends AddressBookSystemTest {
 
         /* --------------------------------- Performing invalid edit operation -------------------------------------- */
 
-        /* Case: invalid index (0) -> rejected */
+        /* Case: invalid targetIndex (0) -> rejected */
         assertCommandFailure(EditCommand.COMMAND_WORD + " 0" + NAME_DESC_BOB,
                 String.format(Messages.MESSAGE_INVALID_COMMAND_FORMAT, EditCommand.MESSAGE_USAGE));
 
-        /* Case: invalid index (-1) -> rejected */
+        /* Case: invalid targetIndex (-1) -> rejected */
         assertCommandFailure(EditCommand.COMMAND_WORD + " -1" + NAME_DESC_BOB,
                 String.format(Messages.MESSAGE_INVALID_COMMAND_FORMAT, EditCommand.MESSAGE_USAGE));
 
-        /* Case: invalid index (size + 1) -> rejected */
+        /* Case: invalid targetIndex (size + 1) -> rejected */
         invalidIndex = getModel().getFilteredPersonList().size() + 1;
         assertCommandFailure(EditCommand.COMMAND_WORD + " " + invalidIndex + NAME_DESC_BOB,
                 Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX);
 
-        /* Case: missing index -> rejected */
+        /* Case: missing targetIndex -> rejected */
         assertCommandFailure(EditCommand.COMMAND_WORD + NAME_DESC_BOB,
                 String.format(Messages.MESSAGE_INVALID_COMMAND_FORMAT, EditCommand.MESSAGE_USAGE));
 
@@ -287,7 +287,7 @@ public class EditCommandSystemTest extends AddressBookSystemTest {
     /**
      * Performs the same verification as {@code assertCommandSuccess(String, Index, ReadOnlyPerson, Index)} except that
      * the browser url and selected card remain unchanged.
-     * @param toEdit the index of the current model's filtered list
+     * @param toEdit the targetIndex of the current model's filtered list
      * @see EditCommandSystemTest#assertCommandSuccess(String, Index, ReadOnlyPerson, Index)
      */
     private void assertCommandSuccess(String command, Index toEdit, ReadOnlyPerson editedPerson) {
@@ -297,9 +297,9 @@ public class EditCommandSystemTest extends AddressBookSystemTest {
     /**
      * Performs the same verification as {@code assertCommandSuccess(String, Model, String, Index)} and in addition,<br>
      * 1. Asserts that result display box displays the success message of executing {@code EditCommand}.<br>
-     * 2. Asserts that the model related components are updated to reflect the person at index {@code toEdit} being
+     * 2. Asserts that the model related components are updated to reflect the person at targetIndex {@code toEdit} being
      * updated to values specified {@code editedPerson}.<br>
-     * @param toEdit the index of the current model's filtered list.
+     * @param toEdit the targetIndex of the current model's filtered list.
      * @see EditCommandSystemTest#assertCommandSuccess(String, Model, String, Index)
      */
     private void assertCommandSuccess(String command, Index toEdit, ReadOnlyPerson editedPerson,

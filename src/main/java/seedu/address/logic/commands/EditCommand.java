@@ -18,8 +18,10 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
+import seedu.address.commons.core.EventsCenter;
 import seedu.address.commons.core.Messages;
 import seedu.address.commons.core.index.Index;
+import seedu.address.commons.events.ui.PersonSelectedEvent;
 import seedu.address.commons.util.CollectionUtil;
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.model.person.Address;
@@ -30,12 +32,12 @@ import seedu.address.model.person.MatricNo;
 import seedu.address.model.person.Name;
 import seedu.address.model.person.Person;
 import seedu.address.model.person.Phone;
-import seedu.address.model.photo.PhotoPath;
 import seedu.address.model.person.ReadOnlyPerson;
 import seedu.address.model.person.Remark;
 import seedu.address.model.person.exceptions.DuplicatePersonException;
 import seedu.address.model.person.exceptions.PersonNotFoundException;
 import seedu.address.model.person.timetable.Timetable;
+import seedu.address.model.photo.PhotoPath;
 import seedu.address.model.tag.Tag;
 import seedu.address.model.tag.exceptions.TagNotFoundException;
 
@@ -50,7 +52,7 @@ public class EditCommand extends UndoableCommand {
     public static final String COMMAND_SECONDARY_TWO = "change";
 
     public static final String MESSAGE_USAGE = COMMAND_WORD + ": Edits the details of the person identified "
-            + "by the index number used in the last person listing. "
+            + "by the targetIndex number used in the last person listing. "
             + "Existing values will be overwritten by the input values.\n"
             + "Parameters: INDEX (must be a positive integer) "
             + "[" + PREFIX_NAME + "NAME] "
@@ -60,14 +62,14 @@ public class EditCommand extends UndoableCommand {
             + "[" + PREFIX_EMAIL + "EMAIL] "
             + "[" + PREFIX_ADDRESS + "ADDRESS] "
             + "[" + PREFIX_TIMETABLE + "TIMETABLE_URL] "
-            + "[" + PREFIX_TAG + "TAG]...\n"
-            + "[" + PREFIX_BIRTHDAY + "BIRTHDAY] "
+            + "[" + PREFIX_TAG + "TAG]... "
+            + "[" + PREFIX_BIRTHDAY + "BIRTHDAY]\n"
             + "Example: " + COMMAND_WORD + " 1 "
             + PREFIX_PHONE + "91234567 "
             + PREFIX_EMAIL + "johndoe@example.com\n"
-            + "OR "
-            + "Edit the specified tag in all contacts containing this tag with a new specified tag "
-            + "Parameters: " + PREFIX_OLD_TAG + "TAG " + PREFIX_NEW_TAG + "TAG"
+            + "OR\n"
+            + "Edit the specified tag in all contacts containing this tag with a new specified tag\n"
+            + "Parameters: " + PREFIX_OLD_TAG + "TAG " + PREFIX_NEW_TAG + "TAG\n"
             + "Example: " + COMMAND_WORD + "old/CS1020 new/CS2010";
 
     public static final String MESSAGE_EDIT_PERSON_SUCCESS = "Edited Person: %1$s";
@@ -136,6 +138,7 @@ public class EditCommand extends UndoableCommand {
                 throw new AssertionError("The target person cannot be missing");
             }
             model.updateFilteredPersonList(PREDICATE_SHOW_ALL_PERSONS);
+            EventsCenter.getInstance().post(new PersonSelectedEvent(editedPerson, index.getZeroBased()));
             return new CommandResult(String.format(MESSAGE_EDIT_PERSON_SUCCESS, editedPerson));
         } else {
 

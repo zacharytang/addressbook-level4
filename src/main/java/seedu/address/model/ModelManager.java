@@ -15,6 +15,7 @@ import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import seedu.address.commons.core.ComponentManager;
 import seedu.address.commons.core.LogsCenter;
+import seedu.address.commons.core.index.Index;
 import seedu.address.commons.events.model.AddressBookChangedEvent;
 import seedu.address.commons.events.model.MasterTagListHasAnUnusedTagEvent;
 import seedu.address.commons.events.model.PersonAddressDisplayDirectionsEvent;
@@ -99,16 +100,14 @@ public class ModelManager extends ComponentManager implements Model {
 
     //@@author nbriannl
     @Override
-    public void showMapOf(ReadOnlyPerson person) {
-        raise(new PersonSelectedEvent(person));
-        raise(new PersonAddressDisplayMapEvent(person));
+    public void showMapOf(ReadOnlyPerson person, Index index) {
+        raise(new PersonAddressDisplayMapEvent(person, index.getZeroBased()));
     }
 
     //@@author nbriannl
     @Override
-    public void showDirectionsTo(ReadOnlyPerson target, Address address) {
-        raise(new PersonSelectedEvent(target));
-        raise(new PersonAddressDisplayDirectionsEvent(target, address));
+    public void showDirectionsTo(ReadOnlyPerson target, Address address, Index index) {
+        raise(new PersonAddressDisplayDirectionsEvent(target, address, index.getZeroBased()));
     }
 
     //@@author April0616
