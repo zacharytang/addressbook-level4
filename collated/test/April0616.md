@@ -459,7 +459,7 @@ public class PhotoPathTest {
         assertFalse(PhotoPath.isValidPhotoPath(""));
         assertFalse(PhotoPath.isValidPhotoPath(" "));
 
-        // / missing partsï¼š not start with 'docs/images/contactPhotos/'
+        // / missing partsï¼? not start with 'docs/images/contactPhotos/'
         assertFalse(PhotoPath.isValidPhotoPath("photo.jpg"));
         assertFalse(PhotoPath.isValidPhotoPath("c:photo.jpg"));
         assertFalse(PhotoPath.isValidPhotoPath("d:photo.jpg"));

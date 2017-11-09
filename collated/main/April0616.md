@@ -175,10 +175,10 @@ public class PhotoCommand extends UndoableCommand {
 
         String trimmedPhotoPath = localPhotoPath.trim();
 
-        if (trimmedPhotoPath.equals("")) { //not specified yet
+        if (trimmedPhotoPath.equals("")) { //not specified yet, delete photo
             this.localPhotoPath = "";
             this.targetIndex = targetIndex;
-            this.photoPath = new PhotoPath(DEFAULT_PHOTO_PATH);
+            this.photoPath = new PhotoPath("");
 
         } else if (isValidLocalPhotoPath(trimmedPhotoPath)) {
 
@@ -196,10 +196,12 @@ public class PhotoCommand extends UndoableCommand {
             try {
                 copyFile(this.localPhotoPath, savePath);
             } catch (IOException e) {
-                e.printStackTrace();
+                assert false : "Cannot copy the file!";
             }
 
             this.targetIndex = targetIndex;
+
+            //update photo path
             this.photoPath = new PhotoPath(savePath);
 
         } else {
@@ -218,15 +220,14 @@ public class PhotoCommand extends UndoableCommand {
         }
 
         ReadOnlyPerson personToPhoto = lastShownList.get(targetIndex.getZeroBased());
-
-        //if the command is 'ph/' or the contact has one original photo, then delete it.
-        String originAppPhotoPath = personToPhoto.getPhotoPath().value;
-
-        if (!(originAppPhotoPath.equals(DEFAULT_PHOTO_PATH))) {
-            removeAppFile(originAppPhotoPath);
-        }
-
         Person photoedPerson = createPhotoedPerson(personToPhoto, photoPath);
+
+        try {
+            model.addPhotoPath(photoPath);
+
+        } catch (DuplicatePhotoPathException e) {
+            assert false : "Duplicated photo path!";
+        }
 
         try {
             model.updatePerson(personToPhoto, photoedPerson);
@@ -297,7 +298,7 @@ public class PhotoCommand extends UndoableCommand {
      * @return successful message for adding photo if the photo path string is not empty.
      */
     private String generateSuccessMsg(ReadOnlyPerson personToPhoto) {
-        if (photoPath.toString().equals(DEFAULT_PHOTO_PATH)) {
+        if (photoPath.toString().equals("")) {
             return String.format(MESSAGE_DELETE_PHOTO_SUCCESS, personToPhoto);
         } else {
             return String.format(MESSAGE_ADD_PHOTO_SUCCESS, personToPhoto);
@@ -673,6 +674,104 @@ public class RemarkCommandParser implements Parser<RemarkCommand> {
 ```
 ###### \java\seedu\address\model\AddressBook.java
 ``` java
+
+    public void setPhotoPaths(List<PhotoPath> photoPaths) throws DuplicatePhotoPathException {
+        this.photoPaths.setPhotoPaths(photoPaths);
+    }
+
+    /**
+     * Adds a photopath to the address book.
+     *
+     * @throws DuplicatePhotoPathException if an equivalent photo path already exists.
+     */
+    public void addPhotoPath(PhotoPath newPhotoPath) throws DuplicatePhotoPathException {
+        photoPaths.add(newPhotoPath);
+    }
+
+    /**
+     * Checks if the master list {@link #photoPaths} has every photo path being used.
+     *  @return true if all photo paths in the master list are being used
+     */
+    public boolean hasAllPhotoPathsInUse () {
+        List<PhotoPath> masterList = new ArrayList<>();
+        for (ReadOnlyPerson person: persons) {
+            masterList.add(person.getPhotoPath());
+        }
+        return masterList.containsAll(photoPaths.toList());
+    }
+
+    /**
+     *  Gets the unused photo paths in the master list {@link #photoPaths}
+     *  @return {@code List<PhotoPath>} of photo paths not being used by any person
+     *  @see #hasAllPhotoPathsInUse()
+     */
+    public List<PhotoPath> getUnusedPhotoPaths () {
+        List<PhotoPath> actualList = new ArrayList<>();
+        for (ReadOnlyPerson person: persons) {
+            PhotoPath thisPhotoPath = person.getPhotoPath();
+            if (!thisPhotoPath.value.equals("")) {
+                actualList.add(thisPhotoPath);
+            }
+        }
+        List<PhotoPath> masterList = photoPaths.toList();
+
+        masterList.removeAll(actualList);
+        return masterList;
+    }
+
+    /**
+     * Removes all the unused photos specified by the unused photo paths
+     * @see #getUnusedPhotoPaths()
+     */
+    public void removeAllUnusedPhotosAndPaths() throws PhotoPathNotFoundException {
+        List<PhotoPath> unusedPhotoPathList = getUnusedPhotoPaths();
+        for (PhotoPath unusedPhotoPath : unusedPhotoPathList) {
+            removeContactPhoto(unusedPhotoPath);
+            this.photoPaths.remove(unusedPhotoPath);
+            logger.info("Delete photo and its path: " + unusedPhotoPath);
+        }
+    }
+
+    /**
+     * Updates the master list of photo paths saved in the default folder of this
+     * address book and delete the empty paths.
+     */
+    public void updatePhotoPathSavedInMasterList() {
+        final File folder = new File(FILE_SAVED_PARENT_PATH);
+        if (!folder.exists()) {
+            return;
+        }
+
+        if (!folder.isDirectory()) {
+            assert false : "The File is not the default folder to save photos!";
+        }
+
+        for (File photo : folder.listFiles()) {
+            try {
+                //covert the photo path string to standard format in the app
+                String photoPathString = photo.getPath().replace("\\", "/");
+                PhotoPath thisPhotoPath = new PhotoPath(photoPathString);
+
+                if (!this.photoPaths.contains(thisPhotoPath)) {
+                    this.photoPaths.add(thisPhotoPath);
+                }
+            } catch (IllegalValueException e) {
+                assert false : "The string of the photo path has wrong format!";
+            }
+        }
+
+        //delete empty path in the master list
+        for (PhotoPath photoPath : this.photoPaths) {
+            if (photoPath.value.equals("")) {
+                try {
+                    this.photoPaths.remove(photoPath);
+                } catch (PhotoPathNotFoundException e) {
+                    assert false : "This photo path cannot be found: " + photoPath;
+                }
+            }
+        }
+    }
+
     /**
      * Removes the photo of the specified contact.
      * @param photoPath
@@ -696,11 +795,6 @@ public class RemarkCommandParser implements Parser<RemarkCommand> {
      * @throws PersonNotFoundException if the {@code key} is not in this {@code AddressBook}.
      */
     public boolean removePerson(ReadOnlyPerson key) throws PersonNotFoundException {
-        /*PhotoPath photoPath = key.getPhotoPath();
-        if (!isDefaultPhoto(photoPath)) {
-            removeContactPhoto(photoPath);
-        }*/
-
         if (persons.remove(key)) {
             EventsCenter.getInstance().post(new PersonHasBeenDeletedEvent(key));
             return true;
@@ -727,6 +821,37 @@ public class RemarkCommandParser implements Parser<RemarkCommand> {
 
     /** Deletes the given list of persons. */
     void deletePersons(ArrayList<ReadOnlyPerson> targets) throws PersonNotFoundException;
+
+    /** Adds the given photo path */
+    void addPhotoPath(PhotoPath photoPath) throws DuplicatePhotoPathException;
+
+```
+###### \java\seedu\address\model\ModelManager.java
+``` java
+    /**
+     * Initializes a ModelManager with the given addressBook and userPrefs.
+     */
+    public ModelManager(ReadOnlyAddressBook addressBook, UserPrefs userPrefs) {
+        super();
+        requireAllNonNull(addressBook, userPrefs);
+
+        logger.fine("Initializing with address book: " + addressBook + " and user prefs " + userPrefs);
+
+        this.addressBook = new AddressBook(addressBook);
+
+        logger.fine("Updating all photopaths...");
+        this.addressBook.updatePhotoPathSavedInMasterList();
+
+        logger.fine("Deleting all unused photos...");
+        try {
+            this.addressBook.removeAllUnusedPhotosAndPaths();
+        } catch (PhotoPathNotFoundException e) {
+            assert false : "Some of the photopaths cannot be found!";
+        }
+
+        filteredPersons = new FilteredList<>(this.addressBook.getPersonList());
+        currentTheme = userPrefs.getCurrentTheme();
+    }
 ```
 ###### \java\seedu\address\model\ModelManager.java
 ``` java
@@ -745,6 +870,15 @@ public class RemarkCommandParser implements Parser<RemarkCommand> {
         addressBook.removePersons(targets);
         indicateAddressBookChanged();
         checkMasterTagListHasAllTagsUsed();
+    }
+
+```
+###### \java\seedu\address\model\ModelManager.java
+``` java
+    @Override
+    public void addPhotoPath(PhotoPath photoPath) throws DuplicatePhotoPathException {
+        addressBook.addPhotoPath(photoPath);
+        indicateAddressBookChanged();
     }
 
     //author@@ nbriannl
@@ -877,59 +1011,6 @@ public class MatricNo {
 
 }
 ```
-###### \java\seedu\address\model\person\PhotoPath.java
-``` java
-/**
- * Represents the path of a person's photo in the address book.
- */
-public class PhotoPath {
-
-    public static final String MESSAGE_APP_PHOTOPATH_CONSTRAINTS =
-            "The app photo path should be a string starting with 'docs/images/contactPhotos/',"
-                    + "following by the file name, like'photo.jpg'.";
-    public static final String FILE_SAVED_PARENT_PATH = "src/main/resources/images/contactPhotos/";
-
-    public final String value;  //photo path
-
-    public PhotoPath(String photoPath) throws IllegalValueException {
-        requireNonNull(photoPath);
-
-        if (!isValidPhotoPath(photoPath)) {
-            throw new IllegalValueException(MESSAGE_APP_PHOTOPATH_CONSTRAINTS);
-        }
-        this.value = photoPath;
-    }
-
-    /**
-     * Returns if a given string is a valid photo path.
-     */
-    public static boolean isValidPhotoPath(String test) {
-        if (test.equals(DEFAULT_PHOTO_PATH)) {
-            return true;
-        }
-        String[] parts = test.split("\\.");
-        Boolean isFileSpecified = (parts.length == 2);
-        return test.startsWith(FILE_SAVED_PARENT_PATH) && isFileSpecified;
-    }
-
-    @Override
-    public String toString() {
-        return value;
-    }
-
-    @Override
-    public boolean equals(Object other) {
-        return other == this // short circuit if same object
-                || (other instanceof PhotoPath // instanceof handles nulls
-                && this.value.equals(((PhotoPath) other).value)); // state check
-    }
-
-    @Override
-    public int hashCode() {
-        return value.hashCode();
-    }
-}
-```
 ###### \java\seedu\address\model\person\Remark.java
 ``` java
 /**
@@ -964,6 +1045,144 @@ public class Remark {
         return value.hashCode();
     }
 }
+```
+###### \java\seedu\address\model\photo\PhotoPath.java
+``` java
+/**
+ * Represents the path of a person's photo in the address book.
+ */
+public class PhotoPath {
+
+    public static final String FILE_SAVED_PARENT_PATH = "src/main/resources/images/contactPhotos/";
+    public static final String MESSAGE_APP_PHOTOPATH_CONSTRAINTS =
+            "The app photo path should be a string starting with '" + FILE_SAVED_PARENT_PATH
+                    + "', following by the file name, like'photo.jpg'.";
+
+    public final String value;  //photo path
+
+    public PhotoPath(String photoPath) throws IllegalValueException {
+        requireNonNull(photoPath);
+
+        if (!isValidPhotoPath(photoPath)) {
+            throw new IllegalValueException(MESSAGE_APP_PHOTOPATH_CONSTRAINTS);
+        }
+        this.value = photoPath;
+    }
+
+    /**
+     * Returns if a given string is a valid photo path.
+     */
+    public static boolean isValidPhotoPath(String test) {
+        if (test.equals("")) {
+            return true;
+        }
+        String[] parts = test.split("\\.");
+        Boolean isFileSpecified = (parts.length == 2);
+        return test.startsWith(FILE_SAVED_PARENT_PATH) && isFileSpecified;
+    }
+
+    @Override
+    public String toString() {
+        return value;
+    }
+
+    @Override
+    public boolean equals(Object other) {
+        return other == this // short circuit if same object
+                || (other instanceof PhotoPath // instanceof handles nulls
+                && this.value.equals(((PhotoPath) other).value)); // state check
+    }
+
+    @Override
+    public int hashCode() {
+        return value.hashCode();
+    }
+}
+```
+###### \java\seedu\address\storage\XmlAdaptedPhotoPath.java
+``` java
+/**
+ * JAXB-friendly adapted version of the photo path.
+ */
+public class XmlAdaptedPhotoPath {
+
+    @XmlValue
+    private String photoPathName;
+
+    /**
+     * Constructs an XmlAdaptedTag.
+     * This is the no-arg constructor that is required by JAXB.
+     */
+    public XmlAdaptedPhotoPath() {}
+
+    /**
+     * Converts a given PhotoPath into this class for JAXB use.
+     *
+     * @param source future changes to this will not affect the created
+     */
+    public XmlAdaptedPhotoPath(PhotoPath source) {
+        photoPathName = source.value;
+    }
+
+    /**
+     * Converts this jaxb-friendly adapted PhotoPath object into the model's PhotoPath object.
+     *
+     * @throws IllegalValueException if there were any data constraints violated in the adapted person
+     */
+    public PhotoPath toModelType() throws IllegalValueException {
+        return new PhotoPath(photoPathName);
+    }
+
+}
+```
+###### \java\seedu\address\storage\XmlSerializableAddressBook.java
+``` java
+/**
+ * An Immutable AddressBook that is serializable to XML format
+ */
+@XmlRootElement(name = "addressbook")
+public class XmlSerializableAddressBook implements ReadOnlyAddressBook {
+
+    @XmlElement
+    private List<XmlAdaptedPerson> persons;
+    @XmlElement
+    private List<XmlAdaptedTag> tags;
+    @XmlElement
+    private List<XmlAdaptedPhotoPath> photoPaths;
+    /**
+     * Creates an empty XmlSerializableAddressBook.
+     * This empty constructor is required for marshalling.
+     */
+    public XmlSerializableAddressBook() {
+        persons = new ArrayList<>();
+        tags = new ArrayList<>();
+        photoPaths = new ArrayList<>();
+    }
+
+    /**
+     * Conversion
+     */
+    public XmlSerializableAddressBook(ReadOnlyAddressBook src) {
+        this();
+        persons.addAll(src.getPersonList().stream().map(XmlAdaptedPerson::new).collect(Collectors.toList()));
+        tags.addAll(src.getTagList().stream().map(XmlAdaptedTag::new).collect(Collectors.toList()));
+        photoPaths.addAll(src.getPhotoPathList().stream().map(XmlAdaptedPhotoPath::new).collect(Collectors.toList()));
+    }
+
+    @Override
+    public ObservableList<PhotoPath> getPhotoPathList() {
+        final ObservableList<PhotoPath> photoPaths = this.photoPaths.stream().map(p -> {
+            try {
+                return p.toModelType();
+            } catch (IllegalValueException e) {
+                e.printStackTrace();
+                //TODO: better error handling
+                return null;
+            }
+        }).collect(Collectors.toCollection(FXCollections::observableArrayList));
+        return FXCollections.unmodifiableObservableList(photoPaths);
+    }
+
 ```
 ###### \java\seedu\address\ui\MainWindow.java
 ``` java
@@ -1208,6 +1427,36 @@ public class MainWindow extends UiPart<Region> {
     }
 }
 ```
+###### \java\seedu\address\ui\PersonInfoOverview.java
+``` java
+    /**
+     * Set the default contact photo to the default person.
+     */
+    public void setDefaultContactPhoto() {
+        String defaultPhotoPath = "src/main/resources/images/help_icon.png";
+        File defaultPhoto = new File(defaultPhotoPath);
+        URI defaultPhotoUri = defaultPhoto.toURI();
+        Image defaultImage = new Image(defaultPhotoUri.toString());
+        centerImage(defaultImage);
+        contactPhoto.setImage(defaultImage);
+    }
+
+    /**
+     * Load the photo of the specified person.
+     * @param person
+     */
+    public void loadPhoto(ReadOnlyPerson person) {
+        String photoPath = person.getPhotoPath().value;
+        File photo = new File(photoPath);
+        URI photoUri = photo.toURI();
+        Image image = new Image(photoUri.toString());
+
+        contactPhoto.setPreserveRatio(true);
+        centerImage(image);
+        contactPhoto.setImage(image);
+    }
+
+```
 ###### \java\seedu\address\ui\PersonInfoPanel.java
 ``` java
 
@@ -1318,18 +1567,18 @@ public class PersonInfoPanel extends UiPart<Region> {
     public void loadPhoto(ReadOnlyPerson person) {
         String prefix = "src/main/resources";
         //String photoPath = person.getPhotoPath().value.substring(prefix.length());
-        String photoPath = person.getPhotoPath().value;
+        String photoPathString = person.getPhotoPath().value;
         Image image;
 
-        logger.info("Is default path? : " + photoPath.equals(PhotoCommand.DEFAULT_PHOTO_PATH));
-
-        if (photoPath.equals(PhotoCommand.DEFAULT_PHOTO_PATH)) {  //default male and female photos
-            if (person.getGender().toString().equals("Male")) {
-                photoPath = "/images/default_male.jpg";
-            } else if (person.getGender().toString().equals("Female")) {
-                photoPath = "/images/default_female.jpg";
+        if (photoPathString.equals("")) {  //default male and female photos
+            image = getDefaultPhotoByGender();
+        } else {
+            File contactImg = new File(photoPathString);
+            if (contactImg.exists() && !contactImg.isDirectory()) {
+                String url = contactImg.toURI().toString();
+                image = new Image(url);
             } else {
-                photoPath = "/images/defaultPhoto.jpg";
+                image = getDefaultPhotoByGender();
             }
             image = new Image(MainApp.class.getResourceAsStream(photoPath));
 
@@ -1340,6 +1589,23 @@ public class PersonInfoPanel extends UiPart<Region> {
         }
 
         photoCircle.setFill(new ImagePattern(image));
+    }
+
+    /**
+     * Get the default photo by gender. If the gender is not specifed, then return the default photo without gender.
+     * @return Image of the according default photo
+     */
+    private Image getDefaultPhotoByGender() {
+        String photoPathString = "";
+
+        if (person.getGender().toString().equals("Male")) {
+            photoPathString = "/images/default_male.jpg";
+        } else if (person.getGender().toString().equals("Female")) {
+            photoPathString = "/images/default_female.jpg";
+        } else {
+            photoPathString = "/images/defaultPhoto.jpg";
+        }
+        return new Image(MainApp.class.getResourceAsStream(photoPathString));
     }
 
 ```
