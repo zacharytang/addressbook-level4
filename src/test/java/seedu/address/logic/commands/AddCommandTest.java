@@ -119,25 +119,15 @@ public class AddCommandTest {
             return null;
         }
 
+        //@@author nbriannl
         @Override
         public void showMapOf(ReadOnlyPerson person, Index index) {
             fail("This method should not be called.");
         }
 
+        //@@author nbriannl
         @Override
         public void showDirectionsTo(ReadOnlyPerson target, Address address, Index index) {
-            fail("This method should not be called.");
-        }
-
-        //@@author nbriannl
-        @Override
-        public void showMapOf(ReadOnlyPerson person) {
-            fail("This method should not be called.");
-        }
-
-        //@@author nbriannl
-        @Override
-        public void showDirectionsTo(ReadOnlyPerson target, Address address) {
             fail("This method should not be called.");
         }
 
