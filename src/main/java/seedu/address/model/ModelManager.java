@@ -55,6 +55,9 @@ public class ModelManager extends ComponentManager implements Model {
 
         this.addressBook = new AddressBook(addressBook);
 
+        logger.fine("Updating all photopaths...");
+        this.addressBook.updatePhotoPathSavedInMasterList();
+
         logger.fine("Deleting all unused photos...");
         try {
             this.addressBook.removeAllUnusedPhotosAndPaths();

@@ -3,7 +3,9 @@ package seedu.address.model;
 import static java.util.Objects.requireNonNull;
 import static seedu.address.commons.util.FileUtil.removeAppFile;
 import static seedu.address.logic.commands.PhotoCommand.DEFAULT_PHOTO_PATH;
+import static seedu.address.logic.commands.PhotoCommand.FILE_SAVED_PARENT_PATH;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -18,6 +20,7 @@ import seedu.address.commons.core.EventsCenter;
 import seedu.address.commons.core.LogsCenter;
 import seedu.address.commons.events.ui.PersonHasBeenDeletedEvent;
 import seedu.address.commons.events.ui.PersonHasBeenModifiedEvent;
+import seedu.address.commons.exceptions.IllegalValueException;
 import seedu.address.model.person.Person;
 import seedu.address.model.person.exceptions.DuplicatePersonException;
 import seedu.address.model.photo.PhotoPath;
@@ -262,6 +265,42 @@ public class AddressBook implements ReadOnlyAddressBook {
             removeContactPhoto(unusedPhotoPath);
             this.photoPaths.remove(unusedPhotoPath);
             logger.info("Delete photo and its path: " + unusedPhotoPath);
+        }
+    }
+
+    /**
+     * Updates the master list of photo paths saved in the default folder of this
+     * address book and delete the empty paths.
+     */
+    public void updatePhotoPathSavedInMasterList() {
+        final File folder = new File(FILE_SAVED_PARENT_PATH);
+        if (!folder.isDirectory()) {
+            assert false : "The File is not the default folder to save photos!";
+        }
+
+        for (File photo : folder.listFiles()) {
+            try {
+                //covert the photo path string to standard format in the app
+                String photoPathString = photo.getPath().replace("\\", "/");
+                PhotoPath thisPhotoPath = new PhotoPath(photoPathString);
+
+                if (!this.photoPaths.contains(thisPhotoPath)) {
+                    this.photoPaths.add(thisPhotoPath);
+                }
+            } catch (IllegalValueException e) {
+                assert false : "The string of the photo path has wrong format!";
+            }
+        }
+
+        //delete empty path in the master list
+        for (PhotoPath photoPath : this.photoPaths) {
+            if (photoPath.value.equals("")) {
+                try {
+                    this.photoPaths.remove(photoPath);
+                } catch (PhotoPathNotFoundException e) {
+                    assert false : "This photo path cannot be found: " + photoPath;
+                }
+            }
         }
     }
 
