@@ -162,9 +162,7 @@ public class PersonInfoPanel extends UiPart<Region> {
         String photoPath = person.getPhotoPath().value;
         Image image;
 
-        logger.info("Is default path? : " + photoPath.equals(PhotoCommand.DEFAULT_PHOTO_PATH));
-
-        if (photoPath.equals(PhotoCommand.DEFAULT_PHOTO_PATH)) {  //default male and female photos
+        if (photoPath.equals("")) {  //default male and female photos
             if (person.getGender().toString().equals("Male")) {
                 photoPath = "/images/default_male.jpg";
             } else if (person.getGender().toString().equals("Female")) {

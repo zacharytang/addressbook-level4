@@ -10,6 +10,7 @@ import java.util.Set;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import seedu.address.model.person.timetable.Timetable;
+import seedu.address.model.photo.PhotoPath;
 import seedu.address.model.tag.Tag;
 import seedu.address.model.tag.UniqueTagList;
 

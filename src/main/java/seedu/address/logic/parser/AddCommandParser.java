@@ -26,7 +26,7 @@ import seedu.address.model.person.MatricNo;
 import seedu.address.model.person.Name;
 import seedu.address.model.person.Person;
 import seedu.address.model.person.Phone;
-import seedu.address.model.person.PhotoPath;
+import seedu.address.model.photo.PhotoPath;
 import seedu.address.model.person.ReadOnlyPerson;
 import seedu.address.model.person.Remark;
 import seedu.address.model.person.timetable.Timetable;
@@ -67,7 +67,7 @@ public class AddCommandParser implements Parser<AddCommand> {
             Timetable timetable = (arePrefixesPresent(argMultimap, PREFIX_TIMETABLE))
                     ? ParserUtil.parseTimetable(argMultimap.getValue(PREFIX_TIMETABLE)).get() : new Timetable("");
             Remark remark = new Remark("");
-            PhotoPath photoPath = new PhotoPath(DEFAULT_PHOTO_PATH);
+            PhotoPath photoPath = new PhotoPath("");
             Set<Tag> tagList = ParserUtil.parseTags(argMultimap.getAllValues(PREFIX_TAG));
             Birthday birthday = (arePrefixesPresent(argMultimap, PREFIX_BIRTHDAY))
                     ? ParserUtil.parseBirthday(argMultimap.getValue(PREFIX_BIRTHDAY)).get() : new Birthday("");

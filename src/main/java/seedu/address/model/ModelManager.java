@@ -25,6 +25,9 @@ import seedu.address.model.person.Person;
 import seedu.address.model.person.ReadOnlyPerson;
 import seedu.address.model.person.exceptions.DuplicatePersonException;
 import seedu.address.model.person.exceptions.PersonNotFoundException;
+import seedu.address.model.photo.PhotoPath;
+import seedu.address.model.photo.exceptions.DuplicatePhotoPathException;
+import seedu.address.model.photo.exceptions.PhotoPathNotFoundException;
 import seedu.address.model.tag.Tag;
 import seedu.address.model.tag.UniqueTagList.DuplicateTagException;
 import seedu.address.model.tag.exceptions.TagNotFoundException;
@@ -40,6 +43,7 @@ public class ModelManager extends ComponentManager implements Model {
     private final AddressBook addressBook;
     private final FilteredList<ReadOnlyPerson> filteredPersons;
 
+    //@@author April0616
     /**
      * Initializes a ModelManager with the given addressBook and userPrefs.
      */
@@ -50,9 +54,21 @@ public class ModelManager extends ComponentManager implements Model {
         logger.fine("Initializing with address book: " + addressBook + " and user prefs " + userPrefs);
 
         this.addressBook = new AddressBook(addressBook);
+
+        logger.fine("Updating all photopaths...");
+        this.addressBook.updatePhotoPathSavedInMasterList();
+
+        logger.fine("Deleting all unused photos...");
+        try {
+            this.addressBook.removeAllUnusedPhotosAndPaths();
+        } catch (PhotoPathNotFoundException e) {
+            assert false : "Some of the photopaths cannot be found!";
+        }
+
         filteredPersons = new FilteredList<>(this.addressBook.getPersonList());
         currentTheme = userPrefs.getCurrentTheme();
     }
+    //@@author
 
     public ModelManager() {
         this(new AddressBook(), new UserPrefs());
@@ -109,6 +125,13 @@ public class ModelManager extends ComponentManager implements Model {
         addressBook.removePersons(targets);
         indicateAddressBookChanged();
         checkMasterTagListHasAllTagsUsed();
+    }
+
+    //@@author April0616
+    @Override
+    public void addPhotoPath(PhotoPath photoPath) throws DuplicatePhotoPathException {
+        addressBook.addPhotoPath(photoPath);
+        indicateAddressBookChanged();
     }
 
     //author@@ nbriannl
