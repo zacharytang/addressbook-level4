@@ -277,8 +277,9 @@ public class AddressBook implements ReadOnlyAddressBook {
             return;
         }
 
-        if (!folder.isDirectory()) {
-            assert false : "The File is not the default folder to save photos!";
+        if (!folder.isDirectory() || folder.listFiles() == null) {
+            assert false : "Does not exist a default folder to save photos or it has no files!";
+            return;
         }
 
         for (File photo : folder.listFiles()) {
@@ -303,6 +304,9 @@ public class AddressBook implements ReadOnlyAddressBook {
                 } catch (PhotoPathNotFoundException e) {
                     assert false : "This photo path cannot be found: " + photoPath;
                 }
+            }
+            if (this.photoPaths.size() == 0) {
+                break;
             }
         }
     }
