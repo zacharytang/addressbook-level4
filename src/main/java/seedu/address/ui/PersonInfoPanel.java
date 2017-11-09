@@ -16,6 +16,8 @@ import javafx.scene.shape.Circle;
 import seedu.address.MainApp;
 import seedu.address.commons.core.LogsCenter;
 import seedu.address.commons.events.model.AddressBookChangedEvent;
+import seedu.address.commons.events.model.PersonAddressDisplayDirectionsEvent;
+import seedu.address.commons.events.model.PersonAddressDisplayMapEvent;
 import seedu.address.commons.events.ui.PersonHasBeenDeletedEvent;
 import seedu.address.commons.events.ui.PersonHasBeenModifiedEvent;
 import seedu.address.commons.events.ui.PersonPanelSelectionChangedEvent;
@@ -196,6 +198,18 @@ public class PersonInfoPanel extends UiPart<Region> {
     //@@author zacharytang
     @Subscribe
     private void handlePersonSelectedEvent(PersonSelectedEvent event) {
+        logger.info(LogsCenter.getEventHandlingLogMessage(event));
+        loadPerson(event.person);
+    }
+
+    @Subscribe
+    private void handlePersonAddressDisplayMapEvent(PersonAddressDisplayMapEvent event) {
+        logger.info(LogsCenter.getEventHandlingLogMessage(event));
+        loadPerson(event.person);
+    }
+
+    @Subscribe
+    private void handlePersonAddressDisplayDirectionsEvent(PersonAddressDisplayDirectionsEvent event) {
         logger.info(LogsCenter.getEventHandlingLogMessage(event));
         loadPerson(event.person);
     }

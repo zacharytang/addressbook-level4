@@ -10,10 +10,12 @@ public class PersonAddressDisplayDirectionsEvent extends BaseEvent {
 
     public final ReadOnlyPerson person;
     public final Address address;
+    public final int targetIndex;
 
-    public PersonAddressDisplayDirectionsEvent(ReadOnlyPerson person, Address address) {
+    public PersonAddressDisplayDirectionsEvent(ReadOnlyPerson person, Address address, int targetIndex) {
         this.person = person;
         this.address = address;
+        this.targetIndex = targetIndex;
     }
 
     @Override

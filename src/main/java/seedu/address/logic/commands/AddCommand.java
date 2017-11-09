@@ -67,7 +67,7 @@ public class AddCommand extends UndoableCommand {
         requireNonNull(model);
         try {
             model.addPerson(toAdd);
-            EventsCenter.getInstance().post(new PersonSelectedEvent(toAdd));
+            EventsCenter.getInstance().post(new PersonSelectedEvent(toAdd, model.getFilteredPersonList().size()));
             return new CommandResult(String.format(MESSAGE_SUCCESS, toAdd));
         } catch (DuplicatePersonException e) {
             throw new CommandException(MESSAGE_DUPLICATE_PERSON);

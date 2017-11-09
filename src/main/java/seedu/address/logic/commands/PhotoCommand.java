@@ -140,7 +140,7 @@ public class PhotoCommand extends UndoableCommand {
         }
         model.updateFilteredPersonList(PREDICATE_SHOW_ALL_PERSONS);
 
-        EventsCenter.getInstance().post(new PersonSelectedEvent(photoedPerson));
+        EventsCenter.getInstance().post(new PersonSelectedEvent(photoedPerson, targetIndex.getZeroBased()));
         return new CommandResult(generateSuccessMsg(photoedPerson));
     }
 

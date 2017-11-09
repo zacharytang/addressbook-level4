@@ -8,9 +8,11 @@ import seedu.address.model.person.ReadOnlyPerson;
 public class PersonAddressDisplayMapEvent extends BaseEvent {
 
     public final ReadOnlyPerson person;
+    public final int targetIndex;
 
-    public PersonAddressDisplayMapEvent (ReadOnlyPerson person) {
+    public PersonAddressDisplayMapEvent (ReadOnlyPerson person, int targetIndex) {
         this.person = person;
+        this.targetIndex = targetIndex;
     }
 
     @Override

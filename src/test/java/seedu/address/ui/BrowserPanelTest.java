@@ -35,9 +35,9 @@ public class BrowserPanelTest extends GuiUnitTest {
     @Before
     public void setUp() throws Exception {
         selectionChangedEventStub = new PersonPanelSelectionChangedEvent(new PersonCard(ALICE, 0));
-        personAddressDisplayMapEventStub = new PersonAddressDisplayMapEvent(new Person(ALICE));
+        personAddressDisplayMapEventStub = new PersonAddressDisplayMapEvent(new Person(ALICE), 0);
         personAddressDisplayDirectionsEventStub = new PersonAddressDisplayDirectionsEvent(new Person(ALICE),
-                new Address("Blk 123 Yishun 61"));
+                new Address("Blk 123 Yishun 61"), 0);
 
         guiRobot.interact(() -> browserPanel = new BrowserPanel());
         uiPartRule.setUiPart(browserPanel);
