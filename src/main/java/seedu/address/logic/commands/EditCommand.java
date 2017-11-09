@@ -60,14 +60,14 @@ public class EditCommand extends UndoableCommand {
             + "[" + PREFIX_EMAIL + "EMAIL] "
             + "[" + PREFIX_ADDRESS + "ADDRESS] "
             + "[" + PREFIX_TIMETABLE + "TIMETABLE_URL] "
-            + "[" + PREFIX_TAG + "TAG]...\n"
-            + "[" + PREFIX_BIRTHDAY + "BIRTHDAY] "
+            + "[" + PREFIX_TAG + "TAG]... "
+            + "[" + PREFIX_BIRTHDAY + "BIRTHDAY]\n"
             + "Example: " + COMMAND_WORD + " 1 "
             + PREFIX_PHONE + "91234567 "
             + PREFIX_EMAIL + "johndoe@example.com\n"
-            + "OR "
-            + "Edit the specified tag in all contacts containing this tag with a new specified tag "
-            + "Parameters: " + PREFIX_OLD_TAG + "TAG " + PREFIX_NEW_TAG + "TAG"
+            + "OR\n"
+            + "Edit the specified tag in all contacts containing this tag with a new specified tag\n"
+            + "Parameters: " + PREFIX_OLD_TAG + "TAG " + PREFIX_NEW_TAG + "TAG\n"
             + "Example: " + COMMAND_WORD + "old/CS1020 new/CS2010";
 
     public static final String MESSAGE_EDIT_PERSON_SUCCESS = "Edited Person: %1$s";
