@@ -20,9 +20,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import seedu.address.commons.exceptions.IllegalValueException;
+import seedu.address.commons.exceptions.NoInternetConnectionException;
 import seedu.address.logic.parser.exceptions.ParseException;
 import seedu.address.model.person.timetable.TimetableInfo;
 
@@ -62,6 +64,8 @@ public class TimetableParserUtil {
             return parseLongUrl(newUrl);
         } catch (IOException e) {
             throw new ParseException("Url cannot be accessed");
+        } catch (NoInternetConnectionException nice) {
+            return new TimetableInfo();
         }
     }
 
@@ -86,7 +90,11 @@ public class TimetableParserUtil {
 
         TimetableInfoFromUrl timetableInfo = parseModuleInfo(modInfo[INDEX_CLASS_INFO]);
 
-        return constructTimetable(acadYear, semester, timetableInfo);
+        try {
+            return constructTimetable(acadYear, semester, timetableInfo);
+        } catch (JsonMappingException e) {
+            return new TimetableInfo();
+        }
     }
 
     /**
@@ -122,7 +130,7 @@ public class TimetableParserUtil {
      * @return list of all lessons a module has
      */
     private static ArrayList<Lesson> getLessonInfoFromApi(String acadYear, String semester, String modCode)
-            throws ParseException {
+            throws ParseException, JsonMappingException {
         String uri = "http://api.nusmods.com/" + acadYear + "/" + semester + "/modules/" + modCode + ".json";
         ObjectMapper mapper = new ObjectMapper();
 
@@ -143,7 +151,7 @@ public class TimetableParserUtil {
             }
 
             return lessons;
-        } catch (Exception e) {
+        } catch (IOException exception) {
             throw new ParseException("Cannot retrieve module information");
         }
     }
@@ -151,7 +159,8 @@ public class TimetableParserUtil {
     /**
      * Takes a shortened URL and returns the full length URL as a string
      */
-    private static String expandUrl(String shortenedUrl) throws IOException, ParseException {
+    private static String expandUrl(String shortenedUrl)
+            throws IOException, ParseException, NoInternetConnectionException {
         URL url = new URL(shortenedUrl);
         // open connection
         HttpURLConnection httpUrlConnection = (HttpURLConnection) url.openConnection(Proxy.NO_PROXY);
@@ -163,7 +172,9 @@ public class TimetableParserUtil {
         String expandedUrl = httpUrlConnection.getHeaderField("Location");
         httpUrlConnection.disconnect();
 
-        if (expandedUrl.equals("http://modsn.us")) {
+        if (expandedUrl == null) {
+            throw new NoInternetConnectionException("No internet connection, starting with empty timetables");
+        } else if (expandedUrl.equals("http://modsn.us")) {
             throw new ParseException(MESSAGE_INVALID_SHORT_URL);
         }
 
@@ -177,7 +188,8 @@ public class TimetableParserUtil {
      * @param timetableInfo Class information parsed from url, stored by module code
      */
     private static TimetableInfo constructTimetable(String acadYear, String semester,
-                                                    TimetableInfoFromUrl timetableInfo) throws IllegalValueException {
+                                                    TimetableInfoFromUrl timetableInfo)
+            throws IllegalValueException, JsonMappingException {
         TimetableInfo timetable = new TimetableInfo();
 
         ArrayList<ModuleInfoFromUrl> lessonInfoByModules = timetableInfo.getModuleInfoList();
@@ -198,7 +210,8 @@ public class TimetableParserUtil {
      * @param moduleInfo lessons for a module parsed from url
      */
     private static void constructTimetableForModule(String acadYear, String semester, TimetableInfo timetable,
-                                                    ModuleInfoFromUrl moduleInfo) throws IllegalValueException {
+                                                    ModuleInfoFromUrl moduleInfo)
+            throws IllegalValueException, JsonMappingException {
         ArrayList<Lesson> lessons = getLessonInfoFromApi(acadYear, semester, moduleInfo.getModCode());
         HashMap<String, String> lessonsForModule = moduleInfo.getLessonInfo();
 
