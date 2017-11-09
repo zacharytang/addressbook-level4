@@ -138,7 +138,7 @@ public class GMapsCommandTest {
         // null -> returns false
         assertFalse(commandWithIndex == null);
 
-        // different index or address -> returns false
+        // different targetIndex or address -> returns false
         assertFalse(commandWithIndex.equals(commandWithDiffIndex));
         assertFalse(commandWithIndex.equals(commandWithIndexAndAddress));
         assertFalse(commandWithIndex.equals(commandWithIndexAndDiffAddress));
@@ -146,7 +146,7 @@ public class GMapsCommandTest {
     }
 
     /**
-     * Returns a {@code GMapsCommand} with the parameter {@code index}, and {@code address}.
+     * Returns a {@code GMapsCommand} with the parameter {@code targetIndex}, and {@code address}.
      */
     private GMapsCommand prepareCommand(Index index, Address address) {
         GMapsCommand gmapsCommand = new GMapsCommand(index , address);

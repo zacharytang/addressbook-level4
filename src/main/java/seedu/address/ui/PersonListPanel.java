@@ -61,7 +61,7 @@ public class PersonListPanel extends UiPart<Region> {
     }
 
     /**
-     * Scrolls to the {@code PersonCard} at the {@code index} and selects it.
+     * Scrolls to the {@code PersonCard} at the {@code targetIndex} and selects it.
      */
     private void scrollTo(int index) {
         Platform.runLater(() -> {
@@ -79,7 +79,7 @@ public class PersonListPanel extends UiPart<Region> {
     @Subscribe
     private void handlePersonSelectedEvent(PersonSelectedEvent event) {
         logger.info(LogsCenter.getEventHandlingLogMessage(event));
-        scrollTo(event.index);
+        scrollTo(event.targetIndex);
     }
 
     @Subscribe

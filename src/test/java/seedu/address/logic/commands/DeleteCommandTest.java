@@ -202,7 +202,7 @@ public class DeleteCommandTest {
 
     //@@author
     /**
-     * Returns a {@code DeleteCommand} with the parameter {@code index}.
+     * Returns a {@code DeleteCommand} with the parameter {@code targetIndex}.
      */
     private DeleteCommand prepareCommand(Index index) {
         DeleteCommand deleteCommand = new DeleteCommand(index);

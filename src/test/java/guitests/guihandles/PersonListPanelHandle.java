@@ -35,7 +35,7 @@ public class PersonListPanelHandle extends NodeHandle<ListView<PersonCard>> {
     }
 
     /**
-     * Returns the index of the selected card.
+     * Returns the targetIndex of the selected card.
      */
     public int getSelectedCardIndex() {
         return getRootNode().getSelectionModel().getSelectedIndex();
@@ -73,7 +73,7 @@ public class PersonListPanelHandle extends NodeHandle<ListView<PersonCard>> {
     }
 
     /**
-     * Returns the person card handle of a person associated with the {@code index} in the list.
+     * Returns the person card handle of a person associated with the {@code targetIndex} in the list.
      */
     public PersonCardHandle getPersonCardHandle(int index) {
         return getPersonCardHandle(getRootNode().getItems().get(index).person);
@@ -91,7 +91,7 @@ public class PersonListPanelHandle extends NodeHandle<ListView<PersonCard>> {
     }
 
     /**
-     * Selects the {@code PersonCard} at {@code index} in the list.
+     * Selects the {@code PersonCard} at {@code targetIndex} in the list.
      */
     public void select(int index) {
         getRootNode().getSelectionModel().select(index);

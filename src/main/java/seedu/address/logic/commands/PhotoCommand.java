@@ -38,7 +38,7 @@ public class PhotoCommand extends UndoableCommand {
     public static final String COMMAND_ALIAS = "ph";
 
     public static final String MESSAGE_USAGE = COMMAND_WORD
-            + ": If adds photo path to the person identified by the index number used in the last person listing,"
+            + ": If adds photo path to the person identified by the targetIndex number used in the last person listing,"
             + " add the photo path to the person.\n"
             + "If the photo path field is empty, the old photo path is removed for the person.\n"
             + "Parameters: INDEX (must be a positive integer) "
@@ -224,8 +224,8 @@ public class PhotoCommand extends UndoableCommand {
     }
 
     /**
-     * Get the index of the person
-     * @return the target index of the person
+     * Get the targetIndex of the person
+     * @return the target targetIndex of the person
      */
     public Index getIndex() {
         return this.targetIndex;

@@ -11,7 +11,7 @@ import seedu.address.model.person.ReadOnlyPerson;
 
 //@@author nbriannl
 /**
- * Selects a person identified using it's last displayed index from the address book.
+ * Selects a person identified using it's last displayed targetIndex from the address book.
  */
 public class GMapsCommand extends Command {
 
