@@ -111,7 +111,14 @@ public class UniquePhotoPathList implements Iterable<PhotoPath> {
     public ObservableList<PhotoPath> asObservableList() {
         return FXCollections.unmodifiableObservableList(mappedList);
     }
-    
+
+    /**
+     * Get the size of the internal list.
+     * @return how many photo paths in the unique photo list.
+     */
+    public int size() {
+        return internalList.size();
+    }
 
     @Override
     public Iterator<PhotoPath> iterator() {
