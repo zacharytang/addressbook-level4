@@ -48,6 +48,7 @@ public class PersonBuilder {
             Timetable defaultTimetable = new Timetable(DEFAULT_TIMETABLE_URL);
             Remark defaultRemark = new Remark(DEFAULT_REMARK);
             PhotoPath defaultPhotoPath = new PhotoPath(DEFAULT_PHOTOPATH);
+            PhotoPath defaultPhotoPath = new PhotoPath("");
             Set<Tag> defaultTags = SampleDataUtil.getTagSet(DEFAULT_TAGS);
             Birthday defaultBirthday = new Birthday(DEFAULT_BIRTHDAY);
             this.person = new Person(defaultName, defaultGender, defaultMatricNo, defaultPhone, defaultEmail,
