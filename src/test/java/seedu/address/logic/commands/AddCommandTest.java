@@ -15,6 +15,7 @@ import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
 import javafx.collections.ObservableList;
+import seedu.address.commons.core.index.Index;
 import seedu.address.logic.CommandHistory;
 import seedu.address.logic.UndoRedoStack;
 import seedu.address.logic.commands.exceptions.CommandException;
@@ -26,6 +27,8 @@ import seedu.address.model.person.Person;
 import seedu.address.model.person.ReadOnlyPerson;
 import seedu.address.model.person.exceptions.DuplicatePersonException;
 import seedu.address.model.person.exceptions.PersonNotFoundException;
+import seedu.address.model.photo.PhotoPath;
+import seedu.address.model.photo.exceptions.DuplicatePhotoPathException;
 import seedu.address.model.tag.Tag;
 import seedu.address.model.tag.exceptions.TagNotFoundException;
 import seedu.address.testutil.PersonBuilder;
@@ -116,6 +119,16 @@ public class AddCommandTest {
             return null;
         }
 
+        @Override
+        public void showMapOf(ReadOnlyPerson person, Index index) {
+            fail("This method should not be called.");
+        }
+
+        @Override
+        public void showDirectionsTo(ReadOnlyPerson target, Address address, Index index) {
+            fail("This method should not be called.");
+        }
+
         //@@author nbriannl
         @Override
         public void showMapOf(ReadOnlyPerson person) {
@@ -137,6 +150,11 @@ public class AddCommandTest {
         //@@author April0616
         @Override
         public void deletePersons(ArrayList<ReadOnlyPerson> targets) throws PersonNotFoundException {
+            fail("This method should not be called.");
+        }
+
+        @Override
+        public void addPhotoPath(PhotoPath photoPath) throws DuplicatePhotoPathException {
             fail("This method should not be called.");
         }
         //@@author

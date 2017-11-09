@@ -5,11 +5,14 @@ import java.io.IOException;
 import java.nio.file.DirectoryNotEmptyException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 
 import seedu.address.commons.core.index.Index;
 import seedu.address.commons.util.FileUtil;
+import seedu.address.logic.commands.PhotoCommand;
 import seedu.address.model.Model;
 import seedu.address.model.person.ReadOnlyPerson;
+import seedu.address.model.photo.PhotoPath;
 
 /**
  * A utility class for test cases.
@@ -61,7 +64,8 @@ public class TestUtil {
      * @param path
      * @throws IOException
      */
-    public static void removeFileAndItsParentsTillRoot(Path path) throws IOException {
+    public static void removeFileAndItsParentsTillRoot(String pathString) throws IOException {
+        Path path = Paths.get(pathString);
         if (path.toString().matches("[a-zA-Z]+[:]+[\\\\]") || path == null) {
             return;
         } else if (Files.isRegularFile(path)) {
@@ -76,8 +80,9 @@ public class TestUtil {
                 return;
             }
         }
+        String parentPathString = path.getParent().toString();
         //use recursion here
-        removeFileAndItsParentsTillRoot(path.getParent());
+        removeFileAndItsParentsTillRoot(parentPathString);
     }
 
     /**
@@ -92,12 +97,15 @@ public class TestUtil {
     }
 
     /**
-     * Creates a temporary folder and a photo file for parseCommand_photo() test, i.e.,
+     * Creates temporary folders and a photo file for parseCommand_photo() test, i.e.,
      * "C:\\family\\photo.jpg"
-     * @return the path string of the temporary file
      */
-    public static String createTempFile() {
-        final String photoPath = "C:\\family\\photo.jpg";
+    public static void createTempFile(String path) {
+        if (!PhotoCommand.isValidLocalPhotoPath(path)) {
+            assert false : "Invalid photo path!";
+            return;
+        }
+        final String photoPath = path;
         File testFile = new File(photoPath);
 
         //create new test file
@@ -105,9 +113,8 @@ public class TestUtil {
         try {
             testFile.createNewFile();
         } catch (IOException e) {
-            e.printStackTrace();
+            assert false : "Cannot open or write file!";
         }
 
-        return photoPath;
     }
 }
