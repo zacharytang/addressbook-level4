@@ -38,7 +38,7 @@ public class GMapsCommandTest {
                 personToFind.getName());
 
         ModelManager expectedModel = new ModelManager(model.getAddressBook(), new UserPrefs());
-        expectedModel.showMapOf(personToFind);
+        expectedModel.showMapOf(personToFind, INDEX_FIRST_PERSON);
 
         assertCommandSuccess(gMapsCommand, model, expectedMessage, expectedModel);
     }
@@ -62,7 +62,7 @@ public class GMapsCommandTest {
                 personToFind.getName());
 
         Model expectedModel = new ModelManager(model.getAddressBook(), new UserPrefs());
-        expectedModel.showMapOf(personToFind);
+        expectedModel.showMapOf(personToFind, INDEX_FIRST_PERSON);
         showFirstPersonOnly(expectedModel);
 
         assertCommandSuccess(gMapsCommand, model, expectedMessage, expectedModel);
@@ -91,7 +91,7 @@ public class GMapsCommandTest {
                 personToFind.getName());
 
         ModelManager expectedModel = new ModelManager(model.getAddressBook(), new UserPrefs());
-        expectedModel.showDirectionsTo(personToFind, address);
+        expectedModel.showDirectionsTo(personToFind, address, INDEX_FIRST_PERSON);
 
         assertCommandSuccess(gMapsCommand, model, expectedMessage, expectedModel);
     }
@@ -108,7 +108,7 @@ public class GMapsCommandTest {
                 personToFind.getName());
 
         ModelManager expectedModel = new ModelManager(model.getAddressBook(), new UserPrefs());
-        expectedModel.showDirectionsTo(personToFind, address);
+        expectedModel.showDirectionsTo(personToFind, address, INDEX_FIRST_PERSON);
         showFirstPersonOnly(expectedModel);
 
         assertCommandSuccess(gMapsCommand, model, expectedMessage, expectedModel);
