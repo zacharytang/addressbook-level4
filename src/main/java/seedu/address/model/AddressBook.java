@@ -273,6 +273,10 @@ public class AddressBook implements ReadOnlyAddressBook {
      */
     public void updatePhotoPathSavedInMasterList() {
         final File folder = new File(FILE_SAVED_PARENT_PATH);
+        if (!folder.exists()) {
+            return;
+        }
+
         if (!folder.isDirectory()) {
             assert false : "The File is not the default folder to save photos!";
         }
