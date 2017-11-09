@@ -1580,6 +1580,12 @@ public class PersonInfoPanel extends UiPart<Region> {
             } else {
                 image = getDefaultPhotoByGender();
             }
+            image = new Image(MainApp.class.getResourceAsStream(photoPath));
+
+        } else {
+            File contactImg = new File(photoPath);
+            String url = contactImg.toURI().toString();
+            image = new Image(url);
         }
 
         photoCircle.setFill(new ImagePattern(image));

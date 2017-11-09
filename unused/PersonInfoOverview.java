@@ -20,7 +20,7 @@ import seedu.address.commons.events.ui.PersonSelectedEvent;
 import seedu.address.model.person.ReadOnlyPerson;
 import seedu.address.model.person.timetable.Timetable;
 
-//@@author zacharytang
+//@@author zacharytang-unused
 /**
  * A UI component that displays a person's data on the main panel
  */
@@ -112,7 +112,7 @@ public class PersonInfoOverview extends UiPart<Region> {
         timetablePlaceholder.getChildren().add(timetableDisplay.getRoot());
     }
 
-    //@@author April0616
+    //@@author April0616-unused
     /**
      * Set the default contact photo to the default person.
      */
@@ -170,7 +170,7 @@ public class PersonInfoOverview extends UiPart<Region> {
         }
     }
 
-    //@@author zacharytang
+    //@@author zacharytang-unused
     @Subscribe
     private void handlePersonSelectedEvent(PersonSelectedEvent event) {
         logger.info(LogsCenter.getEventHandlingLogMessage(event));

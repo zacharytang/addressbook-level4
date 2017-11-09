@@ -8,7 +8,7 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 
-<!-- @@author zacharytang -->
+<!-- @@author zacharytang-unused -->
 <StackPane styleClass="info-panel" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
     <!--Edit dividerPositions below to adjust vertical divider position between the person info and the timetable area -->
     <SplitPane dividerPositions="0.3" orientation="VERTICAL">
