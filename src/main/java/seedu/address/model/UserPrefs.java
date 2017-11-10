@@ -48,7 +48,7 @@ public class UserPrefs {
 
     public String getCurrentTheme() {
         if (currentTheme == null) {
-            return "/view/DarkTheme.css";
+            return "/view/LightTheme.css";
         } else {
             return currentTheme;
         }
