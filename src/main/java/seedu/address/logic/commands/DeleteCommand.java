@@ -1,5 +1,8 @@
 package seedu.address.logic.commands;
 
+import static seedu.address.commons.core.MessageAlignmentFormatter.FORMAT_ALIGNMENT_TO_DELETE;
+import static seedu.address.commons.core.MessageAlignmentFormatter.FORMAT_ALIGNMENT_TO_EXAMPLE;
+import static seedu.address.commons.core.MessageAlignmentFormatter.FORMAT_ALIGNMENT_TO_PARAMETERS;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_TAG;
 
 import java.util.ArrayList;
@@ -25,16 +28,16 @@ public class DeleteCommand extends UndoableCommand {
     public static final String COMMAND_ALIAS = "d";
     public static final String COMMAND_SECONDARY = "remove";
 
-    public static final String MESSAGE_USAGE = COMMAND_WORD
-            + ": Deletes persons identified using their last displayed indexes used in the last person listing.\n"
-            + "  OR the tag specified from all people containing the specific tag\n"
-            + "Parameters: INDEX (must be positive integers)\n"
-            + "        OR  " + PREFIX_TAG + "TAG (case-sensitive)\n "
+    public static final String MESSAGE_USAGE = "| " + COMMAND_WORD + " |"
+            + ": Deletes the persons identified using their last displayed indexes used in the last person listing.\n"
+            + FORMAT_ALIGNMENT_TO_DELETE + "OR the tag specified from all people containing the specific tag\n"
+            + "Parameters: INDEX... (must be positive integers)\n"
+            + FORMAT_ALIGNMENT_TO_PARAMETERS + "OR  " + PREFIX_TAG + "TAG... (case-sensitive)\n"
             + "Example: " + COMMAND_WORD + " 1\n"
-            + "         " + COMMAND_WORD + " 1, 2, 3\n"
-            + "         " + COMMAND_WORD + " 2 3 4\n"
-            + "         " + COMMAND_WORD + " " + PREFIX_TAG + "friend\n"
-            + "         " + COMMAND_WORD + " " + PREFIX_TAG + "friend " + PREFIX_TAG + "enemy";
+            + FORMAT_ALIGNMENT_TO_EXAMPLE + COMMAND_WORD + " 1, 2, 3\n"
+            + FORMAT_ALIGNMENT_TO_EXAMPLE + COMMAND_WORD + " 2 3 4\n"
+            + FORMAT_ALIGNMENT_TO_EXAMPLE + COMMAND_WORD + " " + PREFIX_TAG + "friend\n"
+            + FORMAT_ALIGNMENT_TO_EXAMPLE + COMMAND_WORD + " " + PREFIX_TAG + "friend " + PREFIX_TAG + "enemy";
 
     public static final String MESSAGE_DELETE_TAG_SUCCESS = "Deleted Tags";
 

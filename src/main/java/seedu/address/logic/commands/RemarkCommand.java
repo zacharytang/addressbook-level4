@@ -1,6 +1,9 @@
 package seedu.address.logic.commands;
 
 import static java.util.Objects.requireNonNull;
+import static seedu.address.commons.core.MessageAlignmentFormatter.FORMAT_ALIGNMENT_TO_EXAMPLE;
+import static seedu.address.commons.core.MessageAlignmentFormatter.FORMAT_ALIGNMENT_TO_PARAMETERS;
+import static seedu.address.commons.core.MessageAlignmentFormatter.FORMAT_ALIGNMENT_TO_REMARK;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_REMARK;
 import static seedu.address.model.Model.PREDICATE_SHOW_ALL_PERSONS;
 
@@ -24,19 +27,16 @@ public class RemarkCommand extends UndoableCommand {
     public static final String COMMAND_WORD = "remark";
     public static final String COMMAND_ALIAS = "rm";
 
-    public static final String MESSAGE_USAGE = COMMAND_WORD
-            + ": If remarks the person identified by the index number used in the last person listing,"
-            + " add the remark to the person.\n"
-            + "If the remark field is empty, the remark is removed for the person.\n"
-            + "Accept multiple remarks at the same time.\n"
-            + "Parameters: INDEX (must be a positive integer) "
-            + PREFIX_REMARK + "[REMARK1] " + PREFIX_REMARK + "[REMARK2]\n"
-            + "Example: (add remark) " + COMMAND_WORD + " 1 " + PREFIX_REMARK + "Likes to drink coffee\n"
-            + "Example: (add remarks) " + COMMAND_WORD + " 1 " + PREFIX_REMARK + "Likes to drink coffee "
+    public static final String MESSAGE_USAGE = "| " + COMMAND_WORD + " |"
+            + ": Adds one or more remarks the person identified by the index number used in the last person listing.\n"
+            + FORMAT_ALIGNMENT_TO_REMARK + "If the remark field is empty, the remark is removed for the person.\n"
+            + "Parameters: INDEX " + PREFIX_REMARK + "[REMARK1] " + PREFIX_REMARK + "[REMARK2] ...\n"
+            + FORMAT_ALIGNMENT_TO_PARAMETERS + "(INDEX must be a positive integer)\n"
+            + "Example: (add a remark) " + COMMAND_WORD + " 1 " + PREFIX_REMARK + "Likes to drink coffee\n"
+            + FORMAT_ALIGNMENT_TO_EXAMPLE
+            + "(add multiple remarks) " + COMMAND_WORD + " 1 " + PREFIX_REMARK + "Likes to drink coffee "
             + PREFIX_REMARK + "CAP5.0\n"
-            + "Example: (delete remarks) " + COMMAND_WORD
-            + " 2 "
-            + PREFIX_REMARK + "\n";
+            + FORMAT_ALIGNMENT_TO_EXAMPLE + "(delete remarks) " + COMMAND_WORD + " 2 " + PREFIX_REMARK + "\n";
 
     public static final String MESSAGE_ADD_REMARK_SUCCESS = "Added Remark(s) to Person: %1$s";
     public static final String MESSAGE_DELETE_REMARK_SUCCESS = "Removed Remark(s) from Person: %1$s";

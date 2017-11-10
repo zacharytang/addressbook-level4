@@ -380,8 +380,8 @@ public class AddressBook implements ReadOnlyAddressBook {
      * Initialises the themes in the address book.
      */
     private void initialiseThemes() {
-        themes.put("dark", "DarkTheme.css");
         themes.put("light", "LightTheme.css");
+        themes.put("dark", "DarkTheme.css");
     }
 
     HashMap<String, String> getThemeMap () {

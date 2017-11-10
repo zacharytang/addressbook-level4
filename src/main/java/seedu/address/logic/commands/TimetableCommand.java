@@ -1,5 +1,7 @@
 package seedu.address.logic.commands;
 
+import static seedu.address.commons.core.MessageAlignmentFormatter.FORMAT_ALIGNMENT_TO_EXAMPLE;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,12 +23,12 @@ public class TimetableCommand extends Command {
     public static final String COMMAND_ALIAS = "wf";
     public static final String COMMAND_SECONDARY = "timetable";
 
-    public static final String MESSAGE_USAGE = COMMAND_WORD
-            + ": Displays a combined timetable of persons, identified using their last displayed indexes\n"
+    public static final String MESSAGE_USAGE =  "| " + COMMAND_WORD + " |"
+            + ": Displays a combined timetable of persons, identified using their last displayed indexes.\n"
             + "Parameters: INDEX (must be positive integers)\n"
             + "Example: " + COMMAND_WORD + " 1\n"
-            + "         " + COMMAND_WORD + " 1, 2, 3\n"
-            + "         " + COMMAND_WORD + " 2 4";
+            + FORMAT_ALIGNMENT_TO_EXAMPLE + COMMAND_WORD + " 1, 2, 3\n"
+            + FORMAT_ALIGNMENT_TO_EXAMPLE + COMMAND_WORD + " 2 4";
 
     public static final String MESSAGE_DISPLAY_SUCCESS = "Displayed timetables: ";
 
