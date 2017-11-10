@@ -20,7 +20,6 @@ import seedu.address.commons.events.model.AddressBookChangedEvent;
 import seedu.address.commons.events.model.MasterTagListHasAnUnusedTagEvent;
 import seedu.address.commons.events.model.PersonAddressDisplayDirectionsEvent;
 import seedu.address.commons.events.model.PersonAddressDisplayMapEvent;
-import seedu.address.commons.events.ui.PersonSelectedEvent;
 import seedu.address.model.person.Address;
 import seedu.address.model.person.Person;
 import seedu.address.model.person.ReadOnlyPerson;

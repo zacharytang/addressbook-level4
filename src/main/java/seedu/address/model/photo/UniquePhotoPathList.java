@@ -6,13 +6,16 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import org.fxmisc.easybind.EasyBind;
+
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
-import org.fxmisc.easybind.EasyBind;
 import seedu.address.commons.util.CollectionUtil;
 import seedu.address.model.photo.exceptions.DuplicatePhotoPathException;
 import seedu.address.model.photo.exceptions.PhotoPathNotFoundException;
+
+
 
 /**
  * A list of PhotoPaths that enforces uniqueness between its elements and does not allow nulls.
@@ -26,7 +29,7 @@ public class UniquePhotoPathList implements Iterable<PhotoPath> {
     private final ObservableList<PhotoPath> internalList = FXCollections.observableArrayList();
     // used by asObservableList()
     private final ObservableList<PhotoPath> mappedList = EasyBind.map(internalList, (photoPath) -> photoPath);
-    
+
     /**
      * Returns true if the list contains an equivalent PhotoPath as the given argument.
      */

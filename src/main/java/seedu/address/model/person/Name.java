@@ -48,15 +48,6 @@ public class Name {
         return fullName;
     }
 
-    /**
-     * @param num
-     * @return first word in the name
-     */
-    public String toString(int num) {
-        String[] nameList = fullName.split(" ");
-        return nameList[num];
-    }
-
     @Override
     public boolean equals(Object other) {
         return other == this // short circuit if same object
