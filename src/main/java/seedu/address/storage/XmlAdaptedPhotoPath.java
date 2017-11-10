@@ -4,7 +4,6 @@ import javax.xml.bind.annotation.XmlValue;
 
 import seedu.address.commons.exceptions.IllegalValueException;
 import seedu.address.model.photo.PhotoPath;
-import seedu.address.model.tag.Tag;
 
 //@@author April0616
 /**
