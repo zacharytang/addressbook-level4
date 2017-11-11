@@ -41,7 +41,7 @@ public class DeleteCommandTest {
         ArrayList<ReadOnlyPerson> deletePersonList = new ArrayList<>();
         deletePersonList.add(personToDelete);
 
-        String expectedMessage = deleteCommand.generateResultMsg(deletePersonList);
+        String expectedMessage = deleteCommand.generateResultMsgForPerson(deletePersonList);
 
         ModelManager expectedModel = new ModelManager(model.getAddressBook(), new UserPrefs());
         expectedModel.deletePerson(personToDelete);
@@ -56,7 +56,10 @@ public class DeleteCommandTest {
         Set<Tag> tagsToDelete = Stream.of(new Tag("friends")).collect(Collectors.toSet());
         DeleteCommand deleteCommand = prepareCommand(tagsToDelete);
 
-        String expectedMessage = DeleteCommand.MESSAGE_DELETE_TAG_SUCCESS;
+        ArrayList<Tag> arrayTags = new ArrayList<>();
+        arrayTags.addAll(tagsToDelete);
+
+        String expectedMessage = DeleteCommand.generateResultMsgForTag(arrayTags);
 
         ModelManager expectedModel = new ModelManager(model.getAddressBook(), new UserPrefs());
         expectedModel.deleteTag(new Tag("friends"));
@@ -97,7 +100,7 @@ public class DeleteCommandTest {
         ArrayList<ReadOnlyPerson> deletePersonList = new ArrayList<>();
         deletePersonList.add(personToDelete);
 
-        String expectedMessage = deleteCommand.generateResultMsg(deletePersonList);
+        String expectedMessage = deleteCommand.generateResultMsgForPerson(deletePersonList);
 
         Model expectedModel = new ModelManager(model.getAddressBook(), new UserPrefs());
         expectedModel.deletePerson(personToDelete);
@@ -114,7 +117,10 @@ public class DeleteCommandTest {
         Set<Tag> tagsToDelete = Stream.of(new Tag("friends")).collect(Collectors.toSet());
         DeleteCommand deleteCommand = prepareCommand(tagsToDelete);
 
-        String expectedMessage = DeleteCommand.MESSAGE_DELETE_TAG_SUCCESS;
+        ArrayList<Tag> arrayTags = new ArrayList<>();
+        arrayTags.addAll(tagsToDelete);
+
+        String expectedMessage = DeleteCommand.generateResultMsgForTag(arrayTags);
 
         Model expectedModel = new ModelManager(model.getAddressBook(), new UserPrefs());
         showFirstPersonOnly(expectedModel);
