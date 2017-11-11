@@ -49,6 +49,9 @@ public class Birthday {
      * @return the formatted String
      */
     public static String formatDate (String unformatted) {
+        if (unformatted.equals("")) {
+            return "";
+        }
         DateFormat withoutFormat = new SimpleDateFormat("ddmmyyyy");
         DateFormat withFormat = new SimpleDateFormat("dd/mm/yyyy");
         Date intermediateDate;
@@ -67,6 +70,9 @@ public class Birthday {
      * @return the unformatted String as {@code ddmmyyyy}
      */
     public String getUnformattedDate () {
+        if (date.equals("")) {
+            return "";
+        }
         DateFormat withFormat = new SimpleDateFormat("dd/mm/yyyy");
         DateFormat withoutFormat = new SimpleDateFormat("ddmmyyyy");
         Date intermediateDate;
