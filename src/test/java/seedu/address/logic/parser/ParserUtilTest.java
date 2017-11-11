@@ -29,7 +29,7 @@ import seedu.address.model.tag.Tag;
 
 public class ParserUtilTest {
     private static final String INVALID_NAME = "R@chel";
-    private static final String INVALID_GENDER = "female";
+    private static final String INVALID_GENDER = "hello";
     private static final String INVALID_MATRIC_NO = "45663445K";
     private static final String INVALID_PHONE = "+651234";
     private static final String INVALID_ADDRESS = " ";
