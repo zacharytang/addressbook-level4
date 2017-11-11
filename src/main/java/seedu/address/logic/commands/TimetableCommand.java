@@ -42,14 +42,21 @@ public class TimetableCommand extends Command {
     public CommandResult execute() throws CommandException {
 
         List<ReadOnlyPerson> lastShownList = model.getFilteredPersonList();
-        List<ReadOnlyPerson> personsToDisplay = new ArrayList<>();
+        List<ReadOnlyPerson> personsToDisplay;
 
-        for (Index index : targetIndexes) {
-            if (index.getZeroBased() >= lastShownList.size()) {
-                throw new CommandException(Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX);
+        // If no indexes passed, display all persons listed
+        if (targetIndexes.size() == 0) {
+            personsToDisplay = model.getFilteredPersonList();
+        } else {
+            personsToDisplay = new ArrayList<>();
+
+            for (Index index : targetIndexes) {
+                if (index.getZeroBased() >= lastShownList.size()) {
+                    throw new CommandException(Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX);
+                }
+                ReadOnlyPerson personSelected = lastShownList.get(index.getZeroBased());
+                personsToDisplay.add(personSelected);
             }
-            ReadOnlyPerson personSelected = lastShownList.get(index.getZeroBased());
-            personsToDisplay.add(personSelected);
         }
 
         EventsCenter.getInstance().post(new TimetableDisplayEvent(personsToDisplay));
