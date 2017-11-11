@@ -28,6 +28,7 @@ public class Timetable {
     public static final String MESSAGE_TIMETABLE_URL_CONSTRAINTS =
             "Timetable URLs should be a valid shortened NUSMods URL";
     public static final String MESSAGE_INVALID_SHORT_URL = "Invalid shortened URL provided";
+    public static final String EMPTY_TIMETABLE_STRING = "";
 
     public static final String[] ARRAY_DAYS = {
         "Monday",
@@ -61,8 +62,8 @@ public class Timetable {
         String trimmedUrl = url.trim();
 
         // If no url provided, returns an empty timetable
-        if (trimmedUrl.equals("")) {
-            this.value = "";
+        if (trimmedUrl.equals(EMPTY_TIMETABLE_STRING)) {
+            this.value = EMPTY_TIMETABLE_STRING;
             this.timetable = new TimetableInfo();
             return;
         }
