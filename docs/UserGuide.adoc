@@ -453,7 +453,7 @@ Examples:
 Selects the 2nd person in the address book.
 
 * `find n/Betsy` +
-`select 1` +
+`s 1` +
 Selects the 1st person in the results of the `find` command.
 
 // tag::timetable[]
@@ -572,10 +572,10 @@ Restores the address book to the state before the previous _undoable_ command wa
 Format: `undo` +
 Alternatives: `u`
 
-[NOTE]
-====
-Undoable commands: those commands that modify the address book's content (`add`, `delete`, `edit` and `clear`).
-====
+****
+* Undoable commands: those commands that modify the address book's content (`add`, `delete`, `edit`, `photo` and `clear`).
+****
+
 
 Examples:
 
@@ -600,6 +600,10 @@ ____
 Reverses the most recent `undo` command. +
 Format: `redo` +
 Alternatives: `r`
+
+****
+* PhotoCommand can only support `undo` command but not `redo` command.
+****
 
 Examples:
 
@@ -704,9 +708,9 @@ Clicking on the address in the address book will open a Google Map map view of t
 *Q*: How do I transfer my data to another Computer? +
 *A*: Install the app in the other computer and overwrite the empty data file it creates with the file that contains the data of your previous Address Book folder.
 
-== Command Summary (v1.4)
+== Command Summary (v1.5)
 
-* *Add* : `add n/NAME g/GENDER p/PHONE_NUMBER e/EMAIL a/ADDRESS m/MATRIC_NUMBER b/BIRTHDAY tt/TIMETABLE_URL [t/TAG]...` +
+* *Add* : `add n/NAME [g/GENDER] [p/PHONE_NUMBER] [e/EMAIL] [a/ADDRESS] [m/MATRIC_NUMBER] [b/BIRTHDAY] [t/TAG]...` +
 e.g. `add n/John Doe g/Male p/98765432 e/johnd@example.com a/John street, block 123, #01-01 m/A0134232H tt/http://modsn.us/abCdE t/friend t/colleague`
 * *Clear* : `clear`
 * *Delete (Person)* : `delete INDEX1 INDEX2 INDEX3` +
@@ -797,4 +801,8 @@ e.g.`select 2`
 
 === Version 1.5
 * Viewing of combined timetables
+* Improve UI, add InfoPersonPanel
+* Make add command fields optional
+* Change the themes of the app
+
 |=======
