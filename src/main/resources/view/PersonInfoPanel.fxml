@@ -65,7 +65,7 @@
                     <VBox.margin>
                         <Insets />
                     </VBox.margin></Label>
-                    <Label fx:id="remark" minHeight="-Infinity" minWidth="-Infinity" prefHeight="20.0" prefWidth="326.0" styleClass="display_small_value" text="\$remark" wrapText="true">
+                    <Label fx:id="remark" styleClass="display_small_value" text="\$remark" wrapText="true">
                     <VBox.margin>
                         <Insets />
                     </VBox.margin></Label>
