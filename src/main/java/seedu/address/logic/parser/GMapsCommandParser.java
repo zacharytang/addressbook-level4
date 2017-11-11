@@ -44,6 +44,11 @@ public class GMapsCommandParser implements Parser<GMapsCommand> {
             }
         }
 
+        if (address.toString().equals("")) {
+            throw new ParseException(Address.MESSAGE_ADDRESS_CONSTRAINTS,
+                    new IllegalValueException(Address.MESSAGE_ADDRESS_CONSTRAINTS));
+        }
+
         return new GMapsCommand(index, address);
     }
 

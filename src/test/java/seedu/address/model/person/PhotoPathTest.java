@@ -14,7 +14,7 @@ public class PhotoPathTest {
     public void isValidPhotoPath() {
 
         // empty
-        assertFalse(PhotoPath.isValidPhotoPath(""));
+        assertTrue(PhotoPath.isValidPhotoPath(""));
         assertFalse(PhotoPath.isValidPhotoPath(" "));
 
         // / missing parts： not start with 'docs/images/contactPhotos/'

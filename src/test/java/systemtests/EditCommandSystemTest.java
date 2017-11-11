@@ -74,7 +74,6 @@ import seedu.address.testutil.PersonUtil;
 
 public class EditCommandSystemTest extends AddressBookSystemTest {
 
-    @Ignore
     @Test
     public void edit() throws Exception {
         Model model = getModel();

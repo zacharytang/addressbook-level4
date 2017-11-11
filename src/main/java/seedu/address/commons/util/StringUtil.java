@@ -27,7 +27,8 @@ public class StringUtil {
         requireNonNull(sentence);
         requireNonNull(word);
 
-        String[] wordsInPreppedSentence = sentence.split("\\s+");
+        String preppedSentence = sentence.trim();
+        String[] wordsInPreppedSentence = preppedSentence.split("\\s+");
         String preppedWord = word.trim();
         String[] wordsInPreppedWord = preppedWord.split("\\s+");
         checkArgument(!wordsInPreppedWord[0].equals(""), "Word parameter cannot be empty");

@@ -109,8 +109,6 @@ public class EditCommandParserTest {
         assertParseFailure(parser, "1" + INVALID_MATRIC_NO_DESC, MatricNo.MESSAGE_MATRIC_NO_CONSTRAINTS);
         // invalid matricNo
         assertParseFailure(parser, "1" + INVALID_EMAIL_DESC, Email.MESSAGE_EMAIL_CONSTRAINTS); // invalid email
-        assertParseFailure(parser, "1" + INVALID_ADDRESS_DESC, Address.MESSAGE_ADDRESS_CONSTRAINTS);
-        // invalid address
         assertParseFailure(parser, "1" + INVALID_TAG_DESC, Tag.MESSAGE_TAG_CONSTRAINTS); // invalid tag
         //@@author CindyTsai1
         assertParseFailure(parser, "1" + INVALID_BIRTHDAY_DESC,
