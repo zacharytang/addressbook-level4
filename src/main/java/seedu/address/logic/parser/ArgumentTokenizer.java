@@ -37,7 +37,7 @@ public class ArgumentTokenizer {
         List<PrefixPosition> positions = new ArrayList<>();
 
         for (Prefix prefix : prefixes) {
-            positions.addAll(findPrefixPositions(argsString.toLowerCase(), prefix));
+            positions.addAll(findPrefixPositions(argsString, prefix));
         }
 
         return positions;
@@ -49,11 +49,12 @@ public class ArgumentTokenizer {
     private static List<PrefixPosition> findPrefixPositions(String argsString, Prefix prefix) {
         List<PrefixPosition> positions = new ArrayList<>();
 
-        int prefixPosition = findPrefixPosition(argsString, prefix.getPrefix(), 0);
+        int prefixPosition = findPrefixPosition(argsString.toLowerCase(), prefix.getPrefix().toLowerCase(), 0);
         while (prefixPosition != -1) {
             PrefixPosition extendedPrefix = new PrefixPosition(prefix, prefixPosition);
             positions.add(extendedPrefix);
-            prefixPosition = findPrefixPosition(argsString, prefix.getPrefix(), prefixPosition);
+            prefixPosition = findPrefixPosition(argsString.toLowerCase(),
+                    prefix.getPrefix().toLowerCase(), prefixPosition);
         }
 
         return positions;
