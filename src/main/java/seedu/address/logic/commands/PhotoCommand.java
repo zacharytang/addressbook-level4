@@ -1,9 +1,6 @@
 package seedu.address.logic.commands;
 
 import static java.util.Objects.requireNonNull;
-import static seedu.address.commons.core.MessageAlignmentFormatter.FORMAT_ALIGNMENT_TO_EXAMPLE;
-import static seedu.address.commons.core.MessageAlignmentFormatter.FORMAT_ALIGNMENT_TO_PARAMETERS;
-import static seedu.address.commons.core.MessageAlignmentFormatter.FORMAT_ALIGNMENT_TO_PHOTO;
 import static seedu.address.commons.util.FileUtil.copyFile;
 import static seedu.address.commons.util.FileUtil.createIfMissing;
 import static seedu.address.commons.util.FileUtil.getFileExtension;
