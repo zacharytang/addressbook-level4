@@ -21,6 +21,7 @@ import seedu.address.commons.events.model.PersonAddressDisplayMapEvent;
 import seedu.address.commons.events.ui.PersonHasBeenDeletedEvent;
 import seedu.address.commons.events.ui.PersonHasBeenModifiedEvent;
 import seedu.address.commons.events.ui.PersonPanelSelectionChangedEvent;
+import seedu.address.commons.events.ui.PersonSelectedEvent;
 import seedu.address.model.person.ReadOnlyPerson;
 
 //@@author April0616
@@ -211,6 +212,12 @@ public class PersonInfoPanel extends UiPart<Region> {
     private void handlePersonPanelSelectionChangeEvent(PersonPanelSelectionChangedEvent event) {
         logger.info(LogsCenter.getEventHandlingLogMessage(event));
         loadPerson(event.getNewSelection().person);
+    }
+
+    @Subscribe
+    private void handlePersonSelectedEvent(PersonSelectedEvent event) {
+        logger.info(LogsCenter.getEventHandlingLogMessage(event));
+        loadPerson(event.person);
     }
 
     //@@author nbriannl
