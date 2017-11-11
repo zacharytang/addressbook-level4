@@ -31,23 +31,26 @@ Excited? Let's get started!
 .  Make sure you have Java version `1.8.0_60` or later installed in your Computer.
 +
 [NOTE]
-Having any Java 8 version is not enough. +
+Having any Java version is not enough. +
 This app will not work with earlier versions of Java 8.
 +
-.  Download the latest `addressbook.jar` link:{repoURL}/releases[here].
+.  Download the latest `UniFy.jar` link:https://github.com/CS2103AUG2017-W09-B1/main/releases[here].
 .  Copy the file to the folder you want to use as the home folder for UniFy.
 .  Double-click the file to start the app. The GUI should appear in a few seconds.
 +
-image::Ui.png[width="790"]
-_Figure 2.1 : UniFy's Interface_
+image::cover1.png[width="790"]
+_Figure 2.1 : UniFy's Interface Light Theme_
+image::cover2.png[width="790"]
+_Figure 2.2 : UniFy's Interface Dark Theme_
 +
 .  Type the command in the command box and press kbd:[Enter] to execute it. +
 e.g. typing *`help`* and pressing kbd:[Enter] will open the help window.
 .  Some example commands you can try:
 
 * *`list`* : lists all contacts
-* **`add`**`n/John Doe g/Male p/98765432 e/johnd@example.com a/John street, block 123, #01-01 m/A0134232H tt/http://modsn.us/abCdE` : adds a contact named `John Doe` to the Address Book
+* **`add`**`n/John Doe g/Male p/98765432 e/johnd@example.com a/John street, block 123, #01-01 m/A0134232H tt/http://modsn.us/etYEX` : adds a contact named `John Doe` to the Address Book
 * **`delete`**`3` : deletes the 3rd contact shown in the current list
+* *`undo`* : undo the previous command
 * *`exit`* : exits the app
 
 . Now you can explore the rest of UniFy! Refer to the link:#commands[Commands] section below for details of each command.
@@ -104,7 +107,7 @@ ____
 
 Adds a person to the address book +
 
-Format: `add n/NAME g/GENDER p/PHONE_NUMBER e/EMAIL a/ADDRESS [m/MATRIC_NUMBER] [b/BIRTHDAY] [tt/TIMETABLE_URL] [t/TAG]...` +
+Format: `add n/NAME [g/GENDER] [p/PHONE_NUMBER] [e/EMAIL] [a/ADDRESS] [m/MATRIC_NUMBER] [b/BIRTHDAY] [t/TAG]...` +
 Alternatives: `a` , `insert` +
  +
 
@@ -117,28 +120,29 @@ You can view the contacts you have added in UniFy in the form of _cards_.
 Here are the following information a person can have: +
 
 * *Name*
+** `Name` field is compulsory while others are not.
 * *Gender*
-** `GENDER` is either Male/Female or M/F
+** `GENDER` is either Male/Female or M/F.
 * *Phone number*
 * *Email*
 * *Address*
 * *Matriculation number* _(Added since v1.2)_
-** `MATRIC_NUMBER` should be a 9-character string starting with 'A or a' and ending with a letter
+** `MATRIC_NUMBER` should be a 9-character string starting with 'A or a' and ending with a letter.
 * *Birthday* _(Added since v1.2)_
 ** The format for `BIRTHDAY` is DDMMYYYY.
 * *Timetable* via an NUSMods shortlink _(Added since v1.2)_
-** The full link is not allowed
+** The full link is not allowed.
 *** Example of a shortlink: http://modsn.us/AC71u
 * *Tags*
-** A person can have any number of tags (even no tags at all!)
+** A person can have any number of tags.
 ** Tags are alphanumeric and without spaces.
 ****
 
 Examples:
 
-* `add n/John Doe g/Male p/98765432 e/johnd@example.com a/John street, block 123, #01-01 m/A0134232H tt/http://modsn.us/abCdE`
+* `add n/John Doe g/Male p/98765432 e/johnd@example.com a/John street, block 123, #01-01 m/A0134232H tt/http://modsn.us/etYEX`
 * `add n/Betsy Crowe g/Female p/1234567 e/betsycrowe@example.com a/Newgate Prison t/friend t/criminal`
-* `add n/Amy Tan g/F p/82974823 tt/4/CS2101classmates e/amy_tan@example.com a/PGP m/a0142323T`
+* `add n/Amy Tan g/F p/82974823 e/amy_tan@example.com a/PGP m/a0142323T`
 * `add n/Betty g/F p/12345678 e/betty@example.com b/23051998`
 * `add n/Jasmine p/12345678`
 // end::birthday[]
@@ -151,7 +155,7 @@ ____
 _Don't want to keep a tag forever? Let's set temporary tags!_
 ____
 Adds a person to the address book +
-Format: `add n/NAME g/GENDER p/PHONE_NUMBER e/EMAIL a/ADDRESS [m/MATRIC_NUMBER] [b/BIRTHDAY] [tt/TIMETABLE_URL] [t/TAG]... [tmpt/NUM_OF_MONTHS/TEMPORARY TAG]...` +
+Format: `add n/NAME [g/GENDER p/PHONE_NUMBER] [e/EMAIL] [a/ADDRESS] [m/MATRIC_NUMBER] [b/BIRTHDAY] [tt/TIMETABLE_URL] [t/TAG]... [tmpt/NUM_OF_MONTHS/TEMPORARY TAG]...` +
 Alternatives: `a` , `insert`
 
 Here is the temporary tag information a person can have: +
@@ -183,21 +187,24 @@ Examples:
 // tag::photoCommand[]
 === Adding/Deleting a Photo for a person : `photo` _(Since v1.4)_
 ____
-_When you study too much, sometimes, you forget how someone looks like._
+_When you study too much, sometimes, you forget what someone looks like._
 ____
 You can add or remove a photo to an existing person in the address book. +
 Format: +
 (Add photo) `photo INDEX ph/PHOTO PATH` +
-(Delete photo) `photo INDEX` +
+(Delete photo) `photo INDEX` or `photo INDEX ph/`+
 Alternatives: `ph`
 
 ****
 * Edits the photo of the person at the specified `INDEX`.
-* The file path of the photo will be updated to the new path.
+* The photo path of the person will be updated.
+* When adding a photo to the person, the photo will be saved to the default folder.
+* When removing the photo, only the path of the photo will be removed from the person.
+* All the unused photo will be deleted from the app the next time you start the application.
 ****
 
 [IMPORTANT]
-Ensure that format of the path to the photo is correct.
+Ensure that format of the path to the photo is correct and the photo exists in the specified place.
 
 Examples:
 
@@ -207,10 +214,10 @@ Add the picture 'Amy_selfie.jpg' in the specified location to the 1st person in 
 The photo of the 1st person will be shown while clicking on the name.
 * `list` +
 `photo 2` +
-Removes the picture from the 2nd person in the last shown list.
+Removes the photo path from the 2nd person in the last shown list.
 * `find n/Betsy` +
-`photo 1` +
-Removes the picture from the 1st person in the results of the `find` command.
+`ph 1` +
+Removes the photo path from the 1st person in the results of the `find` command.
 // end::photoCommand[]
 
 // tag::remarkCommand[]
@@ -222,7 +229,7 @@ ____
 You can add remarks to any person in UniFy, keeping any special information you might want to remember. +
 Format: +
 (Add remark) `remark INDEX r/REMARK1 [r/REMARK2]...` +
-(Delete remark): `remark INDEX ` or `remark INDEX r/`
+(Delete remark): `remark INDEX` or `remark INDEX r/`
 
 ****
 * Edits the remark of the person at the specified `INDEX`.
@@ -265,6 +272,9 @@ Format: `find [n/NAME] [t/Tag] [p/PHONE] [e/EMAIL] [b/BIRTHDAY MONTH]...` +
 Alternatives: `f` , `search`
 
 ****
+* At least one field should be specified.
+* You can specify multiple keywords related to one field by using whitespace to split them.
+* Persons matching at least one of the keywords will be returned.
 * The search is case insensitive. e.g `hans` will match `Hans`
 * The order of the categories does not matter. e.g. `p/` can come before `t/`
 * Mentioned attributes are searched.
@@ -276,7 +286,8 @@ Alternatives: `f` , `search`
 ****
 
 Examples:
-
+* `find n/ian zach` +
+Returns any person with name including 'ian' or 'zach'
 * `find n/Joe t/friends` +
 Returns any person with name including `Joe` and tagged by `friends`
 * `find t/friends p/1234` +
@@ -310,7 +321,7 @@ Alternatives: `e` , `modify`, `change`
 ****
 * Edits the person at the specified `INDEX`.
 * You must provide at least one of the optional fields.
-* Editing tags is not cumulative! WWhen editing tags, the person's existing tags will be replaced by the new ones you put in.
+* Editing tags is not cumulative! When editing tags, the person's existing tags will be replaced by the new ones you put in.
 ** This also means you can remove all the person's tags by typing `t/` without specifying any tags after it.
 ****
 
@@ -357,7 +368,7 @@ Format: +
 Alternatives: `d` , `remove`
 
 ****
-* UniFy accepts duplicated indexes.
+* UniFy accepts duplicated indexes. If you type `delete 3, 3, 4`, the 3rd and 4th persons will be deleted.
 * When you delete your contacts, their contact photos will also be deleted.
 ****
 
@@ -370,10 +381,6 @@ Deletes the 2nd person in the address book.
 * `list` +
 `delete 2, 3, 4` +
 Deletes the 2nd, 3rd, 4th persons in the address book.
-
-* `list` +
-`delete 2 2 4` +
-Deletes the 2nd and 4th persons in the address book.
 
 * `find n/Betsy` +
 `delete 1 5` +
@@ -423,7 +430,7 @@ Examples:
 `delete t/friends` +
 Deletes the tag 'friends' from all people containing the tag 'friends' in the address book.
 
-* `find Betsy` +
+* `find n/Betsy` +
 `delete t/module1 t/module2` +
 Deletes the tags 'module1' and 'module2' from all people containing one of the tag, or both of the tags in the address book. +
 // end::deletetag[]
@@ -446,7 +453,7 @@ Examples:
 Selects the 2nd person in the address book.
 
 * `find n/Betsy` +
-`select 1` +
+`s 1` +
 Selects the 1st person in the results of the `find` command.
 
 // tag::timetable[]
@@ -565,10 +572,10 @@ Restores the address book to the state before the previous _undoable_ command wa
 Format: `undo` +
 Alternatives: `u`
 
-[NOTE]
-====
-Undoable commands: those commands that modify the address book's content (`add`, `delete`, `edit` and `clear`).
-====
+****
+* Undoable commands: those commands that modify the address book's content (`add`, `delete`, `edit`, `photo` and `clear`).
+****
+
 
 Examples:
 
@@ -593,6 +600,10 @@ ____
 Reverses the most recent `undo` command. +
 Format: `redo` +
 Alternatives: `r`
+
+****
+* PhotoCommand can only support `undo` command but not `redo` command.
+****
 
 Examples:
 
@@ -697,9 +708,9 @@ Clicking on the address in the address book will open a Google Map map view of t
 *Q*: How do I transfer my data to another Computer? +
 *A*: Install the app in the other computer and overwrite the empty data file it creates with the file that contains the data of your previous Address Book folder.
 
-== Command Summary (v1.4)
+== Command Summary (v1.5)
 
-* *Add* : `add n/NAME g/GENDER p/PHONE_NUMBER e/EMAIL a/ADDRESS m/MATRIC_NUMBER b/BIRTHDAY tt/TIMETABLE_URL [t/TAG]...` +
+* *Add* : `add n/NAME [g/GENDER] [p/PHONE_NUMBER] [e/EMAIL] [a/ADDRESS] [m/MATRIC_NUMBER] [b/BIRTHDAY] [t/TAG]...` +
 e.g. `add n/John Doe g/Male p/98765432 e/johnd@example.com a/John street, block 123, #01-01 m/A0134232H tt/http://modsn.us/abCdE t/friend t/colleague`
 * *Clear* : `clear`
 * *Delete (Person)* : `delete INDEX1 INDEX2 INDEX3` +
@@ -790,4 +801,8 @@ e.g.`select 2`
 
 === Version 1.5
 * Viewing of combined timetables
+* Improve UI, add InfoPersonPanel
+* Make add command fields optional
+* Change the themes of the app
+
 |=======

@@ -28,7 +28,8 @@ public class UniqueCommandList {
         commandList.add(EditCommand.COMMAND_SECONDARY_TWO);
         commandList.add(ExitCommand.COMMAND_WORD);
         commandList.add(ExitCommand.COMMAND_ALIAS);
-        commandList.add(ExitCommand.COMMAND_SECONDARY);
+        commandList.add(ExitCommand.COMMAND_SECONDARY_ONE);
+        commandList.add(ExitCommand.COMMAND_SECONDARY_TWO);
         commandList.add(FindCommand.COMMAND_WORD);
         commandList.add(FindCommand.COMMAND_ALIAS);
         commandList.add(FindCommand.COMMAND_SECONDARY);

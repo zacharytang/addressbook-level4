@@ -1,6 +1,9 @@
 package seedu.address.logic.commands;
 
 import static java.util.Objects.requireNonNull;
+import static seedu.address.commons.core.MessageAlignmentFormatter.FORMAT_ALIGNMENT_TO_EXAMPLE;
+import static seedu.address.commons.core.MessageAlignmentFormatter.FORMAT_ALIGNMENT_TO_PARAMETERS;
+import static seedu.address.commons.core.MessageAlignmentFormatter.FORMAT_ALIGNMENT_TO_PHOTO;
 import static seedu.address.commons.util.FileUtil.copyFile;
 import static seedu.address.commons.util.FileUtil.createIfMissing;
 import static seedu.address.commons.util.FileUtil.getFileExtension;
@@ -37,17 +40,15 @@ public class PhotoCommand extends UndoableCommand {
     public static final String COMMAND_WORD = "photo";
     public static final String COMMAND_ALIAS = "ph";
 
-    public static final String MESSAGE_USAGE = COMMAND_WORD
-            + ": If adds photo path to the person identified by the index number used in the last person listing,"
-            + " add the photo path to the person.\n"
-            + "If the photo path field is empty, the old photo path is removed for the person.\n"
-            + "Parameters: INDEX (must be a positive integer) "
-            + PREFIX_PHOTO + "[PHOTO PATH] \n"
-            + "Example: (add photo path) " + COMMAND_WORD + " 1 " + PREFIX_PHOTO
+    public static final String MESSAGE_USAGE = "| " + COMMAND_WORD + " |"
+            + ": Adds a photo to the person identified by the index number used in the last person listing"
+            + "by specifying the path of the photo.\n"
+            + "If the path field is empty, the old photo path is removed for the person.\n"
+            + "Parameters: INDEX " + PREFIX_PHOTO + "[PHOTO PATH] \n"
+            + "(INDEX must be a positive integer)\n"
+            + "Example: (add photo)     " + COMMAND_WORD + " 1 " + PREFIX_PHOTO
             + "C:\\Users\\User\\Desktop\\photo.jpg\n"
-            + "Example: (delete photo path) " + COMMAND_WORD
-            + " 2 "
-            + PREFIX_PHOTO + "\n";
+            + "(delete photo) " + COMMAND_WORD + " 2 " + PREFIX_PHOTO + "\n";
 
     public static final String MESSAGE_ADD_PHOTO_SUCCESS =
             "Successfully saved photo and added the photo path to Person: %1$s";
