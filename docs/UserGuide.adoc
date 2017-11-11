@@ -260,7 +260,7 @@ _Display your contacts how you like it. All of them? Just your classmates for a 
 Want to know who's birthday is in this month? Unify every common contact together and list them as one._
 ____
 
-You can find people whose information contains any of the given keywords from each category. +
+You can find people whose information contains all given keywords from each category. +
 Format: `find [n/NAME] [t/Tag] [p/PHONE] [e/EMAIL] [b/BIRTHDAY MONTH]...` +
 Alternatives: `f` , `search`
 
@@ -268,11 +268,10 @@ Alternatives: `f` , `search`
 * The search is case insensitive. e.g `hans` will match `Hans`
 * The order of the categories does not matter. e.g. `p/` can come before `t/`
 * Mentioned attributes are searched.
-* Partial words will be matched e.g. `Han` will match `Hans`
-* Persons matching at least one of the keywords will be returned.
+* Partial words will be matched. e.g. `Han` will match `Hans`
 * MONTH should be inputted by numbers. e.g `12` searches for December babies
-* Single digit months needs to be preceded by a 0 in front.
-* Example: `02` searches for those born in February
+* Only one birthday month is to be input.
+* Single digit months needs to be preceded by a 0 in front. e.g. `02` searches for those born in February
 * Only the birthday month is searched.
 ****
 
@@ -282,10 +281,10 @@ Examples:
 Returns any person with name including `Joe` and tagged by `friends`
 * `find t/friends p/1234` +
 Returns any person tagged by `friends`, and having phone numbers containing `1234`
-* `find t/jcfriends t/computing` +
-Returns all persons in the address book containing *either* 'JCfriends' or 'computing' (or *both*).
+* `find t/jcfriends computing` +
+Returns all persons in UniFy containing *both* 'JCfriends' and 'computing'.
 * `find b/12` +
-Returns all persons in the address book having birthdays in `December`
+Returns all persons in UniFy having birthdays in `December`
 
 
 === Sorting all persons : `sort` _(Coming in v2.0)_
