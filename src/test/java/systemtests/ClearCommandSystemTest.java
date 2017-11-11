@@ -2,7 +2,6 @@ package systemtests;
 
 import static seedu.address.testutil.TypicalPersons.KEYWORD_MATCHING_MEIER;
 
-import org.junit.Ignore;
 import org.junit.Test;
 
 import seedu.address.commons.core.index.Index;
@@ -15,7 +14,6 @@ import seedu.address.model.ModelManager;
 
 public class ClearCommandSystemTest extends AddressBookSystemTest {
 
-    @Ignore
     @Test
     public void clear() {
         final Model defaultModel = getModel();

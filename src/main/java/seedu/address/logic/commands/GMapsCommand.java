@@ -31,7 +31,7 @@ public class GMapsCommand extends Command {
             + "Example: " + COMMAND_WORD + " 1 \n"
             + FORMAT_ALIGNMENT_TO_EXAMPLE + COMMAND_WORD + " 1 a/Blk 123, Yishun 75";
 
-    public static final String MESSAGE_SELECT_PERSON_SUCCESS = "Showing Map View of %1$s 's address";
+    public static final String MESSAGE_SELECT_PERSON_SUCCESS = "Showing Map View of %1$s's address";
     public static final String MESSAGE_DIRECTIONS_TO_PERSON_SUCCESS = "Showing directions to %1$s";
 
     private final Index targetIndex;

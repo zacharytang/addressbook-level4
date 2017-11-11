@@ -11,14 +11,15 @@ public class GenderTest {
     @Test
     public void isValidGender() {
         // invalid Gender
-        assertFalse(Gender.isValidGender("")); // empty string
+
         assertFalse(Gender.isValidGender(" ")); // spaces only
         assertFalse(Gender.isValidGender("^")); // only non-alphanumeric characters
         assertFalse(Gender.isValidGender("peter*")); // contains non-alphanumeric characters
         assertFalse(Gender.isValidGender("apple")); // unrelated description
         assertFalse(Gender.isValidGender("male")); // first letter not uppercase
 
-        // valid Gender
+        // valid Gender/ empty when optional
+        assertTrue(Gender.isValidGender("")); // empty string
         assertTrue(Gender.isValidGender("Male")); // GENDER_VALIDATION_WORD1
         assertTrue(Gender.isValidGender("Female")); // GENDER_VALIDATION_WORD2
     }
