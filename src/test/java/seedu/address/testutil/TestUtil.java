@@ -12,7 +12,6 @@ import seedu.address.commons.util.FileUtil;
 import seedu.address.logic.commands.PhotoCommand;
 import seedu.address.model.Model;
 import seedu.address.model.person.ReadOnlyPerson;
-import seedu.address.model.photo.PhotoPath;
 
 /**
  * A utility class for test cases.

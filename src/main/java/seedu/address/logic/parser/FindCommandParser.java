@@ -4,11 +4,19 @@ import static seedu.address.commons.core.Messages.MESSAGE_INVALID_COMMAND_FORMAT
 import static seedu.address.logic.parser.CliSyntax.PREFIX_ADDRESS;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_BIRTHDAY;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_EMAIL;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_GENDER;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_MATRIC_NO;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_NAME;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_NEW_TAG;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_OLD_TAG;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_PHONE;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_PHOTO;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_REMARK;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_TAG;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_TIMETABLE;
 
 import java.util.ArrayList;
+import java.util.stream.Stream;
 
 import seedu.address.logic.commands.FindCommand;
 import seedu.address.logic.parser.exceptions.ParseException;
@@ -30,8 +38,9 @@ public class FindCommandParser implements Parser<FindCommand> {
                 ArgumentTokenizer.tokenize(args, PREFIX_NAME, PREFIX_PHONE, PREFIX_EMAIL,
                         PREFIX_ADDRESS, PREFIX_TAG, PREFIX_BIRTHDAY);
 
-        if (args.isEmpty() || args.substring(1, 2).equals("g") || args.substring(1, 2).equals("m")
-                || args.substring(1, 3).equals("tt") || !args.substring(2, 3).equals("/")) {
+        if (args.isEmpty() || arePrefixesPresent(argsMultimap, PREFIX_GENDER, PREFIX_TIMETABLE, PREFIX_MATRIC_NO,
+                PREFIX_NEW_TAG, PREFIX_OLD_TAG, PREFIX_PHOTO, PREFIX_REMARK) || !arePrefixesPresent(argsMultimap,
+                PREFIX_TAG, PREFIX_BIRTHDAY, PREFIX_ADDRESS, PREFIX_EMAIL, PREFIX_PHONE, PREFIX_NAME)) {
             throw new ParseException(
                     String.format(MESSAGE_INVALID_COMMAND_FORMAT, FindCommand.MESSAGE_USAGE));
         }
@@ -87,5 +96,13 @@ public class FindCommandParser implements Parser<FindCommand> {
         }
         return new FindCommand(predicate);
 
+    }
+
+    /**
+     * Returns true if none of the prefixes contains empty {@code Optional} values in the given
+     * {@code ArgumentMultimap}.
+     */
+    private static boolean arePrefixesPresent(ArgumentMultimap argumentMultimap, Prefix... prefixes) {
+        return Stream.of(prefixes).anyMatch(prefix -> argumentMultimap.getValue(prefix).isPresent());
     }
 }

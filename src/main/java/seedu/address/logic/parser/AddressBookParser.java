@@ -122,7 +122,8 @@ public class AddressBookParser {
 
         case ExitCommand.COMMAND_WORD:
         case ExitCommand.COMMAND_ALIAS:
-        case ExitCommand.COMMAND_SECONDARY:
+        case ExitCommand.COMMAND_SECONDARY_ONE:
+        case ExitCommand.COMMAND_SECONDARY_TWO:
             return new ExitCommand();
 
         case HelpCommand.COMMAND_WORD:

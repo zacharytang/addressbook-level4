@@ -1,6 +1,8 @@
 package seedu.address.logic.commands;
 
 import static java.util.Objects.requireNonNull;
+import static seedu.address.commons.core.MessageAlignmentFormatter.FORMAT_ALIGNMENT_TO_EDIT;
+import static seedu.address.commons.core.MessageAlignmentFormatter.FORMAT_ALIGNMENT_TO_PARAMETERS;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_ADDRESS;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_BIRTHDAY;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_EMAIL;
@@ -51,26 +53,27 @@ public class EditCommand extends UndoableCommand {
     public static final String COMMAND_SECONDARY_ONE = "modify";
     public static final String COMMAND_SECONDARY_TWO = "change";
 
-    public static final String MESSAGE_USAGE = COMMAND_WORD + ": Edits the details of the person identified "
-            + "by the index number used in the last person listing. "
-            + "Existing values will be overwritten by the input values.\n"
+    public static final String MESSAGE_USAGE = "| " + COMMAND_WORD + " |"
+            + ": Edits the details of the person identified by the index number used in the last person listing.\n"
+            + FORMAT_ALIGNMENT_TO_EDIT +  "Existing values will be overwritten by the input values.\n"
             + "Parameters: INDEX (must be a positive integer) "
             + "[" + PREFIX_NAME + "NAME] "
             + "[" + PREFIX_GENDER + "GENDER] "
             + "[" + PREFIX_MATRIC_NO + "MATRIC NO.] "
             + "[" + PREFIX_PHONE + "PHONE] "
             + "[" + PREFIX_EMAIL + "EMAIL] "
-            + "[" + PREFIX_ADDRESS + "ADDRESS] "
-            + "[" + PREFIX_TIMETABLE + "TIMETABLE_URL] "
+            + "[" + PREFIX_ADDRESS + "ADDRESS]\n"
+            + FORMAT_ALIGNMENT_TO_PARAMETERS + "[" + PREFIX_TIMETABLE + "TIMETABLE_URL] "
             + "[" + PREFIX_TAG + "TAG]... "
             + "[" + PREFIX_BIRTHDAY + "BIRTHDAY]\n"
             + "Example: " + COMMAND_WORD + " 1 "
             + PREFIX_PHONE + "91234567 "
             + PREFIX_EMAIL + "johndoe@example.com\n"
             + "OR\n"
-            + "Edit the specified tag in all contacts containing this tag with a new specified tag\n"
+            + "| " + COMMAND_WORD + " |"
+            + ": Edits the specified tag in all contacts containing this tag with a new specified tag.\n"
             + "Parameters: " + PREFIX_OLD_TAG + "TAG " + PREFIX_NEW_TAG + "TAG\n"
-            + "Example: " + COMMAND_WORD + "old/CS1020 new/CS2010";
+            + "Example: " + COMMAND_WORD + " " + PREFIX_OLD_TAG + "CS1020 " + PREFIX_NEW_TAG + "CS2010";
 
     public static final String MESSAGE_EDIT_PERSON_SUCCESS = "Edited Person: %1$s";
     public static final String MESSAGE_NOT_EDITED = "At least one field to edit must be provided.";
