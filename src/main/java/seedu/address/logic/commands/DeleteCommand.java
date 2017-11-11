@@ -64,20 +64,22 @@ public class DeleteCommand extends UndoableCommand {
         this.targetTags = targetTags;
     }
 
-    //@@author nbriannl
+    //@@author
     @Override
     public CommandResult executeUndoableCommand() throws CommandException {
-        // this code block is command execution for delete [indexes]
         if (targetTags == null && targetIndexes != null) {
-            return getCommandResultForPerson();
+            return executeCommandForPerson();
 
-        } else { // this code block is command execution for delete t/[tag...]
-            return getCommandResultForTag();
+        } else {
+            return executeCommandForTag();
         }
     }
 
     //@@author April0616
-    private CommandResult getCommandResultForPerson() throws CommandException {
+    /**
+     * Command execution of {@code DeleteCommand} for a {@code Person}
+     */
+    private CommandResult executeCommandForPerson () throws CommandException {
         List<ReadOnlyPerson> lastShownList = model.getFilteredPersonList();
         ArrayList<ReadOnlyPerson> deletePersonList = new ArrayList<>();
 
@@ -94,13 +96,14 @@ public class DeleteCommand extends UndoableCommand {
         } catch (PersonNotFoundException pnfe) {
             assert false : "One of the target persons is missing";
         }
-
-        //return new CommandResult(String.format(MESSAGE_DELETE_PERSON_SUCCESS));
         return new CommandResult(generateResultMsg(deletePersonList));
     }
 
     //@@author nbriannl
-    private CommandResult getCommandResultForTag () throws CommandException {
+    /**
+     * Command execution of {@code DeleteCommand} for a {@code Tag}
+     */
+    private CommandResult executeCommandForTag () throws CommandException {
         ArrayList<Tag> arrayTags = new ArrayList<Tag>(targetTags);
         List<Tag> listOfExistingTags = model.getAddressBook().getTagList();
 
@@ -157,7 +160,6 @@ public class DeleteCommand extends UndoableCommand {
         String resultMsg = formatBuilder.toString();
 
         return resultMsg;
-
     }
 
     //@@author April0616

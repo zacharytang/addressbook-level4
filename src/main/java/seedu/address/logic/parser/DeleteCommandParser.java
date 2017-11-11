@@ -32,18 +32,55 @@ public class DeleteCommandParser implements Parser<DeleteCommand> {
      * Parses the given {@code String} of arguments in the context of the DeleteCommand
      * and returns an DeleteCommand object for execution.
      * @throws ParseException if the user input does not conform the expected format
+     *
      */
     public DeleteCommand parse(String args) throws ParseException {
 
         ArgumentMultimap argMultimap = ArgumentTokenizer.tokenize(args, PREFIX_TAG);
         String preamble = argMultimap.getPreamble();
 
-        if (preamble.equals("")) { // code block for delete for a tag
-            DeleteCommand tagList = getDeleteCommandForTags(argMultimap);
+        if (preamble.equals("")) {
+            DeleteCommand tagList = parseForTags(argMultimap);
             if (tagList != null) {
                 return tagList;
             }
-        } else if (preamble.matches(DELETE_ONE_PERSON_VALIDATION_REGEX)) { // code block for delete for a person
+        } else {
+            DeleteCommand index = parseForPersonIndexes(args, preamble);
+            if (index != null) {
+                return index;
+            }
+        }
+
+        throw new ParseException(
+                String.format(MESSAGE_INVALID_COMMAND_FORMAT, DeleteCommand.MESSAGE_USAGE));
+    }
+
+    //@@author nbriannl
+    /**
+     * Parses the {@code Tags} contained within {@code argMultimap} to return
+     * a DeleteCommand object that executes a delete for Tags.
+     * @throws ParseException if the values mapped as a tag does not conform as a valid tag
+     * @see #parse(String)
+     */
+    private DeleteCommand parseForTags (ArgumentMultimap argMultimap) throws ParseException {
+        try {
+            if (arePrefixesPresent(argMultimap, PREFIX_TAG)) {
+                Set<Tag> tagList = ParserUtil.parseTags(argMultimap.getAllValues(PREFIX_TAG));
+                return new DeleteCommand(tagList);
+            }
+        } catch (IllegalValueException ive) {
+            throw new ParseException(
+                    String.format(MESSAGE_INVALID_COMMAND_FORMAT, DeleteCommand.MESSAGE_USAGE));
+        }
+        return null;
+    }
+
+    //@@author April0616
+    /**
+     *
+     */
+    private DeleteCommand parseForPersonIndexes (String args, String preamble) throws ParseException {
+        if (preamble.matches(DELETE_ONE_PERSON_VALIDATION_REGEX)) { // code block for delete for a person
             try {
                 Index index = ParserUtil.parseIndex(args);
                 return new DeleteCommand(index);
@@ -69,22 +106,6 @@ public class DeleteCommandParser implements Parser<DeleteCommand> {
                 throw new ParseException(
                         String.format(MESSAGE_INVALID_COMMAND_FORMAT, DeleteCommand.MESSAGE_USAGE));
             }
-        }
-
-        throw new ParseException(
-                String.format(MESSAGE_INVALID_COMMAND_FORMAT, DeleteCommand.MESSAGE_USAGE));
-    }
-
-    //@@author nbriannl
-    private DeleteCommand getDeleteCommandForTags (ArgumentMultimap argMultimap) throws ParseException {
-        try {
-            if (arePrefixesPresent(argMultimap, PREFIX_TAG)) {
-                Set<Tag> tagList = ParserUtil.parseTags(argMultimap.getAllValues(PREFIX_TAG));
-                return new DeleteCommand(tagList);
-            }
-        } catch (IllegalValueException ive) {
-            throw new ParseException(
-                    String.format(MESSAGE_INVALID_COMMAND_FORMAT, DeleteCommand.MESSAGE_USAGE));
         }
         return null;
     }
