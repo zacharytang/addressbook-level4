@@ -37,7 +37,7 @@ public class ArgumentTokenizer {
         List<PrefixPosition> positions = new ArrayList<>();
 
         for (Prefix prefix : prefixes) {
-            positions.addAll(findPrefixPositions(argsString, prefix));
+            positions.addAll(findPrefixPositions(argsString.toLowerCase(), prefix));
         }
 
         return positions;
