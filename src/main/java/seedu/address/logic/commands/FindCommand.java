@@ -48,6 +48,8 @@ public class FindCommand extends Command {
 
     public static final String MESSAGE_NOT_FOUND = "At least one field to find must be provided.";
     private ArrayList<String> predicate;
+    //to keep track of how many prefixes are input
+    private int count = 0;
 
     public FindCommand(ArrayList<String> predicate) {
         this.predicate = predicate;
@@ -60,99 +62,92 @@ public class FindCommand extends Command {
         //to keep track of the number of times a single person matches different fields of keywords
         HashMap<String, Integer> predicateMap = new HashMap<>();
 
-        //to keep track of how many prefixes are input
-        int count = 0;
-
         for (int i = 0; i < predicate.size() - 1; i++) {
             String predicates = predicate.get(i);
 
             if (predicates.equals(PREFIX_NAME.getPrefix())) {
-                count++;
-                ArrayList<String> nameList = findName(predicate.get(i + 1));
-                for (int j = 0; j < nameList.size(); j++) {
-                    if (!predicateMap.containsKey(nameList.get(j))) {
-                        predicateMap.put(nameList.get(j), 1);
-                        predicateList.add(nameList.get(j));
+                ArrayList<String> personsWithName = findPersonsWithName(predicate.get(i + 1));
+                for (int j = 0; j < personsWithName.size(); j++) {
+                    if (!predicateMap.containsKey(personsWithName.get(j))) {
+                        predicateMap.put(personsWithName.get(j), 1);
+                        predicateList.add(personsWithName.get(j));
                     } else {
-                        predicateMap.put(nameList.get(j), predicateMap.remove(nameList.get(i)) + 1);
+                        predicateMap.put(personsWithName.get(j), predicateMap.remove(personsWithName.get(j)) + 1);
                     }
                 }
             }
 
             if (predicates.equals(PREFIX_PHONE.getPrefix())) {
-                count++;
-                ArrayList<String> phoneList = findPhone(predicate.get(i + 1));
-                for (int j = 0; j < phoneList.size(); j++) {
-                    if (!predicateMap.containsKey(phoneList.get(j))) {
-                        predicateMap.put(phoneList.get(j), 1);
-                        predicateList.add(phoneList.get(j));
+                ArrayList<String> personsWithPhone = findPersonsWithPhone(predicate.get(i + 1));
+                for (int j = 0; j < personsWithPhone.size(); j++) {
+                    if (!predicateMap.containsKey(personsWithPhone.get(j))) {
+                        predicateMap.put(personsWithPhone.get(j), 1);
+                        predicateList.add(personsWithPhone.get(j));
                     } else {
-                        predicateMap.put(phoneList.get(j), predicateMap.remove(phoneList.get(i)) + 1);
+                        predicateMap.put(personsWithPhone.get(j), predicateMap.remove(personsWithPhone.get(j)) + 1);
                     }
                 }
             }
 
             if (predicates.equals(PREFIX_ADDRESS.getPrefix())) {
-                count++;
-                ArrayList<String> addressList = findAddress(predicate.get(i + 1));
-                for (int j = 0; j < addressList.size(); j++) {
-                    if (!predicateMap.containsKey(addressList.get(j))) {
-                        predicateMap.put(addressList.get(j), 1);
-                        predicateList.add(addressList.get(j));
+                ArrayList<String> personsWithAddress = findPersonsWithAddress(predicate.get(i + 1));
+                for (int j = 0; j < personsWithAddress.size(); j++) {
+                    if (!predicateMap.containsKey(personsWithAddress.get(j))) {
+                        predicateMap.put(personsWithAddress.get(j), 1);
+                        predicateList.add(personsWithAddress.get(j));
                     } else {
-                        predicateMap.put(addressList.get(j), predicateMap.remove(addressList.get(i)) + 1);
+                        predicateMap.put(personsWithAddress.get(j), predicateMap.remove(personsWithAddress.get(j)) + 1);
                     }
                 }
             }
 
             if (predicates.equals(PREFIX_EMAIL.getPrefix())) {
-                count++;
-                ArrayList<String> emailList = findEmail(predicate.get(i + 1));
-                for (int j = 0; j < emailList.size(); j++) {
-                    if (!predicateMap.containsKey(emailList.get(j))) {
-                        predicateMap.put(emailList.get(j), 1);
-                        predicateList.add(emailList.get(j));
+                ArrayList<String> personsWithEmail = findPersonsWithEmail(predicate.get(i + 1));
+                for (int j = 0; j < personsWithEmail.size(); j++) {
+                    if (!predicateMap.containsKey(personsWithEmail.get(j))) {
+                        predicateMap.put(personsWithEmail.get(j), 1);
+                        predicateList.add(personsWithEmail.get(j));
                     } else {
-                        predicateMap.put(emailList.get(j), predicateMap.remove(emailList.get(i)) + 1);
+                        predicateMap.put(personsWithEmail.get(j), predicateMap.remove(personsWithEmail.get(j)) + 1);
                     }
                 }
             }
 
             if (predicates.equals(PREFIX_TAG.getPrefix())) {
-                count++;
-                ArrayList<String> tagList = findTags(predicate.get(i + 1));
-                for (int j = 0; j < tagList.size(); j++) {
-                    if (!predicateMap.containsKey(tagList.get(j))) {
-                        predicateMap.put(tagList.get(j), 1);
-                        predicateList.add(tagList.get(j));
+                ArrayList<String> personsWithTags = findPersonsWithTags(predicate.get(i + 1));
+                for (int j = 0; j < personsWithTags.size(); j++) {
+                    if (!predicateMap.containsKey(personsWithTags.get(j))) {
+                        predicateMap.put(personsWithTags.get(j), 1);
+                        predicateList.add(personsWithTags.get(j));
                     } else {
-                        predicateMap.put(tagList.get(j), predicateMap.remove(tagList.get(i)) + 1);
+                        predicateMap.put(personsWithTags.get(j), predicateMap.remove(personsWithTags.get(j)) + 1);
                     }
                 }
             }
 
             if (predicates.equals(PREFIX_BIRTHDAY.getPrefix())) {
-                count++;
-                ArrayList<String> birthdayList = findBirthday(predicate.get(i + 1));
-                for (int j = 0; j < birthdayList.size(); j++) {
-                    if (!predicateMap.containsKey(birthdayList.get(j))) {
-                        predicateMap.put(birthdayList.get(j), 1);
-                        predicateList.add(birthdayList.get(j));
+                ArrayList<String> personsWithBirthday = findPersonsWithBirthday(predicate.get(i + 1));
+                for (int j = 0; j < personsWithBirthday.size(); j++) {
+                    if (!predicateMap.containsKey(personsWithBirthday.get(j))) {
+                        predicateMap.put(personsWithBirthday.get(j), 1);
+                        predicateList.add(personsWithBirthday.get(j));
                     } else {
-                        predicateMap.put(birthdayList.get(j), predicateMap.remove(birthdayList.get(i)) + 1);
+                        predicateMap.put(personsWithBirthday.get(j),
+                                predicateMap.remove(personsWithBirthday.get(j)) + 1);
                     }
                 }
             }
         }
 
         //to eliminate the persons who did not match all keywords
+        ArrayList<String> predicatesList = new ArrayList<>();
         for (String word : predicateList) {
-            if (predicateMap.get(word) != count) {
-                predicateList.remove(word);
+            if (predicateMap.get(word) == count) {
+                predicatesList.add(word);
             }
         }
 
-        NameContainsKeywordsPredicate predicates = new NameContainsKeywordsPredicate(predicateList);
+        NameContainsKeywordsPredicate predicates = new NameContainsKeywordsPredicate(predicatesList);
         model.updateFilteredPersonList(predicates);
         return new CommandResult(getMessageForPersonListShownSummary(model.getFilteredPersonList().size()));
     }
@@ -170,15 +165,16 @@ public class FindCommand extends Command {
      * Search for persons that contain the {@String keyword} in their name
      * @param name
      */
-    public ArrayList<String> findName(String name) {
+    public ArrayList<String> findPersonsWithName(String name) {
         ObservableList<ReadOnlyPerson> personList = model.getAddressBook().getPersonList();
         String[] nameKeyword = name.split(" ");
+        count += nameKeyword.length;
         ArrayList<String> nameList = new ArrayList<>();
         for (ReadOnlyPerson person : personList) {
             for (String keyword : nameKeyword) {
                 String names = person.getName().toString().toLowerCase();
                 keyword = keyword.toLowerCase();
-                if (names.contains(keyword) && !nameList.contains(person.getName().toString())) {
+                if (names.contains(keyword)) {
                     nameList.add(person.getName().toString());
                 }
             }
@@ -190,14 +186,15 @@ public class FindCommand extends Command {
      * Search for persons that contain the {@String keyword} in their phone number
      * @param phone
      */
-    public ArrayList<String> findPhone(String phone) {
+    public ArrayList<String> findPersonsWithPhone(String phone) {
         ObservableList<ReadOnlyPerson> personList = model.getAddressBook().getPersonList();
         String[] phoneKeyword = phone.split(" ");
+        count += phoneKeyword.length;
         ArrayList<String> phoneList = new ArrayList<>();
         for (ReadOnlyPerson person : personList) {
             for (String keyword : phoneKeyword) {
                 String phones = person.getPhone().toString();
-                if (phones.contains(keyword) && !phoneList.contains(person.getName().toString())) {
+                if (phones.contains(keyword)) {
                     phoneList.add(person.getName().toString());
                 }
             }
@@ -209,15 +206,16 @@ public class FindCommand extends Command {
      * Search for persons that contain the {@String keyword} in their email
      * @param email
      */
-    public ArrayList<String> findEmail(String email) {
+    public ArrayList<String> findPersonsWithEmail(String email) {
         ObservableList<ReadOnlyPerson> personList = model.getAddressBook().getPersonList();
         String[] emailKeyword = email.split(" ");
+        count += emailKeyword.length;
         ArrayList<String> emailList = new ArrayList<>();
         for (ReadOnlyPerson person : personList) {
             for (String keyword : emailKeyword) {
                 String emails = person.getEmail().toString().toLowerCase();
                 keyword = keyword.toLowerCase();
-                if (emails.contains(keyword) && !emailList.contains(person.getName().toString())) {
+                if (emails.contains(keyword)) {
                     emailList.add(person.getName().toString());
                 }
             }
@@ -229,15 +227,16 @@ public class FindCommand extends Command {
      * Search for persons that contain the {@String keyword} in their address
      * @param address
      */
-    public ArrayList<String> findAddress(String address) {
+    public ArrayList<String> findPersonsWithAddress(String address) {
         ObservableList<ReadOnlyPerson> personList = model.getAddressBook().getPersonList();
         String[] addressKeyword = address.split(" ");
+        count += addressKeyword.length;
         ArrayList<String> addressList = new ArrayList<>();
         for (ReadOnlyPerson person : personList) {
             for (String keyword : addressKeyword) {
                 String addresses = person.getAddress().toString().toLowerCase();
                 keyword = keyword.toLowerCase();
-                if (addresses.contains(keyword) && !addressList.contains(person.getName().toString())) {
+                if (addresses.contains(keyword)) {
                     addressList.add(person.getName().toString());
                 }
             }
@@ -249,20 +248,24 @@ public class FindCommand extends Command {
      * Search for persons that contain the {@String keyword} in their tag
      * @param tags
      */
-    public ArrayList<String> findTags(String tags) {
+    public ArrayList<String> findPersonsWithTags(String tags) {
         ObservableList<ReadOnlyPerson> personList = model.getAddressBook().getPersonList();
         String[] tagKeyword = tags.split(" ");
+        count += tagKeyword.length;
         ArrayList<String> tagList = new ArrayList<>();
         for (ReadOnlyPerson person : personList) {
             for (String keyword : tagKeyword) {
+                //Used to keep track if a person's tags matches one keyword multiple times, if yes only record once
+                ArrayList<String> tagsList = new ArrayList<>();
                 for (Tag tagging : person.getTags()) {
                     //the tag name returned is in the format of [TAGNAME] so extract the name without []
                     String tag1 = tagging.toString().substring(1, tagging.toString().length()).toLowerCase();
                     keyword = keyword.toLowerCase();
-                    if (tag1.contains(keyword) && !tagList.contains(person.getName().toString())) {
-                        tagList.add(person.getName().toString());
+                    if (tag1.contains(keyword) && !tagsList.contains(person.getName().toString())) {
+                        tagsList.add(person.getName().toString());
                     }
                 }
+                tagList.addAll(tagsList);
             }
         }
         return tagList;
@@ -272,15 +275,16 @@ public class FindCommand extends Command {
      * Search for persons that contain the {@String keyword} in their birthday
      * @param birthday
      */
-    public ArrayList<String> findBirthday(String birthday) {
+    public ArrayList<String> findPersonsWithBirthday(String birthday) {
         ObservableList<ReadOnlyPerson> personList = model.getAddressBook().getPersonList();
         String[] birthdayKeyword = birthday.split(" ");
+        count += birthdayKeyword.length;
         ArrayList<String> birthdayList = new ArrayList<>();
         for (ReadOnlyPerson person : personList) {
             for (String keyword : birthdayKeyword) {
                 String birth = person.getBirthday().toString();
                 String birthdays = (!birth.equals("")) ? birth.substring(2, 4) : "";
-                if (birthdays.equals(keyword) && !birthdayList.contains(person.getName().toString())) {
+                if (birthdays.equals(keyword)) {
                     birthdayList.add(person.getName().toString());
                 }
             }
