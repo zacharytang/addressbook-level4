@@ -84,8 +84,10 @@
     -fx-border-color: transparent transparent transparent transparent;
 }
 
+// horizontal divider above timetable
 .split-pane:vertical .split-pane-divider {
-    -fx-background-color: #FAFAFA;
+    -fx-background-color: #E0E0E0;
+    -fx-background-insets: 3;
     -fx-border-color: transparent transparent transparent transparent;
 }
 
