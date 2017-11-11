@@ -12,7 +12,7 @@ import seedu.address.commons.exceptions.IllegalValueException;
 public class Gender {
 
     public static final String MESSAGE_GENDER_CONSTRAINTS =
-            "Person gender should be a string of either 'Male', 'Female' or 'M', 'F'";
+            "Person gender should be a string of either 'Male', 'Female', 'male', 'female', 'm', 'f' or 'M', 'F'";
     public static final String GENDER_VALIDATION_WORD1 = "Male";
     public static final String GENDER_VALIDATION_WORD2 = "Female";
 
@@ -28,9 +28,9 @@ public class Gender {
     public Gender(String gender) throws IllegalValueException {
         requireNonNull(gender);
         String trimmedGender = gender.trim();
-        if (trimmedGender.equals("M")) {
+        if (trimmedGender.equals("M") || trimmedGender.equals("male") || trimmedGender.equals("m")) {
             trimmedGender = "Male";
-        } else if (trimmedGender.equals("F")) {
+        } else if (trimmedGender.equals("F") || trimmedGender.equals("female") || trimmedGender.equals("f")) {
             trimmedGender = "Female";
         }
         if (!isValidGender(trimmedGender)) {
