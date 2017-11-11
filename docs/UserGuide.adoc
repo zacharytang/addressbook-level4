@@ -120,20 +120,21 @@ You can view the contacts you have added in UniFy in the form of _cards_.
 Here are the following information a person can have: +
 
 * *Name*
+** `Name` field is compulsory while others are not.
 * *Gender*
-** `GENDER` is either Male/Female or M/F
+** `GENDER` is either Male/Female or M/F.
 * *Phone number*
 * *Email*
 * *Address*
 * *Matriculation number* _(Added since v1.2)_
-** `MATRIC_NUMBER` should be a 9-character string starting with 'A or a' and ending with a letter
+** `MATRIC_NUMBER` should be a 9-character string starting with 'A or a' and ending with a letter.
 * *Birthday* _(Added since v1.2)_
 ** The format for `BIRTHDAY` is DDMMYYYY.
 * *Timetable* via an NUSMods shortlink _(Added since v1.2)_
-** The full link is not allowed
+** The full link is not allowed.
 *** Example of a shortlink: http://modsn.us/AC71u
 * *Tags*
-** A person can have any number of tags (even no tags at all!)
+** A person can have any number of tags.
 ** Tags are alphanumeric and without spaces.
 ****
 
@@ -141,7 +142,7 @@ Examples:
 
 * `add n/John Doe g/Male p/98765432 e/johnd@example.com a/John street, block 123, #01-01 m/A0134232H tt/http://modsn.us/etYEX`
 * `add n/Betsy Crowe g/Female p/1234567 e/betsycrowe@example.com a/Newgate Prison t/friend t/criminal`
-* `add n/Amy Tan g/F p/82974823 tt/4/CS2101classmates e/amy_tan@example.com a/PGP m/a0142323T`
+* `add n/Amy Tan g/F p/82974823 e/amy_tan@example.com a/PGP m/a0142323T`
 * `add n/Betty g/F p/12345678 e/betty@example.com b/23051998`
 * `add n/Jasmine p/12345678`
 // end::birthday[]
@@ -154,7 +155,7 @@ ____
 _Don't want to keep a tag forever? Let's set temporary tags!_
 ____
 Adds a person to the address book +
-Format: `add n/NAME g/GENDER p/PHONE_NUMBER e/EMAIL a/ADDRESS [m/MATRIC_NUMBER] [b/BIRTHDAY] [tt/TIMETABLE_URL] [t/TAG]... [tmpt/NUM_OF_MONTHS/TEMPORARY TAG]...` +
+Format: `add n/NAME [g/GENDER p/PHONE_NUMBER] [e/EMAIL] [a/ADDRESS] [m/MATRIC_NUMBER] [b/BIRTHDAY] [tt/TIMETABLE_URL] [t/TAG]... [tmpt/NUM_OF_MONTHS/TEMPORARY TAG]...` +
 Alternatives: `a` , `insert`
 
 Here is the temporary tag information a person can have: +
@@ -186,17 +187,20 @@ Examples:
 // tag::photoCommand[]
 === Adding/Deleting a Photo for a person : `photo` _(Since v1.4)_
 ____
-_When you study too much, sometimes, you forget how someone looks like._
+_When you study too much, sometimes, you forget what someone looks like._
 ____
 You can add or remove a photo to an existing person in the address book. +
 Format: +
 (Add photo) `photo INDEX ph/PHOTO PATH` +
-(Delete photo) `photo INDEX` +
+(Delete photo) `photo INDEX` or `photo INDEX ph/`+
 Alternatives: `ph`
 
 ****
 * Edits the photo of the person at the specified `INDEX`.
-* The file path of the photo will be updated to the new path.
+* The photo path of the person will be updated.
+* When adding a photo to the person, the photo will be saved to the default folder.
+* When removing the photo, only the path of the photo will be removed from the person.
+* All the unused photo will be deleted from the app the next time you start the application.
 ****
 
 [IMPORTANT]
