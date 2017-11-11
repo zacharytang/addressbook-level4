@@ -139,6 +139,15 @@ public class DeleteCommand extends UndoableCommand {
             formatBuilder.append("Deleted Persons :\n");
         }
 
+        formatBuilder.append("[ ");
+
+        for (int i = 0; i < deletePersonList.size(); i++) {
+            formatBuilder.append((i + 1) + ". " + deletePersonList.get(i).getName() + " ");
+        }
+
+        formatBuilder.append("]\n");
+        formatBuilder.append("Details: \n");
+
         for (ReadOnlyPerson p : deletePersonList) {
             formatBuilder.append("[");
             formatBuilder.append(p.getAsText());
