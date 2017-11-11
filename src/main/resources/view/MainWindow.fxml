@@ -42,7 +42,7 @@
                         <!-- @@author nbriannl -->
                         <StackPane fx:id="tagListPanelPlaceholder" alignment="TOP_CENTER" styleClass="pane-with-border">
                      <padding>
-                        <Insets bottom="5.0" left="10.0" right="10.0" top="5.0" />
+                        <Insets bottom="10.0" left="10.0" right="10.0" />
                      </padding>
                         </StackPane>
                         <StackPane fx:id="personInfoPlaceholder" VBox.vgrow="ALWAYS" />
