@@ -96,7 +96,7 @@ public class DeleteCommand extends UndoableCommand {
         } catch (PersonNotFoundException pnfe) {
             assert false : "One of the target persons is missing";
         }
-        return new CommandResult(generateResultMsg(deletePersonList));
+        return new CommandResult(generateResultMsgForPerson(deletePersonList));
     }
 
     //@@author nbriannl
@@ -123,7 +123,7 @@ public class DeleteCommand extends UndoableCommand {
             }
         }
 
-        return new CommandResult(MESSAGE_DELETE_TAG_SUCCESS);
+        return new CommandResult(generateResultMsgForTag(arrayTags));
     }
 
     //@@author April0616
@@ -132,7 +132,7 @@ public class DeleteCommand extends UndoableCommand {
      * @param deletePersonList
      * @return commandResult string
      */
-    public static String generateResultMsg(ArrayList<ReadOnlyPerson> deletePersonList) {
+    public static String generateResultMsgForPerson(ArrayList<ReadOnlyPerson> deletePersonList) {
         int numOfPersons = deletePersonList.size();
         StringBuilder formatBuilder = new StringBuilder();
 
@@ -157,6 +157,37 @@ public class DeleteCommand extends UndoableCommand {
             formatBuilder.append("]");
             formatBuilder.append("\n");
         }
+        String resultMsg = formatBuilder.toString();
+
+        return resultMsg;
+    }
+
+    //@@author nbriannl
+    /**
+     * Generates the command result String for Delete Command when deleting tags
+     */
+    public static String generateResultMsgForTag(ArrayList<Tag> arrayTags) {
+        int numOfTag = arrayTags.size();
+        StringBuilder formatBuilder = new StringBuilder();
+
+        if (numOfTag == 1) {
+            formatBuilder.append("Deleted Tag :\n");
+        } else {
+            formatBuilder.append("Deleted Tags :\n");
+        }
+
+        formatBuilder.append("[ ");
+
+        for (int i = 0; i < arrayTags.size(); i++) {
+            if (i == 0) {
+                formatBuilder.append(arrayTags.get(i).tagName);
+            } else {
+                formatBuilder.append(", " + arrayTags.get(i).tagName);
+            }
+        }
+
+        formatBuilder.append(" ]\n");
+
         String resultMsg = formatBuilder.toString();
 
         return resultMsg;
