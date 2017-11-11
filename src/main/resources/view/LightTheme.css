@@ -86,9 +86,9 @@
 
 // horizontal divider above timetable
 .split-pane:vertical .split-pane-divider {
-    -fx-background-color: #E0E0E0;
-    -fx-background-insets: 3;
+    -fx-background-color: #FAFAFA;
     -fx-border-color: transparent transparent transparent transparent;
+    -fx-effect: dropshadow( gaussian , rgba(0,0,0,0.7) , 10,0,0,-7 );
 }
 
 .split-pane {

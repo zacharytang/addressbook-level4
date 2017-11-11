@@ -164,17 +164,6 @@ public class MainWindow extends UiPart<Region> {
         commandBoxPlaceholder.getChildren().add(commandBox.getRoot());
     }
 
-    /**
-     *
-     */
-    public void loadBorders() {
-        personListPanelPlaceholder.setStyle("-fx-border-color:red");
-        tagListPanelPlaceholder.setStyle("-fx-border-color:red");
-        personInfoPlaceholder.setStyle("-fx-border-color:blue");
-        infoPlaceholder.setStyle("-fx-border-color:yellow");
-        commandBoxPlaceholder.setStyle("-fx-border-color:aqua");
-    }
-
     void hide() {
         primaryStage.hide();
     }

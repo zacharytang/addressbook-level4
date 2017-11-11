@@ -86,9 +86,9 @@
 
 // horizontal divider above timetable
 .split-pane:vertical .split-pane-divider {
-    -fx-background-color: derive(#383838, 50%);
-    -fx-background-insets: 3;
+    -fx-background-color: #383838;
     -fx-border-color: transparent transparent transparent transparent;
+    -fx-effect: dropshadow( gaussian , rgba(0,0,0,0.7) , 10,0,0,-7 );
 }
 
 .split-pane {
@@ -134,7 +134,7 @@
 
 .list-cell:filled:selected {
     -fx-background-color: #3f5e70;
-    -fx-effect: dropshadow( gaussian , rgba(0,0,0,0.7) , 10,0,5,5 );
+    -fx-effect: dropshadow( gaussian , rgba(0,0,0,0.7) , 5,0,5,5 );
 }
 
 .list-cell:filled:selected #cardPane {
