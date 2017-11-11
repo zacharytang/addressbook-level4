@@ -59,12 +59,18 @@ public class Timetable {
     public Timetable(String url) throws IllegalValueException {
         requireNonNull(url);
         String trimmedUrl = url.trim();
-        if (trimmedUrl == "") {
-            trimmedUrl = "http://modsn.us/5tN3z";
+
+        // If no url provided, returns an empty timetable
+        if (trimmedUrl.equals("")) {
+            this.value = "";
+            this.timetable = new TimetableInfo();
+            return;
         }
+
         if (!isValidUrl(trimmedUrl)) {
             throw new IllegalValueException(MESSAGE_TIMETABLE_URL_CONSTRAINTS);
         }
+
         this.value = trimmedUrl;
         this.timetable = parseUrl(trimmedUrl);
     }
