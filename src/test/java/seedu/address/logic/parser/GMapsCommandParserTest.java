@@ -49,7 +49,6 @@ public class GMapsCommandParserTest {
         assertParseFailure(parser, "1 a/", Address.MESSAGE_ADDRESS_CONSTRAINTS);
     }
 
-
     @Test
     public void parse_validValueWithoutAddress_success() throws Exception {
         GMapsCommand expectedCommand = new GMapsCommand(INDEX_FIRST_PERSON, null);

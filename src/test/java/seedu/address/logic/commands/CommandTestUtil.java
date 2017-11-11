@@ -51,8 +51,8 @@ public class CommandTestUtil {
     public static final String VALID_TAG_FRIEND = "friend";
     public static final String VALID_REMARK_COFFEE = "like to drink coffee";
     public static final String VALID_REMARK_CAP = "CAP 5.0";
-    public static final String VALID_PHOTOPATH_AMY = "F:\\Selfie\\photo.jpg";
-    public static final String VALID_PHOTOPATH_BOB = "D:\\Family\\selfie.jpg";
+    public static final String VALID_PHOTOPATH_AMY = "C:\\Selfie\\photo.jpg";
+    public static final String VALID_PHOTOPATH_BOB = "C:\\Family\\selfie.jpg";
 
     public static final String NAME_DESC_AMY = " " + PREFIX_NAME + VALID_NAME_AMY;
     public static final String NAME_DESC_BOB = " " + PREFIX_NAME + VALID_NAME_BOB;
@@ -79,7 +79,6 @@ public class CommandTestUtil {
     public static final String INVALID_MATRIC_NO_DESC = " " + PREFIX_MATRIC_NO + "30132222K";
     public static final String INVALID_PHONE_DESC = " " + PREFIX_PHONE + "911a"; // 'a' not allowed in phones
     public static final String INVALID_EMAIL_DESC = " " + PREFIX_EMAIL + "bob!yahoo"; // missing '@' symbol
-    public static final String INVALID_ADDRESS_DESC = " " + PREFIX_ADDRESS; // empty string not allowed for addresses
     // '/' not allowed in birthdays
     public static final String INVALID_BIRTHDAY_DESC = " " + PREFIX_BIRTHDAY + "23/05/1997";
     public static final String INVALID_PHOTOPATH_DESC = " " + PREFIX_PHOTO + "haa.jpg";
