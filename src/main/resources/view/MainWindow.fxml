@@ -34,7 +34,7 @@
 
                 <!-- @@author -->
                 <SplitPane id="splitPane" fx:id="splitPane" dividerPositions="0.4269269269269269" minHeight="50.0" prefHeight="290.0" prefWidth="870.0">
-                    <VBox minHeight="81.0" minWidth="650.0" prefHeight="81.0" prefWidth="650.0" SplitPane.resizableWithParent="true">
+                    <VBox maxWidth="670.0" minHeight="81.0" minWidth="670.0" prefHeight="81.0" prefWidth="670.0" SplitPane.resizableWithParent="true">
                         <padding>
                             <Insets bottom="10" left="10" right="10" top="10" />
                         </padding>
