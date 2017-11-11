@@ -52,10 +52,10 @@ public class PersonListPanel extends UiPart<Region> {
                 .addListener((observable, oldValue, newValue) -> {
                     if (newValue != null) {
                         logger.fine("Selection in person list panel changed to : '" + newValue + "'");
-                        if (this.shouldRaiseEvent) {
+                        if (shouldRaiseEvent) {
                             raise(new PersonPanelSelectionChangedEvent(newValue));
                         }
-                        this.shouldRaiseEvent = true;
+                        shouldRaiseEvent = true;
                     }
                 });
     }
@@ -79,20 +79,21 @@ public class PersonListPanel extends UiPart<Region> {
     @Subscribe
     private void handlePersonSelectedEvent(PersonSelectedEvent event) {
         logger.info(LogsCenter.getEventHandlingLogMessage(event));
+        shouldRaiseEvent = false;
         scrollTo(event.index);
     }
 
     @Subscribe
     private void handlePersonAddressDisplayMapEvent(PersonAddressDisplayMapEvent event) {
         logger.info(LogsCenter.getEventHandlingLogMessage(event));
-        this.shouldRaiseEvent = false;
+        shouldRaiseEvent = false;
         scrollTo(event.targetIndex);
     }
 
     @Subscribe
     private void handlePersonAddressDisplayDirectionsEvent(PersonAddressDisplayDirectionsEvent event) {
         logger.info(LogsCenter.getEventHandlingLogMessage(event));
-        this.shouldRaiseEvent = false;
+        shouldRaiseEvent = false;
         scrollTo(event.targetIndex);
     }
 
