@@ -51,6 +51,7 @@ public class UiManager extends ComponentManager implements Ui {
 
         //Set the application icon.
         primaryStage.getIcons().add(getImage(ICON_APPLICATION));
+        primaryStage.setMaximized(true);
 
         try {
             mainWindow = new MainWindow(primaryStage, config, prefs, logic);
