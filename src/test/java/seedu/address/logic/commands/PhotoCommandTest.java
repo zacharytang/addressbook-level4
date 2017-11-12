@@ -53,7 +53,6 @@ public class PhotoCommandTest {
         File amyFile = new File("photo.jpg");
         //File bobFile = new File(VALID_PHOTONAME_BOB);
         File bobFile = new File("selfie.jpg");
-
         try {
             amyFile.createNewFile();
             bobFile.createNewFile();

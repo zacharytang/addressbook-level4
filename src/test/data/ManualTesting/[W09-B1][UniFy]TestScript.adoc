@@ -18,27 +18,69 @@ By: `Team W09-B1`      Since: `Aug 2017`      Licence: `MIT`
 
 == Before You Start Testing
 === Materials Required for Testing
+Before testing, you need ensure that you have a picture in your local disk.
+You need to open the UniFy.jar file.
 
-=== Test Data
-
-=== Test Environment
+=== Import Test Data
+You need to replace the addressbook.xml file with the new one. ??
 
 
 == Special Instructions
 === Test Procedures
+Type the command in the command box and press 'Enter'.
+You should type in the commands in the script in order, or you will not see the correct output.
 
 == Content for Testing (Include ALIAS)
 === AddCommand
 ==== Description/Data
 ==== Steps To Execute And Expected Results
 
-=== ClearCommand
+=== ThemeCommand
 ==== Description/Data
 ==== Steps To Execute And Expected Results
 
 === DeleteCommand (Person)
 ==== Description/Data
+DeleteCommand can delete multiple persons simultaneously.
+
 ==== Steps To Execute And Expected Results
+1. Type in: delete 1,2,3
+
+Expected Result: Delete the 1st, 2nd, 3rd persons in the shown list.
+
+Result Message:
+
+2. Type in: find n/John
+
+Expected Result: Find all the persons with 'john' inside their names.
+
+Result Message: 1 persons listed!
+
+3. Type in: delete 1
+
+Expected Result: Delete the first person in the shown list.
+
+Result Message:
+
+4. Type in: list
+
+5. Type in: delete -1, -2
+
+Expected Result: Error with instruction.
+
+Result Message: Invalid command format!
+
+6. Type in: delete 999
+
+Expected Result: Error.
+
+Result Message: The person index provided is invalid
+
+7. Type in: delete
+
+Expected Result: Error with instruction.
+
+Result Message: Invalid command format!
 
 === DeleteCommand (Tag)
 ==== Description/Data
@@ -54,11 +96,97 @@ By: `Team W09-B1`      Since: `Aug 2017`      Licence: `MIT`
 
 === PhotoCommand
 ==== Description/Data
+PhotoCommand is to add the photo to your specified contact.
+
+==== Before Test PhotoCommand
+Windows System: Right click on one picture file, click 'Properties'
+and copy the file path in the 'location:' field.
+It should be an absolute file path in your computer, like "C:\selfie\bg.jpg".
+
 ==== Steps To Execute And Expected Results
+1. Type in: list
+
+Expected Result: List all the persons.
+
+Result Message: Listed all persons
+
+2. Type in: photo
+
+Expected Result: Error with instruction.
+
+Result Message: Invalid command format!
+
+3. Type in: photo 1 ph/[Your copied file path]
+
+Expected Result: You could see the photo is added to the first person in the shown list.
+
+Result Message:
+
+4. Type in: ph 1
+
+Expected Result: The photo is removed from the person card.
+
+Result Message:
+
+5. Type in: photo 1 ph/Q:\haha.jpg
+
+Expected Result: Error with Instruction.
+
+Result Message: Cannot find file here!
+
+6. Type in: photo 2 ph/[Your copied photo path]
+
+Expected Result: You could see the photo is added to the second person in the shown list.
+
+Result Message:
+
+7. Type in: undo
+
+Expected Result: Undo the previous result.
+
+Result Message:
+
+8. Type in: select 2
+
+Expected Result: The photo will be removed from the person card of the 2nd person.
+
+Result Message:
 
 === RemarkCommand
 ==== Description/Data
+Remark Command is to add a remark to the specified person.
+
 ==== Steps To Execute And Expected Results
+1. Type in: list
+
+Expected Result: List all the person in the addressbook.
+
+Result Message: Listed all persons
+
+2. Type in: remark 1 r/Likes CS2103T
+
+Expected Result: Add the remark 'Likes CS2103T' to the first person in the shown list.
+
+Result Message: Added Remark(s) to Person
+
+3. Type in: remark 1 r/
+
+Expected Result: Remove the remark from the 1st person in the shown list.
+
+Result Message: Removed Remark(s) from Person
+
+4. Type in: rm 2 r/404 r/NOT FOUND
+
+Expected Result: Add two remarks to the 2nd person in the shown list.
+
+Result Message: Added Remark(s) to Person
+
+5. Type in: undo
+
+Expected Result: Undo the previous command. The remark added to the 2nd person in the shown list will be removed.
+
+Result Message: Undo success!
+
 
 === FindCommand
 ==== Description/Data
@@ -89,6 +217,10 @@ By: `Team W09-B1`      Since: `Aug 2017`      Licence: `MIT`
 ==== Steps To Execute And Expected Results
 
 === RedoCommand
+==== Description/Data
+==== Steps To Execute And Expected Results
+
+=== ClearCommand
 ==== Description/Data
 ==== Steps To Execute And Expected Results
 
