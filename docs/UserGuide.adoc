@@ -150,41 +150,6 @@ Examples:
 
 // end::add[]
 
-// tag::tempTag[]
-==== Adding a person with temporary tags _(Coming in v2.0)_
-____
-_Don't want to keep a tag forever? Let's set temporary tags!_
-____
-Adds a person to the address book +
-Format: `add n/NAME [g/GENDER p/PHONE_NUMBER] [e/EMAIL] [a/ADDRESS] [m/MATRIC_NUMBER] [b/BIRTHDAY] [tt/TIMETABLE_URL] [t/TAG]... [tmpt/NUM_OF_MONTHS/TEMPORARY TAG]...` +
-Alternatives: `a` , `insert`
-
-Here is the temporary tag information a person can have: +
-
-** `NUM_OF_MONTHS` *must be a positive integer* eg: 1, 2, 3, ...
-** `NUM_OF_MONTHS` specifies the number of months the temporary tag will last, after which it will disappear.
-*** Example: `tmpt/6/ATAPcolleague` tags the person with `ATAPcolleague`. After 6 months, the tag will disappear.
-
-// end::tempTag[]
-
-
-==== Adding a person using the information on social media _(Coming in v2.0)_
-____
-_Add someone from a module via Facebook? Add him seamlessly into UniFy!_
-____
-
-Adds a person to address book from the social media accounts +
-Format: `add s/SOCIAL_MEDIA_TYPE SOCIAL_MEDIA_ID`
-
-****
-* The name of social media type is case insensitive.
-****
-
-Examples:
-
-* `add s/facebook John Doe`
-* `add s/Instagram John Doe`
-
 // tag::photoCommand[]
 === Adding/Deleting a Photo for a person : `photo` _(Since v1.4)_
 ____
@@ -433,6 +398,9 @@ ____
 You can view the combined timetables of a group of people, selected by indexes. +
 Format: `whenfree [INDEX]...`
 
+image::whenfree.png[width=790]
+_Figure 3.10 : View the combined timetables of your contacts easily_
+
 Examples:
 
 * `whenfree 1 2` +
@@ -444,7 +412,6 @@ Displays a combined timetable for all listed users.
 ****
 * Creates a combined timetable representing all the persons chosen.
 * If no index is specified, displays the timetable representing all the persons currently listed.
-* All persons specified *must have timetables added*.
 ****
 // end::timetable[]
 
@@ -565,6 +532,39 @@ There is no need to save manually.
 
 We have exciting new features in the works to be excited for!
 
+// tag::tempTag[]
+=== Adding a person with temporary tags _(Coming in v2.0)_
+____
+_Don't want to keep a tag forever? Let's set temporary tags!_
+____
+Adds a person to the address book +
+Format: `add n/NAME [g/GENDER p/PHONE_NUMBER] [e/EMAIL] [a/ADDRESS] [m/MATRIC_NUMBER] [b/BIRTHDAY] [tt/TIMETABLE_URL] [t/TAG]... [tmpt/NUM_OF_MONTHS/TEMPORARY TAG]...` +
+Alternatives: `a` , `insert`
+
+Here is the temporary tag information a person can have: +
+
+** `NUM_OF_MONTHS` *must be a positive integer* eg: 1, 2, 3, ...
+** `NUM_OF_MONTHS` specifies the number of months the temporary tag will last, after which it will disappear.
+*** Example: `tmpt/6/ATAPcolleague` tags the person with `ATAPcolleague`. After 6 months, the tag will disappear.
+// end::tempTag[]
+
+=== Adding a person using the information on social media _(Coming in v2.0)_
+____
+_Add someone from a module via Facebook? Add him seamlessly into UniFy!_
+____
+
+Adds a person to address book from the social media accounts +
+Format: `add s/SOCIAL_MEDIA_TYPE SOCIAL_MEDIA_ID`
+
+****
+* The name of social media type is case insensitive.
+****
+
+Examples:
+
+* `add s/facebook John Doe`
+* `add s/Instagram John Doe`
+
 // tag::oldContact[]
 === Deleting old contacts _(Coming in v2.0)_
 ____
@@ -678,14 +678,14 @@ _Here are some features in UniFy that are not in the form of commands, but good 
 Typing a mispelled word for a command will trigger the address book to suggest the correct phrasing for that command
 
 image::command_suggestion.png[width=790]
-_Example: Typing the command `delet` will make UniFy reply `Do you mean delete?`_
+_Figure 5.1 : Typing the command `delet` will make UniFy reply `Do you mean delete?`_
 
 === Tag Bar _(Since v1.5)_
 
 You can easily view all existing tags as icons, displayed above the person card
 
 image::tag_bar.png[width=790]
-_The tag bar is right above the information of the person displayed_
+_Figure 5.2 : The tag bar is right above the information of the person displayed_
 
 _(Coming in v2.0)_ You can click a tag and all people with that tag will be displayed!
 
