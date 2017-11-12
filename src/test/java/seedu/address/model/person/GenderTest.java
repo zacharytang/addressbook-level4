@@ -10,17 +10,25 @@ public class GenderTest {
 
     @Test
     public void isValidGender() {
+
         // invalid Gender
+        assertFalse(Gender.isValidInput(" ")); // spaces only
+        assertFalse(Gender.isValidInput("^")); // only non-alphanumeric characters
+        assertFalse(Gender.isValidInput("peter*")); // contains non-alphanumeric characters
+        assertFalse(Gender.isValidInput("apple")); // unrelated description
+        assertFalse(Gender.isValidInput("fmale")); // wrong input
 
-        assertFalse(Gender.isValidGender(" ")); // spaces only
-        assertFalse(Gender.isValidGender("^")); // only non-alphanumeric characters
-        assertFalse(Gender.isValidGender("peter*")); // contains non-alphanumeric characters
-        assertFalse(Gender.isValidGender("apple")); // unrelated description
-        assertFalse(Gender.isValidGender("male")); // first letter not uppercase
-
-        // valid Gender/ empty when optional
-        assertTrue(Gender.isValidGender("")); // empty string
-        assertTrue(Gender.isValidGender("Male")); // GENDER_VALIDATION_WORD1
-        assertTrue(Gender.isValidGender("Female")); // GENDER_VALIDATION_WORD2
+        // valid Gender
+        assertTrue(Gender.isValidInput("")); // empty string when unspecified
+        assertTrue(Gender.isValidInput("m"));
+        assertTrue(Gender.isValidInput("f"));
+        assertTrue(Gender.isValidInput("male"));
+        assertTrue(Gender.isValidInput("female"));
+        assertTrue(Gender.isValidInput("MALE"));
+        assertTrue(Gender.isValidInput("FEMALE"));
+        assertTrue(Gender.isValidInput("mAlE"));
+        assertTrue(Gender.isValidInput("FemALE"));
+        assertTrue(Gender.isValidInput("Male"));
+        assertTrue(Gender.isValidInput("Female"));
     }
 }
