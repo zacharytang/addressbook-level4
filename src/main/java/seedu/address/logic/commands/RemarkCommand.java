@@ -20,7 +20,7 @@ import seedu.address.model.person.exceptions.PersonNotFoundException;
 
 //@@author April0616
 /**
- * Edits the remark of a person to the address book.
+ * Edits the remark of the specified person.
  */
 public class RemarkCommand extends UndoableCommand {
 
@@ -46,6 +46,7 @@ public class RemarkCommand extends UndoableCommand {
     private final Remark remark;
 
     /**
+     * Initializes the remark command.
      * @param targetIndex of the person in the list to edit the remark
      * @param remark of the person
      */
@@ -84,9 +85,9 @@ public class RemarkCommand extends UndoableCommand {
     }
 
     /**
-     * Generates the successful Message accordingly.
-     * @param personToRemark
-     * @return successful message for adding remark if the remark string is not empty.
+     * Generates the successful message for adding remarks and deleting remarks.
+     * @param personToRemark the person to be remarked
+     * @return the successful message for adding remark if the remark string is not empty.
      */
     private String generateSuccessMsg(ReadOnlyPerson personToRemark) {
         if (remark.toString().isEmpty()) {
@@ -100,8 +101,7 @@ public class RemarkCommand extends UndoableCommand {
      * Creates and returns a {@code Person} with the details of {@code personToRemark}
      * remarked with {@code remarkPersonDescriptor}.
      */
-    public static Person createRemarkedPerson(ReadOnlyPerson personToRemark,
-                                                 Remark remark) {
+    public static Person createRemarkedPerson(ReadOnlyPerson personToRemark, Remark remark) {
         assert personToRemark != null;
 
         Person remarkPerson = new Person(personToRemark.getName(), personToRemark.getGender(),
