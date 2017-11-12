@@ -42,8 +42,10 @@ public class PhotoCommandTest {
 
     @Test
     public void equals() throws FileNotFoundException, IllegalValueException {
-        File amyFile = new File(VALID_PHOTONAME_AMY);
-        File bobFile = new File(VALID_PHOTONAME_BOB);
+        //File amyFile = new File(VALID_PHOTONAME_AMY);
+        File amyFile = new File("photo.jpg");
+        //File bobFile = new File(VALID_PHOTONAME_BOB);
+        File bobFile = new File("selfie.jpg");
         try {
             amyFile.createNewFile();
             bobFile.createNewFile();
