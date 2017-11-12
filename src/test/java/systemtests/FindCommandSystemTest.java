@@ -21,6 +21,7 @@ import seedu.address.logic.commands.SuggestCommand;
 import seedu.address.logic.commands.UndoCommand;
 import seedu.address.model.Model;
 import seedu.address.model.tag.Tag;
+import seedu.address.testutil.TypicalPersons;
 
 public class FindCommandSystemTest extends AddressBookSystemTest {
 
@@ -116,7 +117,7 @@ public class FindCommandSystemTest extends AddressBookSystemTest {
 
         /* Case: find phone number of person in address book -> 1 persons found */
         command = FindCommand.COMMAND_WORD + " " + "p/" + DANIEL.getPhone().value;
-        ModelHelper.setFilteredList(expectedModel);
+        ModelHelper.setFilteredList(expectedModel, DANIEL);
         assertCommandSuccess(command, expectedModel);
         assertSelectedCardUnchanged();
 
@@ -133,6 +134,7 @@ public class FindCommandSystemTest extends AddressBookSystemTest {
         /* Case: find tags of person in address book -> 1 persons found */
         List<Tag> tags = new ArrayList<>(DANIEL.getTags());
         command = FindCommand.COMMAND_WORD + " " + "t/" + tags.get(0).tagName;
+        ModelHelper.setFilteredList(expectedModel, TypicalPersons.getTypicalPersons());
         assertCommandSuccess(command, expectedModel);
         assertSelectedCardUnchanged();
 
@@ -150,7 +152,7 @@ public class FindCommandSystemTest extends AddressBookSystemTest {
         assert getModel().getAddressBook().getPersonList().size() == 0;
         command = FindCommand.COMMAND_WORD + " " + "n/" + KEYWORD_MATCHING_MEIER;
         expectedModel = getModel();
-        ModelHelper.setFilteredList(expectedModel, DANIEL);
+        ModelHelper.setFilteredList(expectedModel);
         assertCommandSuccess(command, expectedModel);
         assertSelectedCardUnchanged();
 
@@ -173,7 +175,7 @@ public class FindCommandSystemTest extends AddressBookSystemTest {
                 MESSAGE_PERSONS_LISTED_OVERVIEW, expectedModel.getFilteredPersonList().size());
 
         executeCommand(command);
-        assertApplicationDisplaysExpected(command, expectedResultMessage, expectedModel);
+        assertApplicationDisplaysExpected("", expectedResultMessage, expectedModel);
         assertCommandBoxShowsDefaultStyle();
         assertStatusBarUnchanged();
     }
