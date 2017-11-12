@@ -46,7 +46,7 @@
                 </VBox.margin>
             </FlowPane>
             <HBox prefHeight="100.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
-                <VBox prefHeight="160.0" prefWidth="9.0" HBox.hgrow="ALWAYS">
+                <VBox prefHeight="160.0" prefWidth="9.0" HBox.hgrow="NEVER">
                     <Label minHeight="-Infinity" minWidth="-Infinity" prefHeight="20.0" prefWidth="80.0" styleClass="display_small_label" text="Gender" />
                     <Label minHeight="-Infinity" minWidth="-Infinity" prefHeight="20.0" prefWidth="80.0" styleClass="display_small_label" text="Matric No" />
                     <Label minHeight="-Infinity" minWidth="-Infinity" prefHeight="20.0" prefWidth="80.0" styleClass="display_small_label" text="Phone" />
