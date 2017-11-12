@@ -14,7 +14,6 @@ import java.io.IOException;
 import org.junit.Test;
 
 import seedu.address.commons.exceptions.IllegalValueException;
-import seedu.address.testutil.TestUtil;
 
 //@@author April0616
 public class PhotoCommandTest {
