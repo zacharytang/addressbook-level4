@@ -6,7 +6,6 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
-import seedu.address.commons.core.Messages;
 import seedu.address.commons.exceptions.IllegalValueException;
 
 //@@author CindyTsai1
@@ -41,16 +40,11 @@ public class Birthday {
         String trimmedBirthday = birthday.trim();
 
         if (!isValidBirthday(trimmedBirthday)) {
-            throw new IllegalValueException(MESSAGE_BIRTHDAY_CONSTRAINTS);
-        } else if (!trimmedBirthday.equals("")) {
-            try {
-                DateFormat df = new SimpleDateFormat(DATE_FORMAT);
-                df.setLenient(false);
-                df.parse(trimmedBirthday);
-            } catch (ParseException pe) {
+            if (trimmedBirthday.length() == 8) {
                 throw new IllegalValueException(MESSAGE_BIRTHDAY_INVALID);
-            }
+            } throw new IllegalValueException(MESSAGE_BIRTHDAY_CONSTRAINTS);
         }
+
         this.date = birthday;
     }
 
@@ -58,7 +52,19 @@ public class Birthday {
      * Returns true if a given string is a valid person birthday.
      */
     public static boolean isValidBirthday(String test) {
-        return test.equals("") || test.matches(BIRTHDAY_VALIDATION_REGEX);
+        if (test.equals("")) {
+            return true;
+        } else if (test.matches(BIRTHDAY_VALIDATION_REGEX)) {
+            try {
+                DateFormat df = new SimpleDateFormat(DATE_FORMAT);
+                df.setLenient(false);
+                df.parse(test);
+                return true;
+            } catch (ParseException pe) {
+                return false;
+            }
+        }
+        return false;
     }
 
 
