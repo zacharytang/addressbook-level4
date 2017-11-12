@@ -44,29 +44,43 @@ You should type in the commands in the script in order, or you will not see the 
 DeleteCommand can delete multiple persons simultaneously.
 
 ==== Steps To Execute And Expected Results
-Type in: delete 1,2,3
+1. Type in: delete 1,2,3
 
-Expected Result:
+Expected Result: Delete the 1st, 2nd, 3rd persons in the shown list.
 
-Type in: find n/John
+Result Message:
 
-Expected Result:
+2. Type in: find n/John
 
-Type in: delete 1
+Expected Result: Find all the persons with 'john' inside their names.
 
-Expected Result:
+Result Message: 1 persons listed!
 
-Type in: delete -1, -2
+3. Type in: delete 1
 
-Expected Result:
+Expected Result: Delete the first person in the shown list.
 
-Type in: delete 999
+Result Message:
 
-Expected Result:
+4. Type in: list
 
-Type in: delete
+5. Type in: delete -1, -2
 
-Expected Result:
+Expected Result: Error with instruction.
+
+Result Message: Invalid command format!
+
+6. Type in: delete 999
+
+Expected Result: Error.
+
+Result Message: The person index provided is invalid
+
+7. Type in: delete
+
+Expected Result: Error with instruction.
+
+Result Message: Invalid command format!
 
 === DeleteCommand (Tag)
 ==== Description/Data
@@ -90,56 +104,88 @@ and copy the file path in the 'location:' field.
 It should be an absolute file path in your computer, like "C:\selfie\bg.jpg".
 
 ==== Steps To Execute And Expected Results
-Type in: list
+1. Type in: list
 
-Type in: photo
+Expected Result: List all the persons.
 
-Expected Result:
+Result Message: Listed all persons
 
-Type in: photo 1 ph/[Your copied file path]
+2. Type in: photo
+
+Expected Result: Error with instruction.
+
+Result Message: Invalid command format!
+
+3. Type in: photo 1 ph/[Your copied file path]
 
 Expected Result: You could see the photo is added to the first person in the shown list.
 
-Type in: ph 1
+Result Message:
+
+4. Type in: ph 1
 
 Expected Result: The photo is removed from the person card.
 
-Type in: photo 1 ph/Q:\haha.jpg
+Result Message:
 
-Expected Result:
+5. Type in: photo 1 ph/Q:\haha.jpg
 
-Type in: photo 2 ph/[Your copied photo path]
+Expected Result: Error with Instruction.
+
+Result Message: Cannot find file here!
+
+6. Type in: photo 2 ph/[Your copied photo path]
 
 Expected Result: You could see the photo is added to the second person in the shown list.
 
-Type in: undo
+Result Message:
 
-Type in: select 2
+7. Type in: undo
 
-Expected Result:
+Expected Result: Undo the previous result.
+
+Result Message:
+
+8. Type in: select 2
+
+Expected Result: The photo will be removed from the person card of the 2nd person.
+
+Result Message:
 
 === RemarkCommand
 ==== Description/Data
 Remark Command is to add a remark to the specified person.
 
 ==== Steps To Execute And Expected Results
-Type in: list
+1. Type in: list
 
-Type in: remark 1 r/Likes CS2103T
+Expected Result: List all the person in the addressbook.
 
-Expected Result:
+Result Message: Listed all persons
 
-Type in: remark 1 r/
+2. Type in: remark 1 r/Likes CS2103T
 
-Expected Result:
+Expected Result: Add the remark 'Likes CS2103T' to the first person in the shown list.
 
-Type in: rm 2 r/404 r/NOT FOUND
+Result Message: Added Remark(s) to Person
 
-Expected Result:
+3. Type in: remark 1 r/
 
-Type in: undo
+Expected Result: Remove the remark from the 1st person in the shown list.
 
-Expected Result:
+Result Message: Removed Remark(s) from Person
+
+4. Type in: rm 2 r/404 r/NOT FOUND
+
+Expected Result: Add two remarks to the 2nd person in the shown list.
+
+Result Message: Added Remark(s) to Person
+
+5. Type in: undo
+
+Expected Result: Undo the previous command. The remark added to the 2nd person in the shown list will be removed.
+
+Result Message: Undo success!
 
 
 === FindCommand
