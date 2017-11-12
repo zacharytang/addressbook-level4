@@ -438,6 +438,18 @@ Opens the Google Maps view for the address of the 1st person in the results of t
 `gmaps 2 a/Blk 632 Yishun St 61` +
 Opens the Google Maps directions from Blk 632 Yishun St 61 to the address of the 2nd person listed in the address book.
 
+=== Changing the theme of UniFy : `theme`
+
+____
+_Don't like how UniFy looks? Why not change it?_
+____
+You can change the theme of *UniFy* to any theme that you have installed. +
+Format: `theme THEME_NAME` +
+Alternatives: `th`, `changetheme`
+
+[NOTE]
+*UniFy* comes with two themes pre-installed, `dark` and `light`. More themes will be made available in the near future!
+
 === Listing entered commands : `history`
 ____
 _What have you been doing? Check the past._
