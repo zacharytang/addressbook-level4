@@ -14,7 +14,7 @@ image::docs/images/UIDark.png[width="600"]
 endif::[]
 
 ifndef::env-github[]
-image::images/UILight.png[width="600"]
+image::images/UI.png[width="600"]
 
 image::images/UIDark.png[width="600"]
 endif::[]
