@@ -6,6 +6,7 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
+import seedu.address.commons.core.Messages;
 import seedu.address.commons.exceptions.IllegalValueException;
 
 //@@author CindyTsai1
@@ -17,12 +18,14 @@ public class Birthday {
 
     public static final String MESSAGE_BIRTHDAY_CONSTRAINTS =
             "Person's birthday should be in the format of DDMMYYYY, and it should not be blank";
+    public static final String MESSAGE_BIRTHDAY_INVALID =
+            "This date does not exist.";
 
     /*
      * The first character of the address must not be a whitespace,
      * otherwise " " (a blank string) becomes a valid input.
      */
-    public static final String BIRTHDAY_VALIDATION_REGEX = "\\d{2}\\d{2}\\d{4}";
+    public static final String BIRTHDAY_VALIDATION_REGEX = "\\d{8}";
 
     public static final String DATE_FORMAT = "ddMMyyyy";
 
@@ -36,8 +39,17 @@ public class Birthday {
     public Birthday(String birthday) throws IllegalValueException {
         requireNonNull(birthday);
         String trimmedBirthday = birthday.trim();
+
         if (!isValidBirthday(trimmedBirthday)) {
             throw new IllegalValueException(MESSAGE_BIRTHDAY_CONSTRAINTS);
+        } else if (!trimmedBirthday.equals("")) {
+            try {
+                DateFormat df = new SimpleDateFormat(DATE_FORMAT);
+                df.setLenient(false);
+                df.parse(trimmedBirthday);
+            } catch (ParseException pe) {
+                throw new IllegalValueException(MESSAGE_BIRTHDAY_INVALID);
+            }
         }
         this.date = birthday;
     }
@@ -46,20 +58,7 @@ public class Birthday {
      * Returns true if a given string is a valid person birthday.
      */
     public static boolean isValidBirthday(String test) {
-        if (test.equals("")) {
-            return true;
-        }
-        if (test.matches(BIRTHDAY_VALIDATION_REGEX)) {
-            try {
-                DateFormat df = new SimpleDateFormat(DATE_FORMAT);
-                df.setLenient(false);
-                df.parse(test);
-                return true;
-            } catch (ParseException pe) {
-                return false;
-            }
-        }
-        return false;
+        return test.equals("") || test.matches(BIRTHDAY_VALIDATION_REGEX);
     }
 
 
