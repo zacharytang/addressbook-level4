@@ -5,6 +5,7 @@ import static java.util.Objects.requireNonNull;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import seedu.address.commons.exceptions.IllegalValueException;
 
@@ -39,9 +40,47 @@ public class Birthday {
         if (!isValidBirthday(trimmedBirthday)) {
             throw new IllegalValueException(MESSAGE_BIRTHDAY_CONSTRAINTS);
         }
-        this.date = birthday;
+        this.date = formatDate(birthday);
     }
 
+    //@@author nbriannl
+    /**
+     * Formats the unformatted input birthday string into dd/mm/yyyy and
+     * @return the formatted String
+     */
+    public static String formatDate (String unformatted) {
+        DateFormat withoutFormat = new SimpleDateFormat("ddmmyyyy");
+        DateFormat withFormat = new SimpleDateFormat("dd/mm/yyyy");
+        Date intermediateDate;
+        try {
+            intermediateDate = withoutFormat.parse(unformatted);
+            String newDateString = withFormat.format(intermediateDate);
+            return newDateString;
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return "";
+    }
+
+    /**
+     * Removes the format from the date attribute
+     * @return the unformatted String as {@code ddmmyyyy}
+     */
+    public String getUnformattedDate () {
+        DateFormat withFormat = new SimpleDateFormat("dd/mm/yyyy");
+        DateFormat withoutFormat = new SimpleDateFormat("ddmmyyyy");
+        Date intermediateDate;
+        try {
+            intermediateDate = withFormat.parse(date);
+            String newDateString = withoutFormat.format(intermediateDate);
+            return newDateString;
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return "";
+    }
+
+    //@@author CindyTsai1
     /**
      * Returns true if a given string is a valid person birthday.
      */
