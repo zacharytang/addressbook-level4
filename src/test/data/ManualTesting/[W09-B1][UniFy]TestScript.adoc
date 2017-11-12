@@ -1,0 +1,94 @@
+= UniFy - Test Script
+:toc:
+:toc-title:
+:toc-placement: preamble
+:sectnums:
+:imagesDir: images
+:stylesDir: stylesheets
+ifdef::env-github[]
+:tip-caption: :bulb:
+:note-caption: :information_source:
+endif::[]
+ifdef::env-github,env-browser[:outfilesuffix: .adoc]
+:repoURL: https://github.com/CS2103AUG2017-W09-B1/main/tree/master
+
+By: `Team W09-B1`      Since: `Aug 2017`      Licence: `MIT`
+
+---
+
+== Before You Start Testing
+=== Materials Required for Testing
+
+=== Test Data
+
+=== Test Environment
+
+
+== Special Instructions
+=== Test Procedures
+
+== Content for Testing (Include ALIAS)
+=== AddCommand
+==== Description/Data
+==== Steps To Execute And Expected Results
+
+=== ClearCommand
+==== Description/Data
+==== Steps To Execute And Expected Results
+
+=== DeleteCommand (Person)
+==== Description/Data
+==== Steps To Execute And Expected Results
+
+=== DeleteCommand (Tag)
+==== Description/Data
+==== Steps To Execute And Expected Results
+
+=== EditCommand (Person)
+==== Description/Data
+==== Steps To Execute And Expected Results
+
+=== EditCommand (Tag)
+==== Description/Data
+==== Steps To Execute And Expected Results
+
+=== PhotoCommand
+==== Description/Data
+==== Steps To Execute And Expected Results
+
+=== RemarkCommand
+==== Description/Data
+==== Steps To Execute And Expected Results
+
+=== FindCommand
+==== Description/Data
+==== Steps To Execute And Expected Results
+
+=== GmapsCommand
+==== Description/Data
+==== Steps To Execute And Expected Results
+
+=== ListCommand
+==== Description/Data
+==== Steps To Execute And Expected Results
+
+=== HelpCommand
+==== Description/Data
+==== Steps To Execute And Expected Results
+
+=== SelectCommand
+==== Description/Data
+==== Steps To Execute And Expected Results
+
+=== HistoryCommand
+==== Description/Data
+==== Steps To Execute And Expected Results
+
+=== UndoCommand
+==== Description/Data
+==== Steps To Execute And Expected Results
+
+=== RedoCommand
+==== Description/Data
+==== Steps To Execute And Expected Results
+
