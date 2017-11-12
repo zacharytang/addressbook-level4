@@ -18,11 +18,22 @@ import java.util.Arrays;
  */
 public class FileUtil {
 
+    public static final String REGEX_DOT = "\\.";
     private static final String CHARSET = "UTF-8";
 
+    //@@author April0616
     /**
-     * Get the extension of the file path by split the path string by regex "."
-     *
+     * Checks whether the name of the file has extension.
+     * @param filePath of the file
+     * @return true if it has specified extension
+     */
+    public static Boolean hasFileExtension(String filePath) {
+        String[] parts = filePath.split(REGEX_DOT);
+        return parts.length == 2;
+    }
+
+    /**
+     * Gets the extension of the file path by split the path string by regex "."
      * @param filePath
      * @return extension string
      */
@@ -31,10 +42,9 @@ public class FileUtil {
     }
 
     /**
-     * Copy all the content from the file in original path to the one in destination path.
-     *
-     * @param oriPath
-     * @param destPath
+     * Copies all the contents from the file in original path to the one in destination path.
+     * @param oriPath of the file to be copied
+     * @param destPath of the file to be pasted
      * @return true if the file is successfully copied to the specified place.
      */
     public static boolean copyFile(String oriPath, String destPath) throws IOException {
@@ -64,8 +74,8 @@ public class FileUtil {
     }
 
     /**
-     * If the file in the specific path in the app directory exists, delete the file in the path
-     * @param path
+     * Removes the file in the app if it exists.
+     * @param path of the file to be deleted
      */
     public static void removeAppFile(String path) {
         File fileToDelete = new File(path);
@@ -75,32 +85,32 @@ public class FileUtil {
     }
 
     /**
-     * Compares whether two files in the specified paths have the same content.
-     * @param firstPath
-     * @param secondPath
-     * @return true if they have the same content
-     * @throws IOException
+     * Checks whether two files have the same content.
+     * @param firstPath path of one file
+     * @param secondPath path of another file
+     * @return true if they have the same content, false otherwise
+     * @throws IOException if an I/O error occurs reading from the stream
      */
     public static boolean haveSameContent(String firstPath, String secondPath) {
         Path p1 = Paths.get(firstPath);
         Path p2 = Paths.get(secondPath);
 
         byte[] firstFileBytes = new byte[0];
-
         try {
             firstFileBytes = Files.readAllBytes(p1);
         } catch (IOException e) {
-            e.printStackTrace();
+            assert false : "An I/O error occurs reading from the stream.";
         }
 
         byte[] secondFileBytes = new byte[0];
         try {
             secondFileBytes = Files.readAllBytes(p2);
         } catch (IOException e) {
-            e.printStackTrace();
+            assert false : "An I/O error occurs reading from the stream.";
         }
         return Arrays.equals(firstFileBytes, secondFileBytes);
     }
+    //@@author
 
     public static boolean isFileExists(File file) {
         return file.exists() && file.isFile();
