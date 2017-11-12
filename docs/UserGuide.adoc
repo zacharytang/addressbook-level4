@@ -157,9 +157,12 @@ _When you study too much, sometimes, you forget what someone looks like._
 ____
 You can add or remove a photo to an existing person in the address book. +
 Format: +
-(Add photo) `photo INDEX ph/PHOTO PATH` +
-(Delete photo) `photo INDEX` or `photo INDEX ph/`+
+_(Add photo)_ `photo INDEX ph/PHOTO PATH` +
+_(Delete photo)_ `photo INDEX` or `photo INDEX ph/` +
 Alternatives: `ph`
+
+image::photo_command.png[width=790]
+_Figure 3.3 : Add your favourite photo of someone to their contact!_
 
 ****
 * Edits the photo of the person at the specified `INDEX`.
@@ -176,8 +179,7 @@ Examples:
 
 * `list` +
 `photo 1 ph/ C:\Users\User\Files\Amy_selfie.jpg` +
-Add the picture 'Amy_selfie.jpg' in the specified location to the 1st person in the last shown list. +
-The photo of the 1st person will be shown while clicking on the name.
+Add the picture 'Amy_selfie.jpg' in the specified location to the 1st person in the address book. +
 * `list` +
 `photo 2` +
 Removes the photo path from the 2nd person in the last shown list.
