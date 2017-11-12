@@ -42,6 +42,15 @@ public class FileUtil {
     }
 
     /**
+     * Checks whether the specified file is in the specified folder.
+     * @param filePath of the file to be checked
+     * @param folderPath of the folder
+     * @return true if the file is in the folder
+     */
+    public static Boolean isInFolder(String filePath, String folderPath) {
+        return filePath.startsWith(folderPath);
+    }
+    /**
      * Copies all the contents from the file in original path to the one in destination path.
      * @param oriPath of the file to be copied
      * @param destPath of the file to be pasted
