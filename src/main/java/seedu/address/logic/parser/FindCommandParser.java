@@ -86,6 +86,20 @@ public class FindCommandParser implements Parser<FindCommand> {
 
         if (argsMultimap.getValue(PREFIX_BIRTHDAY).isPresent()) {
             birthdayList = argsMultimap.getValue(PREFIX_BIRTHDAY).get();
+
+            /** validity of birthday keyword input check
+             *  keyword input must have a value between 1 to 12
+             *  keyword input must be 2 digits
+             *  keyword input must be in Integers
+             */
+            if (!birthdayList.matches("[0-9]+")) {
+                throw new ParseException(FindCommand.MESSAGE_BIRTHDAYKEYWORD_NONNUMBER);
+            } else if (Integer.parseInt(birthdayList.trim()) > 12 || Integer.parseInt(birthdayList.trim()) < 1) {
+                throw new ParseException(String.format(FindCommand.MESSAGE_BIRTHDAYKEYWORD_NONEXIST, birthdayList.trim()));
+            } else if (birthdayList.trim().length() == 1) {
+                throw new ParseException(String.format(FindCommand.MESSAGE_BIRTHDAYKEYWORD_INVALID, birthdayList.trim()));
+            }
+
             predicate.add(PREFIX_BIRTHDAY.getPrefix());
             predicate.add(birthdayList);
         }
@@ -94,8 +108,8 @@ public class FindCommandParser implements Parser<FindCommand> {
                 && tagList.isEmpty() && birthdayList.isEmpty()) {
             throw new ParseException(FindCommand.MESSAGE_NOT_FOUND);
         }
-        return new FindCommand(predicate);
 
+        return new FindCommand(predicate);
     }
 
     /**
