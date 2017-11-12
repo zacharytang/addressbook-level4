@@ -32,17 +32,18 @@ public class Gender {
         String trimmedGender = gender.trim();
 
         if (!isValidInput(trimmedGender)) {
-            value = "";
             throw new IllegalValueException(MESSAGE_GENDER_CONSTRAINTS);
-
         }
 
         String ignoredCaseGender = trimmedGender.toLowerCase();
         if (ignoredCaseGender.equals(VALID_MALE_FIRST_WORD)
                 || ignoredCaseGender.equals(VALID_MALE_SECOND_WORD)) {
             value = "Male";
-        } else {
+        } else if (ignoredCaseGender.equals(VALID_FEMALE_FIRST_WORD)
+                || ignoredCaseGender.equals(VALID_FEMALE_SECOND_WORD)) {
             value = "Female";
+        } else {
+            value = "";
         }
     }
 
