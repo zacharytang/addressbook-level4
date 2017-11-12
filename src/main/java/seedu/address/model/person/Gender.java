@@ -36,27 +36,34 @@ public class Gender {
         }
 
         String ignoredCaseGender = trimmedGender.toLowerCase();
+        value = setGenderByInput(ignoredCaseGender);
+    }
+
+    private String setGenderByInput(String ignoredCaseGender) {
+        String genderValue = "";
         if (ignoredCaseGender.equals(VALID_MALE_FIRST_WORD)
                 || ignoredCaseGender.equals(VALID_MALE_SECOND_WORD)) {
-            value = "Male";
+            genderValue = "Male";
         } else if (ignoredCaseGender.equals(VALID_FEMALE_FIRST_WORD)
                 || ignoredCaseGender.equals(VALID_FEMALE_SECOND_WORD)) {
-            value = "Female";
+            genderValue = "Female";
         } else {
-            value = "";
+            genderValue = "";
         }
+        return genderValue;
     }
 
     /**
-     * Returns if a given input string is a valid person gender.
+     * Checks whether the input gender is valid.
+     * @return true if a given input string is a valid person gender, false otherwise.
      */
     public static boolean isValidInput(String inputGender) {
-        String ignoredCaseInputGender = inputGender.toLowerCase();
-        return ignoredCaseInputGender.equals(VALID_MALE_FIRST_WORD)
-                || ignoredCaseInputGender.equals(VALID_MALE_SECOND_WORD)
-                || ignoredCaseInputGender.equals(VALID_FEMALE_FIRST_WORD)
-                || ignoredCaseInputGender.equals(VALID_FEMALE_SECOND_WORD)
-                || ignoredCaseInputGender.equals(VALID_GENDER_UNSPECIFIED);
+        String ignoredCaseInput = inputGender.toLowerCase();
+        return ignoredCaseInput.equals(VALID_MALE_FIRST_WORD)
+                || ignoredCaseInput.equals(VALID_MALE_SECOND_WORD)
+                || ignoredCaseInput.equals(VALID_FEMALE_FIRST_WORD)
+                || ignoredCaseInput.equals(VALID_FEMALE_SECOND_WORD)
+                || ignoredCaseInput.equals(VALID_GENDER_UNSPECIFIED);
     }
 
     @Override
