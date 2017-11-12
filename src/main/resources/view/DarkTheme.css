@@ -80,7 +80,8 @@
 
 /* @@author zacharytang */
 .split-pane:horizontal .split-pane-divider {
-    -fx-background-color: #383838;
+    -fx-background-color: derive(#383838, 50%);
+    -fx-background-insets: 3;
     -fx-border-color: transparent transparent transparent transparent;
 }
 
