@@ -171,6 +171,7 @@ public class TimetableParserUtil {
         // open connection
         HttpURLConnection httpUrlConnection = (HttpURLConnection) url.openConnection(Proxy.NO_PROXY);
 
+        httpUrlConnection.setReadTimeout(200);
         // stop following browser redirect
         httpUrlConnection.setInstanceFollowRedirects(false);
 
