@@ -39,14 +39,13 @@ public class FindCommand extends Command {
             + "[" + PREFIX_ADDRESS + "ADDRESS] "
             + "[" + PREFIX_BIRTHDAY + "BIRTHDAY] "
             + "[" + PREFIX_TAG + "TAG]...\n"
-            + "Example: " + COMMAND_WORD + " "
-            + PREFIX_NAME + "John Doe "
-            + PREFIX_PHONE + "98765432 "
-            + PREFIX_EMAIL + "johnd@example.com "
-            + PREFIX_ADDRESS + "311, Clementi Ave 2, #02-25 "
-            + PREFIX_BIRTHDAY + "21051994 "
+            + "Example: \n" + COMMAND_WORD + " "
+            + PREFIX_NAME + "ian zach\n"
+            + "Returns any person with name including 'ian' and 'zach'.\n"
+            + COMMAND_WORD + " "
             + PREFIX_TAG + "friends "
-            + PREFIX_TAG + "owesMoney";
+            + PREFIX_TAG + "owesMoney\n"
+            + "Returns all persons in UniFy containing *both* 'JCfriends' and 'computing'.";
 
     public static final String MESSAGE_NOT_FOUND = "At least one field to find must be provided.";
     public static final String MESSAGE_BIRTHDAYKEYWORD_INVALID = "You should type 0%1$s instead of %1$s.";
