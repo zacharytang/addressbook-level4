@@ -171,6 +171,8 @@ public class TimetableParserUtil {
         // open connection
         HttpURLConnection httpUrlConnection = (HttpURLConnection) url.openConnection(Proxy.NO_PROXY);
 
+        // Handle nusmods domain not being available
+        httpUrlConnection.setReadTimeout(200);
         // stop following browser redirect
         httpUrlConnection.setInstanceFollowRedirects(false);
 
