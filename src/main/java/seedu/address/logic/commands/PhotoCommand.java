@@ -87,8 +87,8 @@ public class PhotoCommand extends UndoableCommand {
             throw new IllegalValueException(MESSAGE_LOCAL_PHOTOPATH_CONSTRAINTS);
         }
     }
-
-    private void setEditPhotoCommandParametersAndFile(Index targetIndex, String photoPath) throws FileNotFoundException, IllegalValueException {
+    private void setEditPhotoCommandParametersAndFile(Index targetIndex, String photoPath)
+            throws FileNotFoundException, IllegalValueException {
         // copy the photo
         String savePath = copyLocalPhotoToApp(photoPath);
 

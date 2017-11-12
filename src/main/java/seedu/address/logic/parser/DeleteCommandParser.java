@@ -19,27 +19,24 @@ import seedu.address.model.tag.Tag;
 public class DeleteCommandParser implements Parser<DeleteCommand> {
 
     //@@author April0616
-    public static final String DELETE_ONE_PERSON_VALIDATION_REGEX = "-?\\d+";
+    public static final String VALID_REGEX_DELETE_ONE_PERSON = "-?\\d+";
 
     public static final String DELETE_MULTIPLE_PERSON_COMMA_VALIDATION_REGEX =
-            "((-?\\d([\\s+]*)\\,([\\s+]*)(?=-?\\d))|-?\\d)+";
+            "(-?\\d\\s*?,\\s*?-?\\d?)+";
 
     public static final String DELETE_MULTIPLE_PERSON_WHITESPACE_VALIDATION_REGEX =
-            "(((-?\\d)([\\s]+)(?=-?\\d))|-?\\d)+";
-
-
+            "(-?\\d\\s*?-?\\d?)+";
+    //@@author nbriannl
     /**
-     * Parses the given {@code String} of arguments in the context of the DeleteCommand
-     * and returns an DeleteCommand object for execution.
-     * @throws ParseException if the user input does not conform the expected format
-     *
+     * Parses the arguments of the delete command.
+     * @return an DeleteCommand object for execution
+     * @throws ParseException if the user input does not conform the expected format.
      */
     public DeleteCommand parse(String args) throws ParseException {
-
         ArgumentMultimap argMultimap = ArgumentTokenizer.tokenize(args, PREFIX_TAG);
         String preamble = argMultimap.getPreamble();
-
         if (preamble.equals("")) {
+            // there exists 't/'
             DeleteCommand tagList = parseForTags(argMultimap);
             if (tagList != null) {
                 return tagList;
@@ -77,10 +74,14 @@ public class DeleteCommandParser implements Parser<DeleteCommand> {
 
     //@@author April0616
     /**
-     *
+     * Parses the indexes contained within {@code argMultimap} to return
+     * a DeleteCommand object that executes a delete for Persons.
+     * @throws ParseException if the values mapped as the persons do not conform as valid person indexes
+     * @see #parse(String)
      */
     private DeleteCommand parseForPersonIndexes (String args, String preamble) throws ParseException {
-        if (preamble.matches(DELETE_ONE_PERSON_VALIDATION_REGEX)) { // code block for delete for a person
+        if (preamble.matches(VALID_REGEX_DELETE_ONE_PERSON)) {
+            // code block for delete for a person
             try {
                 Index index = ParserUtil.parseIndex(args);
                 return new DeleteCommand(index);
@@ -107,7 +108,7 @@ public class DeleteCommandParser implements Parser<DeleteCommand> {
                         String.format(MESSAGE_INVALID_COMMAND_FORMAT, DeleteCommand.MESSAGE_USAGE));
             }
         }
-        return null;
+        throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, DeleteCommand.MESSAGE_USAGE));
     }
 
     //@@author nbriannl-reused

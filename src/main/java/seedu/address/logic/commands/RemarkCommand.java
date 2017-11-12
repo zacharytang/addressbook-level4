@@ -100,6 +100,7 @@ public class RemarkCommand extends UndoableCommand {
     /**
      * Creates and returns a {@code Person} with the details of {@code personToRemark}
      * remarked with {@code remarkPersonDescriptor}.
+     * @return the person object with the new remark
      */
     public static Person createRemarkedPerson(ReadOnlyPerson personToRemark, Remark remark) {
         assert personToRemark != null;
