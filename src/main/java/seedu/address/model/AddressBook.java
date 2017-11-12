@@ -2,8 +2,8 @@ package seedu.address.model;
 
 import static java.util.Objects.requireNonNull;
 import static seedu.address.commons.util.FileUtil.removeAppFile;
-import static seedu.address.logic.commands.PhotoCommand.DEFAULT_PHOTO_PATH;
-import static seedu.address.logic.commands.PhotoCommand.FILE_SAVED_PARENT_PATH;
+import static seedu.address.logic.commands.PhotoCommand.PATH_DEFAULT_PHOTO;
+import static seedu.address.logic.commands.PhotoCommand.PATH_FILE_SAVED_PARENT_DIRECTORY;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -272,7 +272,7 @@ public class AddressBook implements ReadOnlyAddressBook {
      * address book and delete the empty paths.
      */
     public void updatePhotoPathSavedInMasterList() {
-        final File folder = new File(FILE_SAVED_PARENT_PATH);
+        final File folder = new File(PATH_FILE_SAVED_PARENT_DIRECTORY);
         if (!folder.exists()) {
             return;
         }
@@ -326,7 +326,7 @@ public class AddressBook implements ReadOnlyAddressBook {
      */
     public static boolean isDefaultPhoto(PhotoPath photoPath) {
         String photoPathValue = photoPath.value;
-        return photoPathValue.equals(DEFAULT_PHOTO_PATH);
+        return photoPathValue.equals(PATH_DEFAULT_PHOTO);
     }
 
     /**
