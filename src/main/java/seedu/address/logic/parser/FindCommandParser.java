@@ -95,9 +95,11 @@ public class FindCommandParser implements Parser<FindCommand> {
             if (!birthdayList.matches("[0-9]+")) {
                 throw new ParseException(FindCommand.MESSAGE_BIRTHDAYKEYWORD_NONNUMBER);
             } else if (Integer.parseInt(birthdayList.trim()) > 12 || Integer.parseInt(birthdayList.trim()) < 1) {
-                throw new ParseException(String.format(FindCommand.MESSAGE_BIRTHDAYKEYWORD_NONEXIST, birthdayList.trim()));
+                throw new ParseException(String.format(FindCommand.MESSAGE_BIRTHDAYKEYWORD_NONEXIST,
+                        birthdayList.trim()));
             } else if (birthdayList.trim().length() == 1) {
-                throw new ParseException(String.format(FindCommand.MESSAGE_BIRTHDAYKEYWORD_INVALID, birthdayList.trim()));
+                throw new ParseException(String.format(FindCommand.MESSAGE_BIRTHDAYKEYWORD_INVALID,
+                        birthdayList.trim()));
             }
 
             predicate.add(PREFIX_BIRTHDAY.getPrefix());
