@@ -2,8 +2,8 @@ package seedu.address.logic.commands;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
-//import static seedu.address.logic.commands.CommandTestUtil.VALID_PHOTONAME_AMY;
-//import static seedu.address.logic.commands.CommandTestUtil.VALID_PHOTONAME_BOB;
+import static seedu.address.logic.commands.CommandTestUtil.VALID_PHOTONAME_AMY;
+import static seedu.address.logic.commands.CommandTestUtil.VALID_PHOTONAME_BOB;
 import static seedu.address.testutil.TypicalIndexes.INDEX_FIRST_PERSON;
 import static seedu.address.testutil.TypicalIndexes.INDEX_SECOND_PERSON;
 
@@ -11,48 +11,18 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
-import org.junit.Ignore;
 import org.junit.Test;
 
 import seedu.address.commons.exceptions.IllegalValueException;
 
-//@@author April0616
+//@@author April0616-unused
+
 public class PhotoCommandTest {
-
     @Test
-    public void isValidLocalPhotoPath() {
-        // blank photo path
-        assertFalse(PhotoCommand.isValidLocalPhotoPath("")); // empty string
-        assertFalse(PhotoCommand.isValidLocalPhotoPath(" ")); // spaces only
+    public void equals() throws FileNotFoundException, IllegalValueException {
+        File amyFile = new File(VALID_PHOTONAME_AMY);
+        File bobFile = new File(VALID_PHOTONAME_BOB);
 
-        // missing parts
-        assertFalse(PhotoCommand.isValidLocalPhotoPath("photo.jpg")); // missing disk part
-        assertFalse(PhotoCommand.isValidLocalPhotoPath("c:photo.jpg")); // missing backslash
-        assertFalse(PhotoCommand.isValidLocalPhotoPath("d:photo.jpg")); // missing backslash
-
-        // invalid parts
-        assertFalse(PhotoCommand.isValidLocalPhotoPath("c:\\\\photo.jpg")); // too many backslashes
-        assertFalse(PhotoCommand.isValidLocalPhotoPath("c:\\")); // no file name
-        assertFalse(PhotoCommand.isValidLocalPhotoPath("c:\\")); // no file name
-
-        // valid photo path
-        assertTrue(PhotoCommand.isValidLocalPhotoPath("c:\\desktop\\baby.jpg"));
-        assertTrue(PhotoCommand.isValidLocalPhotoPath("d:\\myself.jpg"));  //
-        assertTrue(PhotoCommand.isValidLocalPhotoPath("d:\\my_photo.jpg"));  // underscore
-    }
-
-
-
-    /**
-     * This test cannot run on Travis CI.
-     */
-    @Ignore
-    private void equals() throws FileNotFoundException, IllegalValueException {
-        //File amyFile = new File(VALID_PHOTONAME_AMY);
-        File amyFile = new File("photo.jpg");
-        //File bobFile = new File(VALID_PHOTONAME_BOB);
-        File bobFile = new File("selfie.jpg");
-        
         try {
             amyFile.createNewFile();
             bobFile.createNewFile();
