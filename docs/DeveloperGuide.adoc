@@ -453,7 +453,7 @@ Execution of a `select` command is similar, except that a `PersonSelectedEvent` 
 **Alternative 1:** Store timetable information after retrieval from NUSMods once +
 **Pros:** We only need to retrieve lesson information once per person +
 **Cons:** Storage of entire timetables can be very costly, and storage can be expensive with a large number of contacts +
-**Alternative 2:** Only store timetable URLs, and query each time app is launched. If no internet, start with empty timetable +
+**Alternative 2 (current choice):** Only store timetable URLs, and query each time app is launched. If no internet, start with empty timetable +
 **Pros:** Storage needed is minimal, as only a single string is stored for each person +
 **Cons:** Startup of app can be slow if there is a large number of persons
 // end::timetable[]
