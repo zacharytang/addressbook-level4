@@ -40,7 +40,7 @@ This app will not work with earlier versions of Java 8.
 +
 image::UILight.png[width="790"]
 _Figure 2.1 : UniFy's Interface Light Theme_
-
++
 image::UIDark.png[width="790"]
 _Figure 2.2 : UniFy's Interface Dark Theme_
 +
@@ -110,7 +110,6 @@ Adds a person to the address book +
 
 Format: `add n/NAME [g/GENDER] [p/PHONE_NUMBER] [e/EMAIL] [a/ADDRESS] [m/MATRIC_NUMBER] [b/BIRTHDAY] [t/TAG]...` +
 Alternatives: `a` , `insert` +
- +
 
 image::PersonCard.png[]
 _Figure 3.2.1 : A person with various contact information_
