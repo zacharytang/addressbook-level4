@@ -287,7 +287,7 @@ public class FindCommand extends Command {
         for (ReadOnlyPerson person : personList) {
             for (String keyword : birthdayKeyword) {
                 String birth = person.getBirthday().toString();
-                String birthdays = (!birth.equals("")) ? birth.substring(2, 4) : "";
+                String birthdays = (!birth.equals("")) ? birth.substring(3, 5) : "";
                 if (birthdays.equals(keyword)) {
                     birthdayList.add(person.getName().toString());
                 }

@@ -73,7 +73,7 @@ public class XmlAdaptedPerson {
         remark = source.getRemark().value;
         photoPath = source.getPhotoPath().value;
         tagged = new ArrayList<>();
-        birthday = source.getBirthday().date;
+        birthday = source.getBirthday().getUnformattedDate();
         for (Tag tag : source.getTags()) {
             tagged.add(new XmlAdaptedTag(tag));
         }

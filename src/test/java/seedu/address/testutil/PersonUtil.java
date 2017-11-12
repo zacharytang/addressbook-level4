@@ -36,7 +36,7 @@ public class PersonUtil {
         sb.append(PREFIX_PHONE + person.getPhone().value + " ");
         sb.append(PREFIX_EMAIL + person.getEmail().value + " ");
         sb.append(PREFIX_ADDRESS + person.getAddress().value + " ");
-        sb.append(PREFIX_BIRTHDAY + person.getBirthday().date + " ");
+        sb.append(PREFIX_BIRTHDAY + person.getBirthday().getUnformattedDate() + " ");
         sb.append(PREFIX_TIMETABLE + person.getTimetable().value + " ");
         person.getTags().stream().forEach(
             s -> sb.append(PREFIX_TAG + s.tagName + " ")
