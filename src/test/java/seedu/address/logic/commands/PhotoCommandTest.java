@@ -2,11 +2,12 @@ package seedu.address.logic.commands;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
-import static seedu.address.logic.commands.CommandTestUtil.VALID_PHOTOPATH_AMY;
-import static seedu.address.logic.commands.CommandTestUtil.VALID_PHOTOPATH_BOB;
+import static seedu.address.logic.commands.CommandTestUtil.VALID_PHOTONAME_AMY;
+import static seedu.address.logic.commands.CommandTestUtil.VALID_PHOTONAME_BOB;
 import static seedu.address.testutil.TypicalIndexes.INDEX_FIRST_PERSON;
 import static seedu.address.testutil.TypicalIndexes.INDEX_SECOND_PERSON;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
@@ -42,11 +43,22 @@ public class PhotoCommandTest {
 
     @Test
     public void equals() throws FileNotFoundException, IllegalValueException {
-        TestUtil.createTempFile(VALID_PHOTOPATH_AMY);
-        TestUtil.createTempFile(VALID_PHOTOPATH_BOB);
+        File amyFile = new File(VALID_PHOTONAME_AMY);
+        File bobFile = new File(VALID_PHOTONAME_BOB);
+        try {
+            amyFile.createNewFile();
+            bobFile.createNewFile();
+        } catch (IOException ioe) {
+            System.err.println("Cannot create temporary files!");
+        }
 
-        PhotoCommand addFirstPersonPhotoPath = new PhotoCommand(INDEX_FIRST_PERSON, VALID_PHOTOPATH_AMY);
-        PhotoCommand addSecondPersonPhotoPath = new PhotoCommand(INDEX_SECOND_PERSON, VALID_PHOTOPATH_BOB);
+        String amyPath = amyFile.getAbsolutePath();
+        String bobPath = bobFile.getAbsolutePath();
+        //TestUtil.createTempFile(VALID_PHOTOPATH_AMY);
+        //TestUtil.createTempFile(VALID_PHOTOPATH_BOB);
+
+        PhotoCommand addFirstPersonPhotoPath = new PhotoCommand(INDEX_FIRST_PERSON, amyPath);
+        PhotoCommand addSecondPersonPhotoPath = new PhotoCommand(INDEX_SECOND_PERSON, bobPath);
 
         // same object -> returns true
         assertTrue(addFirstPersonPhotoPath.equals(addFirstPersonPhotoPath));
@@ -65,11 +77,9 @@ public class PhotoCommandTest {
         // different objects -> returns false
         assertFalse(addFirstPersonPhotoPath.equals(addSecondPersonPhotoPath));
 
-        try {
-            TestUtil.removeFileAndItsParentsTillRoot(VALID_PHOTOPATH_BOB);
-            TestUtil.removeFileAndItsParentsTillRoot(VALID_PHOTOPATH_AMY);
-        } catch (IOException e) {
-            assert false : "Cannot successfully remove files!";
-        }
+        //TestUtil.removeFileAndItsParentsTillRoot(VALID_PHOTOPATH_BOB);
+        //TestUtil.removeFileAndItsParentsTillRoot(VALID_PHOTOPATH_AMY);
+        amyFile.delete();
+        bobFile.delete();
     }
 }
