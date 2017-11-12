@@ -48,6 +48,9 @@ public class FindCommand extends Command {
             + PREFIX_TAG + "owesMoney";
 
     public static final String MESSAGE_NOT_FOUND = "At least one field to find must be provided.";
+    public static final String MESSAGE_BIRTHDAYKEYWORD_INVALID = "You should type 0%1$s instead of %1$s.";
+    public static final String MESSAGE_BIRTHDAYKEYWORD_NONEXIST = "Month %1$s does not exist.";
+    public static final String MESSAGE_BIRTHDAYKEYWORD_NONNUMBER = "Keyword input must be in integer.";
     private ArrayList<String> predicate;
     //to keep track of how many prefixes are input
     private int count = 0;
