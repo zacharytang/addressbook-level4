@@ -2,8 +2,8 @@ package seedu.address.logic.commands;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
-import static seedu.address.logic.commands.CommandTestUtil.VALID_PHOTONAME_AMY;
-import static seedu.address.logic.commands.CommandTestUtil.VALID_PHOTONAME_BOB;
+//import static seedu.address.logic.commands.CommandTestUtil.VALID_PHOTONAME_AMY;
+//import static seedu.address.logic.commands.CommandTestUtil.VALID_PHOTONAME_BOB;
 import static seedu.address.testutil.TypicalIndexes.INDEX_FIRST_PERSON;
 import static seedu.address.testutil.TypicalIndexes.INDEX_SECOND_PERSON;
 
