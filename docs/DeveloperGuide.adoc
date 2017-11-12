@@ -419,8 +419,8 @@ and stores it in a `List<ReadOnlyPerson>`.
 . A `TimetableDisplayEvent` is then posted with the list of people to be displayed.
 . The event is then handled by the `InfoPanel`, which creates a new `TimetableDisplay` component and brings it to the front.
 .. Each `Timetable` to be displayed is obtained from the list of people from the `TimetableDisplayEvent` handled.
-.. When `TimetableDisplay` component is created, `TimetableDisplay:fillInitialGrid()` first populates the timetable with empty slots.
-.. After which, each `Timetable` is added to the grid by `TimetableDisplay:fillSingleTimetable()`.
+.. When `TimetableDisplay` component is created, `fillInitialGrid()` first populates the timetable with empty slots.
+.. After which, each `Timetable` is added to the grid by `fillSingleTimetable()`.
 
 Execution of a `select` command is similar, except that a `PersonSelectedEvent` is handled instead of a `TimetableDisplayEvent`
 

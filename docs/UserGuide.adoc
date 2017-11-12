@@ -239,7 +239,7 @@ _Display your contacts how you like it. All of them? Just your classmates for a 
 Want to know who's birthday is in this month? Unify every common contact together and list them as one._
 ____
 
-You can find people whose information contains all given keywords from each category. +
+You can find people whose information contains all given keywords (inclusive) from each category. +
 Format: `find [n/NAME] [p/PHONE] [e/EMAIL] [a/ADDRESS] [b/BIRTHDAY MONTH] [t/TAG]...` +
 Alternatives: `f` , `search`
 
@@ -260,13 +260,13 @@ Alternatives: `f` , `search`
 Examples:
 
 * `find n/ian zach` +
-Returns any person with name including 'ian' or 'zach'
+Returns any person with name including 'ian' and 'zach'
 * `find n/Joe t/friends` +
 Returns any person with name including `Joe` and tagged by `friends`
 * `find t/friends p/1234` +
 Returns any person tagged by `friends`, and having phone numbers containing `1234`
 * `find t/jcfriends computing` +
-Returns all persons in UniFy containing *both* 'JCfriends' and 'computing'.
+Returns all persons in UniFy containing *both* 'JCfriends' and 'computing'
 * `find b/12` +
 Returns all persons in UniFy having birthdays in `December`
 
