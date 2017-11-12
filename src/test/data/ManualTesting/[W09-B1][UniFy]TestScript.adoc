@@ -133,43 +133,97 @@ Example: add n/John Doe g/Male m/A0162533K p/98765432 e/johnd@example.com a/311,
 DeleteCommand can delete multiple persons simultaneously.
 
 ==== Steps To Execute And Expected Results
-1. Type in: delete 1,2,3
+*Type in:* delete 1, 2, 3 +
+*Expected Result:* Delete the first, second and third persons in the shown list. Person Info Panel shows first person in list. Success message showing information of persons deleted. +
+*Result Message:* +
+Deleted Persons : +
+[ 1. Damith 2. Neil Bryan 3. Fan Yiting ] +
+Details:  +
+[Damith +
+Gender: Male +
+Matric No.:  +
+Phone: 96584398 +
+Email: damith@u.nus.edu +
+Address: NUS COM2 #2-57 +
+Birthday:  +
+Timetable:  +
+Remark: [CS2103T Prof and Tutor] +
+Photo:  +
+Tags: [Legend][Myth][CS2103T][Man][Prof]] +
+[Neil Bryan +
+Gender: Male +
+Matric No.: A0155016R +
+Phone: 96477278 +
+Email: neilbrian.nl@u.nus.edu +
+Address: Blk 666, Yishun St 61 +
+Birthday: 02/10/1995 +
+Timetable: http://modsn.us/VLQ3g +
+Remark: [Handsome] +
+Photo:  +
+Tags: [Teammate][CS2103T][CS2101]] +
+[Fan Yiting +
+Gender: Female +
+Matric No.: A0162131F +
+Phone: 96857667 +
+Email: fyt0616@u.nus.edu +
+Address: Prince George Park Residences NUS +
+Birthday: 16/06/1998 +
+Timetable: http://modsn.us/aHN0q +
+Remark: [Likes playing Dota 2] +
+Photo:  +
+Tags: [Teammate][CS2103T][CS2101]]
 
-Expected Result: Delete the 1st, 2nd, 3rd persons in the shown list.
+*Type in:* undo +
+*Expected Result:* Success message for undo command. 3 persons restored. +
+*Result Message:* +
+Undo success!
 
-Result Message:
+*Type in:* delete 1 +
+*Expected Result:* Delete the first person in the shown list.  +
+*Result Message:* +
+Deleted Person : +
+[ 1. Damith ] +
+Details:  +
+[Damith +
+Gender: Male +
+Matric No.:  +
+Phone: 96584398 +
+Email: damith@u.nus.edu +
+Address: NUS COM2 #2-57 +
+Birthday:  +
+Timetable:  +
+Remark: [CS2103T Prof and Tutor] +
+Photo:  +
+Tags: [Legend][Myth][CS2103T][Man][Prof]] +
 
-2. Type in: find n/John
+*Type in:* undo +
+*Expected Result:* Success message for undo command. 1 person restored. +
+*Result Message:* +
+Undo success! +
 
-Expected Result: Find all the persons with 'john' inside their names.
+*Type in:* delete -1, -2 +
+*Expected Result:* Error message showing the index does not exist +
+*Result Message:*  +
+The person index provided is invalid
 
-Result Message: 1 persons listed!
+*Type in:* delete 999 +
+*Expected Result:* Error message showing the index does not exist +
+*Result Message:*  +
+The person index provided is invalid
 
-3. Type in: delete 1
-
-Expected Result: Delete the first person in the shown list.
-
-Result Message:
-
-4. Type in: list
-
-5. Type in: delete -1, -2
-
-Expected Result: Error with instruction.
-
-Result Message: Invalid command format!
-
-6. Type in: delete 999
-
-Expected Result: Error.
-
-Result Message: The person index provided is invalid
-
-7. Type in: delete
-
-Expected Result: Error with instruction.
-
-Result Message: Invalid command format!
+*Type in:* delete +
+*Expected Result:* Error message suggesting the correct command format +
+*Result Message:* +
+Invalid command format! +
+| delete |: Deletes the persons identified using their last displayed indexes used in the last person listing. +
+           	OR the tag specified from all people containing the specific tag +
+Parameters: INDEX... (must be positive integers) +
+               	OR  t/TAG... (case-sensitive) +
+Example: delete 1 +
+           	delete 1, 2, 3 +
+           	delete 2 3 4 +
+           	delete t/friend +
+           	delete t/friend t/enemy
 
 === DeleteCommand (Tag)
 ==== Description/Data
