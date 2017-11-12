@@ -14,9 +14,9 @@ image::docs/images/UIDark.png[width="600"]
 endif::[]
 
 ifndef::env-github[]
-image::images/UI.png[width="600"]
+image::images/Ui.png[width="600"]
 
-image::images/UIDark.png[width="600"]
+image::images/UiDark.png[width="600"]
 endif::[]
 
 __Unifying your University Contact Information, and more. For You.__
