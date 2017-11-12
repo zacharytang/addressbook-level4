@@ -42,7 +42,8 @@ public class Birthday {
         if (!isValidBirthday(trimmedBirthday)) {
             if (trimmedBirthday.length() == 8) {
                 throw new IllegalValueException(MESSAGE_BIRTHDAY_INVALID);
-            } throw new IllegalValueException(MESSAGE_BIRTHDAY_CONSTRAINTS);
+            }
+            throw new IllegalValueException(MESSAGE_BIRTHDAY_CONSTRAINTS);
         }
 
         this.date = birthday;
