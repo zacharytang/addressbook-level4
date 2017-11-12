@@ -146,7 +146,7 @@ public class EditCommand extends UndoableCommand {
             throw new CommandException(MESSAGE_NONEXISTENT_TAG);
         }
         model.updateFilteredPersonList(PREDICATE_SHOW_ALL_PERSONS);
-        return new CommandResult(String.format(MESSAGE_EDIT_TAG_SUCCESS, oldTag));
+        return new CommandResult(generateResultMsgForTag(oldTag, newTag));
     }
 
     //@@author
@@ -199,6 +199,14 @@ public class EditCommand extends UndoableCommand {
         return new Person(updatedName, updatedGender, updatedMatricNo,
                 updatedPhone, updatedEmail, updatedAddress,
                 updatedTimetable, updatedRemark, updatedPhotoPath, updatedTags, updateBirthday);
+    }
+
+    //@@author nbriannl
+    /**
+     * Generates the command result String for Edit Command when editing tags
+     */
+    public static String generateResultMsgForTag(Tag oldTag, Tag newTag) {
+        return "Edited Tag:\n" + "From '" + oldTag.tagName + "' to '" + newTag.tagName + "'";
     }
 
     //@@author nbriannl

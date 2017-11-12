@@ -14,6 +14,7 @@ import static seedu.address.logic.commands.CommandTestUtil.assertCommandFailure;
 import static seedu.address.logic.commands.CommandTestUtil.assertCommandSuccess;
 import static seedu.address.logic.commands.CommandTestUtil.showFirstPersonOnly;
 import static seedu.address.logic.commands.EditCommand.MESSAGE_NONEXISTENT_TAG;
+import static seedu.address.logic.commands.EditCommand.generateResultMsgForTag;
 import static seedu.address.testutil.TypicalIndexes.INDEX_FIRST_PERSON;
 import static seedu.address.testutil.TypicalIndexes.INDEX_SECOND_PERSON;
 import static seedu.address.testutil.TypicalPersons.getTypicalAddressBook;
@@ -63,7 +64,7 @@ public class EditCommandTest {
         Tag newTag = new Tag("enemy");
         EditCommand editCommand = prepareCommand(oldTag, newTag);
 
-        String expectedMessage = String.format(EditCommand.MESSAGE_EDIT_TAG_SUCCESS, oldTag);
+        String expectedMessage = generateResultMsgForTag(oldTag, newTag);
 
         Model expectedModel = new ModelManager(new AddressBook(model.getAddressBook()), new UserPrefs());
         expectedModel.editTag(oldTag, newTag);
@@ -133,7 +134,7 @@ public class EditCommandTest {
         Tag newTag = new Tag("enemy");
         EditCommand editCommand = prepareCommand(oldTag, newTag);
 
-        String expectedMessage = String.format(EditCommand.MESSAGE_EDIT_TAG_SUCCESS, oldTag);
+        String expectedMessage = generateResultMsgForTag(oldTag, newTag);
 
         Model expectedModel = new ModelManager(new AddressBook(model.getAddressBook()), new UserPrefs());
         expectedModel.editTag(oldTag, newTag);
