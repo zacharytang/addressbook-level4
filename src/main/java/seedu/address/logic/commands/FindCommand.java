@@ -12,6 +12,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import javafx.collections.ObservableList;
+import seedu.address.commons.core.Messages;
 import seedu.address.model.person.NameContainsKeywordsPredicate;
 import seedu.address.model.person.ReadOnlyPerson;
 import seedu.address.model.tag.Tag;
@@ -48,9 +49,13 @@ public class FindCommand extends Command {
             + PREFIX_TAG + "owesMoney";
 
     public static final String MESSAGE_NOT_FOUND = "At least one field to find must be provided.";
+    public static final String MESSAGE_BIRTHDAYKEYWORD_INVALID = "You should type 0%1$s instead of %1$s.";
+    public static final String MESSAGE_BIRTHDAYKEYWORD_NONEXIST = "Month %1$s does not exist.";
+    public static final String MESSAGE_BIRTHDAYKEYWORD_NONNUMBER = "Keyword input must be in integer.";
     private ArrayList<String> predicate;
     //to keep track of how many prefixes are input
     private int count = 0;
+    private String birthdaySearch = new String();
 
     public FindCommand(ArrayList<String> predicate) {
         this.predicate = predicate;
@@ -127,6 +132,7 @@ public class FindCommand extends Command {
             }
 
             if (predicates.equals(PREFIX_BIRTHDAY.getPrefix())) {
+                birthdaySearch = predicate.get(i + 1).trim();
                 ArrayList<String> personsWithBirthday = findPersonsWithBirthday(predicate.get(i + 1));
                 for (int j = 0; j < personsWithBirthday.size(); j++) {
                     if (!predicateMap.containsKey(personsWithBirthday.get(j))) {
@@ -150,7 +156,61 @@ public class FindCommand extends Command {
 
         NameContainsKeywordsPredicate predicates = new NameContainsKeywordsPredicate(predicatesList);
         model.updateFilteredPersonList(predicates);
+        if (!birthdaySearch.isEmpty()) {
+            return new CommandResult(getMessageForPersonListShownSummary(
+                    model.getFilteredPersonList().size())
+            + getMessageForMonthSearch(birthdaySearch));
+        }
         return new CommandResult(getMessageForPersonListShownSummary(model.getFilteredPersonList().size()));
+    }
+
+    /**
+     * Constructs a feedback message to summarise an operation that displayed a listing of persons with the same
+     * birthday month.
+     * @param month used to generate Month
+     * @return summary message for the birthday month of persons displayed
+     */
+    private static String getMessageForMonthSearch(String month) {
+        switch (month) {
+        case "01":
+            month = "January";
+            break;
+        case "02":
+            month = "February";
+            break;
+        case "03":
+            month = "March";
+            break;
+        case "04":
+            month = "April";
+            break;
+        case "05":
+            month = "May";
+            break;
+        case "06":
+            month = "June";
+            break;
+        case "07":
+            month = "July";
+            break;
+        case "08":
+            month = "August";
+            break;
+        case "09":
+            month = "September";
+            break;
+        case "10":
+            month = "October";
+            break;
+        case "11":
+            month = "November";
+            break;
+        case "12":
+            month = "December";
+            break;
+        default:
+        }
+        return String.format(Messages.MESSAGE_BIRTHDAY_MONTH_SEARCHED, month);
     }
 
     //@@author

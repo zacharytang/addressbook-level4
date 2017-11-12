@@ -269,7 +269,7 @@ Want to know who's birthday is in this month? Unify every common contact togethe
 ____
 
 You can find people whose information contains all given keywords from each category. +
-Format: `find [n/NAME] [t/Tag] [p/PHONE] [e/EMAIL] [b/BIRTHDAY MONTH]...` +
+Format: `find [n/NAME] [p/PHONE] [e/EMAIL] [a/ADDRESS] [b/BIRTHDAY MONTH] [t/TAG]...` +
 Alternatives: `f` , `search`
 
 ****
@@ -730,7 +730,7 @@ e.g. photo 1
 e.g. `remark 2 r/Likes to drink coffee r/CAP 5.0`
 * *Delete Remark* : `remark INDEX` +
 e.g. remark 2
-* *Find* : `find [n/NAME] [t/Tag] [p/PHONE] [e/EMAIL] [b/BIRTHDAY MONTH] [r/remark]...` +
+* *Find* : `find [n/NAME] [p/PHONE] [e/EMAIL] [a/ADDRESS] [b/BIRTHDAY MONTH] [t/TAG]...` +
 e.g. `find n/James Jake`
 * *Google Maps* `gmaps INDEX`
 //following command not come in v1.4 yet
