@@ -298,18 +298,6 @@ Returns all persons in UniFy containing *both* 'JCfriends' and 'computing'.
 * `find b/12` +
 Returns all persons in UniFy having birthdays in `December`
 
-
-=== Sorting all persons : `sort` _(Coming in v2.0)_
-____
-_Sometimes, you just meet too many people in University. Don't worry, get all your contacts in order._
-____
-Shows the list of all persons in the current list in your address book by arranging their names in alphabetical order. +
-Format: +
-(Sort by name in ascending order) `sort ASC` +
-(Sort by name in descending order) `sort DESC`
-Alternatives: `s` , `sortall`, `arrange`
-// end::sortCommand[]
-
 === Editing a person or a tag: `edit`
 ==== Editing a person
 ____
@@ -386,26 +374,6 @@ Deletes the 2nd, 3rd, 4th persons in the address book.
 * `find n/Betsy` +
 `delete 1 5` +
 Deletes the 1st and 5th persons in the results of the `find` command.
-
-// tag::oldContact[]
-==== Deleting old contacts _(Coming in v2.0)_
-____
-_Some people you do not talk for months. Maybe a group mate from a previous module you never see ever again.
-They drift away, and out of UniFy they go as well._
-____
-Deletes the contacts which you have not viewed/edited/listed for a certain number of months. +
-Format: `delete old/NUM_OF_MONTH` +
-Alternatives: `d` , `remove`
-
-****
-* The NUM_OF_MONTH *must be a positive integer* 1, 2, 3, ...
-****
-
-Examples:
-
-* `delete old/2` +
-Deletes all the contacts which you have not viewed/edited/listed for the past 2 months.
-// end::oldContact[]
 
 // tag::deletetag[]
 ==== Deleting a Tag (or multiple Tags) _(Since v1.1)_
@@ -501,56 +469,6 @@ Opens the Google Maps view for the address of the 1st person in the results of t
 `gmaps 2 a/Blk 632 Yishun St 61` +
 Opens the Google Maps directions from Blk 632 Yishun St 61 to the address of the 2nd person listed in the address book.
 
-// tag::locations[]
-==== Listing persons who live nearby : `nearby` _(Coming in v2.0)_
-____
-_It is Summer break. Who is there to call for late night supper near your home?_
-____
-Shows a list of persons whose addresses are nearby a specified *address* within a specified radius. +
-Format: `nearby a/ADDRESS d/DISTANCE` +
-Alternatives: `n`, `nearme`, `closeby`, `neighbours` `neighbors`
-
-Example:
-
-* `nearby a/Blk 123 Kent Ridge Drive d/500` +
- Shows a list of people with address 500m away from Blk 123 Kent Ridge Drive.
-
-****
-* The `DISTANCE` specified is in metres.
-****
-
-==== Finding a central location among a group of persons : `central` _(Coming in v2.0)_
-____
-_"Where is a good place for us to meet?" UniFy everyone's location to find a central one._
-____
-After listing persons, shows the central location among the persons most recently listed +
-Format: `central [a/ADDRESS] [INDEX]...` +
-Alternatives: `ct`, `center`, `wheremeet`
-
-****
-* Specifying an `ADDRESS` will include that address in calculating the central location.
-* If an `INDEX`, or more than one `INDEX` is specified, shows the central location among the specified people with these indexes. +
-****
-
-Example:
-
-* `list` +
-`central` +
-Shows the central location among the persons most recently listed.
-
-* `list` +
-`central a/Blk 123 Kent Ridge Drive` +
-Shows the central location among the persons most recently listed and Blk 123 Kent Ridge Drive.
-
-* `list` +
-`central 1 5 6` +
-Shows the central location among the persons most recently listed with Index 1, 5 and 6.
-
-* `list t/jcfriends` +
-`central` +
-Shows the central locaton among the persons tagged as 'jcfriends'.
-// end::locations[]
-
 === Listing entered commands : `history`
 ____
 _What have you been doing? Check the past._
@@ -630,6 +548,91 @@ Clears all entries from the address book. +
 Format: `clear` +
 Alternatives: `c`, `wipe`
 
+== Upcoming Commands
+
+We have exciting new features in the works to be excited for!
+
+// tag::oldContact[]
+=== Deleting old contacts _(Coming in v2.0)_
+____
+_Some people you do not talk for months. Maybe a group mate from a previous module you never see ever again.
+They drift away, and out of UniFy they go as well._
+____
+Deletes the contacts which you have not viewed/edited/listed for a certain number of months. +
+Format: `delete old/NUM_OF_MONTH` +
+Alternatives: `d` , `remove`
+
+****
+* The NUM_OF_MONTH *must be a positive integer* 1, 2, 3, ...
+****
+
+Examples:
+
+* `delete old/2` +
+Deletes all the contacts which you have not viewed/edited/listed for the past 2 months.
+// end::oldContact[]
+
+// tag::locations[]
+=== Listing persons who live nearby : `nearby` _(Coming in v2.0)_
+____
+_It is Summer break. Who is there to call for late night supper near your home?_
+____
+Shows a list of persons whose addresses are nearby a specified *address* within a specified radius. +
+Format: `nearby a/ADDRESS d/DISTANCE` +
+Alternatives: `n`, `nearme`, `closeby`, `neighbours` `neighbors`
+
+Example:
+
+* `nearby a/Blk 123 Kent Ridge Drive d/500` +
+ Shows a list of people with address 500m away from Blk 123 Kent Ridge Drive.
+
+****
+* The `DISTANCE` specified is in metres.
+****
+
+=== Finding a central location among a group of persons : `central` _(Coming in v2.0)_
+____
+_"Where is a good place for us to meet?" UniFy everyone's location to find a central one._
+____
+After listing persons, shows the central location among the persons most recently listed +
+Format: `central [a/ADDRESS] [INDEX]...` +
+Alternatives: `ct`, `center`, `wheremeet`
+
+****
+* Specifying an `ADDRESS` will include that address in calculating the central location.
+* If an `INDEX`, or more than one `INDEX` is specified, shows the central location among the specified people with these indexes. +
+****
+
+Example:
+
+* `list` +
+`central` +
+Shows the central location among the persons most recently listed.
+
+* `list` +
+`central a/Blk 123 Kent Ridge Drive` +
+Shows the central location among the persons most recently listed and Blk 123 Kent Ridge Drive.
+
+* `list` +
+`central 1 5 6` +
+Shows the central location among the persons most recently listed with Index 1, 5 and 6.
+
+* `list t/jcfriends` +
+`central` +
+Shows the central locaton among the persons tagged as 'jcfriends'.
+// end::locations[]
+
+=== Sorting all persons : `sort` _(Coming in v2.0)_
+____
+_Sometimes, you just meet too many people in University. Don't worry, get all your contacts in order._
+____
+Shows the list of all persons in the current list in your address book by arranging their names in alphabetical order. +
+Format: +
+(Sort by name in ascending order) `sort ASC` +
+(Sort by name in descending order) `sort DESC`
+Alternatives: `s` , `sortall`, `arrange`
+// end::sortCommand[]
+
 // tag::password[]
 === Setting a password for your address book : `password` _(Coming in v2.0)_
 ____
@@ -685,11 +688,6 @@ image::tag_bar.png[width=790]
 _The tag bar is right above the information of the person displayed_
 
 _(Coming in v2.0)_ You can click a tag and all people with that tag will be displayed!
-
-=== Theme Selection _(Coming in v2.0)_
-
-To change the theme of the app, click on *Appearance* -> *Themes*, at the top of the window. +
-Several themes are available, such as *Day Mode* and *Night Mode*.
 
 // tag::fontsize[]
 === Font Size _(Coming in v2.0)_
