@@ -125,8 +125,39 @@ Example: add n/John Doe g/Male m/A0162533K p/98765432 e/johnd@example.com a/311,
 
 === ThemeCommand
 ==== Description/Data
+ThemeCommand can switch themes in the application. +
+There are 2 themes currently implemented: DarkTheme.css and LightTheme.css
 
 ==== Steps To Execute And Expected Results
+*Type in:* theme light +
+*Expected Result:* Error message reminding user that the theme is correct
+*Result Message:* +
+You are already using this theme!
+
+*Type in:* theme dark +
+*Expected Result:* Application change theme into DarkTheme.css +
+*Result Message:*  +
+Theme switched: DarkTheme.css
+
+*Type in:* theme light +
+*Expected Result:* Application change theme into LightTheme.css +
+*Result Message:* +
+Theme switched: LightTheme.css
+
+*Type in:* theme red +
+*Expected Result:* Error Message for non exist themes +
+*Result Message:*  +
+Invalid Theme Name
+
+*Type in:* theme +
+*Expected Result:* Error Message for correct command input +
+*Result Message:* +
+Invalid command format!  +
+| theme |: Changes the theme to the specified theme word. +
+Parameters: THEMEWORD +
+            (Possible theme words are: dark, light) +
+Example: theme dark +
+         theme light +
 
 === DeleteCommand (Person)
 ==== Description/Data
