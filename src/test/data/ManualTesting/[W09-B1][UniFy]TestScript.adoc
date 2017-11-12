@@ -45,7 +45,7 @@ AddCommand can add persons into the application. All fields are currently option
 
 ==== Steps To Execute And Expected Results
 *Type in:* add n/The Myth g/Male p/12345678 e/the_myth@example.com a/NUS m/A0000000A b/01011991 t/CS2103T tt/http://modsn.us/Zd8wn +
-*Expected Result:* Success message with person information displayed and person information displayed at display panel
+*Expected Result:* Success message with person information displayed and person information displayed at display panel +
 *Result Message:*
 New person added: The Myth +
 Gender: Male +
@@ -77,50 +77,50 @@ Tags:
 *Type in:* add n/hehe g/h +
 *Expected Result:* Error message suggesting the correct gender format +
 *Result Message:*  +
-Person gender should be a case-insensitive string of either 'male', 'female', or 'm', 'f'
+[red]#Person gender should be a case-insensitive string of either 'male', 'female', or 'm', 'f'#
 
-*Type in:* add n/hehe p/abc
+*Type in:* add n/hehe p/abc +
 *Expected Result:* Error message suggesting the correct phone format +
 *Result Message:* +
-Phone numbers can only contain numbers, and should be at least 3 digits long
+[red]#Phone numbers can only contain numbers, and should be at least 3 digits long#
 
 *Type in:* add n/hehe m/A123456A +
 *Expected Result:* Error message suggesting the correct matriculation number format +
 *Result Message:* +
-Person's matriculation number should be a 9-character string starting with 'A' or 'a', followed by 7 digits, and ending with a letter.
+[red]#Person's matriculation number should be a 9-character string starting with 'A' or 'a', followed by 7 digits, and ending with a letter.#
 
 *Type in:* add n/hehe e/heheexample.com +
 *Expected Result:* Error message suggesting the correct email format +
 *Result Message:* +
-Person emails should be 2 alphanumeric/period strings separated by '@'
+[red]#Person emails should be 2 alphanumeric/period strings separated by '@'#
 
 *Type in:* add n/hehe b/29021997 +
 *Expected Result:* Error message showing that the date is invalid +
 *Result Message:* +
-This date does not exist.
+[red]#This date does not exist.#
 
 *Type in:* add n/hehe b/1234567 +
 *Expected Result:* Error message suggesting the correct birthday format +
 *Result Message:* +
-Person's birthday should be in the format of DDMMYYYY
+[red]#Person's birthday should be in the format of DDMMYYYY#
 
 *Type in:* add n/hehe tt/http://modsn.us/12345 +
 *Expected Result:* Error message suggesting the NUSMods URL is not valid +
 *Result Message:*  +
-Invalid shortened URL provided
+[red]#Invalid shortened URL provided#
 
 *Type in:* add n/hehe tt/https://nusmods.com/timetable/2017-2018/sem1?CS2101[SEC]=1&CS2103T[TUT]=T1&CS2010[LEC]=1&CS2010[TUT]=9&CS2010[LAB]=8&ES2660[SEC]=3&GEQ1000[TUT]=E17&CS1010J[LEC]=1&CS1010J[TUT]=10 +
 *Expected Result:* Error message requesting for a shortened NUSMods URL +
 *Result Message:* +
-Timetable URLs should be a valid shortened NUSMods URL
+[red]#Timetable URLs should be a valid shortened NUSMods URL#
 
 *Type in:* add +
 *Expected Result:* Error message suggesting the correct command format +
 *Result Message:* +
-Invalid command format!  +
+[red]#Invalid command format!  +
 | add |: Adds a person to the address book. +
 Parameters: n/NAME [g/GENDER] [m/MATRIC NO.] [p/PHONE] [e/EMAIL] [a/ADDRESS] [b/BIRTHDAY] [tt/TIMETABLE_URL] [t/TAG]... +
-Example: add n/John Doe g/Male m/A0162533K p/98765432 e/johnd@example.com a/311, Clementi Ave 2, #02-25 b/21051994 tt/http://modsn.us/0YdMq t/friends t/owesMoney
+Example: add n/John Doe g/Male m/A0162533K p/98765432 e/johnd@example.com a/311, Clementi Ave 2, #02-25 b/21051994 tt/http://modsn.us/0YdMq t/friends t/owesMoney#
 
 
 === ThemeCommand
