@@ -33,6 +33,7 @@ public class GMapsCommand extends Command {
 
     public static final String MESSAGE_SELECT_PERSON_SUCCESS = "Showing Map View of %1$s's address";
     public static final String MESSAGE_DIRECTIONS_TO_PERSON_SUCCESS = "Showing directions to %1$s";
+    public static final String MESSAGE_PERSON_HAS_NO_ADDRESS = "%1$s has no address!";
 
     private final Index targetIndex;
     private final Address targetAddress;
@@ -51,6 +52,9 @@ public class GMapsCommand extends Command {
         }
 
         ReadOnlyPerson personToShowMap = lastShownList.get(targetIndex.getZeroBased());
+        if (personToShowMap.getAddress().toString().equals("")) {
+            throw new CommandException(String.format(MESSAGE_PERSON_HAS_NO_ADDRESS, personToShowMap.getName()));
+        }
 
         if (targetAddress != null) {
             model.showDirectionsTo(personToShowMap, targetAddress, targetIndex);
