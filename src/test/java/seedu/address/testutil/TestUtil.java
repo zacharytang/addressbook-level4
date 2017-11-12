@@ -57,10 +57,10 @@ public class TestUtil {
         return model.getAddressBook().getPersonList().get(index.getZeroBased());
     }
 
-    //@@author April0616
+    //@@author April0616-unused
     /**
-     * Remove the temporary test files and parents if they exist till the root of disk C.
-     * @param path
+     * Removes the temporary test files and parents if they exist till the root of the path.
+     * @param pathString of the file
      * @throws IOException
      */
     public static void removeFileAndItsParentsTillRoot(String pathString) throws IOException {
