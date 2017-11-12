@@ -8,9 +8,9 @@ https://coveralls.io/github/CS2103AUG2017-W09-B1/main?branch=master[image:https:
 https://www.codacy.com/app/zacharytang/main?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=CS2103AUG2017-W09-B1/main&amp;utm_campaign=Badge_Grade)[image:https://api.codacy.com/project/badge/Grade/67e717e8e66245b9881839446b7fb464[Codacy Badge]]
 
 ifdef::env-github[]
-image::docs/images/UILight.png[width="600"]
+image::docs/images/Ui.png[width="600"]
 
-image::docs/images/UIDark.png[width="600"]
+image::docs/images/UiDark.png[width="600"]
 endif::[]
 
 ifndef::env-github[]
