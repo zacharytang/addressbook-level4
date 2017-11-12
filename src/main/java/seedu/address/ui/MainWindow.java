@@ -100,7 +100,10 @@ public class MainWindow extends UiPart<Region> {
         registerAsAnEventHandler(this);
     }
 
-    private Stage getPrimaryStage() {
+    /**
+     * Gets the primary stage of the main window.
+     */
+    public Stage getPrimaryStage() {
         return primaryStage;
     }
 
