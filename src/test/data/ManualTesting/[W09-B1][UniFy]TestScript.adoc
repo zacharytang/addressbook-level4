@@ -231,7 +231,84 @@ Example: delete 1 +
 
 === EditCommand (Person)
 ==== Description/Data
+Edits a person’s information.
+
 ==== Steps To Execute And Expected Results
+*Type in:* edit +
+*Expected Result:* Error message suggesting correct command input +
+*Result Message:* +
+Invalid command format! +
+| edit |: Edits the details of the person identified by the index number used in the last person listing. +
+           Existing values will be overwritten by the input values. +
+Parameters: INDEX (must be a positive integer) [n/NAME] [g/GENDER] [m/MATRIC NO.] [p/PHONE] [e/EMAIL] [a/ADDRESS] +
+                   [tt/TIMETABLE_URL] [t/TAG]... [b/BIRTHDAY] +
+Example: edit 1 p/91234567 e/johndoe@example.com +
+OR +
+| edit |: Edits the specified tag in all contacts containing this tag with a new specified tag. +
+Parameters: old/TAG new/TAG +
+Example: edit old/CS1020 new/CS2010
+
+*Type in:* edit 26 p/12345678 g/F +
+*Expected Result:* Success message showing the person with edited field +
+*Result Message:* +
+Edited Person: haha +
+Gender: Female +
+Matric No.: +
+Phone: 12345678 +
+Email: +
+Address: +
+Birthday: +
+Timetable: +
+Remark: +
+Photo: +
+Tags:
+
+*Type in:* edit 26 g/M m/A0000000A p/12345678 e/the_myth@example.com b/01011991 a/NUS n/The Myth t/CS2103T tt/http://modsn.us/Zd8wn +
+*Expected Result:* Error message showing same person exist in address book +
+*Result Message:* +
+This person already exists in the address book.
+
+*_Following test are repeated from AddCommand (modified as EditCommand, but returns the same results as AddCommand)_*
+
+*Type in:* edit 26 g/h +
+*Expected Result:* Error message suggest correct gender input +
+*Result Message:* +
+Person gender should be a case-insensitive string of either 'male', 'female', or 'm', 'f'
+
+*Type in:* edit 26 p/abc +
+*Expected Result:* Error message suggesting the correct phone format +
+*Result Message:* +
+Phone numbers can only contain numbers, and should be at least 3 digits long
+
+*Type in:* edit 26 m/A123456A +
+*Expected Result:* Error message suggesting the correct matriculation number format +
+*Result Message:* +
+Person's matriculation number should be a 9-character string starting with 'A' or 'a', followed by 7 digits, and ending with a letter.
+
+*Type in:* edit 26 e/heheexample.com +
+*Expected Result:* Error message suggesting the correct email format +
+*Result Message:* +
+Person emails should be 2 alphanumeric/period strings separated by '@'
+
+*Type in:* edit 26 b/29021997 +
+*Expected Result:* Error message showing that the date is invalid +
+*Result Message:* +
+This date does not exist.
+
+*Type in:* edit 26 b/1234567 +
+*Expected Result:* Error message suggesting the correct birthday format +
+*Result Message:* +
+Person's birthday should be in the format of DDMMYYYY
+
+*Type in:* edit 26 tt/http://modsn.us/12345 +
+*Expected Result:* Error message suggesting the NUSMods URL is not valid +
+*Result Message:* +
+Invalid shortened URL provided
+
+*Type in:* edit 26 tt/https://nusmods.com/timetable/2017-2018/sem1?CS2101[SEC]=1&CS2103T[TUT]=T1&CS2010[LEC]=1&CS2010[TUT]=9&CS2010[LAB]=8&ES2660[SEC]=3&GEQ1000[TUT]=E17&CS1010J[LEC]=1&CS1010J[TUT]=10 +
+*Expected Result:* Error message requesting for a shortened NUSMods URL +
+*Result Message:* +
+Timetable URLs should be a valid shortened NUSMods URL
 
 === EditCommand (Tag)
 ==== Description/Data
