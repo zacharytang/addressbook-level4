@@ -34,6 +34,8 @@ public class ParserUtil {
 
     public static final String MESSAGE_INVALID_INDEX = "Index is not a non-zero unsigned integer.";
     public static final String MESSAGE_INSUFFICIENT_PARTS = "Number of parts must be more than 1.";
+    public static final String REGEX_COMMA = ",";
+    public static final String REGEX_MULTIPLE_WHITESPACE = " +";
 
     /**
      * Parses {@code oneBasedIndex} into an {@code Index} and returns it. Leading and trailing whitespaces will be
@@ -51,7 +53,7 @@ public class ParserUtil {
     //@@author April0616
     /**
      * Parses {@code oneBasedIndexes} separated with commas into a {@Code ArrayList<Index>} and returns it.
-     * Leading and trailing whitespaces will be trimmed.
+     * Leading and trailing whitespaces are trimmed.
      * @param splitString is the sign used to separate indexes, can be either comma or whitespace(s)
      * @throws IllegalValueException if one of the specified indexes is invalid (not non-zero unsigned integer).
      *
@@ -60,11 +62,10 @@ public class ParserUtil {
             throws IllegalValueException {
         String trimmedIndexes = oneBasedIndexes.trim();
         String[] indexes;
-
-        if (splitString.equals(",")) {
+        if (splitString.equals(REGEX_COMMA)) {
             indexes = trimmedIndexes.split(splitString);
         } else {
-            indexes = trimmedIndexes.split(" +");
+            indexes = trimmedIndexes.split(REGEX_MULTIPLE_WHITESPACE);
         }
 
         ArrayList<Index> deletePersons = new ArrayList<>();
@@ -97,7 +98,7 @@ public class ParserUtil {
     //@@author April0616
     /**
      * Parses a {@code Optional<String> gender} into an {@code Optional<Gender>} if {@code gender} is present.
-     * See header comment of this class regarding the use of {@code Optional} parameters.
+     * @See header comment of this class regarding the use of {@code Optional} parameters.
      */
     public static Optional<Gender> parseGender(Optional<String> gender) throws IllegalValueException {
         requireNonNull(gender);
@@ -106,7 +107,7 @@ public class ParserUtil {
 
     /**
      * Parses a {@code Optional<String> matricNo} into an {@code Optional<MatricNo>} if {@code matricNo} is present.
-     * See header comment of this class regarding the use of {@code Optional} parameters.
+     * @See header comment of this class regarding the use of {@code Optional} parameters.
      */
     public static Optional<MatricNo> parseMatricNo(Optional<String> matricNo) throws IllegalValueException {
         requireNonNull(matricNo);
