@@ -408,8 +408,9 @@ _Figure 4.2.1 : Timetable class diagram (XYZComponent refers to all other compon
 Displaying of timetables is facilitated using a single `TimetableDisplay` component, which resides above `BrowserPanel`. Both these
 components are contained within `InfoPanel`, which handles specific events to bring either panel to the front.
 
-Upon execution of a `select` or `whenfree` command, an arraylist of `Timetable` to display is passed to `TimetableDisplay`, which
-dynamically fills the JavaFX container `GridPane` with `Panes`, according to the timetables to be displayed.
+Upon execution of a `select` or `whenfree` command, the following happens:
+
+.  g
 
 ==== Design Considerations
 
@@ -433,6 +434,16 @@ dynamically fills the JavaFX container `GridPane` with `Panes`, according to the
 **Alternative 2:** Both shortened and full-length NUSMods URLs are accepted. +
 **Pros:** This is more user friendly as any type of NUSMods URL is accepted. +
 **Cons:** This is much harder to detect malformed URL as parsing data does not detect errors in lesson tokens in URL. Shortened URL gives 403 response on bad URL.
+
+---
+
+**Aspect:** Behaviour of app when there is no internet connection +
+**Alternative 1:** Store timetable information after retrieval from NUSMods once +
+**Pros:** We only need to retrieve lesson information once per person +
+**Cons:** Storage of entire timetables can be very costly, and storage can be expensive with a large number of contacts +
+**Alternative 2:** Only store timetable URLs, and query each time app is launched. If no internet, start with empty timetable +
+**Pros:** Storage needed is minimal, as only a single string is stored for each person +
+**Cons:** Startup of app can be slow if there is a large number of persons
 // end::timetable[]
 
 // tag::deletetag[]
