@@ -83,6 +83,10 @@ Understanding the Command Format is easy! Let us explain:
 * Commands have alternative keywords than can be used in place of them.
 ** Example: You can type `wipe` or `c` instead of `clear` to execute the same command.
 
+[NOTE]
+You can view a summary of all commands <<Command Summary (v1.5), here>>,
+and a table of all alternative keywords for commands <<Command Alternatives Reference Table, here>>
+
 
 === Viewing help : `help`
 
@@ -399,7 +403,7 @@ ____
 You can view the combined timetables of a group of people, selected by indexes. +
 Format: `whenfree [INDEX]...`
 
-image::whenfree.png[width=790]
+image::whenfree.png[width=800]
 _Figure 3.10 : View the combined timetables of your contacts easily_
 
 Examples:
@@ -690,14 +694,14 @@ _Here are some features in UniFy that are not in the form of commands, but good 
 
 Typing a mispelled word for a command will trigger the address book to suggest the correct phrasing for that command
 
-image::command_suggestion.png[width=790]
+image::command_suggestion.png[width=600]
 _Figure 5.1 : Typing the command `delet` will make UniFy reply `Do you mean delete?`_
 
 === Tag Bar _(Since v1.5)_
 
 You can easily view all existing tags as icons, displayed above the person card
 
-image::tag_bar.png[width=790]
+image::tag_bar.png[width=600]
 _Figure 5.2 : The tag bar is right above the information of the person displayed_
 
 _(Coming in v2.0)_ You can click a tag and all people with that tag will be displayed!
