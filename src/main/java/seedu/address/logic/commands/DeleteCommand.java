@@ -45,41 +45,51 @@ public class DeleteCommand extends UndoableCommand {
 
     private final Set<Tag> targetTags;
 
+    //@@author nbriannl
+    public DeleteCommand(Set<Tag> targetTags) {
+        this.targetIndexes = null;
+        this.targetTags = targetTags;
+    }
+    //@@author April0616
+    /**
+     * Creates a delete command which aims to delete one person.
+     * @param targetIndex of the specified person
+     */
     public DeleteCommand(Index targetIndex) {
         this.targetIndexes = new ArrayList<>();
         targetIndexes.add(targetIndex);
         this.targetTags = null;
     }
 
-    //@@author April0616
+    /**
+     * Creates a delete command which aims to delete multiple persons.
+     * @param targetIndexes is the list of all the indexes of the specified persons.
+     */
     public DeleteCommand(ArrayList<Index> targetIndexes) {
         this.targetIndexes = targetIndexes;
         this.targetTags = null;
     }
 
-
-    //@@author nbriannl
-    public DeleteCommand(Set<Tag> targetTags) {
-        this.targetIndexes = null;
-        this.targetTags = targetTags;
-    }
-
-    //@@author
     @Override
+    /**
+     * Executes the delete commands for persons or tags.
+     * @return the CommandResult of the delete command
+     * @throws CommandException if the invalid persons or tags are provided
+     */
     public CommandResult executeUndoableCommand() throws CommandException {
         if (targetTags == null && targetIndexes != null) {
-            return executeCommandForPerson();
+            return executeCommandForPersons();
 
         } else {
             return executeCommandForTag();
         }
     }
 
-    //@@author April0616
     /**
-     * Command execution of {@code DeleteCommand} for a {@code Person}
+     * Executes Delete Command for persons.
+     * @throws CommandException when the person index provided is invalid
      */
-    private CommandResult executeCommandForPerson () throws CommandException {
+    private CommandResult executeCommandForPersons() throws CommandException {
         List<ReadOnlyPerson> lastShownList = model.getFilteredPersonList();
         ArrayList<ReadOnlyPerson> deletePersonList = new ArrayList<>();
 
@@ -87,6 +97,7 @@ public class DeleteCommand extends UndoableCommand {
             if (index.getZeroBased() >= lastShownList.size()) {
                 throw new CommandException(Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX);
             }
+
             ReadOnlyPerson personToDelete = lastShownList.get(index.getZeroBased());
             deletePersonList.add(personToDelete);
         }
@@ -96,7 +107,8 @@ public class DeleteCommand extends UndoableCommand {
         } catch (PersonNotFoundException pnfe) {
             assert false : "One of the target persons is missing";
         }
-        return new CommandResult(generateResultMsgForPerson(deletePersonList));
+
+        return new CommandResult(generateSuccessfulResultMsgForPerson(deletePersonList));
     }
 
     //@@author nbriannl
@@ -128,37 +140,37 @@ public class DeleteCommand extends UndoableCommand {
 
     //@@author April0616
     /**
-     * Generate the command result of the deletePersonList.
-     * @param deletePersonList
-     * @return commandResult string
+     * Generates the successful command result of the deletePersonList.
+     * @param deletePersonList of the deleted persons
+     * @return the string of the command result message
      */
-    public static String generateResultMsgForPerson(ArrayList<ReadOnlyPerson> deletePersonList) {
+    public static String generateSuccessfulResultMsgForPerson(ArrayList<ReadOnlyPerson> deletePersonList) {
         int numOfPersons = deletePersonList.size();
-        StringBuilder formatBuilder = new StringBuilder();
 
+        StringBuilder formatBuilder = new StringBuilder();
         if (numOfPersons == 1) {
             formatBuilder.append("Deleted Person :\n");
         } else {
             formatBuilder.append("Deleted Persons :\n");
         }
 
+        // List the names of the persons deleted
         formatBuilder.append("[ ");
-
         for (int i = 0; i < deletePersonList.size(); i++) {
             formatBuilder.append((i + 1) + ". " + deletePersonList.get(i).getName() + " ");
         }
-
         formatBuilder.append("]\n");
-        formatBuilder.append("Details: \n");
 
+        // List the details of the persons deleted
+        formatBuilder.append("Details: \n");
         for (ReadOnlyPerson p : deletePersonList) {
             formatBuilder.append("[");
             formatBuilder.append(p.getAsText());
             formatBuilder.append("]");
             formatBuilder.append("\n");
         }
-        String resultMsg = formatBuilder.toString();
 
+        String resultMsg = formatBuilder.toString();
         return resultMsg;
     }
 

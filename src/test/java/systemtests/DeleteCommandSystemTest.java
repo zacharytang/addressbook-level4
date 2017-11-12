@@ -39,7 +39,7 @@ public class DeleteCommandSystemTest extends AddressBookSystemTest {
         ArrayList<ReadOnlyPerson> deletePersonList = new ArrayList<>();
         deletePersonList.add(deletedPerson);
 
-        String expectedResultMessage = DeleteCommand.generateResultMsgForPerson(deletePersonList);
+        String expectedResultMessage = DeleteCommand.generateSuccessfulResultMsgForPerson(deletePersonList);
         assertCommandSuccess(command, expectedModel, expectedResultMessage);
 
         /* Case: delete the first person in the list using alias,
@@ -108,7 +108,7 @@ public class DeleteCommandSystemTest extends AddressBookSystemTest {
         deletePersonList = new ArrayList<>();
         deletePersonList.add(deletedPerson);
 
-        expectedResultMessage = DeleteCommand.generateResultMsgForPerson(deletePersonList);
+        expectedResultMessage = DeleteCommand.generateSuccessfulResultMsgForPerson(deletePersonList);
         assertCommandSuccess(command, expectedModel, expectedResultMessage, expectedIndex);
 
         /* --------------------------------- Performing invalid delete operation ------------------------------------ */
@@ -209,7 +209,7 @@ public class DeleteCommandSystemTest extends AddressBookSystemTest {
         ArrayList<ReadOnlyPerson> deletePersonList = new ArrayList<>();
         deletePersonList.add(deletedPerson);
 
-        String expectedResultMessage = DeleteCommand.generateResultMsgForPerson(deletePersonList);
+        String expectedResultMessage = DeleteCommand.generateSuccessfulResultMsgForPerson(deletePersonList);
 
         assertCommandSuccess(
                 DeleteCommand.COMMAND_WORD + " " + toDelete.getOneBased(), expectedModel, expectedResultMessage);

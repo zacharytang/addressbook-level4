@@ -7,7 +7,7 @@ import seedu.address.model.photo.PhotoPath;
 
 //@@author April0616
 /**
- * JAXB-friendly adapted version of the photo path.
+ * It's the JAXB-friendly adapted version of the photo path.
  */
 public class XmlAdaptedPhotoPath {
 
