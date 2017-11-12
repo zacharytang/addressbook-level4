@@ -60,7 +60,9 @@ public class PersonInfoPanel extends UiPart<Region> {
     @FXML
     private FlowPane tags;
 
-
+    /**
+     * Initializes the person information panel.
+     */
     public PersonInfoPanel() {
         super(FXML);
         this.person = null;
@@ -146,7 +148,7 @@ public class PersonInfoPanel extends UiPart<Region> {
 
     //@@author April0616
     /**
-     * Set the default contact photo.
+     * Sets the default contact photo.
      */
     public void setDefaultContactPhoto() {
         Image defaultImage = new Image(MainApp.class.getResourceAsStream(DEFAULT_PHOTO_PATH));
@@ -154,7 +156,7 @@ public class PersonInfoPanel extends UiPart<Region> {
     }
 
     /**
-     * Load the photo of the specified person.
+     * Loads the photo of the specified person.
      * @param person
      */
     public void loadPhoto(ReadOnlyPerson person) {
@@ -179,7 +181,7 @@ public class PersonInfoPanel extends UiPart<Region> {
     }
 
     /**
-     * Get the default photo by gender. If the gender is not specifed, then return the default photo without gender.
+     * Gets the default photo by gender. If the gender is not specifed, then return the default photo without gender.
      * @return Image of the according default photo
      */
     private Image getDefaultPhotoByGender() {

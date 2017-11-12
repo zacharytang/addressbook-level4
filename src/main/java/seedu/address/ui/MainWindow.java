@@ -75,6 +75,9 @@ public class MainWindow extends UiPart<Region> {
     @FXML
     private StackPane statusbarPlaceholder;
 
+    /**
+     * Initializes the main window by the parameters provided.
+     */
     public MainWindow(Stage primaryStage, Config config, UserPrefs prefs, Logic logic) {
         super(FXML);
 
@@ -97,13 +100,14 @@ public class MainWindow extends UiPart<Region> {
         registerAsAnEventHandler(this);
     }
 
-    public Stage getPrimaryStage() {
+    private Stage getPrimaryStage() {
         return primaryStage;
     }
 
     private void setAccelerators() {
         setAccelerator(helpMenuItem, KeyCombination.valueOf("F1"));
     }
+    //@@author
 
     /**
      * Sets the accelerator of a MenuItem.
@@ -135,7 +139,7 @@ public class MainWindow extends UiPart<Region> {
         });
     }
 
-    //author@@ nbriannl
+    //@@author nbriannl
     /**
      * Fills up all the placeholders of this window.
      */

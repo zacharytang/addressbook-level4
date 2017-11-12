@@ -32,7 +32,6 @@
 
             <SplitPane dividerPositions="0.26582278481012656" orientation="VERTICAL" prefWidth="2000.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
 
-                <!-- @@author -->
                 <SplitPane id="splitPane" fx:id="splitPane" dividerPositions="0.4269269269269269" maxHeight="628.0" minHeight="230.0" prefHeight="600.0" prefWidth="1990.0">
                     <VBox maxWidth="1000.0" minHeight="81.0" minWidth="430.0" prefHeight="81.0" prefWidth="843.0" SplitPane.resizableWithParent="true">
                         <padding>
@@ -48,6 +47,7 @@
                         <StackPane fx:id="personInfoPlaceholder" VBox.vgrow="ALWAYS" />
 
                     </VBox>
+                        <!-- @@author April0616 -->
                     <VBox minWidth="200" prefWidth="323.0">
 
                         <StackPane fx:id="commandBoxPlaceholder" minWidth="100" prefWidth="305.0" styleClass="pane-with-border">
