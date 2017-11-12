@@ -548,6 +548,19 @@ Clears all entries from the address book. +
 Format: `clear` +
 Alternatives: `c`, `wipe`
 
+=== Exiting the program : `exit`
+____
+_You are done with what you need to do. Thank you for using UniFy._
+____
+Exits the program. +
+Format: `exit` +
+Alternatives: `x` , `quit`
+
+=== Saving the data
+
+Address book data are saved in the hard disk automatically after any command that changes the data. +
+There is no need to save manually.
+
 == Upcoming Commands
 
 We have exciting new features in the works to be excited for!
@@ -656,19 +669,6 @@ Adds 123456789 as a password.
 To clear the password set.
 // end::password[]
 
-=== Exiting the program : `exit`
-____
-_You are done with what you need to do. Thank you for using UniFy._
-____
-Exits the program. +
-Format: `exit` +
-Alternatives: `x` , `quit`
-
-=== Saving the data
-
-Address book data are saved in the hard disk automatically after any command that changes the data. +
-There is no need to save manually.
-
 == Other features
 
 _Here are some features in UniFy that are not in the form of commands, but good to know to aid in your productivity._
@@ -752,28 +752,28 @@ e.g.`select 2`
 
 == Command Alternatives Reference Table
 
+_In alphabetical order_
+
 [width="15%", options="header",]
 |=======
-|Command | Alternatives |-|-|-|-
-|help |-|-|-|-|-
-|add | a | insert |-|-|-
-|photo | ph |-|-|-|-
-|remark | rm |-|-|-|-
-|list | l | showall | viewall |-|-
-|find | f | search |-|-|-
-|sort | s | sortall | arrange |-|-
-|edit | e | modify | change |-|-
-|delete | d | remove |-|-|-
-|select| s | choose |-|-|-
-|history| h | past |-|-|-
-|whenfree |-|-|-|-|-
-|gmaps | g | map | maps|-|-
-|nearby| n | nearme | closeby | neighbours | neighbors
-|central| ct | center | wheremeet |-|-
-|undo | u |-|-|-|-
-|redo | r |-|-|-|-
-|password | p | code |-|-|-
-|exit | x | quit |-|-|-
+|Command | Alternatives |-|-
+|add | a | insert |-
+|clear | c | wipe |-
+|delete | d | remove |-
+|edit | e | modify | change
+|exit | x | quit |-
+|find | f | search |-
+|gmaps | g | map | maps
+|help |-|-|-
+|history | h | past |-
+|list | l | showall | viewall
+|photo | ph |-|-
+|redo | r |-|-
+|remark | rm |-|-
+|select| s | choose |-
+|theme | th | changetheme|-
+|whenfree | wf | timetable |-
+|undo | u |-|-
 |=======
 
 == Version Notes
