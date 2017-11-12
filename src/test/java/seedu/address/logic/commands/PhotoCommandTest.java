@@ -42,6 +42,7 @@ public class PhotoCommandTest {
     }
 
 
+
     /**
      * This test cannot run on Travis CI.
      */
