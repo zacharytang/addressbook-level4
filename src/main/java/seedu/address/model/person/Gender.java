@@ -34,7 +34,6 @@ public class Gender {
         if (!isValidInput(trimmedGender)) {
             value = "";
             throw new IllegalValueException(MESSAGE_GENDER_CONSTRAINTS);
-
         }
 
         String ignoredCaseGender = trimmedGender.toLowerCase();

@@ -117,7 +117,6 @@ public class ModelManager extends ComponentManager implements Model {
         checkMasterTagListHasAllTagsUsed();
     }
 
-    //@@author April0616
     @Override
     public synchronized void deletePersons(ArrayList<ReadOnlyPerson> targets) throws PersonNotFoundException {
         addressBook.removePersons(targets);
@@ -125,12 +124,12 @@ public class ModelManager extends ComponentManager implements Model {
         checkMasterTagListHasAllTagsUsed();
     }
 
-    //@@author April0616
     @Override
     public void addPhotoPath(PhotoPath photoPath) throws DuplicatePhotoPathException {
         addressBook.addPhotoPath(photoPath);
         indicateAddressBookChanged();
     }
+    //@@author
 
     //author@@ nbriannl
     @Override
