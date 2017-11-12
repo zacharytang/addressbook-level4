@@ -18,12 +18,20 @@ By: `Team W09-B1`      Since: `Aug 2017`      Licence: `MIT`
 
 == Before You Start Testing
 === Materials Required for Testing
-Before testing, you need ensure that you have a picture in your local disk.
-You need to open the UniFy.jar file.
+Before testing, you need ensure that you have the test data  ([W09-B1][UniFy]SampleData.xml) and a picture in your somewhere in your computer that you know the path to.
+Place UniFy.jar in an empty folder. Open UniFy.jar.
 
 === Import Test Data
-You need to replace the addressbook.xml file with the new one. ??
-
+****
+* If you are testing on the .jar file, you need to replace the current storage file: addressbook.xml. +
+* Type `clear` to clear the application. +
+* Close the application. +
+* You should now see additional files created and a folder called `data`. +
+* Open `data`. +
+* Replace addressbook.xml with [W09-B1][UniFy]SampleData.xml and rename it to addressbook.xml. +
+* Open UniFy.jar. +
+* You are ready for testing.
+****
 
 == Special Instructions
 === Test Procedures
@@ -33,10 +41,91 @@ You should type in the commands in the script in order, or you will not see the 
 == Content for Testing (Include ALIAS)
 === AddCommand
 ==== Description/Data
+AddCommand can add persons into the application. All fields are currently optional, except name.
+
 ==== Steps To Execute And Expected Results
+*Type in:* add n/The Myth g/Male p/12345678 e/the_myth@example.com a/NUS m/A0000000A b/01011991 t/CS2103T tt/http://modsn.us/Zd8wn +
+*Expected Result:* Success message with person information displayed and person information displayed at display panel
+*Result Message:*
+New person added: The Myth +
+Gender: Male +
+Matric No.: A0000000A +
+Phone: 12345678 +
+Email: the_myth@example.com +
+Address: NUS +
+Birthday: 01/01/1991 +
+Timetable: http://modsn.us/Zd8wn +
+Remark:  +
+Photo:  +
+Tags: [CS2103T]
+
+*Type in:* add n/haha  +
+*Expected Result:* Success message with person information displayed (blank for fields with no input) and person information displayed at display panel +
+*Result Message:* +
+New person added: haha +
+Gender: +
+Matric No.:  +
+Phone:  +
+Email:  +
+Address:  +
+Birthday:  +
+Timetable:  +
+Remark:  +
+Photo:  +
+Tags:
+
+*Type in:* add n/hehe g/h +
+*Expected Result:* Error message suggesting the correct gender format +
+*Result Message:*  +
+Person gender should be a case-insensitive string of either 'male', 'female', or 'm', 'f'
+
+*Type in:* add n/hehe p/abc
+*Expected Result:* Error message suggesting the correct phone format +
+*Result Message:* +
+Phone numbers can only contain numbers, and should be at least 3 digits long
+
+*Type in:* add n/hehe m/A123456A +
+*Expected Result:* Error message suggesting the correct matriculation number format +
+*Result Message:* +
+Person's matriculation number should be a 9-character string starting with 'A' or 'a', followed by 7 digits, and ending with a letter.
+
+*Type in:* add n/hehe e/heheexample.com +
+*Expected Result:* Error message suggesting the correct email format +
+*Result Message:* +
+Person emails should be 2 alphanumeric/period strings separated by '@'
+
+*Type in:* add n/hehe b/29021997 +
+*Expected Result:* Error message showing that the date is invalid +
+*Result Message:* +
+This date does not exist.
+
+*Type in:* add n/hehe b/1234567 +
+*Expected Result:* Error message suggesting the correct birthday format +
+*Result Message:* +
+Person's birthday should be in the format of DDMMYYYY
+
+*Type in:* add n/hehe tt/http://modsn.us/12345 +
+*Expected Result:* Error message suggesting the NUSMods URL is not valid +
+*Result Message:*  +
+Invalid shortened URL provided
+
+*Type in:* add n/hehe tt/https://nusmods.com/timetable/2017-2018/sem1?CS2101[SEC]=1&CS2103T[TUT]=T1&CS2010[LEC]=1&CS2010[TUT]=9&CS2010[LAB]=8&ES2660[SEC]=3&GEQ1000[TUT]=E17&CS1010J[LEC]=1&CS1010J[TUT]=10 +
+*Expected Result:* Error message requesting for a shortened NUSMods URL +
+*Result Message:* +
+Timetable URLs should be a valid shortened NUSMods URL
+
+*Type in:* add +
+*Expected Result:* Error message suggesting the correct command format +
+*Result Message:* +
+Invalid command format!  +
+| add |: Adds a person to the address book. +
+Parameters: n/NAME [g/GENDER] [m/MATRIC NO.] [p/PHONE] [e/EMAIL] [a/ADDRESS] [b/BIRTHDAY] [tt/TIMETABLE_URL] [t/TAG]... +
+Example: add n/John Doe g/Male m/A0162533K p/98765432 e/johnd@example.com a/311, Clementi Ave 2, #02-25 b/21051994 tt/http://modsn.us/0YdMq t/friends t/owesMoney
+
 
 === ThemeCommand
 ==== Description/Data
+
 ==== Steps To Execute And Expected Results
 
 === DeleteCommand (Person)
