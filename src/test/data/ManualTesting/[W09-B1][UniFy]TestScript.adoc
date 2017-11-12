@@ -18,27 +18,55 @@ By: `Team W09-B1`      Since: `Aug 2017`      Licence: `MIT`
 
 == Before You Start Testing
 === Materials Required for Testing
+Before testing, you need ensure that you have a picture in your local disk.
+You need to open the UniFy.jar file.
 
-=== Test Data
-
-=== Test Environment
+=== Import Test Data
+You need to replace the addressbook.xml file with the new one. ??
 
 
 == Special Instructions
 === Test Procedures
+Type the command in the command box and press 'Enter'.
+You should type in the commands in the script in order, or you will not see the correct output.
 
 == Content for Testing (Include ALIAS)
 === AddCommand
 ==== Description/Data
 ==== Steps To Execute And Expected Results
 
-=== ClearCommand
+=== ThemeCommand
 ==== Description/Data
 ==== Steps To Execute And Expected Results
 
 === DeleteCommand (Person)
 ==== Description/Data
+DeleteCommand can delete multiple persons simultaneously.
+
 ==== Steps To Execute And Expected Results
+Type in: delete 1,2,3
+
+Expected Result:
+
+Type in: find n/John
+
+Expected Result:
+
+Type in: delete 1
+
+Expected Result:
+
+Type in: delete -1, -2
+
+Expected Result:
+
+Type in: delete 999
+
+Expected Result:
+
+Type in: delete
+
+Expected Result:
 
 === DeleteCommand (Tag)
 ==== Description/Data
@@ -54,11 +82,65 @@ By: `Team W09-B1`      Since: `Aug 2017`      Licence: `MIT`
 
 === PhotoCommand
 ==== Description/Data
+PhotoCommand is to add the photo to your specified contact.
+
+==== Before Test PhotoCommand
+Windows System: Right click on one picture file, click 'Properties'
+and copy the file path in the 'location:' field.
+It should be an absolute file path in your computer, like "C:\selfie\bg.jpg".
+
 ==== Steps To Execute And Expected Results
+Type in: list
+
+Type in: photo
+
+Expected Result:
+
+Type in: photo 1 ph/[Your copied file path]
+
+Expected Result: You could see the photo is added to the first person in the shown list.
+
+Type in: ph 1
+
+Expected Result: The photo is removed from the person card.
+
+Type in: photo 1 ph/Q:\haha.jpg
+
+Expected Result:
+
+Type in: photo 2 ph/[Your copied photo path]
+
+Expected Result: You could see the photo is added to the second person in the shown list.
+
+Type in: undo
+
+Type in: select 2
+
+Expected Result:
 
 === RemarkCommand
 ==== Description/Data
+Remark Command is to add a remark to the specified person.
+
 ==== Steps To Execute And Expected Results
+Type in: list
+
+Type in: remark 1 r/Likes CS2103T
+
+Expected Result:
+
+Type in: remark 1 r/
+
+Expected Result:
+
+Type in: rm 2 r/404 r/NOT FOUND
+
+Expected Result:
+
+Type in: undo
+
+Expected Result:
+
 
 === FindCommand
 ==== Description/Data
@@ -89,6 +171,10 @@ By: `Team W09-B1`      Since: `Aug 2017`      Licence: `MIT`
 ==== Steps To Execute And Expected Results
 
 === RedoCommand
+==== Description/Data
+==== Steps To Execute And Expected Results
+
+=== ClearCommand
 ==== Description/Data
 ==== Steps To Execute And Expected Results
 
