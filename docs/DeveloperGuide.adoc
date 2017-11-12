@@ -408,18 +408,21 @@ _Figure 4.2.1 : Timetable class diagram (XYZComponent refers to all other compon
 Displaying of timetables is facilitated using a single `TimetableDisplay` component, which resides above `BrowserPanel`. Both these
 components are contained within `InfoPanel`, which handles specific events to bring either panel to the front.
 
-Upon execution of a `select` or `whenfree` command, the following happens:
+Upon execution of a `whenfree` command, the following happens:
 
-. `TimetableCommandParser` parses the input to determine which timetables to display
-.. If no arguments are passed, empty `ArrayList<Index>` is used
-.. Otherwise, arguments are parsed into their respective `Index` and stored in an `ArrayList<Index>`
-. A new `TimetableCommand` is constructed, using the list created by the parser
+. `TimetableCommandParser` parses the input to determine which timetables to display.
+.. If no arguments are passed, empty `ArrayList<Index>` is used.
+.. Otherwise, arguments are parsed into their respective `Index` and stored in an `ArrayList<Index>`.
+. A new `TimetableCommand` is constructed, using the list created by the parser.
 . When `TimetableCommand:execute()` is called, the list of `Index`, is used to obtain the `ReadOnlyPerson` to display,
-and stores it in a `List<ReadOnlyPerson>`
-. A `TimetableDisplayEvent` is then posted with the list of people to be displayed
-. The event is then handled by the `InfoPanel`, which brings the `TimetableDisplay` component to the front for viewing
+and stores it in a `List<ReadOnlyPerson>`.
+. A `TimetableDisplayEvent` is then posted with the list of people to be displayed.
+. The event is then handled by the `InfoPanel`, which creates a new `TimetableDisplay` component and brings it to the front.
+.. Each `Timetable` to be displayed is obtained from the list of people from the `TimetableDisplayEvent` handled.
+.. When `TimetableDisplay` component is created, `TimetableDisplay:fillInitialGrid()` first populates the timetable with empty slots.
+.. After which, each `Timetable` is added to the grid by `TimetableDisplay:fillSingleTimetable()`.
 
-
+Execution of a `select` command is similar, except that a `PersonSelectedEvent` is handled instead of a `TimetableDisplayEvent`
 
 ==== Design Considerations
 
