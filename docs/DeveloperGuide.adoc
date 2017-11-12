@@ -367,7 +367,7 @@ Users are able to store timetables by supplying a shortened NUSMods URL when add
 
 ==== Retrieval of Lesson Information
 
-NUSMods URLs are in the format of `.../timetable/ACAD_YEAR/SEM?MODULE_CODE[LESSON_TYPE]=LESSON_NO&...`  We use `TimetableParserUtil : expandUrl` to get an expanded URL from shortened URL provided, then parse the expanded URL accordingly to obtain lesson data.
+NUSMods URLs are in the format of `.../timetable/ACAD_YEAR/SEM?MODULE_CODE[LESSON_TYPE]=LESSON_NO&...`  We use `TimetableParserUtil:expandUrl()` to get an expanded URL from shortened URL provided, then parse the expanded URL accordingly to obtain lesson data.
 Lessons for each module are stored in `ModuleInfoFromUrl`, which is then represented in `TimetableInfoFromUrl`.
 
 https://github.com/nusmodifications/nusmods-api[NUSMods API] is used to retrieve data related to lessons parsed from URLs. JSON objects representing each module is retrieved and
