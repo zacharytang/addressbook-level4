@@ -41,7 +41,7 @@ public class DeleteCommandTest {
         ArrayList<ReadOnlyPerson> deletePersonList = new ArrayList<>();
         deletePersonList.add(personToDelete);
 
-        String expectedMessage = deleteCommand.generateResultMsgForPerson(deletePersonList);
+        String expectedMessage = deleteCommand.generateSuccessfulResultMsgForPerson(deletePersonList);
 
         ModelManager expectedModel = new ModelManager(model.getAddressBook(), new UserPrefs());
         expectedModel.deletePerson(personToDelete);
@@ -100,7 +100,7 @@ public class DeleteCommandTest {
         ArrayList<ReadOnlyPerson> deletePersonList = new ArrayList<>();
         deletePersonList.add(personToDelete);
 
-        String expectedMessage = deleteCommand.generateResultMsgForPerson(deletePersonList);
+        String expectedMessage = deleteCommand.generateSuccessfulResultMsgForPerson(deletePersonList);
 
         Model expectedModel = new ModelManager(model.getAddressBook(), new UserPrefs());
         expectedModel.deletePerson(personToDelete);
