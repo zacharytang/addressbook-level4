@@ -117,7 +117,7 @@ public class PhotoCommand extends UndoableCommand {
         createAppPhotoFile(savePath);
 
         try {
-            copyFile(this.localPhotoPath, savePath);
+            copyFile(localPhotoPath, savePath);
         } catch (IOException e) {
             assert false : "Cannot copy the file!";
         }
