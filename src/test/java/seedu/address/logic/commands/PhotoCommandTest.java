@@ -2,8 +2,6 @@ package seedu.address.logic.commands;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
-//import static seedu.address.logic.commands.CommandTestUtil.VALID_PHOTONAME_AMY;
-//import static seedu.address.logic.commands.CommandTestUtil.VALID_PHOTONAME_BOB;
 import static seedu.address.testutil.TypicalIndexes.INDEX_FIRST_PERSON;
 import static seedu.address.testutil.TypicalIndexes.INDEX_SECOND_PERSON;
 
@@ -15,6 +13,9 @@ import org.junit.Ignore;
 import org.junit.Test;
 
 import seedu.address.commons.exceptions.IllegalValueException;
+
+//import static seedu.address.logic.commands.CommandTestUtil.VALID_PHOTONAME_AMY;
+//import static seedu.address.logic.commands.CommandTestUtil.VALID_PHOTONAME_BOB;
 
 //@@author April0616
 public class PhotoCommandTest {
@@ -52,7 +53,7 @@ public class PhotoCommandTest {
         File amyFile = new File("photo.jpg");
         //File bobFile = new File(VALID_PHOTONAME_BOB);
         File bobFile = new File("selfie.jpg");
-        
+
         try {
             amyFile.createNewFile();
             bobFile.createNewFile();
