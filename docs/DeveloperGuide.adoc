@@ -410,7 +410,16 @@ components are contained within `InfoPanel`, which handles specific events to br
 
 Upon execution of a `select` or `whenfree` command, the following happens:
 
-.  g
+. `TimetableCommandParser` parses the input to determine which timetables to display
+.. If no arguments are passed, empty `ArrayList<Index>` is used
+.. Otherwise, arguments are parsed into their respective `Index` and stored in an `ArrayList<Index>`
+. A new `TimetableCommand` is constructed, using the list created by the parser
+. When `TimetableCommand:execute()` is called, the list of `Index`, is used to obtain the `ReadOnlyPerson` to display,
+and stores it in a `List<ReadOnlyPerson>`
+. A `TimetableDisplayEvent` is then posted with the list of people to be displayed
+. The event is then handled by the `InfoPanel`, which brings the `TimetableDisplay` component to the front for viewing
+
+
 
 ==== Design Considerations
 
