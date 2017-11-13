@@ -320,6 +320,7 @@ The following activity diagram summarize what happens inside the `UndoRedoStack`
 image::UndoRedoActivityDiagram.png[width="200"]
 _Figure 4.1.4 : Activity diagram when a new command is executed_
 
+// tag::you[]
 ==== Design Considerations
 
 **Aspect:** Implementation of `UndoableCommand` +
@@ -359,13 +360,14 @@ _Figure 4.1.4 : Activity diagram when a new command is executed_
 **Alternative 2:** `HistoryManager` is used for undo/redo. +
 **Pros:** We do not need to maintain a separate stack, and just reuse what is already in the codebase. +
 **Cons:** This would require dealing with commands that have already been undone: We must remember to skip these commands. Violates Single Responsibility Principle and Separation of Concerns as `HistoryManager` now needs to do two different things. +
+// end::you[]
 // end::undoredo[]
 
 // tag::timetable[]
 === Timetables Attribute
-
+// tag::you[]
 Users are able to store timetables by supplying a shortened NUSMods URL when adding a person. You will be able to understand how NUSMods URLs are being parsed and how the timetable information is being extracted. This need is especially crucial for NUS students who require friends' timetables in order to find out a time to meet up.
-
+// end::you[]
 ==== Retrieval of Lesson Information
 
 NUSMods URLs are in the format of `.../timetable/ACAD_YEAR/SEM?MODULE_CODE[LESSON_TYPE]=LESSON_NO&...`  We use `TimetableParserUtil:expandUrl()` to get an expanded URL from shortened URL provided, then parse the expanded URL accordingly to obtain lesson data.
@@ -425,6 +427,8 @@ and stores it in a `List<ReadOnlyPerson>`.
 
 Execution of a `select` command is similar, except that a `PersonSelectedEvent` is handled instead of a `TimetableDisplayEvent`
 
+// tag::you[]
+
 ==== Design Considerations
 
 **Aspect:** Representation of timetables +
@@ -457,6 +461,7 @@ Execution of a `select` command is similar, except that a `PersonSelectedEvent` 
 **Alternative 2:** Store timetable information after retrieval from NUSMods once. +
 **Pros:** We only need to retrieve lesson information once per person. +
 **Cons:** Storage of entire timetables can be very costly, and storage can be expensive with a large number of contacts.
+// end::you[]
 // end::timetable[]
 
 // tag::deletetag[]
@@ -592,6 +597,9 @@ _Figure 4.3.4.1 : The tags parsed are put into an ArrayList and iterated through
 image::DeleteCommandForTagSequenceDiagram2.png[width="800"]
 _Figure 4.3.4.2 : How each tag is removed from the Address Book and each Person's list of tags_
 
+
+// tag::you[]
+
 ==== Design Considerations
 
 **Aspect:** Implementation of Delete Tags +
@@ -617,7 +625,7 @@ Also, users who are used to the previous version of the command may not apprecia
 
 (**Note:** Pull Request #79 Delete multiple persons, chooses Alternative 2 as its design consideration with `deletePersons(ArrayList<ReadOnlyPerson> targets)` implemented
 in the Model Component.)
-
+// end::you[]
 // end::deletetag[]
 
 // tag::edittag[]
@@ -758,10 +766,11 @@ Modifying the existing `edit` command was picked over creating a new command `ed
 // tag::TagColorMap[]
 === Tag Colouring Mechanism
 Tag labels appear in various `UI` components: `PersonCard`, `TagListPanel` and `PersonInfoPanel`. +
-
+// tag::you[]
 In order for a tag to have the same color across all components, there was a need for the `UI` Components
 to keep track of what colors have been used and which color was a tag tied to. +
 You will be able to understand how a Singleton class `TagColorMap` was implemented.
+// end::you[]
 
 image::ClassDiagramTagColorMap.png[width="300"]
 _Figure 4.5.1 : The class diagram for TagColorMap_
@@ -785,6 +794,8 @@ private void initTags(ReadOnlyPerson person) {
 }
 ----
 
+// tag::you[]
+
 ==== Design Considerations
 
 **Aspects:** Implementation Coloring of Tag +
@@ -796,6 +807,7 @@ private void initTags(ReadOnlyPerson person) {
 **Cons:** This requires a large amount of modification of existing code base of the `UI` component.
 
 ---
+// end::you[]
 // end::TagColorMap[]
 
 // tag::remarkCommand[]
@@ -903,6 +915,7 @@ public class Person implements ReadOnlyPerson {
 }
 ----
 
+// tag::you[]
 
 ==== Design Considerations
 
@@ -923,15 +936,17 @@ public class Person implements ReadOnlyPerson {
 **Alternative 2:** AddCommand and EditCommand are used for adding and editing of the remark. +
 **Pros:** The command lines are more intuitive for the user. +
 **Cons:** The remark is perceived as a compulsory field of personal information for that contact, but this is not true.
+// end::you[]
 // end::remarkCommand[]
 
 
 // tag::photoCommand[]
 === Photo Command Mechanism
-
+// tag::you[]
 The photo command allows users to assign photos to their contacts, and it also supports adding, editing and deleting photos as the remark command.
 You will be able to understand how it accepts the absolute path in the user's computer and copies the original photo to the default folder of the file.
 We are implementing this `PhotoCommand` as NUS students may want to keep themselves reminded of how their contacts look like.
+// end::you[]
 
 ---
 
@@ -1049,6 +1064,8 @@ public class PhotoPath {
 }
 ----
 
+// tag::you[]
+
 ==== Design Considerations
 
 **Aspects:** The way the contact photo saved in users' computers is retrieved. +
@@ -1058,6 +1075,7 @@ public class PhotoPath {
 **Alternative 2:** Users are provided a pop-up window to choose the photo. +
 **Pros:** It is more convenient for the user to choose the file. +
 **Cons:** This becomes no more a command-line input in this command-line application.
+// end::you[]
 // end::photoCommand[]
 
 // tag::birthday[]
@@ -1321,10 +1339,12 @@ We are using `java.util.logging` package for logging. The `LogsCenter` class is 
 
 *Logging Levels*
 
+// tag::you[]
 * `SEVERE` : Critical problem detected which may possibly cause the termination of the application
 * `WARNING` : Problems detected that does not affect the usage of app, but requires to continue with caution
 * `INFO` : Information showing the noteworthy actions by the App
 * `FINE` : Details that is not usually noteworthy but may be useful in debugging e.g. print the actual list instead of just its size
+// end::you[]
 
 === Configuration
 
