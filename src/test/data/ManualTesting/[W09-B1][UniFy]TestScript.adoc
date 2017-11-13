@@ -130,7 +130,7 @@ There are 2 themes currently implemented: DarkTheme.css and LightTheme.css
 
 ==== Steps To Execute And Expected Results
 *Type in:* theme light +
-*Expected Result:* Error message reminding user that the theme is correct
+*Expected Result:* Error message reminding user that the theme is correct +
 *Result Message:* +
 You are already using this theme!
 
@@ -258,7 +258,68 @@ Example: delete 1 +
 
 === DeleteCommand (Tag)
 ==== Description/Data
+DeleteCommand can delete one or more tags.
+
 ==== Steps To Execute And Expected Results
+*Type in:* delete t/CS2103T +
+*Expected Result:* CS2103T Tag removed from all contacts with CS2103T tag. Removed from panel with list of all tags (Tag List Panel) +
+*Result Message:*  +
+Deleted Tag : +
+[ CS2103T ]
+
+*Type in:* undo +
+*Expected Result:* Success message for undo command. [CS2103T] restored. +
+*Result Message:*  +
+Undo success!
+
+*Type in:* delete t/CS2101 t/Teammate +
+*Expected Result:* CS2103T and Teammate Tags removed from all contacts with any of these tag. +
+*Result Message:*  +
+Deleted Tags : +
+[Teammate, CS2101 ]
+
+*Type in:* undo +
+*Expected Result:* Success message for undo command. [Teammate] and [CS2103T] restored. +
+*Result Message:*  +
+Undo success!
+
+*Type in:* delete t/A +
+*Expected Result:* Error message showing tag A does not exist +
+*Result Message:*  +
+One (or more) of the tags provided does not exist
+
+*Type in:* delete t/Arts t/Bus +
+*Expected Result:* Error message showing those tags do not exist +
+*Result Message:*  +
+One (or more) of the tags provided does not exist
+
+*Type in:* delete t/  +
+*Expected Result:* Error message suggesting correct command input +
+*Result Message:*  +
+Invalid command format! +
+| delete |: Deletes the persons identified using their last displayed indexes used in the last person listing. +
+           	OR the tag specified from all people containing the specific tag +
+Parameters: INDEX... (must be positive integers) +
+               	OR  t/TAG... (case-sensitive) +
+Example: delete 1 +
+         delete 1, 2, 3 +
+         delete 2 3 4 +
+           	delete t/friend +
+           	delete t/friend t/enemy
+
+*Type in:* delete t/-1 +
+*Expected Result:* Error message suggesting correct command input +
+*Result Message:*  +
+Invalid command format! +
+| delete |: Deletes the persons identified using their last displayed indexes used in the last person listing. +
+           	OR the tag specified from all people containing the specific tag +
+Parameters: INDEX... (must be positive integers) +
+               	OR  t/TAG... (case-sensitive) +
+Example: delete 1 +
+           	delete 1, 2, 3 +
+           	delete 2 3 4 +
+           	delete t/friend +
+           	delete t/friend t/enemy
 
 === EditCommand (Person)
 ==== Description/Data
@@ -432,7 +493,7 @@ Expected Result: Add two remarks to the 2nd person in the shown list.
 
 Result Message: Added Remark(s) to Person
 
-5. Type in: undo
+5. *Type in*: undo
 
 Expected Result: Undo the previous command. The remark added to the 2nd person in the shown list will be removed.
 
