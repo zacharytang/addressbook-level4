@@ -58,6 +58,7 @@ include::../UserGuide.adoc[tag=find]
 
 ==== Justification
 
+This command allows users to find contacts easily using different fields of information, not limited to only the name field. It would be more flexible for users to find a person and it allows users to limit their search so as to find the correct person faster.
 
 ==== Implementation
 
@@ -85,6 +86,7 @@ include::../UserGuide.adoc[tag=suggest]
 
 ==== Justification
 
+This command is implemented to prompt the error message to users so as to suggest users the correct command spelling. We believe this is useful as spelling errors are common and this enhancement serves as a guide for users.
 
 ==== Implementation
 
@@ -123,7 +125,7 @@ include::../UserGuide.adoc[tag=sortCommand]
 
 * Make add command fields optional (Pull request https://github.com/CS2103AUG2017-W09-B1/main/pull/154[#154])
 * UI: Change error message colour (Pull requests https://github.com/CS2103AUG2017-W09-B1/main/pull/57[#57])
-* Modified or added to test to maintain or increase coverage (Pull request https://github.com/CS2103AUG2017-W09-B1/main/pull/86[#86])
+* Modified or added to test to maintain or increase coverage (Pull request https://github.com/CS2103AUG2017-W09-B1/main/pull/86[#86], Pull request https://github.com/CS2103AUG2017-W09-B1/main/pull/268[#268])
 * Storage backup (Pull request https://github.com/CS2103AUG2017-W09-B1/main/pull/3[#3])
 
 === Other contributions (CS2101)
