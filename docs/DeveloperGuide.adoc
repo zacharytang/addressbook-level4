@@ -726,6 +726,48 @@ Modifying the existing `edit` command was picked over creating a new command `ed
 ---
 // end::edittag[]
 
+// tag::TagColorMap[]
+=== Tag Colouring Mechanism
+Tag labels appear in various `UI` components: `PersonCard`, `TagListPanel` and `PersonInfoPanel`. +
+In order to have the same color across all components, there was a need for the `UI` Components
+to keep track of what colors have been used and which tag was tied to what color. +
+Thus a Singleton class `TagColorMap` was implemented.
+
+image::ClassDiagramTagColorMap.png[width="800"]
+_Figure 4.5 : The class diagram for TagColorMap_
+
+As a result of this singleton class, coloring tags on initialisation is made extremely easy,
+since the TagColorMap provided UI components an easy way to access the color mapping of tags and
+color the tags accordingly in the application, from anywhere in the code base.
+
+The following code is common in `PersonCard.java`, `TagListPanel.java`, `PersonInfoPanel.java`
+as all the these components require rendering tags.
+
+[source,java]
+----
+private void initTags(ReadOnlyPerson person) {
+    person.getTags().forEach(tag -> {
+            Label tagLabel = new Label(tag.tagName);
+            tagLabel.setStyle("-fx-background-color: " + TagColorMap.getInstance().getTagColor(tag.tagName));
+            tags.getChildren().add(tagLabel);
+        }
+    );
+}
+----
+
+==== Design Considerations
+
+**Aspects:** Implementation Coloring of Tag +
+**Alternative 1(current choice):** Use a singleton class TagColorMap to provide colors, and mapping of tags to colors. +
+**Pros:** Easy to implement. Easy to access from any UI Component. +
+**Cons:** Increases coupling across the code base. Difficult to replace TagColorMap with a stub. +
+**Alternative 2:** TagColorMap as a class attribute of MainWindow and pass TagColorMap as a parameter to the constructors of relevant UI components.  +
+**Pros:** Naive method and straightforward to implement +
+**Cons:** Requires a large amount of modification of existing code base.
+
+---
+// end::TagColorMap[]
+
 // tag::remarkCommand[]
 === Remark Command Mechanism
 
