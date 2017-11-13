@@ -97,10 +97,7 @@ public class StringUtilTest {
      *   - sentence with extra spaces
      *
      * Possible scenarios returning true:
-     *   - matches first word in sentence
-     *   - last word in sentence
-     *   - middle word in sentence
-     *   - matches multiple words
+     *   - matches all words
      *
      * Possible scenarios returning false:
      *   - query word matches part of a sentence word
@@ -116,16 +113,16 @@ public class StringUtilTest {
         assertFalse(StringUtil.containsWordIgnoreCase("", "abc")); // Boundary case
         assertFalse(StringUtil.containsWordIgnoreCase("    ", "123"));
 
-        // Matches a partial word only
+        // Partial word only
         assertFalse(StringUtil.containsWordIgnoreCase("aaa bbb ccc", "bb")); // Sentence word bigger than query word
         assertFalse(StringUtil.containsWordIgnoreCase("aaa bbb ccc", "bbbb")); // Query word bigger than sentence word
 
-        // Matches word in the sentence, different upper/lower case letters
-        assertTrue(StringUtil.containsWordIgnoreCase("aaa bBb ccc", "aaa Bbb ccc")); // First word (boundary case)
-        assertTrue(StringUtil.containsWordIgnoreCase("aaa bBb ccc@1", "aaa bbb CCc@1")); // Last word (boundary case)
-        assertTrue(StringUtil.containsWordIgnoreCase("  AAA   bBb   ccc  ", "aaa bbb ccc")); // extra spaces
-        assertTrue(StringUtil.containsWordIgnoreCase("Aaa", "aaa")); // Only one word in sentence (boundary case)
-        assertTrue(StringUtil.containsWordIgnoreCase("aaa bbb ccc", "aaa bbb  ccc  ")); // Leading/trailing spaces
+        // Matches all word in the sentence, different upper/lower case letters
+        assertTrue(StringUtil.containsWordIgnoreCase("ALICE", "ALICE")); // both upper case
+        assertTrue(StringUtil.containsWordIgnoreCase("alice", "alice")); // both lower case
+        assertTrue(StringUtil.containsWordIgnoreCase("Alice", "aLice")); // mixed cases
+        assertTrue(StringUtil.containsWordIgnoreCase("Alice choo", "Alice Choo")); // multiple words
+        assertTrue(StringUtil.containsWordIgnoreCase("   Alice   choo", "alice Choo  ")); // Leading/trailing spaces
 
     }
 

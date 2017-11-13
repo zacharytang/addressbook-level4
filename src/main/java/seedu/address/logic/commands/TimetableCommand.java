@@ -74,7 +74,7 @@ public class TimetableCommand extends Command {
         for (ReadOnlyPerson person : personList) {
             msg.append("[");
             msg.append(person.getName().toString());
-            msg.append("] ");
+            msg.append("]\n");
         }
 
         return msg.toString();

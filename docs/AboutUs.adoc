@@ -4,7 +4,7 @@ ifdef::env-github,env-browser[:outfilesuffix: .adoc]
 :imagesDir: images
 :stylesDir: stylesheets
 
-UniFy - Level 2.0 was developed by the 'https://github.com/orgs/CS2103AUG2017-W09-B1/teams/developers/members' team. +
+UniFy was developed by team W09-B1 +
 
 We are a team based in the http://www.comp.nus.edu.sg[School of Computing, National University of Singapore].
 
