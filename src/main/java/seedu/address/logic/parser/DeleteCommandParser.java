@@ -37,14 +37,14 @@ public class DeleteCommandParser implements Parser<DeleteCommand> {
         String preamble = argMultimap.getPreamble();
         if (preamble.equals("")) {
             // there exists 't/'
-            DeleteCommand tagList = parseForTags(argMultimap);
-            if (tagList != null) {
-                return tagList;
+            DeleteCommand deleteCommandForTag = parseForTags(argMultimap);
+            if (deleteCommandForTag != null) {
+                return deleteCommandForTag;
             }
         } else {
-            DeleteCommand index = parseForPersonIndexes(args, preamble);
-            if (index != null) {
-                return index;
+            DeleteCommand deleteCommandForPerson = parseForPersonIndexes(args, preamble);
+            if (deleteCommandForPerson != null) {
+                return deleteCommandForPerson;
             }
         }
 
