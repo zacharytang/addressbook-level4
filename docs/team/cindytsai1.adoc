@@ -15,7 +15,7 @@ The source code is based on the  https://github.com/se-edu/addressbook-level4[Ad
 *Code contributed*: [https://github.com/CS2103AUG2017-W09-B1/main/blob/master/collated/main/CindyTsai1.md[Functional code]]
 [https://github.com/CS2103AUG2017-W09-B1/main/blob/master/collated/test/CindyTsai1.md[Test code]] +
 
-=== Enhancement Added: Birthday Command
+=== Enhancement Added: Birthday Attribute
 
 ==== External behavior
 
@@ -43,12 +43,77 @@ include::../DeveloperGuide.adoc[tag=birthday]
 
 ---
 
+=== Enhancement Added: Find Command
+
+==== External behavior
+
+---
+#Start of Extract [from: User Guide]#
+
+include::../UserGuide.adoc[tag=find]
+
+#End of Extract#
+
+---
+
+==== Justification
+
+
+==== Implementation
+
+---
+#Start of Extract [from: Developer Guide]#
+
+include::../DeveloperGuide.adoc[tag=find]
+
+#End of Extract#
+
+---
+
+=== Enhancement Added: Suggest Command
+
+==== External behavior
+
+---
+#Start of Extract [from: User Guide]#
+
+include::../UserGuide.adoc[tag=suggest]
+
+#End of Extract#
+
+---
+
+==== Justification
+
+
+==== Implementation
+
+---
+#Start of Extract [from: Developer Guide]#
+
+include::../DeveloperGuide.adoc[tag=suggest]
+
+#End of Extract#
+
+---
+
 === Enhancement Proposed: Password command
 
 ---
 #Start of Extract [from: User Guide]#
 
 include::../UserGuide.adoc[tag=password]
+
+#End of Extract#
+
+---
+
+=== Enhancement Proposed: Sort command
+
+---
+#Start of Extract [from: User Guide]#
+
+include::../UserGuide.adoc[tag=sortCommand]
 
 #End of Extract#
 
