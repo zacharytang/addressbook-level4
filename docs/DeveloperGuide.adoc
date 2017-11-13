@@ -1222,6 +1222,11 @@ if (predicates.equals(PREFIX_PHONE.getPrefix())) {
 
 ==== Command Logic
 
+The following is the logic component class diagram for `FindCommand`
+
+image::FindCommandLogicComponentSequenceDiagram.png[width="800"]
+_Figure 4.9.3.1 : FindCommand Logic Component Class Diagram_
+
 ==== Design Considerations
 
 **Aspect:** Implementation of find command +
