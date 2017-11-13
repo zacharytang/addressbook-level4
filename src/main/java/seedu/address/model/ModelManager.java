@@ -203,6 +203,7 @@ public class ModelManager extends ComponentManager implements Model {
         checkMasterTagListHasAllTagsUsed();
     }
 
+    //@@author nbriannl
     @Override
     public HashMap<String, String> getThemeMap () {
         return this.addressBook.getThemeMap();
@@ -217,6 +218,7 @@ public class ModelManager extends ComponentManager implements Model {
     public String getCurrentTheme() {
         return currentTheme;
     }
+    //@@author
 
     //=========== Filtered Person List Accessors =============================================================
 
