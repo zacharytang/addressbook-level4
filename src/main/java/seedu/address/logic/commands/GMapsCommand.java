@@ -63,9 +63,6 @@ public class GMapsCommand extends Command {
             model.showMapOf(personToShowMap, targetIndex);
             return new CommandResult(String.format(MESSAGE_SELECT_PERSON_SUCCESS, personToShowMap.getName()));
         }
-
-
-
     }
 
     @Override
