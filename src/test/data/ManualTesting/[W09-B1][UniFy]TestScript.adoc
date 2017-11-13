@@ -355,52 +355,52 @@ and copy the file path in the 'location:' field.
 It should be an absolute file path in your computer, like "C:\selfie\bg.jpg".
 
 ==== Steps To Execute And Expected Results
-1. Type in: list
-
+. Type in: list
++
 Expected Result: List all the persons.
-
++
 Result Message: Listed all persons
-
-2. Type in: photo
-
++
+. Type in: photo
++
 Expected Result: Error with instruction.
-
++
 Result Message: Invalid command format!
-
-3. Type in: photo 1 ph/[Your copied file path]
-
++
+. Type in: photo 1 ph/[Your copied file path]
++
 Expected Result: You could see the photo is added to the first person in the shown list.
-
++
 Result Message:
-
-4. Type in: ph 1
-
++
+. Type in: ph 1
++
 Expected Result: The photo is removed from the person card.
-
++
 Result Message:
-
-5. Type in: photo 1 ph/Q:\haha.jpg
-
++
+. Type in: photo 1 ph/Q:\haha.jpg
++
 Expected Result: Error with Instruction.
-
++
 Result Message: Cannot find file here!
-
-6. Type in: photo 2 ph/[Your copied photo path]
-
++
+. Type in: photo 2 ph/[Your copied photo path]
++
 Expected Result: You could see the photo is added to the second person in the shown list.
-
++
 Result Message:
-
-7. Type in: undo
-
++
+. Type in: undo
++
 Expected Result: Undo the previous result.
-
++
 Result Message:
-
-8. Type in: select 2
-
++
+. Type in: select 2
++
 Expected Result: The photo will be removed from the person card of the 2nd person.
-
++
 Result Message:
 
 === RemarkCommand
@@ -408,34 +408,34 @@ Result Message:
 Remark Command is to add a remark to the specified person.
 
 ==== Steps To Execute And Expected Results
-1. Type in: list
-
+. Type in: list
++
 Expected Result: List all the person in the addressbook.
-
++
 Result Message: Listed all persons
-
-2. Type in: remark 1 r/Likes CS2103T
-
++
+. Type in: remark 1 r/Likes CS2103T
++
 Expected Result: Add the remark 'Likes CS2103T' to the first person in the shown list.
-
++
 Result Message: Added Remark(s) to Person
-
-3. Type in: remark 1 r/
-
++
+. Type in: remark 1 r/
++
 Expected Result: Remove the remark from the 1st person in the shown list.
-
++
 Result Message: Removed Remark(s) from Person
-
-4. Type in: rm 2 r/404 r/NOT FOUND
-
++
+. Type in: rm 2 r/404 r/NOT FOUND
++
 Expected Result: Add two remarks to the 2nd person in the shown list.
-
++
 Result Message: Added Remark(s) to Person
-
-5. Type in: undo
-
++
+. Type in: undo
++
 Expected Result: Undo the previous command. The remark added to the 2nd person in the shown list will be removed.
-
++
 Result Message: Undo success!
 
 
