@@ -15,6 +15,8 @@ endif::[]
 By: `CS2103AUG2017-W09-B1`      Since: `AUG 2017`      Licence: `MIT`
 
 == Introduction
+
+//tag::intro[]
 Thank you for downloading **UniFy**! We're glad that you've chosen us to help you manage your hectic university life.
 
 **UniFy** is a personal assistant to your everyday life in NUS. It helps you maintain your numerous groups,
@@ -25,6 +27,7 @@ We know that time is precious for university students, so we made **UniFy** as s
 to use **UniFy**, no more searching for hidden buttons or navigating unfamiliar pages!
 
 Excited? Let's get started!
+// end::intro[]
 
 == Quick Start
 
