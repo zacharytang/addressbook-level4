@@ -1,21 +1,12 @@
 = Fan Yuting - Project Portfolio
-:toc:
-:toc-title:
-:toc-placement: preamble
-:sectnums:
-:imagesDir: images
-:stylesDir: stylesheets
-:experimental:
+:imagesDir: ../images
+:stylesDir: ../stylesheets
 ifdef::env-github[]
 :tip-caption: :bulb:
 :note-caption: :information_source:
 endif::[]
-:repoURL: https://github.com/CS2103AUG2017-W09-B1/main/
-
----
 ifdef::env-github,env-browser[:outfilesuffix: .adoc]
-:imagesDir: ../images
-:stylesDir: ../stylesheets
+:repoURL: https://github.com/CS2103AUG2017-W09-B1/main/tree/master
 
 == Project: UniFy
 === Introduction to UniFy
@@ -26,15 +17,15 @@ It is written in Java, and has about 10 kLoC.
 
 ---
 ifdef::env-github[]
-image::docs/images/Ui.png[width="600"]
+image::Ui.png[width="600"]
 
-image::docs/images/UiDark.png[width="600"]
+image::UiDark.png[width="600"]
 endif::[]
 
 ifndef::env-github[]
-image::images/Ui.png[width="600"]
+image::Ui.png[width="600"]
 
-image::images/UiDark.png[width="600"]
+image::UiDark.png[width="600"]
 endif::[]
 ---
 
