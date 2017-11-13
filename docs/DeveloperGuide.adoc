@@ -1110,7 +1110,7 @@ public static boolean isValidBirthday(String test) {
 **Pros:** It is simple and easy to understand. +
 **Cons:** It requires extra methods to change the format displayed.
 // end::birthday[]
-
+// tag::find[]
 === Find Command [Filter] Mechanism
 
 Finding a person by filters means that users will be able to find a person using different fields of information. Currently, UniFy supports users to find a person by name, phone, email, address, tags and birthday month. This allows users to have more flexibility in the way they search for their contacts. +
@@ -1236,7 +1236,8 @@ _Figure 4.9.3.1 : FindCommand Logic Component Class Diagram_
 **Alternative 2:** All persons matching one or more keywords are returned. +
 **Pros:** It is simple to implement. +
 **Cons:** By typing more keywords in different fields, more persons matching one of the keywords will be returned which defeats the purpose of having this enhancement.
-
+// end::find[]
+// tag::suggest[]
 === Suggest Command Mechanism
 
 This feature will conduct spelling check if the command input does not match any of the existing commands. It will prompt an error message suggesting the correct spelling of the command word. You will be able to understand how the code determines the correct spelling. +
@@ -1294,7 +1295,7 @@ public static TreeSet<String> getPossibleCommandList(String command) {
 **Alternative 2:** The suggested command is conducted then prompt to ask if the user is intending to conduct such an action. +
 **Pros:** This does not require the user to retype to correct his spelling error. +
 **Cons:** This is harder to implement and if the user do not intent to conduct the suggested command action, the user has to do an extra step to undo the command, which might be inconvenient.
-
+// end::suggest[]
 === Logging
 
 We are using `java.util.logging` package for logging. The `LogsCenter` class is used to manage the logging levels and logging destinations.
