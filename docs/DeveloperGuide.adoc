@@ -483,7 +483,7 @@ As a result of this modification, `delete` can execute a delete on tags, or a de
 
 For both types of delete commands, the same `delete` command is used but the parameters in the command line are different.
 
-The two types of commands are distinguished by the `preamble` of the parameter arguments after the word `delete`, when tokenized against the `/t` prefix for tags.
+The two types of commands are distinguished by the `preamble` of the parameter arguments after the word `delete`, when tokenized against the `t/` prefix for tags.
 
 Preamble for
 
@@ -1110,6 +1110,185 @@ public static boolean isValidBirthday(String test) {
 **Pros:** It is simple and easy to understand. +
 **Cons:** It requires extra methods to change the format displayed.
 // end::birthday[]
+
+=== Find Command [Filter] Mechanism
+
+Finding a person by filters means that users will be able to find a person using different fields of information. Currently, UniFy supports users to find a person by name, phone, email, address, tags and birthday month. This allows users to have more flexibility in the way they search for their contacts. +
+Only persons who match all keywords in all fields will be returned. You will be able to understand how the result of the find command is determined.
+
+In general, the ability to find persons by filters was implemented by modifying the existing `find` command.
+
+The modification involves:
+
+* Parsing of user input in the FindCommandParser
+* Searching of different fields for the person list in the FindCommand
+
+==== Parsing of user input
+
+The input will be tokenized against the `n/`, `p/`, `e/`, `a/`, `t/` and `b/` prefixes which are for name, phone, email, address, tags and birthday month respectively. This can be done by the `ArgumentTokenizer` class. +
+The user input will be parsed as an ArrayList with prefixes and keywords separated. If the index of `n/` is 1, the keywords for the name field will be at the index of 2 in the ArrayList. +
+
+The implementation of this parse is shown below:
+
+[source,java]
+----
+if (argsMultimap.getValue(PREFIX_NAME).isPresent()) {
+    nameList = argsMultimap.getValue(PREFIX_NAME).get();
+    predicate.add(PREFIX_NAME.getPrefix());
+    predicate.add(nameList);
+}
+----
+
+Since the field of `b/` only takes in birthday month, a small check is implemented to determine the validity of the keyword input. The birthday month is checked to only contain integer and be within the range of 1 to 12.
+
+The implementation of this check is shown below:
+
+[source,java]
+----
+// checks if birthday month contains non-integers, and returns "Keyword input must be in integer."
+if (!birthdayList.matches("[0-9]+")) {
+    throw new ParseException(FindCommand.MESSAGE_BIRTHDAYKEYWORD_NONNUMBER);
+
+// checks if birthday month in out of bound, and returns "Month %1$s does not exist."
+} else if (Integer.parseInt(birthdayList.trim()) > 12 || Integer.parseInt(birthdayList.trim()) < 1) {
+    throw new ParseException(String.format(FindCommand.MESSAGE_BIRTHDAYKEYWORD_NONEXIST, birthdayList.trim()));
+
+} else if (birthdayList.trim().length() == 1) {
+    throw new ParseException(String.format(FindCommand.MESSAGE_BIRTHDAYKEYWORD_INVALID, birthdayList.trim()));
+}
+----
+
+==== Searching of Persons using several fields of information
+
+The search is done using the following steps.
+
+. The code searches persons matching the keyword in the name field, followed by the rest of the fields.
+. The persons matching the keyword will be added into a HashMap<String, Integer> that stores the name of the person and the number of times the person matches the keywords.
+. The persons are then added to a new ArrayList if the number of times the person matches the keywords equals to the number of keywords input.
+. The ArrayList containing names of persons, having information that matches all keywords in respective fields, will be updated in the filtered list.
+. The find result displayed to users.
+
+The implementation of person's phone being searched is shown below:
+[source,java]
+----
+public ArrayList<String> findPersonsWithPhone(String phone) {
+    // Get the list of persons in UniFy
+    ObservableList<ReadOnlyPerson> personList = model.getAddressBook().getPersonList();
+
+    String[] phoneKeyword = phone.split(" ");
+
+    // Keeping track of the number of keywords input in total
+    count += phoneKeyword.length;
+
+    ArrayList<String> phoneList = new ArrayList<>();
+
+    for (ReadOnlyPerson person : personList) {
+        for (String keyword : phoneKeyword) {
+            String phones = person.getPhone().toString();
+
+            // keyword is a subset of phones (do not have to match fully)
+            if (phones.contains(keyword)) {
+                phoneList.add(person.getName().toString());
+            }
+        }
+    }
+    return phoneList;
+}
+----
+
+The implementation of tracking the number of times a person being matched is shown below:
+[source, java]
+----
+// if phone prefix is input
+if (predicates.equals(PREFIX_PHONE.getPrefix())) {
+
+    // Result from the code above
+    ArrayList<String> personsWithPhone = findPersonsWithPhone(predicate.get(i + 1));
+
+    for (int j = 0; j < personsWithPhone.size(); j++) {
+
+        // if it is the first time this person is being searched, add the person in with time of matches = 1
+        if (!predicateMap.containsKey(personsWithPhone.get(j))) {
+            predicateMap.put(personsWithPhone.get(j), 1);
+            predicateList.add(personsWithPhone.get(j));
+
+        // if the person is searched before, increase the time of matches by 1
+        } else {
+            predicateMap.put(personsWithPhone.get(j), predicateMap.remove(personsWithPhone.get(j)) + 1);
+        }
+    }
+}
+----
+
+==== Command Logic
+
+==== Design Considerations
+
+**Aspect:** Implementation of find command +
+**Alternative 1 (current choice):** Only the persons matching all keywords are returned. +
+**Pros:** This aligns with the purpose of implementing this enhancement to allow users to refine and limit their search by inputting more keywords in different fields. +
+**Cons:** It is harder to implement as we need to keep track of how many times a person is being matched. +
+**Alternative 2:** All persons matching one or more keywords are returned. +
+**Pros:** It is simple to implement. +
+**Cons:** By typing more keywords in different fields, more persons matching one of the keywords will be returned which defeats the purpose of having this enhancement.
+
+=== Suggest Command Mechanism
+
+This feature will conduct spelling check if the command input does not match any of the existing commands. It will prompt an error message suggesting the correct spelling of the command word. You will be able to understand how the code determines the correct spelling. +
+This is implemented because there is many commands to remember in UniFy and we suspect users might have typos during their usage.
+
+In general, the ability of this command was implemented by adding a SuggestCommand class.
+
+==== Implementation of Suggest Command
+
+`SuggestCommand` class calls the `UniqueCommandList` class to determine the possible correct spellings and to retrieve the list of command words existing in the address book.
+
+We have identified a few spelling mistakes that our users might make.
+
+* Two alphabets swapping positions
+* One extra alphabet added
+* One alphabet lacking
+* One alphabet mistyped
+
+The implementation of the determination of possible spellings is shown below:
+[source, java]
+----
+public static TreeSet<String> getPossibleCommandList(String command) {
+    possibleCommandList = new TreeSet<>();
+
+    // Swapping i with i+1
+    for (int i = 1; i < command.length() - 1; i++) {
+        possibleCommandList.add(command.substring(0, i) + command.charAt(i + 1) + command.charAt(i) + command.substring(i + 2));
+    }
+
+    // deleting one char, skipping i
+    for (int i = 0; i < command.length(); i++) {
+        possibleCommandList.add(command.substring(0, i) + command.substring(i + 1));
+    }
+
+    // inserting one char
+    for (int i = 0; i < command.length() + 1; i++) {
+        for (char j = 'a'; j <= 'z'; j++) {
+            possibleCommandList.add(command.substring(0, i) + j + command.substring(i));
+            // replacing one char
+            if (i < command.length()) {
+                possibleCommandList.add(command.substring(0, i) + j + command.substring(i + 1));
+            }
+        }
+    }
+    return possibleCommandList;
+}
+----
+
+==== Design Considerations
+
+**Aspect:** Implementation of suggest command +
+**Alternative 1 (current choice):** An error message suggesting the correct spelling for the command word is returned. +
+**Pros:** This is easier to implement without modification of other command classes. +
+**Cons:** This would still require the user to correct his spelling error by himself. +
+**Alternative 2:** The suggested command is conducted then prompt to ask if the user is intending to conduct such an action. +
+**Pros:** This does not require the user to retype to correct his spelling error. +
+**Cons:** This is harder to implement and if the user do not intent to conduct the suggested command action, the user has to do an extra step to undo the command, which might be inconvenient.
 
 === Logging
 
