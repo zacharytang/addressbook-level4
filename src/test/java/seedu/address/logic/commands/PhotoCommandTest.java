@@ -35,6 +35,8 @@ public class PhotoCommandTest {
         assertFalse(PhotoCommand.isValidLocalPhotoPath("c:\\\\photo.jpg")); // too many backslashes
         assertFalse(PhotoCommand.isValidLocalPhotoPath("c:\\")); // no file name
         assertFalse(PhotoCommand.isValidLocalPhotoPath("c:\\")); // no file name
+        assertFalse(PhotoCommand.isValidLocalPhotoPath("d:\\my_photo.txt"));  // invalid extension
+        assertFalse(PhotoCommand.isValidLocalPhotoPath("d:\\my_photo.pdf"));  // invalid extension
 
         // valid photo path
         assertTrue(PhotoCommand.isValidLocalPhotoPath("c:\\desktop\\baby.jpg"));
