@@ -784,7 +784,7 @@ private void initTags(ReadOnlyPerson person) {
 **Alternative 1(current choice):** Use a singleton class TagColorMap to provide colors, and mapping of tags to colors. +
 **Pros:** Easy to implement. Easy to access from any UI Component. +
 **Cons:** Increases coupling across the code base. Difficult to replace TagColorMap with a stub. +
-**Alternative 2:** TagColorMap as a class attribute of MainWindow and pass TagColorMap as a parameter to the constructors of relevant UI components.  +
+**Alternative 2:** TagColorMap as a class attribute of MainWindow and passes TagColorMap as a parameter to the constructors of relevant UI components.  +
 **Pros:** Naive method and straightforward to implement +
 **Cons:** Requires a large amount of modification of existing code base.
 
