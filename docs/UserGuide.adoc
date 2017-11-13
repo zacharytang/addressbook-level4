@@ -318,7 +318,10 @@ Examples:
 [TIP]
 Editing a person's tag only edits the tag(s) for a *single* person. This command edits one tag name for *all* people.
 
+
 === Deleting multiple persons or tags: `delete`
+
+// tag::deletePersons[]
 ==== Deleting multiple persons _(since v1.3)_
 ____
 _Some people just have to go away in your life. Sometimes they leave you. Delete these people out of UniFy as well._
@@ -347,6 +350,7 @@ Deletes the 2nd, 3rd, 4th persons in the address book.
 * `find n/Betsy` +
 `delete 1 5` +
 Deletes the 1st and 5th persons in the results of the `find` command.
+// end::deletePersons[]
 
 // tag::deletetag[]
 ==== Deleting a Tag (or multiple Tags) _(Since v1.1)_

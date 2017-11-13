@@ -78,6 +78,54 @@ include::../DeveloperGuide.adoc[tag=remarkCommand]
 
 ---
 
+=== Enhancement Added: Gender & MatricNo attributes
+
+==== External behavior
+
+---
+#Start of Extract [from: User Guide]#
+
+include::../UserGuide.adoc[tag=birthday]
+
+#End of Extract#
+
+---
+
+==== Implementation
+
+(Pull request https://github.com/CS2103AUG2017-W09-B1/main/pull/68[#68])
+
+---
+
+=== Enhancement Added: Delete multiple persons
+
+==== External behavior
+
+---
+#Start of Extract [from: User Guide]#
+
+include::../UserGuide.adoc[tag=deletePersons]
+
+#End of Extract#
+
+---
+
+==== Implementation
+
+(Pull requests https://github.com/CS2103AUG2017-W09-B1/main/pull/79[#79])
+
+
+=== Enhancement Added: Improve User Interface (Restructure MainWindow and create PersonInfoPanel)
+
+==== External behavior
+
+
+
+==== Implementation
+
+(Pull request https://github.com/CS2103AUG2017-W09-B1/main/pull/133[#133])
+
+
 === Enhancement Proposed: Temporary Tags
 
 #Start of Extract [from: User Guide]#
@@ -97,18 +145,14 @@ include::../UserGuide.adoc[tag=oldContact]
 
 #End of Extract#
 
-
 ---
 
 === Other enhancements and contributions
 
-* Add gender & matric No. attribute to addCommand (Pull request https://github.com/CS2103AUG2017-W09-B1/main/pull/68[#68])
-* Delete multiple persons (Pull requests https://github.com/CS2103AUG2017-W09-B1/main/pull/79[#79])
-* PhotoCommand: add display pictures of contacts (Pull requests https://github.com/CS2103AUG2017-W09-B1/main/pull/96[#96], https://github.com/CS2103AUG2017-W09-B1/main/pull/150[#150])
-* Improve UI (Pull request https://github.com/CS2103AUG2017-W09-B1/main/pull/133[#133])
-* Fix some bugs (Pull requests https://github.com/CS2103AUG2017-W09-B1/main/pull/108/files[#108], https://github.com/CS2103AUG2017-W09-B1/main/pull/64[#64])
 * Improve styles (Pull requests https://github.com/CS2103AUG2017-W09-B1/main/pull/140/files[#140], https://github.com/CS2103AUG2017-W09-B1/main/pull/107[#107], https://github.com/CS2103AUG2017-W09-B1/main/pull/131[#131])
-* help form team in Github and setup the team repository
+* Form team in Github and setup the team repository
+* Do manual testing for UniFy and raised 15 issues (https://github.com/CS2103AUG2017-W09-B1/main/issues/171[#171], https://github.com/CS2103AUG2017-W09-B1/main/issues/187[#187], https://github.com/CS2103AUG2017-W09-B1/main/issues/188[#188], https://github.com/CS2103AUG2017-W09-B1/main/issues/190[#190], https://github.com/CS2103AUG2017-W09-B1/main/issues/193[#193], https://github.com/CS2103AUG2017-W09-B1/main/issues/194[#194], https://github.com/CS2103AUG2017-W09-B1/main/issues/196[#196], https://github.com/CS2103AUG2017-W09-B1/main/issues/197[#197], https://github.com/CS2103AUG2017-W09-B1/main/issues/198[#198], https://github.com/CS2103AUG2017-W09-B1/main/issues/199[#199], https://github.com/CS2103AUG2017-W09-B1/main/issues/200[#200], https://github.com/CS2103AUG2017-W09-B1/main/issues/202[#202], https://github.com/CS2103AUG2017-W09-B1/main/issues/203[#203], https://github.com/CS2103AUG2017-W09-B1/main/issues/204[#204], https://github.com/CS2103AUG2017-W09-B1/main/issues/251[#251])
+* Do acceptance testing for another group (https://github.com/CS2103AUG2017-W11-B3/main[W11-b3]), find bugs (Issues https://github.com/CS2103AUG2017-W11-B3/main/issues/53[#53], https://github.com/CS2103AUG2017-W11-B3/main/issues/56[#56]), and give suggestions(https://github.com/CS2103AUG2017-W11-B3/main/issues/57[#57], https://github.com/CS2103AUG2017-W11-B3/main/issues/62[#62])
 
 ---
 == Other Projects
