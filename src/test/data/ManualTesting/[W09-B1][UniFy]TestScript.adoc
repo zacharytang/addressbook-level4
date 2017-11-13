@@ -715,6 +715,11 @@ Timetable Command shows the combined timetable of selected persons
 *Result Message:* +
 Displayed timetables: [Damith] [Neil Bryan] [Fan Yiting]
 
+*Type in:* whenfree +
+*Expected Result:* A combined timetable is shown +
+*Result Message:* +
+Displayed timetables: [Damith] [Neil Bryan] [Fan Yiting] [Tai Yu Xuan] [Zachariah Tan] [Claire Cordeiro] [Jeannie Khoo] [Adelia Toy Tee Hooi] [Ed Lin] [Lum Sze Nga] [Dana Yip] [Siti Wahid] [Aisha Othman] [Godfrey Fu] [Oswald Wong] [Sylvester Wee] [Raheem Mahmood] [Vicente Jasudasen] [Betty Lam] [Angeline Ee] [Oh Geok Har Felicia] [Herman Khor] [Ashraff Mohamad] [Lenny Rajiv] [The Myth] [haha]
+
 === SuggestCommand
 ==== Description/Data
 Suggest function suggests user the correct input
@@ -769,6 +774,7 @@ select 1 +
 help +
 list +
 fnid +
+whenfree +
 whenfree 1 2 3 +
 gmaps 3 a/ +
 gmaps 22 +
