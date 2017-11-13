@@ -255,6 +255,7 @@ Alternatives: `f` , `search`
 * Only one birthday month is to be input.
 * Single digit months needs to be preceded by a 0 in front. e.g. `02` searches for those born in February
 * Only the birthday month is searched.
+* Typing with one of the prefix keyword empty will be considered as not searching for that prefix. e.g. `find n/an p/` will only return the persons containing `an` in their names
 ****
 
 Examples:
