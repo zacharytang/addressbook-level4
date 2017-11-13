@@ -613,6 +613,7 @@ Here is the temporary tag information a person can have: +
 *** Example: `tmpt/6/ATAPcolleague` tags the person with `ATAPcolleague`. After 6 months, the tag will disappear.
 // end::tempTag[]
 
+// tag::v2.0[]
 === Adding a person using the information on social media _(Coming in v2.0)_
 // tag::blurb[]
 ____
@@ -631,6 +632,7 @@ Examples:
 
 * `add s/facebook John Doe`
 * `add s/Instagram John Doe`
+// end::v2.0[]
 
 // tag::oldContact[]
 === Deleting old contacts _(Coming in v2.0)_

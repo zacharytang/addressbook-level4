@@ -358,6 +358,7 @@ public class EditCommand extends UndoableCommand {
             return Optional.ofNullable(tags);
         }
 
+        //@@author CindyTsai1
         public void setBirthday(Birthday birthday) {
             this.birthday = birthday;
         }
@@ -366,6 +367,7 @@ public class EditCommand extends UndoableCommand {
             return Optional.ofNullable(birthday);
         }
 
+        //@@author
         @Override
         public boolean equals(Object other) {
             // short circuit if same object

@@ -119,14 +119,25 @@ include::../UserGuide.adoc[tag=sortCommand]
 
 ---
 
-=== Other contributions
+=== Other contributions (CS2103T)
 
-* Suggest command (Pull request https://github.com/CS2103AUG2017-W09-B1/main/pull/86[#86])
-* Find by multiple field (Pull request https://github.com/CS2103AUG2017-W09-B1/main/pull/97[#97])
 * Make add command fields optional (Pull request https://github.com/CS2103AUG2017-W09-B1/main/pull/154[#154])
 * UI: Change error message colour (Pull requests https://github.com/CS2103AUG2017-W09-B1/main/pull/57[#57])
-* Modified or added to test to maintain or increase coverage
-(Pull request https://github.com/CS2103AUG2017-W09-B1/main/pull/86[#86])
+* Modified or added to test to maintain or increase coverage (Pull request https://github.com/CS2103AUG2017-W09-B1/main/pull/86[#86])
+* Storage backup (Pull request https://github.com/CS2103AUG2017-W09-B1/main/pull/3[#3])
+
+=== Other contributions (CS2101)
+
+Written by me, edited by Brian
+
+---
+#Start of Extract [from: User Guide]#
+
+include::../UserGuide.adoc[tag=v2.0]
+
+#End of Extract#
+
+---
 
 == Project:
 * Worked CP2106 Independent Software Development Project (Orbital)
