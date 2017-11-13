@@ -674,7 +674,7 @@ With reference to the previous code snippet the type of `EditCommand` returned d
 The parameter type of the EditCommand is different.
 
 <1> A `new EditCommand(Tag, Tag)` from the method parseForTags(argsMultimap) is returned.
-<2> A `new EditCommand(Index, EditPersonDescriptor) from the method parseForPersonDetails(argsMultimap) is returned.
+<2> A `new EditCommand(Index, EditPersonDescriptor)` from the method parseForPersonDetails(argsMultimap) is returned.
 
 The following code shows the respective object construction of the different types of EditCommand.
 
@@ -914,6 +914,8 @@ public class Person implements ReadOnlyPerson {
 **Pros:** This would be able to better reminds the user of the added remark information. Also, the font-size is larger that is easier to read. +
 **Cons:** This does not have the consistent formatting with other fields in the person card. If the remark is too long, it will be poorly displayed as well.
 
+---
+
 **Aspects:** The command nature of Remark +
 **Alternative 1(current choice):** A RemarkCommand to add remarks to a contact is used. +
 **Pros:** It is not the compulsory field when a person is added as most people do not add remarks to a newly added contact. +
@@ -1120,6 +1122,7 @@ public static boolean isValidBirthday(String test) {
 **Pros:** It is simple and easy to understand. +
 **Cons:** It requires extra methods to change the format displayed.
 // end::birthday[]
+
 // tag::find[]
 === Find Command [Filter] Mechanism
 
@@ -1247,6 +1250,7 @@ _Figure 4.9.3.1 : FindCommand Logic Component Class Diagram_
 **Pros:** It is simple to implement. +
 **Cons:** By typing more keywords in different fields, more persons matching one of the keywords will be returned which defeats the purpose of having this enhancement.
 // end::find[]
+
 // tag::suggest[]
 === Suggest Command Mechanism
 
@@ -1306,6 +1310,7 @@ public static TreeSet<String> getPossibleCommandList(String command) {
 **Pros:** This does not require the user to retype to correct his spelling error. +
 **Cons:** This is harder to implement and if the user do not intent to conduct the suggested command action, the user has to do an extra step to undo the command, which might be inconvenient.
 // end::suggest[]
+
 === Logging
 
 We are using `java.util.logging` package for logging. The `LogsCenter` class is used to manage the logging levels and logging destinations.
