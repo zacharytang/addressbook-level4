@@ -57,15 +57,16 @@ Please do not disable them. If you have disabled them, go to `File` > `Settings`
 . Locate the `build.gradle` file and select it. Click `OK`
 . Click `Open as Project`
 . Click `OK` to accept the default settings
-. Open a console and run the command `gradlew processResources` (Mac/Linux: `./gradlew processResources`). It should finish with the `BUILD SUCCESSFUL` message. +
+. Open your console and run the command `gradlew processResources` (Mac/Linux: `./gradlew processResources`). It should finish with the `BUILD SUCCESSFUL` message. +
 This will generate all resources required by the application and tests.
 
 === Verifying the setup
 
-. Run the `seedu.address.MainApp` and try a few commands
+. Run the `seedu.address.MainApp`
+. Try out a few commands
 . link:#testing[Run the tests] to ensure they all pass.
 
-=== Configurations to do before writing code
+=== Doing configurations before writing code
 
 ==== Configuring the coding style
 
@@ -122,9 +123,9 @@ link:#common-classes[*`Commons`*] represents a collection of classes used by mul
 The rest of the App consists of four components.
 
 * link:#ui-component[*`UI`*] : The User Interface (UI) of the App.
-* link:#logic-component[*`Logic`*] : Executes command.
-* link:#model-component[*`Model`*] : Holds the data of the App in-memory.
-* link:#storage-component[*`Storage`*] : Reads data from, and writes data to, the hard disk.
+* link:#logic-component[*`Logic`*] : The execution of command.
+* link:#model-component[*`Model`*] : The storage of the data of the App in-memory.
+* link:#storage-component[*`Storage`*] : The saving and retrieving of data from the hard disk.
 
 Each of the four components
 
@@ -227,11 +228,11 @@ The `Storage` component,
 This section describes some noteworthy details on how certain features are implemented.
 
 // tag::undoredo[]
-=== Undo/Redo mechanism
+=== Undo/Redo Command mechanism
 
 The undo/redo mechanism is designed to suit the needs of students who might accidentally execute a undesired command. It is facilitated by an `UndoRedoStack`, which resides inside `LogicManager`. It supports undoing and redoing of commands that modifies the state of the address book (e.g. `add`, `edit`). Such commands will inherit from `UndoableCommand`.
 
-`UndoRedoStack` only deals with `UndoableCommands`. Commands that cannot be undone will inherit from `Command` instead. The following diagram shows the inheritance diagram for commands:
+`UndoRedoStack` only deals with `UndoableCommands`. Commands that cannot be undone will inherit from `Command` instead. You will be able to see the inheritance diagram for commands below (_Fig 4.1.1_).
 
 image::LogicCommandClassDiagram.png[width="800"]
 _Figure 4.1.1 : Structure of Commands in the Logic Component. This diagram shows finer details concerning `XYZCommand` and `Command` in Figure 3.3.1_
@@ -353,7 +354,7 @@ _Figure 4.1.4 : Activity diagram when a new command is executed_
 
 **Aspect:** Data structure to support the undo/redo commands +
 **Alternative 1 (current choice):** Separate stack for undo and redo are used. +
-**Pros:** This is asy to understand for new Computer Science undergraduates, who are likely to be the new incoming developers of our project. +
+**Pros:** This is easy to understand for new Computer Science undergraduates, who are likely to be the new incoming developers of our project. +
 **Cons:** Logic is duplicated twice. For example, when a new command is executed, we must remember to update both `HistoryManager` and `UndoRedoStack`. +
 **Alternative 2:** `HistoryManager` is used for undo/redo. +
 **Pros:** We do not need to maintain a separate stack, and just reuse what is already in the codebase. +
@@ -401,7 +402,7 @@ More specific information for a person's lessons is abstracted further as follow
 The following UML diagram represents the implementation of the classes.
 
 image::TimetableClassDiagram.png[width="800"]
-_Figure 4.2.1 : Timetable class diagram (XYZComponent refers to all other components that `Person` is composed of, the class diagram is not complete)_
+_Figure 4.2.2.1 : Timetable class diagram (XYZComponent refers to all other components that `Person` is composed of, the class diagram is not complete)_
 
 ==== Displaying of Timetables
 
@@ -450,16 +451,16 @@ Execution of a `select` command is similar, except that a `PersonSelectedEvent` 
 ---
 
 **Aspect:** Behaviour of app when there is no internet connection +
-**Alternative 1:** Store timetable information after retrieval from NUSMods once +
-**Pros:** We only need to retrieve lesson information once per person +
-**Cons:** Storage of entire timetables can be very costly, and storage can be expensive with a large number of contacts +
-**Alternative 2 (current choice):** Only store timetable URLs, and query each time app is launched. If no internet, start with empty timetable +
+**Alternative 1(current choice):** Only store timetable URLs, and query each time app is launched. If no internet, start with empty timetable +
 **Pros:** Storage needed is minimal, as only a single string is stored for each person +
-**Cons:** Startup of app can be slow if there is a large number of persons
+**Cons:** Startup of app can be slow if there is a large number of persons +
+**Alternative 2:** Store timetable information after retrieval from NUSMods once +
+**Pros:** We only need to retrieve lesson information once per person +
+**Cons:** Storage of entire timetables can be very costly, and storage can be expensive with a large number of contacts
 // end::timetable[]
 
 // tag::deletetag[]
-=== Delete Tag Mechanism
+=== Delete Command [Tag] Mechanism
 
 Deleting a tag means deleting a specified tag in all persons who contain that tag, as well as delete the tag from the master list of tags in the Address Book.
 This is significantly different from deleting a tag for a person via the `edit` command.
@@ -581,20 +582,20 @@ The delete command is undergoes a typical command execution in the `Logic` Compo
 
 The following sequence diagram shows the interactions with the `Model` Component.
 
-Not shown in Figure 4.3.1, `listTags` are checked against `listOfExistingTags`, i.e. all tags
+Not shown in Figure 4.3.4.1, `listTags` are checked against `listOfExistingTags`, i.e. all tags
 to be deleted are checked whether each of them already exist in the address book. If this check fails, an exception is thrown.
 The sequence diagram demonstrates a *successful* deletion, hence this aspect of the logic is omitted for clarity.
 
 image::DeleteCommandForTagSequenceDiagram1.png[width="800"]
-_Figure 4.3.1 : The tags parsed are put into an ArrayList and iterated through for deletion_
+_Figure 4.3.4.1 : The tags parsed are put into an ArrayList and iterated through for deletion_
 
 image::DeleteCommandForTagSequenceDiagram2.png[width="800"]
-_Figure 4.3.2 : How each tag is removed from the Address Book and each Person's list of tags_
+_Figure 4.3.4.2 : How each tag is removed from the Address Book and each Person's list of tags_
 
 ==== Design Considerations
 
 **Aspect:** Implementation of Delete Tags +
-**Alternative 1 (current choice):** Modify the existing `delete` command. +
+**Alternative 1 (current choice):** The existing `delete` command is modified +
 **Pros:** The same command word `delete` is used which is an intuitive way to invoke a deletion of some object (person or tag).  +
 **Cons:** The `DeleteCommand` class is no longer responsible for deletion of a person *only* but is now responsible for deleting a tag as well.
 Modifying the command via overriding constructors, adding new attributes and modifying the parse may seem too convoluted a solution.
@@ -618,12 +619,12 @@ This Violates Single Responsibility Principle and Separation of Concerns as `Del
 // end::deletetag[]
 
 // tag::edittag[]
-=== Edit Tag Mechanism
+=== Edit Command [Tag] Mechanism
 
 Editing a tag means editing a specified tag (the old tag) in all persons who contain that tag,
 as well as editing the tag from the master list of tags in the Address Book.
 This is significantly different from edit person's tag via the `edit` command.
-There is a need for this because a user would like to edit a tag for multiple people containing that tag.
+We find this necessary because a user would like to edit a tag for multiple people containing that tag.
 To edit a particular tag across multiple contacts, by editing each contact, would be a tedious process, hence, the addition of this feature.
 
 In this section, you will see that the implementation of editing a tag is very similar to deleting a tag.
@@ -736,7 +737,7 @@ The edit command is undergoes a typical command execution in the `Logic` Compone
 The following sequence diagram shows the interactions with the `Model` Component.
 
 image::EditCommandForTagSequenceDiagram.png[width="800"]
-_Figure 4.3.4 : How each tag is edit from the Address Book and each Person's list of tags_
+_Figure 4.4.4.1 : How each tag is edit from the Address Book and each Person's list of tags_
 
 ==== Design Considerations
 
@@ -745,8 +746,6 @@ _Figure 4.3.4 : How each tag is edit from the Address Book and each Person's lis
 The design considerations are similar to the to Implementation of Delete Tags. +
 
 Modifying the existing `edit` command was picked over creating a new command `edittag`
-
----
 // end::edittag[]
 
 // tag::TagColorMap[]
@@ -754,10 +753,10 @@ Modifying the existing `edit` command was picked over creating a new command `ed
 Tag labels appear in various `UI` components: `PersonCard`, `TagListPanel` and `PersonInfoPanel`. +
 In order to have the same color across all components, there was a need for the `UI` Components
 to keep track of what colors have been used and which tag was tied to what color. +
-Thus a Singleton class `TagColorMap` was implemented.
+You will be able to understand how a Singleton class `TagColorMap` was implemented.
 
-image::ClassDiagramTagColorMap.png[width="800"]
-_Figure 4.5 : The class diagram for TagColorMap_
+image::ClassDiagramTagColorMap.png[width="300"]
+_Figure 4.5.1 : The class diagram for TagColorMap_
 
 As a result of this singleton class, coloring tags on initialisation is made extremely easy,
 since the TagColorMap provided UI components an easy way to access the color mapping of tags and
@@ -781,14 +780,12 @@ private void initTags(ReadOnlyPerson person) {
 ==== Design Considerations
 
 **Aspects:** Implementation Coloring of Tag +
-**Alternative 1(current choice):** Use a singleton class TagColorMap to provide colors, and mapping of tags to colors. +
-**Pros:** Easy to implement. Easy to access from any UI Component. +
-**Cons:** Increases coupling across the code base. Difficult to replace TagColorMap with a stub. +
-**Alternative 2:** TagColorMap as a class attribute of MainWindow and pass TagColorMap as a parameter to the constructors of relevant UI components.  +
-**Pros:** Naive method and straightforward to implement +
-**Cons:** Requires a large amount of modification of existing code base.
-
----
+**Alternative 1 (current choice):** A singleton class TagColorMap to provide colors, and mapping of tags to colors is used. +
+**Pros:** This is easy to implement. Easy to access from any UI Component. +
+**Cons:** This increases coupling across the code base. Difficult to replace TagColorMap with a stub. +
+**Alternative 2:** TagColorMap as a class attribute of MainWindow is used and is passed as a parameter to the constructors of relevant UI components.  +
+**Pros:** This is a naive method and straightforward to implement +
+**Cons:** This requires a large amount of modification of existing code base.
 // end::TagColorMap[]
 
 // tag::remarkCommand[]
@@ -852,13 +849,13 @@ In the `EditCommand` class, a new attribute `updatedRemark` is added to the pers
 The following diagram shows the high-level sequence diagram of the `RemarkCommand` for you:
 
 image::RemarkCommandHighLevelSequenceDiagram.png[width="800"]
-_Figure 4.6.1 : High-level sequence diagram_
+_Figure 4.6.2.1 : High-level sequence diagram_
 
 `RemarkCommand` extends `UndoableCommand`, which is an abstract subclass of abstract class command, so the user can also undo the added remark.
 The class inheritance diagram is shown below:
 
 image::RemarkCommandClassInheritanceDiagram.png[width="800"]
-_Figure 4.6.2 : Class Inheritance Diagram_
+_Figure 4.6.2.2 : Class Inheritance Diagram_
 
 The implementation is shown below.
 
@@ -875,12 +872,12 @@ public class RemarkCommand extends UndoableCommand {
 After `RemarkCommand` is executed, the new data will be saved to the AddressBook. The logic component sequence diagram is shown below:
 
 image::RemarkCommandLogicComponentSequenceDiagram.png[width="800"]
-_Figure 4.6.3 : Logic Component Sequence Diagram_
+_Figure 4.6.2.3 : Logic Component Sequence Diagram_
 
 We create a new `Remark` attribute, and the `Person` class is linked to it. Its model component class diagram is shown below:
 
 image::RemarkCommandComponentClassDiagram.png[width="800"]
-_Figure 4.6.4 : Component Class Diagram_
+_Figure 4.6.2.4 : Component Class Diagram_
 
 The implementation is shown below.
 
@@ -908,7 +905,7 @@ public class Person implements ReadOnlyPerson {
 **Cons:** This does not have the consistent formatting with other fields in the person card. If the remark is too long, it will be poorly displayed as well.
 
 **Aspects:** The command nature of Remark +
-**Alternative 1(current choice):** A RemarkCommand is used to add remarks to a contact. +
+**Alternative 1(current choice):** A RemarkCommand to add remarks to a contact is used. +
 **Pros:** It is not the compulsory field when a person is added as most people do not add remarks to a newly added contact. +
 **Cons:** It is an extra command for the user to remember. +
 **Alternative 2:** AddCommand and EditCommand are used for adding and editing of the remark. +
@@ -921,8 +918,8 @@ public class Person implements ReadOnlyPerson {
 === Photo Command Mechanism
 
 The photo command allows users to assign photos to their contacts, and it also supports adding, editing and deleting photos as the remark command.
-It accepts the absolute path in the user's computer, copying the original photo to the default folder of the file.
-We are implementing this `PhotoCommand` as NUS students may forget what their classmates look like.
+You will be able to understand how it accepts the absolute path in the user's computer and copies the original photo to the default folder of the file.
+We are implementing this `PhotoCommand` as NUS students may want to keep themselves reminded of how their contacts look like.
 
 ---
 
@@ -988,14 +985,14 @@ Up to now, the photo command hasn't supported the `RedoCommand`.
 The interactions between multiple objects are complicated, so the following diagram shows the simplified high-level sequence diagram for you:
 
 image::PhotoCommand_highLevelSequenceDiagrams.png[width="800"]
-_Figure 4.7.1 : High-level Sequence Diagram_
+_Figure 4.7.2.1 : High-level Sequence Diagram_
 
 
 For the logic component part, the `PhotoCommandParser` is created by the `AddressBookParser`, and the `PhotoCommand` is created by the `PhotoCommandParser`.
 The logic component class diagram is shown below:
 
 image::PhotoCommand_logicComponentClassDiagram.png[width="800"]
-_Figure 4.7.2 : Logic Component Class Diagram_
+_Figure 4.7.2.2 : Logic Component Class Diagram_
 
 Also, the `PhotoCommand` class inherits from the `UndoableCommand` class.
 The implementation is shown below.
@@ -1010,11 +1007,11 @@ public class PhotoCommand extends UndoableCommand {
 }
 ----
 
-As shown in Figure 4.7.3, the `AddressBook` consists of one `UniqueTagList`, one `UniquePersonList`, and one `UniquePhotoPathList`.
+As shown in Figure 4.7.2.3, the `AddressBook` consists of one `UniqueTagList`, one `UniquePersonList`, and one `UniquePhotoPathList`.
 The `UniquePhotoPathList` acts as a container for `PhotoPath` objects.
 
 image::PhotoCommand_modelComponentClassDiagram.png[width="800"]
-_Figure 4.7.3 : Model Component Class Diagram_
+_Figure 4.7.2.3 : Model Component Class Diagram_
 
 We create a new `PhotoPath` attribute, and the `Person` class is linked to it.
 
@@ -1042,14 +1039,13 @@ public class PhotoPath {
 
 ==== Design Considerations
 
-**Aspects:** How to fetch the contact photo saved in users' computers +
-**Alternative 1(current choice):** Let users specify the absolute path of the photo +
+**Aspects:** The way the contact photo saved in users' computers is retrieved +
+**Alternative 1 (current choice):** Users are required to specify the absolute path of the photo +
 **Pros:** This might be inconvenient as users need additional steps to get the absolute file of the photo. +
 **Cons:** The image file is specified accurately by using the command line. +
-**Alternative 2:** Provide a pop-up window for the user to choose the photo +
+**Alternative 2:** Users are provided a pop-up window to choose the photo +
 **Pros:** It is more convenient for the user to choose the file. +
 **Cons:** This becomes no more a command-line input in this command-line application.
-
 // end::photoCommand[]
 
 // tag::birthday[]
@@ -1078,7 +1074,7 @@ The following are the main classes edited to implement this:
 The following UML diagram represents the implementation of the classes in the Model component.
 
 image::BirthdayModelComponentClassDiagram.png[width="800"]
-_Figure 4.8.1 : UML diagram for updated Model with Birthday_
+_Figure 4.8.1.1 : UML diagram for updated Model with Birthday_
 
 ==== Validation of Birthdays
 After the birthday is input, it will be checked if the date is valid.
@@ -1107,7 +1103,7 @@ public static boolean isValidBirthday(String test) {
 ==== Design Considerations
 
 **Aspect:** Representation of birthdays +
-**Alternative 1 (current choice):** The birthday of the specified contact is displayed as string of numbers. +
+**Alternative 1 (current choice):** The birthday of the specified contact is displayed as string of numbers with `/` separating the day, month and year. +
 **Pros:** This is easy to implement as there is no need to alter the input. +
 **Cons:** It is difficult to recognise the date from the number displayed. +
 **Alternative 2:** The birthday is in the format of 25 Dec 1997. +
@@ -1143,12 +1139,12 @@ We chose asciidoc over Markdown because asciidoc, although a bit more complex th
 
 === Editing Documentation
 
-See <<UsingGradle#rendering-asciidoc-files, UsingGradle.adoc>> to learn how to render `.adoc` files locally to preview the end result of your edits.
+You can see <<UsingGradle#rendering-asciidoc-files, UsingGradle.adoc>> to learn how to render `.adoc` files locally to preview the end result of your edits.
 Alternatively, you can download the AsciiDoc plugin for IntelliJ, which allows you to preview the changes you have made to your `.adoc` files in real-time.
 
 === Publishing Documentation
 
-See <<UsingTravis#deploying-github-pages, UsingTravis.adoc>> to learn how to deploy GitHub Pages using Travis.
+You can see <<UsingTravis#deploying-github-pages, UsingTravis.adoc>> to learn how to deploy GitHub Pages using Travis.
 
 === Converting Documentation to PDF format
 
@@ -1215,7 +1211,7 @@ e.g. `seedu.address.logic.LogicManagerTest`
 
 == Dev Ops
 
-=== Build Automation
+=== Building Automation
 
 See <<UsingGradle#, UsingGradle.adoc>> to learn how to use Gradle for build automation.
 
