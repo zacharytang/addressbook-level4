@@ -3,6 +3,7 @@ package seedu.address.logic.commands;
 import static java.util.Objects.requireNonNull;
 import static seedu.address.commons.core.MessageAlignmentFormatter.FORMAT_ALIGNMENT_TO_EXAMPLE;
 import static seedu.address.commons.core.MessageAlignmentFormatter.FORMAT_ALIGNMENT_TO_PARAMETERS;
+import static seedu.address.commons.util.FileUtil.REGEX_VALID_IMAGE;
 import static seedu.address.commons.util.FileUtil.copyFile;
 import static seedu.address.commons.util.FileUtil.createIfMissing;
 import static seedu.address.commons.util.FileUtil.getFileExtension;
@@ -42,6 +43,7 @@ public class PhotoCommand extends UndoableCommand {
     public static final String MESSAGE_USAGE = "| " + COMMAND_WORD + " |"
             + ": Adds a photo to the person identified by the index number used in the last person listing"
             + "by specifying the path of the photo.\n"
+            + "The valid photo extensions are 'jpg', 'jpeg', 'png', 'gif' or 'bmp'.\n"
             + "If the path field is empty, the old photo path is removed for the person.\n"
             + "Parameters: INDEX " + PREFIX_PHOTO + "[PHOTO PATH] \n"
             + FORMAT_ALIGNMENT_TO_PARAMETERS + "(INDEX must be a positive integer)\n"
@@ -57,9 +59,11 @@ public class PhotoCommand extends UndoableCommand {
             "Photo Path should be the absolute path of a valid file in your PC. It should be a string started "
                     + "with the name of your disk, "
                     + "followed by several groups of backslash and string, like \"c:\\desktop\\happy.jpg\","
-                    + "and the file should exist.";
+                    + "and the file should exist.\n"
+                    + "The valid photo extensions are 'jpg', 'jpeg', 'png', 'gif' or 'bmp'.\n";
 
-    public static final String REGEX_LOCAL_PHOTOPATH_VALIDATION = "([a-zA-Z]:)?(\\\\[a-zA-Z0-9_.-]+)+\\\\?";
+    public static final String REGEX_LOCAL_PHOTOPATH_VALIDATION =
+            "([a-zA-Z]:)?(\\\\[a-zA-Z0-9_.-]+)+\\\\?" + REGEX_VALID_IMAGE;
 
     public static final String PATH_FILE_SAVED_PARENT_DIRECTORY = "src/main/resources/images/contactPhotos/";
     public static final String PATH_DEFAULT_PHOTO = "src/main/resources/images/defaultPhoto.jpg";
@@ -160,7 +164,7 @@ public class PhotoCommand extends UndoableCommand {
         model.updateFilteredPersonList(PREDICATE_SHOW_ALL_PERSONS);
 
         EventsCenter.getInstance().post(new PersonSelectedEvent(photoedPerson, targetIndex.getZeroBased()));
-        return new CommandResult(generateSuccessMsg(photoedPerson));
+        return new CommandResult(generateSuccessMsg(personToPhoto));
     }
 
     /**

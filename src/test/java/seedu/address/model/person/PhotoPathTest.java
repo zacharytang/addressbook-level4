@@ -17,13 +17,18 @@ public class PhotoPathTest {
         assertTrue(PhotoPath.isValidPhotoPath(""));
         assertFalse(PhotoPath.isValidPhotoPath(" "));
 
-        // / missing parts： not start with 'docs/images/contactPhotos/'
+        // missing parts: not start with 'docs/images/contactPhotos/'
         assertFalse(PhotoPath.isValidPhotoPath("photo.jpg"));
         assertFalse(PhotoPath.isValidPhotoPath("c:photo.jpg"));
         assertFalse(PhotoPath.isValidPhotoPath("d:photo.jpg"));
         assertFalse(PhotoPath.isValidPhotoPath("c:\\\\photo.jpg"));
         assertFalse(PhotoPath.isValidPhotoPath("c:\\"));
         assertFalse(PhotoPath.isValidPhotoPath("c:\\"));
+
+        // invalid file extension
+        assertFalse(PhotoPath.isValidPhotoPath("src/main/resources/images/contactPhotos/photo.txt"));
+        assertFalse(PhotoPath.isValidPhotoPath("src/main/resources/images/contactPhotos/selfie.pdf"));
+        assertFalse(PhotoPath.isValidPhotoPath("src/main/resources/images/contactPhotos/selfie2.doc"));
 
         // valid photo path
         //assertTrue(PhotoPath.isValidPhotoPath("src/main/resources/images/help_icon.png"));  //default photo path
