@@ -759,7 +759,7 @@ In order for a tag to have the same color across all components, there was a nee
 to keep track of what colors have been used and which color was a tag tied to. +
 Thus a Singleton class `TagColorMap` was implemented.
 
-image::ClassDiagramTagColorMap.png[width="800"]
+image::ClassDiagramTagColorMap.png[width="300"]
 _Figure 4.5 : The class diagram for TagColorMap_
 
 As a result of this singleton class, coloring tags on initialisation is made extremely easy,
