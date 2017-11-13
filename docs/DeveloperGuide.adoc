@@ -719,6 +719,132 @@ public class Person implements ReadOnlyPerson {
 **Cons:** The remark is perceived as a compulsory field of personal information for that contact, but this is not true.
 // end::remarkCommand[]
 
+
+// tag::photoCommand[]
+=== Photo Command Mechanism
+
+The photo command allows users to assign photos to their contacts, and it also supports adding, editing and deleting photos as the remark command.
+It accepts the absolute path in the user's computer, copy the original photo to the default folder of the file.
+We are implementing this `Remark Command` because NUS students may forget what their classmates look like.
+
+---
+
+These classes are added to implement this enhancement:
+
+* PhotoPath
+* PhotoCommand
+* PhotoCommandParser
+* PhotoPathNotFoundException
+* DuplicationPhotoPathException
+* UniquePhotoPathList
+* XmlAdaptedPhotoPath
+* ...
+
+These classes are edited to implement this enhancement:
+
+* AddressBook
+* FileUtil
+* AddCommand
+* EditCommand
+* PersonInfoPanel
+* XmlAdaptedPerson
+* Person
+* ...
+
+---
+
+[NOTE]
+Instead of typing the command `remark`, an alternative would be `ph`.
+The alias is added to the `PhotoCommand` Class.
+The added photo will be displayed on the person information panel.
+If a photo is newly added to the photoList by `PhotoCommand`, it will be saved to the default folder and link to the specified contact.
+If a photo is removed from one contact, the link between the photo and the contact will be removed, but the photo file
+will still be kept inside the folder until the next time the user starts the application in case the user wants to undo the command.
+Up to now, the photo command hasn't supported the Redo Command.
+
+==== Implementation of Photo Command
+
+**[Step 1]** _Logic:_ Create the photoCommandParser class to parse the input.
+
+**[Step 2]** _Logic:_ Teach the app to accept `photoPath` arguments
+
+**[Step 3]** _Ui:_ Add a Shape 'photo' for displaying the photo in `personInfoPanel`
+
+**[Step 4]** _Model:_ Add `PhotoPath` class
+
+**[Step 5]** _Model:_ Modify `ReadOnlyPerson` to support a photoPath field
+
+**[Step 6]** _Storage:_ Add photoPath field to `XmlAdaptedPerson` class
+
+**[Step 7]** _Ui:_ Connect photoPath field to `PersonInfoPanel` class, display the contact photo
+
+**[Step 8]** _Logic:_ Implement PhotoCommand#execute() logic
+
+**[Step 9]** _Commons:_ Implement related methods in `FileUtil`
+
+**[Step 10]** _Models:_ Implement how to initialize the photolist and delete unused photo in `AddressBook` class
+
+
+==== Codes and Diagrams
+
+The following diagram shows the high-level sequence diagram of the remark command for you:
+
+image::RemarkCommandHighLevelSequenceDiagram.png[width="800"]
+_Figure 4.4.1 : High-level sequence diagram_
+
+The RemarkCommand extends Undoable Command, which is an abstract subclass of abstract class Command, so the user can also undo the added remark.
+The class inheritance diagram is shown below:
+
+image::RemarkCommandClassInheritanceDiagram.png[width="800"]
+_Figure 4.4.2 : Class Inheritance Diagram_
+
+The implementation is shown below.
+
+[source,java]
+----
+/*
+ * Edits the remark of a person to the address book.
+ */
+public class RemarkCommand extends UndoableCommand {
+    //...
+}
+----
+
+After the remark command is executed, the new data will be saved to the AddressBook. The logic component sequence diagram is shown below:
+
+image::RemarkCommandLogicComponentSequenceDiagram.png[width="800"]
+_Figure 4.4.3 : Logic Component Sequence Diagram_
+
+We create a new Remark attribute, and the person class is linked to it. Its model component class diagram is shown below:
+
+image::RemarkCommandComponentClassDiagram.png[width="800"]
+_Figure 4.4.4 : Component Class Diagram_
+
+The implementation is shown below.
+
+[source,java]
+----
+public class Person implements ReadOnlyPerson {
+    //...
+    private ObjectProperty<Address> address;
+    private ObjectProperty<Timetable> timetable;
+    private ObjectProperty<Remark> remark;
+    // ...
+----
+
+
+==== Design Considerations
+
+**Aspects:** How to fetch the contact photo saved in the user's computer +
+**Alternative 1(current choice):** Let the user specify the absolute path of the photo +
+**Pros:** This might be inconvenient as the user needs additional step to check the absolute file of the photo. +
+**Cons:** The image file is specified accurately by using the command line. +
+**Alternative 2:** Provide a pop-up window for the user to choose the photo +
+**Pros:** It might be more convenient for the user to choose the file +
+**Cons:** This is no more a command-line input in this command-line application.
+
+// end::photoCommand[]
+
 // tag::birthday[]
 === Birthday Attribute
 
