@@ -28,6 +28,7 @@
 
         assertCommandSuccess(deleteCommand, model, expectedMessage, expectedModel);
     }
+
 ```
 ###### \java\seedu\address\logic\commands\DeleteCommandTest.java
 ``` java
@@ -70,6 +71,8 @@ public class PhotoCommandTest {
         assertFalse(PhotoCommand.isValidLocalPhotoPath("c:\\\\photo.jpg")); // too many backslashes
         assertFalse(PhotoCommand.isValidLocalPhotoPath("c:\\")); // no file name
         assertFalse(PhotoCommand.isValidLocalPhotoPath("c:\\")); // no file name
+        assertFalse(PhotoCommand.isValidLocalPhotoPath("d:\\my_photo.txt"));  // invalid extension
+        assertFalse(PhotoCommand.isValidLocalPhotoPath("d:\\my_photo.pdf"));  // invalid extension
 
         // valid photo path
         assertTrue(PhotoCommand.isValidLocalPhotoPath("c:\\desktop\\baby.jpg"));
@@ -532,13 +535,18 @@ public class PhotoPathTest {
         assertTrue(PhotoPath.isValidPhotoPath(""));
         assertFalse(PhotoPath.isValidPhotoPath(" "));
 
-        // / missing partsï¼? not start with 'docs/images/contactPhotos/'
+        // missing parts: not start with 'docs/images/contactPhotos/'
         assertFalse(PhotoPath.isValidPhotoPath("photo.jpg"));
         assertFalse(PhotoPath.isValidPhotoPath("c:photo.jpg"));
         assertFalse(PhotoPath.isValidPhotoPath("d:photo.jpg"));
         assertFalse(PhotoPath.isValidPhotoPath("c:\\\\photo.jpg"));
         assertFalse(PhotoPath.isValidPhotoPath("c:\\"));
         assertFalse(PhotoPath.isValidPhotoPath("c:\\"));
+
+        // invalid file extension
+        assertFalse(PhotoPath.isValidPhotoPath("src/main/resources/images/contactPhotos/photo.txt"));
+        assertFalse(PhotoPath.isValidPhotoPath("src/main/resources/images/contactPhotos/selfie.pdf"));
+        assertFalse(PhotoPath.isValidPhotoPath("src/main/resources/images/contactPhotos/selfie2.doc"));
 
         // valid photo path
         //assertTrue(PhotoPath.isValidPhotoPath("src/main/resources/images/help_icon.png"));  //default photo path
