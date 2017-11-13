@@ -233,14 +233,14 @@ Tags: [Legend][Myth][CS2103T][Man][Prof]] +#
 [green]#Undo success!#
 
 *Type in:* delete -1, -2 +
-*Expected Result:* Error message showing the index does not exist +
+*Expected Result:* Show Error message +
 *Result Message:*  +
-[red]#The person index provided is invalid#
+[red]#Invalid command format!#
 
 *Type in:* delete 999 +
-*Expected Result:* Error message showing the index does not exist +
+*Expected Result:* Show Error message +
 *Result Message:*  +
-[red]#The person index provided is invalid#
+[red]#Invalid command format!#
 
 *Type in:* delete +
 *Expected Result:* Error message suggesting the correct command format +
@@ -432,6 +432,8 @@ Windows System: Right click on one picture file, click `Properties`
 and copy the file path in the `location:` field.
 It should be an absolute file path in your computer, like "C:\selfie\bg.jpg".
 
+Mac/Linux System: The valid absolute file path.
+
 ==== Steps To Execute And Expected Results
 *Type in:* photo +
 *Expected Result:* Error message suggesting the correct command input +
@@ -524,6 +526,13 @@ Timetable:  +
 Remark: [Likes CS2103T] +
 Photo:  +
 Tags: [Legend][Myth][CS2103T][Man][Prof]#
+
+*Type in:* ph 1 ph/[A path of txt file]+
+*Expected Result:* Message showing there is an error +
+*Result Message:*  +
+Invalid file path! +
+| photo |: Adds a photo to the person identified by the index number used in the last person listingby specifying the path of the photo. +
+The valid photo extensions are 'jpg', 'jpeg', 'png', 'gif' or 'bmp'.
 
 === RemarkCommand
 ==== Description/Data
@@ -823,6 +832,7 @@ photo 1 ph/Q:\haha.jpg +
 ph 1 +
 photo 1 ph/[your file path] +
 photo +
+ph 1 ph/[your file path of a txt file] +
 edit old/At new/Friend +
 edit old/Prof new/ +
 edit old/Arts new/Friend +

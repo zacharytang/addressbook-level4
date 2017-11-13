@@ -21,12 +21,11 @@ import java.util.stream.Stream;
 import seedu.address.logic.commands.FindCommand;
 import seedu.address.logic.parser.exceptions.ParseException;
 
+//@@author CindyTsai1
 /**
  * Parses input arguments and creates a new FindCommand object
  */
 public class FindCommandParser implements Parser<FindCommand> {
-
-    //@@author CindyTsai1
     /**
      * Parses the given {@code String} of arguments in the context of the FindCommand
      * and returns an FindCommand object for execution.
@@ -92,14 +91,16 @@ public class FindCommandParser implements Parser<FindCommand> {
              *  keyword input must be 2 digits
              *  keyword input must be in Integers
              */
-            if (!birthdayList.matches("[0-9]+")) {
-                throw new ParseException(FindCommand.MESSAGE_BIRTHDAYKEYWORD_NONNUMBER);
-            } else if (Integer.parseInt(birthdayList.trim()) > 12 || Integer.parseInt(birthdayList.trim()) < 1) {
-                throw new ParseException(String.format(FindCommand.MESSAGE_BIRTHDAYKEYWORD_NONEXIST,
-                        birthdayList.trim()));
-            } else if (birthdayList.trim().length() == 1) {
-                throw new ParseException(String.format(FindCommand.MESSAGE_BIRTHDAYKEYWORD_INVALID,
-                        birthdayList.trim()));
+            if (!birthdayList.equals("")) {
+                if (!birthdayList.matches("[0-9]+")) {
+                    throw new ParseException(FindCommand.MESSAGE_BIRTHDAYKEYWORD_NONNUMBER);
+                } else if (Integer.parseInt(birthdayList.trim()) > 12 || Integer.parseInt(birthdayList.trim()) < 1) {
+                    throw new ParseException(String.format(FindCommand.MESSAGE_BIRTHDAYKEYWORD_NONEXIST,
+                            birthdayList.trim()));
+                } else if (birthdayList.trim().length() == 1) {
+                    throw new ParseException(String.format(FindCommand.MESSAGE_BIRTHDAYKEYWORD_INVALID,
+                            birthdayList.trim()));
+                }
             }
 
             predicate.add(PREFIX_BIRTHDAY.getPrefix());
