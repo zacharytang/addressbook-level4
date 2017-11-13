@@ -155,6 +155,8 @@ public class FindCommand extends Command {
 
         NameContainsKeywordsPredicate predicates = new NameContainsKeywordsPredicate(predicatesList);
         model.updateFilteredPersonList(predicates);
+
+        //Different display message for birthday
         if (!birthdaySearch.isEmpty()) {
             return new CommandResult(getMessageForPersonListShownSummary(
                     model.getFilteredPersonList().size())
@@ -169,7 +171,7 @@ public class FindCommand extends Command {
      * @param month used to generate Month
      * @return summary message for the birthday month of persons displayed
      */
-    private static String getMessageForMonthSearch(String month) {
+    public static String getMessageForMonthSearch(String month) {
         switch (month) {
         case "01":
             month = "January";
