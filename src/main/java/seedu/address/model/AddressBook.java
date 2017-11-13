@@ -178,7 +178,7 @@ public class AddressBook implements ReadOnlyAddressBook {
         persons.forEach(this::syncMasterTagListWith);
     }
 
-    //author@@ nbriannl
+    //@@author nbriannl
     /**
      * Checks if the master list {@link #tags} has every tag being used.
      *  @return true if all tags in the master list is being used by a person
