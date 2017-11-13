@@ -367,7 +367,7 @@ Users are able to store timetables by supplying a shortened NUSMods URL when add
 
 ==== Retrieval of Lesson Information
 
-NUSMods URLs are in the format of `.../timetable/ACAD_YEAR/SEM?MODULE_CODE[LESSON_TYPE]=LESSON_NO&...`  We use `TimetableParserUtil : expandUrl` to get an expanded URL from shortened URL provided, then parse the expanded URL accordingly to obtain lesson data.
+NUSMods URLs are in the format of `.../timetable/ACAD_YEAR/SEM?MODULE_CODE[LESSON_TYPE]=LESSON_NO&...`  We use `TimetableParserUtil:expandUrl()` to get an expanded URL from shortened URL provided, then parse the expanded URL accordingly to obtain lesson data.
 Lessons for each module are stored in `ModuleInfoFromUrl`, which is then represented in `TimetableInfoFromUrl`.
 
 https://github.com/nusmodifications/nusmods-api[NUSMods API] is used to retrieve data related to lessons parsed from URLs. JSON objects representing each module is retrieved and
@@ -408,8 +408,21 @@ _Figure 4.2.1 : Timetable class diagram (XYZComponent refers to all other compon
 Displaying of timetables is facilitated using a single `TimetableDisplay` component, which resides above `BrowserPanel`. Both these
 components are contained within `InfoPanel`, which handles specific events to bring either panel to the front.
 
-Upon execution of a `select` or `whenfree` command, an arraylist of `Timetable` to display is passed to `TimetableDisplay`, which
-dynamically fills the JavaFX container `GridPane` with `Panes`, according to the timetables to be displayed.
+Upon execution of a `whenfree` command, the following happens:
+
+. `TimetableCommandParser` parses the input to determine which timetables to display.
+.. If no arguments are passed, empty `ArrayList<Index>` is used.
+.. Otherwise, arguments are parsed into their respective `Index` and stored in an `ArrayList<Index>`.
+. A new `TimetableCommand` is constructed, using the list created by the parser.
+. When `TimetableCommand:execute()` is called, the list of `Index`, is used to obtain the `ReadOnlyPerson` to display,
+and stores it in a `List<ReadOnlyPerson>`.
+. A `TimetableDisplayEvent` is then posted with the list of people to be displayed.
+. The event is then handled by the `InfoPanel`, which creates a new `TimetableDisplay` component and brings it to the front.
+.. Each `Timetable` to be displayed is obtained from the list of people from the `TimetableDisplayEvent` handled.
+.. When `TimetableDisplay` component is created, `fillInitialGrid()` first populates the timetable with empty slots.
+.. After which, each `Timetable` is added to the grid by `fillSingleTimetable()`.
+
+Execution of a `select` command is similar, except that a `PersonSelectedEvent` is handled instead of a `TimetableDisplayEvent`
 
 ==== Design Considerations
 
@@ -433,6 +446,16 @@ dynamically fills the JavaFX container `GridPane` with `Panes`, according to the
 **Alternative 2:** Both shortened and full-length NUSMods URLs are accepted. +
 **Pros:** This is more user friendly as any type of NUSMods URL is accepted. +
 **Cons:** This is much harder to detect malformed URL as parsing data does not detect errors in lesson tokens in URL. Shortened URL gives 403 response on bad URL.
+
+---
+
+**Aspect:** Behaviour of app when there is no internet connection +
+**Alternative 1:** Store timetable information after retrieval from NUSMods once +
+**Pros:** We only need to retrieve lesson information once per person +
+**Cons:** Storage of entire timetables can be very costly, and storage can be expensive with a large number of contacts +
+**Alternative 2 (current choice):** Only store timetable URLs, and query each time app is launched. If no internet, start with empty timetable +
+**Pros:** Storage needed is minimal, as only a single string is stored for each person +
+**Cons:** Startup of app can be slow if there is a large number of persons
 // end::timetable[]
 
 // tag::deletetag[]
