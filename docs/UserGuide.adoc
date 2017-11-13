@@ -15,6 +15,8 @@ endif::[]
 By: `CS2103AUG2017-W09-B1`      Since: `AUG 2017`      Licence: `MIT`
 
 == Introduction
+
+//tag::intro[]
 Thank you for downloading **UniFy**! We're glad that you've chosen us to help you manage your hectic university life.
 
 **UniFy** is a personal assistant to your everyday life in NUS. It helps you maintain your numerous groups,
@@ -25,6 +27,7 @@ We know that time is precious for university students, so we made **UniFy** as s
 to use **UniFy**, no more searching for hidden buttons or navigating unfamiliar pages!
 
 Excited? Let's get started!
+// end::intro[]
 
 == Quick Start
 
@@ -105,12 +108,12 @@ ____
 _First thing to do with UniFy is to start adding the various people you've met in University, as well as important people like your family._
 ____
 ==== Adding a person manually
-
+// tag::blurb[]
 ____
 _Add contact information you want to remember! Your group mate's timetable, your friend's birthday. Tag your
 module mates with appropriate tags too!_
 ____
-
+// end::blurb[]
 Use this to add a person to *UniFy* +
 
 Format: `add n/NAME [g/GENDER] [p/PHONE_NUMBER] [e/EMAIL] [a/ADDRESS] [m/MATRIC_NUMBER] [b/BIRTHDAY] [tt/TIMETABLE_URL] [t/TAG]...` +
@@ -155,10 +158,12 @@ Examples:
 // end::add[]
 
 // tag::photoCommand[]
-=== Adding/Deleting a Photo for a person : `photo` _(Since v1.4)_
+=== Adding/Deleting a Photo for a person : `photo` _(For WINDOWS System Since v1.4)_
+// tag::blurb[]
 ____
 _When you study too much, sometimes, you forget how someone looks like._
 ____
+// end::blurb[]
 You can add or remove a photo to an existing person in the address book. +
 Format: +
 _(Add photo)_ `photo INDEX ph/PHOTO PATH` +
@@ -169,6 +174,7 @@ image::photo_command.png[width=790]
 _Figure 3.3 : Add your favourite photo of someone to their contact!_
 
 ****
+* For now, this command only works under WINDOWS Operating System.
 * Edits the photo of the person at the specified `INDEX`.
 * The photo path of the person will be updated.
 * When adding a photo to the person, the photo will be saved to the default folder.
@@ -194,10 +200,12 @@ Removes the photo path from the 1st person in the results of the `find` command.
 
 // tag::remarkCommand[]
 === Giving remarks to a person : `remark` _(Since v1.1)_
+// tag::blurb[]
 ____
 _Sometimes you want to remind yourself how this person was like in a funny incident. Or you owe friends money for last night's supper. +
 Tags are too short, and your remarks for a person are more descriptive and unique. UniFy lets you add a remark to a person you can always look back on._
 ____
+// end::blurb[]
 You can add remarks to any person in UniFy, keeping any special information you might want to remember. +
 Format: +
 (Add remark) `remark INDEX r/REMARK1 [r/REMARK2]...` +
@@ -225,10 +233,11 @@ Removes the remark from the 1st person in the results of the `find` command.
 // end::remarkCommand[]
 
 === Listing all people : `list`
+// tag::blurb[]
 ____
 _Want to list all contacts for an overview?_
 ____
-
+// end::blurb[]
 Use this command to show a list of all persons stored. +
 Format: `list` +
 Alternatives: `l` , `showall`, `viewall`
@@ -273,9 +282,11 @@ Returns all persons in UniFy having birthdays in `December`
 
 === Editing a person or a tag: `edit`
 ==== Editing a person
+// tag::blurb[]
 ____
 _Made a mistake? Someone changed their contact details? Edit it._
 ____
+// end::blurb[]
 You can edit the details of an existing person in your address book, specified by their index +
 Format: `edit INDEX [n/NAME] [g/GENDER] [m/MATRIC_NO] [p/PHONE] [e/EMAIL] [a/ADDRESS] [b/BIRTHDAY] [tt/TIMETABLE_URL] [t/TAG]...` +
 Alternatives: `e` , `modify`, `change`
@@ -295,11 +306,14 @@ Edits the phone number, gender and email address of the 1st person to be `912345
 * `edit 2 n/Betsy Crower m/A0162522j b/14081998 t/` +
 Edits the name, matriculation number and birthday of the 2nd person to be `Betsy Crower`, `A0162522j`, `14081998` and clears all existing tags.
 
+// tag::edittag[]
 ==== Editing a tag _(Since v1.2)_
+// tag::blurb[]
 ____
 _When you need to edit module tags of classmates when advancing from a prerequisite module (e.g. CS1010 -> CS1020),
 changing each of their tag to an updated one is too tedious! UniFy lets you simply edit a particular tag for all contacts in one command._ +
 ____
+// end::blurb[]
 
 You can replace a tag to a new word for all people that have the specified tag +
 Format: `edit old/OLDTAG new/NEWTAG` +
@@ -318,14 +332,17 @@ Examples:
 [TIP]
 Editing a person's tag only edits the tag(s) for a *single* person. This command edits one tag name for *all* people.
 
+// end::edittag[]
 
 === Deleting multiple persons or tags: `delete`
 
 // tag::deletePersons[]
 ==== Deleting multiple persons _(since v1.3)_
+// tag::blurb[]
 ____
 _Some people just have to go away in your life. Sometimes they leave you. Delete these people out of UniFy as well._
 ____
+// end::blurb[]
 By specifying an index or multiple indexes, you can delete specified people in the most recent listing from the address book. +
 Format: +
 `delete INDEX1, INDEX2, INDEX3...`(separated by commas) +
@@ -354,11 +371,13 @@ Deletes the 1st and 5th persons in the results of the `find` command.
 
 // tag::deletetag[]
 ==== Deleting a Tag (or multiple Tags) _(Since v1.1)_
+// tag::blurb[]
 ____
 _You have just finished a project in a module. Having the 'groupmate' tag to your project mates seems rude for you since
 the project is already over.
 Instead of going through each member one by one, delete that particular 'groupmate' tag in one go!_
 ____
+// end::blurb[]
 
 You specify a tag and it will be deleted from all people who originally had that tag +
 Format: `delete t/TAG...` +
@@ -404,9 +423,11 @@ Selects the 1st person in the results of the `find` command.
 
 // tag::timetable[]
 === Viewing combined timetables : `whenfree` _(Since v1.5)_
+// tag::blurb[]
 ____
 _"When are all of you free?" is an extremely common question in University. Let us solve that._
 ____
+// end::blurb[]
 You can view the combined timetables of a group of people, selected by indexes. +
 Format: `whenfree [INDEX]...`
 
@@ -430,10 +451,13 @@ Displays a combined timetable for all listed users.
 ****
 // end::timetable[]
 
+// tag::gmaps[]
 === Opening a Google Maps view of an address : `gmaps` _(Since v1.3)_
+// tag::blurb[]
 ____
 _You are meeting your group mate at his house. But where is his house on the map?_
 ____
+// end::blurb[]
 For a person specified by an index, opens a Google Maps view of the person's address. +
 If you specify an address, gives the Google Maps directions from the given address to the person's location. +
 Format: `gmaps INDEX [a/ADDRESS]` +
@@ -450,23 +474,29 @@ Opens the Google Maps view for the address of the 1st person in the results of t
 * `list` +
 `gmaps 2 a/Blk 632 Yishun St 61` +
 Opens the Google Maps directions from Blk 632 Yishun St 61 to the address of the 2nd person listed in the address book.
+// end::gmaps[]
 
+// tag::theme[]
 === Changing the theme of UniFy : `theme`
-
+// tag::blurb[]
 ____
 _Don't like how UniFy looks? Why not change it?_
 ____
+// end::blurb[]
 You can change the theme of *UniFy* to any theme that you have installed. +
 Format: `theme THEME_NAME` +
 Alternatives: `th`, `changetheme`
 
 [NOTE]
 *UniFy* comes with two themes pre-installed, `dark` and `light`. More themes will be made available in the near future!
+// end::theme[]
 
 === Listing entered commands : `history`
+// tag::blurb[]
 ____
 _What have you been doing? Check the past._
 ____
+// end::blurb[]
 Lists all the commands that you have entered in reverse chronological order. +
 Format: `history` +
 Alternatives: `h` , `past`
@@ -478,9 +508,11 @@ Pressing the kbd:[&uarr;] and kbd:[&darr;] arrows will display the previous and 
 
 // tag::undoredo[]
 === Undoing previous command : `undo`
+// tag::blurb[]
 ____
 _You made a mistake, deleted some one by accident. Do not fret. UniFy is forgiving, undo your mistakes._
 ____
+// end::blurb[]
 Restores the address book to the state before the previous _undoable_ command was executed. +
 Format: `undo` +
 Alternatives: `u`
@@ -507,9 +539,11 @@ The `undo` command fails as there are no undoable commands executed previously.
 `undo` (reverses the `delete 1` command) +
 
 === Redoing the previously undone command : `redo`
+// tag::blurb[]
 ____
 _It is OK. You wanted to delete that person anyways._
 ____
+// end::blurb[]
 Reverses the most recent `undo` command. +
 Format: `redo` +
 Alternatives: `r`
@@ -543,9 +577,11 @@ Format: `clear` +
 Alternatives: `c`, `wipe`
 
 === Exiting the program : `exit`
+// tag::blurb[]
 ____
 _You are done with what you need to do. Thank you for using UniFy._
 ____
+// end::blurb[]
 Exits the program. +
 Format: `exit` +
 Alternatives: `x` , `quit`
@@ -576,9 +612,11 @@ Here is the temporary tag information a person can have: +
 // end::tempTag[]
 
 === Adding a person using the information on social media _(Coming in v2.0)_
+// tag::blurb[]
 ____
 _Add someone from a module via Facebook? Add him seamlessly into UniFy!_
 ____
+// end::blurb[]
 
 Adds a person to address book from the social media accounts +
 Format: `add s/SOCIAL_MEDIA_TYPE SOCIAL_MEDIA_ID`
@@ -594,10 +632,12 @@ Examples:
 
 // tag::oldContact[]
 === Deleting old contacts _(Coming in v2.0)_
+// tag::blurb[]
 ____
 _Some people you do not talk for months. Maybe a group mate from a previous module you never see ever again.
 They drift away, and out of UniFy they go as well._
 ____
+// end::blurb[]
 Deletes the contacts which you have not viewed/edited/listed for a certain number of months. +
 Format: `delete old/NUM_OF_MONTH` +
 Alternatives: `d` , `remove`
@@ -614,9 +654,11 @@ Deletes all the contacts which you have not viewed/edited/listed for the past 2 
 
 // tag::locations[]
 === Listing persons who live nearby : `nearby` _(Coming in v2.0)_
+// tag::blurb[]
 ____
 _It is Summer break. Who is there to call for late night supper near your home?_
 ____
+// end::blurb[]
 Shows a list of persons whose addresses are nearby a specified *address* within a specified radius. +
 Format: `nearby a/ADDRESS d/DISTANCE` +
 Alternatives: `n`, `nearme`, `closeby`, `neighbours` `neighbors`
@@ -631,9 +673,11 @@ Example:
 ****
 
 === Finding a central location among a group of persons : `central` _(Coming in v2.0)_
+// tag::blurb[]
 ____
 _"Where is a good place for us to meet?" UniFy everyone's location to find a central one._
 ____
+// end::blurb[]
 After listing persons, shows the central location among the persons most recently listed +
 Format: `central [a/ADDRESS] [INDEX]...` +
 Alternatives: `ct`, `center`, `wheremeet`
@@ -662,10 +706,13 @@ Shows the central location among the persons most recently listed with Index 1, 
 Shows the central locaton among the persons tagged as 'jcfriends'.
 // end::locations[]
 
+
 === Sorting all persons : `sort` _(Coming in v2.0)_
+// tag::blurb[]
 ____
 _Sometimes, you just meet too many people in University. Don't worry, get all your contacts in order._
 ____
+// end::blurb[]
 Shows the list of all persons in the current list in your address book by arranging their names in alphabetical order. +
 Format: +
 _(Sort by name in ascending order)_ `sort ASC` +
@@ -675,9 +722,11 @@ Alternatives: `s` , `sortall`, `arrange`
 
 // tag::password[]
 === Setting a password for your address book : `password` _(Coming in v2.0)_
+// tag::blurb[]
 ____
 _Your privacy is important. Prevent others from viewing the contact details you possess._
 ____
+// end::blurb[]
 Sets or changes the password that allows access to the address book +
 Format: `password pw/PASSWORD` +
 Alternatives: `p` , `code`
@@ -696,17 +745,22 @@ Adds 123456789 as a password.
 To clear the password set.
 // end::password[]
 
+=== Adding/Deleting a Photo for a person : `photo` _(For Linux and Mac System Coming in v2.0)_
+
+Allows the photoCommand to work under Linux and Mac Operating System.
+
 == Other features
 
 _Here are some features in UniFy that are not in the form of commands, but good to know to aid in your productivity._
 
 === Command Suggestion _(Since v1.5)_
 
-Typing a mispelled word for a command will trigger the address book to suggest the correct phrasing for that command
+Typing a misspelled word for a command will trigger the address book to suggest the correct phrasing for that command
 
 image::command_suggestion.png[width=600]
 _Figure 5.1 : Typing the command `delet` will make UniFy reply `Do you mean delete?`_
 
+// tag::tagbar[]
 === Tag Bar _(Since v1.5)_
 
 You can easily view all existing tags as icons, displayed above the person card
@@ -718,6 +772,7 @@ _Figure 5.2 : The tag bar is right above the information of the person displayed
 For tags that are not in use for any people, they will be in grey and after all the other tags
 
 _(Coming in v2.0)_ You can click a tag and all people with that tag will be displayed!
+// end::tagbar[]
 
 // tag::fontsize[]
 === Font Size _(Coming in v2.0)_

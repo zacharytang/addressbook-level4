@@ -50,6 +50,7 @@ public class DeleteCommand extends UndoableCommand {
         this.targetIndexes = null;
         this.targetTags = targetTags;
     }
+
     //@@author April0616
     /**
      * Creates a delete command which aims to delete one person.

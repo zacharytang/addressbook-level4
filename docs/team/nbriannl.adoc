@@ -3,12 +3,21 @@ ifdef::env-github,env-browser[:outfilesuffix: .adoc]
 :imagesDir: ../images
 :stylesDir: ../stylesheets
 
+== Purpose
+
+This project portfolio documents the software experience I have in the module
+CS2103/T (Software Engineering).
+
+A section titled 'Documentation Contributions (For CS2101 Use)' contains *additional*
+documentation contribution I would like the evaluators in CS2101 (Effective Communication for Computing Professionals) to take note of.
+It is *not* for CS2103/T.
+
 == Project: UniFy
 UniFy is a desktop Address Book application for University students, particularly those from NUS (National University of Singapore).
 
 The user is able to manage the many people he meets in University, keep track of his friends' Birthdays, view his friend’s timetables, and much more.
-Most of the user interactions are via CLI, while there exists a GUI created with JavaFX. It is written in Java and has
-about 6kLoC.
+Most of the user interactions are via Command Line Interface, while there exists a Graphical User Interface created with JavaFX. It is written in Java and has
+about 8kLoC.
 
 The source code is based on the  https://github.com/se-edu/addressbook-level4[AddressBook-Level4] project created by SE-EDU initiative.
 
@@ -30,8 +39,14 @@ include::../UserGuide.adoc[tag=deletetag]
 
 ==== Justification
 
-Deleting a common tag present in multiple contact is tedious so being able to delete a common tag is seen
+Deleting a common tag present in multiple contact is tedious, therefore being able to delete a common tag is seen
 as an essential feature by a busy University student seeking efficiency.
+
+For example, a University Student, who wants to delete an irrelevant tag (such as 'ProjectGroupMate', when a project is completed),
+would
+want to delete the tag from every contact containing that tag. It would be very inefficient for him
+to find all his contacts with that tag, and edit each and every contact with a new set of tags, which excludes the
+tag to be deleted.
 
 ==== Implementation
 
@@ -43,6 +58,105 @@ include::../DeveloperGuide.adoc[tag=deletetag]
 #End of Extract#
 
 ---
+
+=== Enhancement Added: Edit Tag
+
+==== External behavior
+
+---
+#Start of Extract [from: User Guide]#
+
+include::../UserGuide.adoc[tag=edittag]
+
+#End of Extract#
+
+---
+
+==== Justification
+
+Editing a tag would be a common task a University Student would face.
+
+For example, he may have a clique of friends tagged as a particular module (e.g. CS2010). When all
+his friends follow him to another module (e.g. CS3230), he would like to edit all his contacts' 'CS2010'
+tag to 'CS3230'. He could edit each and every contact with a new set of tags, including the renamed tag, but it
+would be extremely inefficient. Hence, this feature would be convenient and essential for the application.
+
+==== Implementation
+
+---
+#Start of Extract [from: Developer Guide]#
+
+include::../DeveloperGuide.adoc[tag=edittag]
+
+#End of Extract#
+
+---
+
+=== Enhancement Added: GMaps Command To Find Location and Show Directions
+
+==== External behavior
+
+---
+#Start of Extract [from: User Guide]#
+
+include::../UserGuide.adoc[tag=gmaps]
+
+#End of Extract#
+
+---
+
+==== Justification
+
+The target user, the NUS university student, would find himself wanting to meet his friends, either for leisure
+or for group projects. If the meet up location is at the house of one of his friends, he would be able to use the application
+to easily search for the location since he may have stored the friend's address in the application.
+
+Furthermore, if he is at some location, for example, at school, and would like to find the directions to his friend's house.
+He is able to quickly type a command to get direction to his friend's house from his location.
+
+=== Enhancement Added: Tag Bar
+
+==== External behavior
+
+---
+#Start of Extract [from: User Guide]#
+
+include::../UserGuide.adoc[tag=tagbar]
+
+#End of Extract#
+
+---
+
+==== Justification
+
+Being able to see all tags that exist in the address book has many benefits to the User Experience. +
+
+It is a useful overview of all the distinct groups of people he may know in University, be it friends,
+classmates or teaching staff. +
+
+Moreover, users would be able to refer to the bar of tags to easily type in other commands in the application
+(for example, finding contacts by tag, deleting and tag or editing a tag).
+It is a quick overview to all the tags that are present in UniFy, as well as which tags
+are present in the address book, but unused by any contact.
+
+=== Enhancement Added: Themes In UniFy and Theme Command in UniFy
+
+==== External behavior
+
+---
+#Start of Extract [from: User Guide]#
+
+include::../UserGuide.adoc[tag=theme]
+
+#End of Extract#
+
+---
+
+==== Justification
+
+Theming adds on to the User Experience by providing variety to the user interface.
+
+This enhancement lays on the groundwork for future CSS stylesheets to be added in the application.
 
 === Enhancements Proposed: Location Related Commands
 
@@ -68,6 +182,15 @@ person being viewed is deleted, modified (via edit or delete tag) or on address 
 * Modified or added to test to maintain or increase coverage
 (Pull request https://github.com/CS2103AUG2017-W09-B1/main/pull/12[#12])
 
-== Project:
-* Worked CP2106 Independent Software Development Project (Orbital)
-* Participated in Gamecraft 2016 hosted by NUS Game Development Group.
+=== Documentation Contributions (For CS2101 Use)
+
+==== Added short blurb before most features in User Guide
+
+---
+#Start of Extract [from: User Guide]#
+
+include::../UserGuide.adoc[tag=blurb]
+
+#End of Extract#
+
+---

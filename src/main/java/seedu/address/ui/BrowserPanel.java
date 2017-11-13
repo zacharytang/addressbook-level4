@@ -25,6 +25,8 @@ public class BrowserPanel extends UiPart<Region> {
     public static final String DEFAULT_PAGE = "default.html";
     public static final String GOOGLE_SEARCH_URL_PREFIX = "https://www.google.com.sg/search?safe=off&q=";
     public static final String GOOGLE_SEARCH_URL_SUFFIX = "&cad=h";
+    public static final String GOOGLE_MAPS_URL_PREFIX = "https://www.google.com.sg/maps/search/";
+    public static final String GOOGLE_MAPS_DIRECTIONS_URL_PREFIX = "https://www.google.com.sg/maps/dir/";
 
     private static final String FXML = "BrowserPanel.fxml";
 
@@ -43,13 +45,14 @@ public class BrowserPanel extends UiPart<Region> {
         registerAsAnEventHandler(this);
     }
 
+    //@@author nbriannl
     private void loadGoogleMap(ReadOnlyPerson person) {
-        loadPage("https://www.google.com.sg/maps/search/" + person.getAddress());
+        loadPage(GOOGLE_MAPS_URL_PREFIX + person.getAddress());
     }
 
-    //@@author nbriannl
+
     private void loadGoogleMapDirections(ReadOnlyPerson person, Address address) {
-        loadPage("https://www.google.com.sg/maps/dir/" + address.toString() + "/" + person.getAddress());
+        loadPage(GOOGLE_MAPS_DIRECTIONS_URL_PREFIX + address.toString() + "/" + person.getAddress());
     }
 
     //@@author
@@ -79,7 +82,6 @@ public class BrowserPanel extends UiPart<Region> {
         loadGoogleMap(event.person);
     }
 
-    //@@author nbriannl
     @Subscribe
     private void handlePersonAddressDisplayDirectionsEvent(PersonAddressDisplayDirectionsEvent event) {
         logger.info(LogsCenter.getEventHandlingLogMessage(event));
