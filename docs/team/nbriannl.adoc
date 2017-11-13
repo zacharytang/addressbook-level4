@@ -77,9 +77,9 @@ include::../UserGuide.adoc[tag=edittag]
 Editing a tag would be a common task a University Student would face.
 
 For example, he may have a clique of friends tagged as a particular module (e.g. CS2010). When all
-his friends follow him to another module (e.g. CS3230), he would like to edit all these contacts' 'CS2010'
+his friends follow him to another module (e.g. CS3230), he would like to edit all his contacts' 'CS2010'
 tag to 'CS3230'. He could edit each and every contact with a new set of tags, including the renamed tag, but it
-would be extremely inefficient. Hence, this feature would be essential for the application.
+would be extremely inefficient. Hence, this feature would be convenient and essential for the application.
 
 ==== Implementation
 
