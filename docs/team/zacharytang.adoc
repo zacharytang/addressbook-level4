@@ -64,7 +64,12 @@ include::../UserGuide.adoc[tag=fontsize]
 * UI: Updated footer to include number of persons (Pull request https://github.com/CS2103AUG2017-W09-B1/main/pull/14[#14])
 * Added aliases for commands (Pull request https://github.com/CS2103AUG2017-W09-B1/main/pull/13[#13],
  https://github.com/CS2103AUG2017-W09-B1/main/pull/2[#2])
-* Maintained project repo documentation (Pull request https://github.com/CS2103AUG2017-W09-B1/main/pull/15[#15],
+* Maintained tests (Pull request https://github.com/CS2103AUG2017-W09-B1/main/pull/218[#218],
+ https://github.com/CS2103AUG2017-W09-B1/main/pull/211[#211],
+ https://github.com/CS2103AUG2017-W09-B1/main/pull/181[#181])
+* Maintained project documentation (Pull request https://github.com/CS2103AUG2017-W09-B1/main/pull/262[#262],
+ https://github.com/CS2103AUG2017-W09-B1/main/pull/240[#240])
+* Maintained project repo page (Pull request https://github.com/CS2103AUG2017-W09-B1/main/pull/15[#15],
  https://github.com/CS2103AUG2017-W09-B1/main/pull/9[#9],
  https://github.com/CS2103AUG2017-W09-B1/main/pull/1[#1])
 
