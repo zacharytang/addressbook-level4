@@ -157,7 +157,7 @@ There are 2 themes currently implemented: DarkTheme.css and LightTheme.css
 Parameters: THEMEWORD +
             (Possible theme words are: dark, light) +
 Example: theme dark +
-         theme light +#
+         theme light#
 
 === DeleteCommand (Person)
 ==== Description/Data
