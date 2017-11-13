@@ -15,6 +15,8 @@ endif::[]
 By: `CS2103AUG2017-W09-B1`      Since: `AUG 2017`      Licence: `MIT`
 
 == Introduction
+
+//tag::intro[]
 Thank you for downloading **UniFy**! We're glad that you've chosen us to help you manage your hectic university life.
 
 **UniFy** is a personal assistant to your everyday life in NUS. It helps you maintain your numerous groups,
@@ -25,6 +27,7 @@ We know that time is precious for university students, so we made **UniFy** as s
 to use **UniFy**, no more searching for hidden buttons or navigating unfamiliar pages!
 
 Excited? Let's get started!
+// end::intro[]
 
 == Quick Start
 
@@ -155,7 +158,7 @@ Examples:
 // end::add[]
 
 // tag::photoCommand[]
-=== Adding/Deleting a Photo for a person : `photo` _(Since v1.4)_
+=== Adding/Deleting a Photo for a person : `photo` _(For WINDOWS System Since v1.4)_
 // tag::blurb[]
 ____
 _When you study too much, sometimes, you forget how someone looks like._
@@ -171,6 +174,7 @@ image::photo_command.png[width=790]
 _Figure 3.3 : Add your favourite photo of someone to their contact!_
 
 ****
+* For now, this command only works under WINDOWS Operating System.
 * Edits the photo of the person at the specified `INDEX`.
 * The photo path of the person will be updated.
 * When adding a photo to the person, the photo will be saved to the default folder.
@@ -699,6 +703,7 @@ Shows the central location among the persons most recently listed with Index 1, 
 Shows the central locaton among the persons tagged as 'jcfriends'.
 // end::locations[]
 
+
 === Sorting all persons : `sort` _(Coming in v2.0)_
 // tag::blurb[]
 ____
@@ -737,13 +742,17 @@ Adds 123456789 as a password.
 To clear the password set.
 // end::password[]
 
+=== Adding/Deleting a Photo for a person : `photo` _(For Linux and Mac System Coming in v2.0)_
+
+Allows the photoCommand to work under Linux and Mac Operating System.
+
 == Other features
 
 _Here are some features in UniFy that are not in the form of commands, but good to know to aid in your productivity._
 
 === Command Suggestion _(Since v1.5)_
 
-Typing a mispelled word for a command will trigger the address book to suggest the correct phrasing for that command
+Typing a misspelled word for a command will trigger the address book to suggest the correct phrasing for that command
 
 image::command_suggestion.png[width=600]
 _Figure 5.1 : Typing the command `delet` will make UniFy reply `Do you mean delete?`_
