@@ -7,9 +7,11 @@
 public class PersonSelectedEvent extends BaseEvent {
 
     public final ReadOnlyPerson person;
+    public final int index;
 
-    public PersonSelectedEvent(ReadOnlyPerson person) {
+    public PersonSelectedEvent(ReadOnlyPerson person, int index) {
         this.person = person;
+        this.index = index;
     }
 
     @Override
@@ -233,6 +235,7 @@ public class TimetableParserUtil {
         } catch (IOException e) {
             throw new ParseException("Url cannot be accessed");
         } catch (NoInternetConnectionException nice) {
+            // No internet connection, return empty timetable
             return new TimetableInfo();
         }
     }
@@ -251,6 +254,7 @@ public class TimetableParserUtil {
         String[] modInfo = toParse.split(SPLIT_QUESTION_MARK);
 
         if (modInfo.length != 2) {
+            // No lesson info in url, return empty timetable
             return new TimetableInfo();
         }
 
@@ -261,6 +265,7 @@ public class TimetableParserUtil {
         try {
             return constructTimetable(acadYear, semester, timetableInfo);
         } catch (JsonMappingException e) {
+            // Cannot retrieve info from NUSMODS API, return empty timetable
             return new TimetableInfo();
         }
     }
@@ -284,6 +289,7 @@ public class TimetableParserUtil {
             String classType = classInfo.split(SPLIT_LEFT_SQAURE_BRACKET)[1].split(SPLIT_RIGHT_SQUARE_BRACKET)[0];
             String classNo = classInfo.split(SPLIT_EQUALS_SIGN)[1];
 
+            // Add lesson to existing module information
             ModuleInfoFromUrl moduleInfo = modules.getModuleInfo(moduleCode);
             moduleInfo.addLesson(classType, classNo);
             modules.addModuleInfo(moduleInfo);
@@ -303,6 +309,7 @@ public class TimetableParserUtil {
         ObjectMapper mapper = new ObjectMapper();
 
         try {
+            // Grab lesson info from API and store as map
             URL url = new URL(uri);
             @SuppressWarnings("unchecked")
             Map<String, Object> mappedJson = mapper.readValue(url, HashMap.class);
@@ -310,6 +317,7 @@ public class TimetableParserUtil {
             ArrayList<HashMap<String, String>> lessonInfo = (ArrayList<HashMap<String, String>>)
                     mappedJson.get("Timetable");
 
+            // Parse info from API and creates arraylist of all lessons
             ArrayList<Lesson> lessons = new ArrayList<>();
             for (HashMap<String, String> lesson : lessonInfo) {
                 Lesson lessonToAdd = new Lesson(lesson.get("ClassNo"), lesson.get("LessonType"),
@@ -333,6 +341,8 @@ public class TimetableParserUtil {
         // open connection
         HttpURLConnection httpUrlConnection = (HttpURLConnection) url.openConnection(Proxy.NO_PROXY);
 
+        // Handle nusmods domain not being available
+        httpUrlConnection.setReadTimeout(500);
         // stop following browser redirect
         httpUrlConnection.setInstanceFollowRedirects(false);
 
@@ -363,7 +373,7 @@ public class TimetableParserUtil {
         ArrayList<ModuleInfoFromUrl> lessonInfoByModules = timetableInfo.getModuleInfoList();
 
         for (ModuleInfoFromUrl moduleInfoFromTimetable : lessonInfoByModules) {
-            constructTimetableForModule(acadYear, semester, timetable, moduleInfoFromTimetable);
+            addModuleToTimetable(acadYear, semester, timetable, moduleInfoFromTimetable);
         }
 
         return timetable;
@@ -377,15 +387,15 @@ public class TimetableParserUtil {
      * @param timetable timetable to be updated
      * @param moduleInfo lessons for a module parsed from url
      */
-    private static void constructTimetableForModule(String acadYear, String semester, TimetableInfo timetable,
-                                                    ModuleInfoFromUrl moduleInfo)
+    private static void addModuleToTimetable(String acadYear, String semester, TimetableInfo timetable,
+                                             ModuleInfoFromUrl moduleInfo)
             throws IllegalValueException, JsonMappingException {
         ArrayList<Lesson> lessons = getLessonInfoFromApi(acadYear, semester, moduleInfo.getModCode());
         HashMap<String, String> lessonsForModule = moduleInfo.getLessonInfo();
 
         for (String classType : lessonsForModule.keySet()) {
+            // Get all class type/number pairs and add to timetable
             String classNo = lessonsForModule.get(classType);
-
             addLessonToTimetable(timetable, lessons, classType, classNo);
         }
     }
@@ -517,12 +527,12 @@ public class TimetableCommand extends Command {
     public static final String COMMAND_ALIAS = "wf";
     public static final String COMMAND_SECONDARY = "timetable";
 
-    public static final String MESSAGE_USAGE = COMMAND_WORD
-            + ": Displays a combined timetable of persons, identified using their last displayed indexes\n"
+    public static final String MESSAGE_USAGE =  "| " + COMMAND_WORD + " |"
+            + ": Displays a combined timetable of persons, identified using their last displayed indexes.\n"
             + "Parameters: INDEX (must be positive integers)\n"
             + "Example: " + COMMAND_WORD + " 1\n"
-            + "         " + COMMAND_WORD + " 1, 2, 3\n"
-            + "         " + COMMAND_WORD + " 2 4";
+            + FORMAT_ALIGNMENT_TO_EXAMPLE + COMMAND_WORD + " 1, 2, 3\n"
+            + FORMAT_ALIGNMENT_TO_EXAMPLE + COMMAND_WORD + " 2 4";
 
     public static final String MESSAGE_DISPLAY_SUCCESS = "Displayed timetables: ";
 
@@ -536,14 +546,21 @@ public class TimetableCommand extends Command {
     public CommandResult execute() throws CommandException {
 
         List<ReadOnlyPerson> lastShownList = model.getFilteredPersonList();
-        List<ReadOnlyPerson> personsToDisplay = new ArrayList<>();
+        List<ReadOnlyPerson> personsToDisplay;
 
-        for (Index index : targetIndexes) {
-            if (index.getZeroBased() >= lastShownList.size()) {
-                throw new CommandException(Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX);
+        // If no indexes passed, display all persons listed
+        if (targetIndexes.size() == 0) {
+            personsToDisplay = model.getFilteredPersonList();
+        } else {
+            personsToDisplay = new ArrayList<>();
+
+            for (Index index : targetIndexes) {
+                if (index.getZeroBased() >= lastShownList.size()) {
+                    throw new CommandException(Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX);
+                }
+                ReadOnlyPerson personSelected = lastShownList.get(index.getZeroBased());
+                personsToDisplay.add(personSelected);
             }
-            ReadOnlyPerson personSelected = lastShownList.get(index.getZeroBased());
-            personsToDisplay.add(personSelected);
         }
 
         EventsCenter.getInstance().post(new TimetableDisplayEvent(personsToDisplay));
@@ -561,7 +578,7 @@ public class TimetableCommand extends Command {
         for (ReadOnlyPerson person : personList) {
             msg.append("[");
             msg.append(person.getName().toString());
-            msg.append("] ");
+            msg.append("]\n");
         }
 
         return msg.toString();
@@ -576,13 +593,15 @@ public class TimetableCommand extends Command {
  */
 public class TimetableCommandParser implements Parser<TimetableCommand> {
 
-    public static final String DISPLAY_ONE_PERSON_VALIDATION_REGEX = "-?\\d+";
+    private static final String DISPLAY_ONE_PERSON_VALIDATION_REGEX = "-?\\d+";
 
-    public static final String DISPLAY_MULTIPLE_PERSON_COMMA_VALIDATION_REGEX =
+    private static final String DISPLAY_MULTIPLE_PERSON_COMMA_VALIDATION_REGEX =
             "((-?\\d([\\s+]*)\\,([\\s+]*)(?=-?\\d))|-?\\d)+";
 
-    public static final String DISPLAY_MULTIPLE_PERSON_WHITESPACE_VALIDATION_REGEX =
+    private static final String DISPLAY_MULTIPLE_PERSON_WHITESPACE_VALIDATION_REGEX =
             "(((-?\\d)([\\s]+)(?=-?\\d))|-?\\d)+";
+
+    private static final String DISPLAY_ALL_LISTED_STRING = "";
 
     /**
      * Parses the given {@code String} of arguments in the context of the TimetableCommand
@@ -594,7 +613,12 @@ public class TimetableCommandParser implements Parser<TimetableCommand> {
 
         String preamble = ArgumentTokenizer.tokenize(args).getPreamble();
 
-        if (preamble.matches(DISPLAY_ONE_PERSON_VALIDATION_REGEX)) {
+        if (preamble.equals(DISPLAY_ALL_LISTED_STRING)) {
+            // No arguments passed, display all listed users
+            ArrayList<Index> indexList = new ArrayList<>();
+            return new TimetableCommand(indexList);
+        } else if (preamble.matches(DISPLAY_ONE_PERSON_VALIDATION_REGEX)) {
+            // Only one argument passed
             try {
                 ArrayList<Index> indexList = new ArrayList<>();
                 Index index = ParserUtil.parseIndex(args);
@@ -606,6 +630,7 @@ public class TimetableCommandParser implements Parser<TimetableCommand> {
                         String.format(MESSAGE_INVALID_COMMAND_FORMAT, TimetableCommand.MESSAGE_USAGE));
             }
         } else if (preamble.matches(DISPLAY_MULTIPLE_PERSON_COMMA_VALIDATION_REGEX)) {
+            // Multiple arguments passed in, separated by commas
             try {
                 ArrayList<Index> indexesList = ParserUtil.parseIndexes(args, ",");
                 return new TimetableCommand(indexesList);
@@ -614,6 +639,7 @@ public class TimetableCommandParser implements Parser<TimetableCommand> {
                         String.format(MESSAGE_INVALID_COMMAND_FORMAT, TimetableCommand.MESSAGE_USAGE));
             }
         } else if (preamble.matches(DISPLAY_MULTIPLE_PERSON_WHITESPACE_VALIDATION_REGEX)) {
+            // Multiple arguments passed in, separated by spaces
             try {
                 ArrayList<Index> indexesList = ParserUtil.parseIndexes(args, " ");
                 return new TimetableCommand(indexesList);
@@ -649,6 +675,7 @@ public class Timetable {
     public static final String MESSAGE_TIMETABLE_URL_CONSTRAINTS =
             "Timetable URLs should be a valid shortened NUSMods URL";
     public static final String MESSAGE_INVALID_SHORT_URL = "Invalid shortened URL provided";
+    public static final String EMPTY_TIMETABLE_STRING = "";
 
     public static final String[] ARRAY_DAYS = {
         "Monday",
@@ -680,12 +707,18 @@ public class Timetable {
     public Timetable(String url) throws IllegalValueException {
         requireNonNull(url);
         String trimmedUrl = url.trim();
-        if (trimmedUrl == "") {
-            trimmedUrl = "http://modsn.us/5tN3z";
+
+        // If no url provided, returns an empty timetable
+        if (trimmedUrl.equals(EMPTY_TIMETABLE_STRING)) {
+            this.value = EMPTY_TIMETABLE_STRING;
+            this.timetable = new TimetableInfo();
+            return;
         }
+
         if (!isValidUrl(trimmedUrl)) {
             throw new IllegalValueException(MESSAGE_TIMETABLE_URL_CONSTRAINTS);
         }
+
         this.value = trimmedUrl;
         this.timetable = parseUrl(trimmedUrl);
     }
@@ -973,20 +1006,6 @@ public class InfoPanel extends UiPart<Region> {
     }
 
     @Subscribe
-    public void handlePersonSelectedEvent(PersonSelectedEvent event) {
-        logger.info(LogsCenter.getEventHandlingLogMessage(event));
-
-        timetablePlaceholder.getChildren().removeAll();
-
-        ArrayList<Timetable> timetableToDisplay = new ArrayList<>();
-        timetableToDisplay.add(event.person.getTimetable());
-        timetableDisplay = new TimetableDisplay(timetableToDisplay);
-        timetablePlaceholder.getChildren().add(timetableDisplay.getRoot());
-
-        timetablePlaceholder.toFront();
-    }
-
-    @Subscribe
     public void handlePersonPanelSelectionChangeEvent(PersonPanelSelectionChangedEvent event) {
         logger.info(LogsCenter.getEventHandlingLogMessage(event));
 
@@ -994,6 +1013,20 @@ public class InfoPanel extends UiPart<Region> {
 
         ArrayList<Timetable> timetableToDisplay = new ArrayList<>();
         timetableToDisplay.add(event.getNewSelection().person.getTimetable());
+        timetableDisplay = new TimetableDisplay(timetableToDisplay);
+        timetablePlaceholder.getChildren().add(timetableDisplay.getRoot());
+
+        timetablePlaceholder.toFront();
+    }
+
+    @Subscribe
+    public void handlePersonSelectedEvent(PersonSelectedEvent event) {
+        logger.info(LogsCenter.getEventHandlingLogMessage(event));
+
+        timetablePlaceholder.getChildren().removeAll();
+
+        ArrayList<Timetable> timetableToDisplay = new ArrayList<>();
+        timetableToDisplay.add(event.person.getTimetable());
         timetableDisplay = new TimetableDisplay(timetableToDisplay);
         timetablePlaceholder.getChildren().add(timetableDisplay.getRoot());
 
@@ -1032,6 +1065,24 @@ public class InfoPanel extends UiPart<Region> {
 ```
 ###### \java\seedu\address\ui\PersonInfoPanel.java
 ``` java
+    @Subscribe
+    private void handlePersonAddressDisplayMapEvent(PersonAddressDisplayMapEvent event) {
+        logger.info(LogsCenter.getEventHandlingLogMessage(event));
+        loadPerson(event.person);
+    }
+
+    @Subscribe
+    private void handlePersonAddressDisplayDirectionsEvent(PersonAddressDisplayDirectionsEvent event) {
+        logger.info(LogsCenter.getEventHandlingLogMessage(event));
+        loadPerson(event.person);
+    }
+
+    @Subscribe
+    private void handlePersonPanelSelectionChangeEvent(PersonPanelSelectionChangedEvent event) {
+        logger.info(LogsCenter.getEventHandlingLogMessage(event));
+        loadPerson(event.getNewSelection().person);
+    }
+
     @Subscribe
     private void handlePersonSelectedEvent(PersonSelectedEvent event) {
         logger.info(LogsCenter.getEventHandlingLogMessage(event));
@@ -1080,6 +1131,7 @@ public class TimetableDisplay extends UiPart<Region> {
      * Populates the initialized grid with lessons according to timetables passed
      */
     private void fillTimetables() {
+        // If null passed into constructor, display empty timetable
         if (timetables == null) {
             return;
         }
@@ -1150,12 +1202,15 @@ public class TimetableDisplay extends UiPart<Region> {
 ###### \resources\view\DarkTheme.css
 ``` css
 .split-pane:horizontal .split-pane-divider {
-    -fx-background-color: #383838;
+    -fx-background-color: derive(#383838, 50%);
+    -fx-background-insets: 3;
     -fx-border-color: transparent transparent transparent transparent;
 }
 
+// horizontal divider above timetable
 .split-pane:vertical .split-pane-divider {
-    -fx-background-color: #383838;
+    -fx-background-color: derive(#383838, 50%);
+    -fx-background-insets: 3;
     -fx-border-color: transparent transparent transparent transparent;
 }
 
@@ -1283,12 +1338,15 @@ public class TimetableDisplay extends UiPart<Region> {
 ###### \resources\view\LightTheme.css
 ``` css
 .split-pane:horizontal .split-pane-divider {
-    -fx-background-color: #FAFAFA;
+    -fx-background-color: #E0E0E0;
+    -fx-background-insets: 3;
     -fx-border-color: transparent transparent transparent transparent;
 }
 
+// horizontal divider above timetable
 .split-pane:vertical .split-pane-divider {
-    -fx-background-color: #FAFAFA;
+    -fx-background-color: #E0E0E0;
+    -fx-background-insets: 3;
     -fx-border-color: transparent transparent transparent transparent;
 }
 
@@ -1408,13 +1466,13 @@ public class TimetableDisplay extends UiPart<Region> {
 ``` fxml
                 <StackPane fx:id="infoPlaceholder" styleClass="pane-with-border">
                     <padding>
-                        <Insets bottom="10" left="10" right="10" top="10"/>
+                        <Insets bottom="10" left="10" right="10" top="10" />
                     </padding>
                 </StackPane>
             </SplitPane>
         </AnchorPane>
     </HBox>
-    <StackPane fx:id="statusbarPlaceholder" VBox.vgrow="NEVER"/>
+    <StackPane fx:id="statusbarPlaceholder" VBox.vgrow="NEVER" />
 </VBox>
 ```
 ###### \resources\view\TimetableDisplay.fxml

@@ -55,14 +55,6 @@ public class TimetableParserUtilTest {
 ```
 ###### \java\seedu\address\logic\parser\AddCommandParserTest.java
 ``` java
-        // missing timetable prefix
-        assertParseFailure(parser, AddCommand.COMMAND_WORD + NAME_DESC_BOB + GENDER_DESC_BOB
-                + MATRIC_NO_DESC_BOB + PHONE_DESC_BOB + EMAIL_DESC_BOB + ADDRESS_DESC_BOB
-                + BIRTHDAY_DESC_BOB + VALID_TIMETABLE_BOB, expectedMessage);
-
-```
-###### \java\seedu\address\logic\parser\AddCommandParserTest.java
-``` java
         // invalid timetable
         assertParseFailure(parser, AddCommand.COMMAND_WORD + NAME_DESC_BOB + GENDER_DESC_BOB
                         + MATRIC_NO_DESC_BOB + PHONE_DESC_BOB + EMAIL_DESC_BOB + ADDRESS_DESC_BOB
@@ -295,14 +287,6 @@ public class TimetableTest {
                 + PHONE_DESC_AMY + EMAIL_DESC_AMY + ADDRESS_DESC_AMY
                 + BIRTHDAY_DESC_AMY + TIMETABLE_DESC_BOB + TAG_DESC_FRIEND;
         assertCommandSuccess(command, toAdd);
-
-```
-###### \java\systemtests\AddCommandSystemTest.java
-``` java
-        /* Case: missing timetable -> rejected */
-        command = AddCommand.COMMAND_WORD + NAME_DESC_AMY + GENDER_DESC_AMY + MATRIC_NO_DESC_AMY + PHONE_DESC_AMY
-                + EMAIL_DESC_AMY + ADDRESS_DESC_AMY + BIRTHDAY_DESC_AMY;
-        assertCommandFailure(command, String.format(MESSAGE_INVALID_COMMAND_FORMAT, AddCommand.MESSAGE_USAGE));
 
 ```
 ###### \java\systemtests\AddCommandSystemTest.java

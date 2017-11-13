@@ -1,4 +1,21 @@
 # nbriannl
+###### \java\seedu\address\commons\events\model\MasterTagListHasAnUnusedTagEvent.java
+``` java
+/** Indicates that the master tag list has an unused tag not used by any person*/
+public class MasterTagListHasAnUnusedTagEvent extends BaseEvent {
+
+    public final Set<Tag> outdatedTags;
+
+    public MasterTagListHasAnUnusedTagEvent (Set<Tag> outdatedTags) {
+        this.outdatedTags = outdatedTags;
+    }
+
+    @Override
+    public String toString() {
+        return "The tag list is outdated. With outdated tags: " + outdatedTags.toString();
+    }
+}
+```
 ###### \java\seedu\address\commons\events\model\PersonAddressDisplayDirectionsEvent.java
 ``` java
 /** Indicates a person's address as a map is to be displayed*/
@@ -6,10 +23,12 @@ public class PersonAddressDisplayDirectionsEvent extends BaseEvent {
 
     public final ReadOnlyPerson person;
     public final Address address;
+    public final int targetIndex;
 
-    public PersonAddressDisplayDirectionsEvent(ReadOnlyPerson person, Address address) {
+    public PersonAddressDisplayDirectionsEvent(ReadOnlyPerson person, Address address, int targetIndex) {
         this.person = person;
         this.address = address;
+        this.targetIndex = targetIndex;
     }
 
     @Override
@@ -25,9 +44,11 @@ public class PersonAddressDisplayDirectionsEvent extends BaseEvent {
 public class PersonAddressDisplayMapEvent extends BaseEvent {
 
     public final ReadOnlyPerson person;
+    public final int targetIndex;
 
-    public PersonAddressDisplayMapEvent (ReadOnlyPerson person) {
+    public PersonAddressDisplayMapEvent (ReadOnlyPerson person, int targetIndex) {
         this.person = person;
+        this.targetIndex = targetIndex;
     }
 
     @Override
@@ -88,21 +109,10 @@ public class PersonHasBeenModifiedEvent extends BaseEvent {
 ```
 ###### \java\seedu\address\logic\commands\DeleteCommand.java
 ``` java
-    @Override
-    public CommandResult executeUndoableCommand() throws CommandException {
-        // this code block is command execution for delete [indexes]
-        if (targetTags == null && targetIndexes != null) {
-            return getCommandResultForPerson();
-
-        } else { // this code block is command execution for delete t/[tag...]
-            return getCommandResultForTag();
-        }
-    }
-
-```
-###### \java\seedu\address\logic\commands\DeleteCommand.java
-``` java
-    private CommandResult getCommandResultForTag () throws CommandException {
+    /**
+     * Command execution of {@code DeleteCommand} for a {@code Tag}
+     */
+    private CommandResult executeCommandForTag () throws CommandException {
         ArrayList<Tag> arrayTags = new ArrayList<Tag>(targetTags);
         List<Tag> listOfExistingTags = model.getAddressBook().getTagList();
 
@@ -122,7 +132,40 @@ public class PersonHasBeenModifiedEvent extends BaseEvent {
             }
         }
 
-        return new CommandResult(MESSAGE_DELETE_TAG_SUCCESS);
+        return new CommandResult(generateResultMsgForTag(arrayTags));
+    }
+
+```
+###### \java\seedu\address\logic\commands\DeleteCommand.java
+``` java
+    /**
+     * Generates the command result String for Delete Command when deleting tags
+     */
+    public static String generateResultMsgForTag(ArrayList<Tag> arrayTags) {
+        int numOfTag = arrayTags.size();
+        StringBuilder formatBuilder = new StringBuilder();
+
+        if (numOfTag == 1) {
+            formatBuilder.append("Deleted Tag :\n");
+        } else {
+            formatBuilder.append("Deleted Tags :\n");
+        }
+
+        formatBuilder.append("[ ");
+
+        for (int i = 0; i < arrayTags.size(); i++) {
+            if (i == 0) {
+                formatBuilder.append(arrayTags.get(i).tagName);
+            } else {
+                formatBuilder.append(", " + arrayTags.get(i).tagName);
+            }
+        }
+
+        formatBuilder.append(" ]\n");
+
+        String resultMsg = formatBuilder.toString();
+
+        return resultMsg;
     }
 
 ```
@@ -168,39 +211,41 @@ public class PersonHasBeenModifiedEvent extends BaseEvent {
     @Override
     public CommandResult executeUndoableCommand() throws CommandException {
         if (isEditForPerson) {
-            List<ReadOnlyPerson> lastShownList = model.getFilteredPersonList();
-
-            if (index.getZeroBased() >= lastShownList.size()) {
-                throw new CommandException(Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX);
-            }
-
-            ReadOnlyPerson personToEdit = lastShownList.get(index.getZeroBased());
-            Person editedPerson = createEditedPerson(personToEdit, editPersonDescriptor);
-
-            try {
-                model.updatePerson(personToEdit, editedPerson);
-            } catch (DuplicatePersonException dpe) {
-                throw new CommandException(MESSAGE_DUPLICATE_PERSON);
-            } catch (PersonNotFoundException pnfe) {
-                throw new AssertionError("The target person cannot be missing");
-            }
-            model.updateFilteredPersonList(PREDICATE_SHOW_ALL_PERSONS);
-            return new CommandResult(String.format(MESSAGE_EDIT_PERSON_SUCCESS, editedPerson));
+            return executeCommandForPerson();
         } else {
-
-            try {
-                model.editTag(oldTag, newTag);
-            } catch (DuplicatePersonException dpe) {
-                throw new AssertionError("Updating the tags on one person cannot possibly make the person"
-                        + " identical to another person.");
-            } catch (PersonNotFoundException pnfe) {
-                throw new AssertionError("The target person cannot be missing");
-            } catch (TagNotFoundException tgne) {
-                throw new CommandException(MESSAGE_NONEXISTENT_TAG);
-            }
-            model.updateFilteredPersonList(PREDICATE_SHOW_ALL_PERSONS);
-            return new CommandResult(String.format(MESSAGE_EDIT_TAG_SUCCESS, oldTag));
+            return executeCommandForTag();
         }
+    }
+
+```
+###### \java\seedu\address\logic\commands\EditCommand.java
+``` java
+    /**
+     * Command execution of {@code EditCommand} for a {@code Tag}
+     */
+    private CommandResult executeCommandForTag () throws CommandException {
+        try {
+            model.editTag(oldTag, newTag);
+        } catch (DuplicatePersonException dpe) {
+            throw new AssertionError("Updating the tags on one person cannot possibly make the person"
+                    + " identical to another person.");
+        } catch (PersonNotFoundException pnfe) {
+            throw new AssertionError("The target person cannot be missing");
+        } catch (TagNotFoundException tgne) {
+            throw new CommandException(MESSAGE_NONEXISTENT_TAG);
+        }
+        model.updateFilteredPersonList(PREDICATE_SHOW_ALL_PERSONS);
+        return new CommandResult(generateResultMsgForTag(oldTag, newTag));
+    }
+
+```
+###### \java\seedu\address\logic\commands\EditCommand.java
+``` java
+    /**
+     * Generates the command result String for Edit Command when editing tags
+     */
+    public static String generateResultMsgForTag(Tag oldTag, Tag newTag) {
+        return "Edited Tag:\n" + "From '" + oldTag.tagName + "' to '" + newTag.tagName + "'";
     }
 
 ```
@@ -245,15 +290,17 @@ public class GMapsCommand extends Command {
     public static final String COMMAND_SECONDARY_ONE = "map";
     public static final String COMMAND_SECONDARY_TWO = "maps";
 
-    public static final String MESSAGE_USAGE = COMMAND_WORD
+    public static final String MESSAGE_USAGE = "| " + COMMAND_WORD + " |"
             + ": Opens a Google Maps view of a person’s address.\n"
-            + " If you specify an address, you can find directions from the address to that person's address.\n"
+            + FORMAT_ALIGNMENT_TO_GMAPS
+            + " If an address is specified, shows the directions from the address to that person's address.\n"
             + "Format: " + COMMAND_WORD + " INDEX [a/ADDRESS]\n"
             + "Example: " + COMMAND_WORD + " 1 \n"
-            + "         " + COMMAND_WORD + " 1 a/Blk 123, Yishun 75";
+            + FORMAT_ALIGNMENT_TO_EXAMPLE + COMMAND_WORD + " 1 a/Blk 123, Yishun 75";
 
-    public static final String MESSAGE_SELECT_PERSON_SUCCESS = "Showing Map View of %1$s 's address";
+    public static final String MESSAGE_SELECT_PERSON_SUCCESS = "Showing Map View of %1$s's address";
     public static final String MESSAGE_DIRECTIONS_TO_PERSON_SUCCESS = "Showing directions to %1$s";
+    public static final String MESSAGE_PERSON_HAS_NO_ADDRESS = "%1$s has no address!";
 
     private final Index targetIndex;
     private final Address targetAddress;
@@ -272,17 +319,17 @@ public class GMapsCommand extends Command {
         }
 
         ReadOnlyPerson personToShowMap = lastShownList.get(targetIndex.getZeroBased());
-
-        if (targetAddress != null) {
-            model.showDirectionsTo(personToShowMap, targetAddress);
-            return new CommandResult(String.format(MESSAGE_DIRECTIONS_TO_PERSON_SUCCESS, personToShowMap.getName()));
-        } else {
-            model.showMapOf(personToShowMap);
-            return new CommandResult(String.format(MESSAGE_SELECT_PERSON_SUCCESS, personToShowMap.getName()));
+        if (personToShowMap.getAddress().toString().equals("")) {
+            throw new CommandException(String.format(MESSAGE_PERSON_HAS_NO_ADDRESS, personToShowMap.getName()));
         }
 
-
-
+        if (targetAddress != null) {
+            model.showDirectionsTo(personToShowMap, targetAddress, targetIndex);
+            return new CommandResult(String.format(MESSAGE_DIRECTIONS_TO_PERSON_SUCCESS, personToShowMap.getName()));
+        } else {
+            model.showMapOf(personToShowMap, targetIndex);
+            return new CommandResult(String.format(MESSAGE_SELECT_PERSON_SUCCESS, personToShowMap.getName()));
+        }
     }
 
     @Override
@@ -306,9 +353,105 @@ public class GMapsCommand extends Command {
     }
 }
 ```
+###### \java\seedu\address\logic\commands\ThemeCommand.java
+``` java
+/**
+ * Changes the theme to the theme indicated
+ */
+public class ThemeCommand extends UndoableCommand {
+
+    public static final String COMMAND_WORD = "theme";
+    public static final String COMMAND_ALIAS = "th";
+    public static final String COMMAND_SECONDARY = "changetheme";
+
+    public static final String MESSAGE_USAGE = "| " + COMMAND_WORD + " |"
+            + ": Changes the theme to the specified theme word.\n"
+            + "Parameters: THEMEWORD\n"
+            + FORMAT_ALIGNMENT_TO_PARAMETERS + "(Possible theme words are: dark, light)\n"
+            + "Example: " + COMMAND_WORD + " dark\n"
+            + FORMAT_ALIGNMENT_TO_EXAMPLE + COMMAND_WORD + " light";
+
+    public static final String MESSAGE_SUCCESS = "Theme switched: %1$s";
+    public static final String VIEW_PATH = "/view/";
+
+    private final String themeKeyword;
+
+    /**
+     * Creates an AddCommand to add the specified {@code ReadOnlyPerson}
+     */
+    public ThemeCommand (String themeKeyword) {
+        this.themeKeyword = themeKeyword;
+    }
+
+    @Override
+    public CommandResult executeUndoableCommand() throws CommandException {
+        requireNonNull(model);
+
+        String themeToSwitch;
+        String currentTheme = model.getCurrentTheme();
+
+        HashMap<String, String> themes = model.getThemeMap();
+
+        if (themes.containsKey(themeKeyword)) {
+            themeToSwitch = themes.get(themeKeyword);
+        } else {
+            throw new CommandException(Messages.MESSAGE_THEME_NOT_FOUND);
+        }
+
+        if (currentTheme.equals(VIEW_PATH + themeToSwitch)) {
+            throw new CommandException(Messages.MESSAGE_ALREADY_IN_THEME);
+        }
+
+        EventsCenter.getInstance().post(new ChangeThemeRequestEvent(themeToSwitch));
+
+        return new CommandResult(String.format(MESSAGE_SUCCESS, themeToSwitch));
+    }
+
+    @Override
+    public boolean equals(Object other) {
+        return other == this // short circuit if same object
+                || (other instanceof ThemeCommand // instanceof handles nulls
+                && themeKeyword.equals(((ThemeCommand) other).themeKeyword));
+    }
+}
+```
 ###### \java\seedu\address\logic\parser\DeleteCommandParser.java
 ``` java
-    private DeleteCommand getDeleteCommandForTags (ArgumentMultimap argMultimap) throws ParseException {
+    /**
+     * Parses the arguments of the delete command.
+     * @return an DeleteCommand object for execution
+     * @throws ParseException if the user input does not conform the expected format.
+     */
+    public DeleteCommand parse(String args) throws ParseException {
+        ArgumentMultimap argMultimap = ArgumentTokenizer.tokenize(args, PREFIX_TAG);
+        String preamble = argMultimap.getPreamble();
+        if (preamble.equals("")) {
+            // there exists 't/'
+            DeleteCommand deleteCommandForTag = parseForTags(argMultimap);
+            if (deleteCommandForTag != null) {
+                return deleteCommandForTag;
+            }
+        } else {
+            DeleteCommand deleteCommandForPerson = parseForPersonIndexes(args, preamble);
+            if (deleteCommandForPerson != null) {
+                return deleteCommandForPerson;
+            }
+        }
+
+        throw new ParseException(
+                String.format(MESSAGE_INVALID_COMMAND_FORMAT, DeleteCommand.MESSAGE_USAGE));
+    }
+
+```
+###### \java\seedu\address\logic\parser\DeleteCommandParser.java
+``` java
+    /**
+     * Parses the {@code Tags} contained within {@code argMultimap} to return
+     * a DeleteCommand object that executes a delete for Tags.
+     * @throws ParseException if the values mapped as a tag does not conform as a valid tag
+     * @see #parse(String)
+     */
+    private DeleteCommand parseForTags (ArgumentMultimap argMultimap) throws ParseException {
         try {
             if (arePrefixesPresent(argMultimap, PREFIX_TAG)) {
                 Set<Tag> tagList = ParserUtil.parseTags(argMultimap.getAllValues(PREFIX_TAG));
@@ -319,6 +462,51 @@ public class GMapsCommand extends Command {
                     String.format(MESSAGE_INVALID_COMMAND_FORMAT, DeleteCommand.MESSAGE_USAGE));
         }
         return null;
+    }
+
+```
+###### \java\seedu\address\logic\parser\EditCommandParser.java
+``` java
+    /**
+     * Parses the given {@code String} of arguments in the context of the EditCommand
+     * and returns an EditCommand object for execution.
+     * @throws ParseException if the user input does not conform the expected format
+     */
+    public EditCommand parse(String args) throws ParseException {
+        requireNonNull(args);
+        ArgumentMultimap argsMultimap =
+                ArgumentTokenizer.tokenize(args, PREFIX_NAME, PREFIX_GENDER, PREFIX_MATRIC_NO,
+                        PREFIX_PHONE, PREFIX_EMAIL, PREFIX_ADDRESS, PREFIX_TIMETABLE, PREFIX_TAG,
+                        PREFIX_OLD_TAG, PREFIX_NEW_TAG, PREFIX_BIRTHDAY);
+        String preamble = argsMultimap.getPreamble();
+
+        if (preamble.matches("")) {
+            return parseForTags(argsMultimap);
+        } else if (preamble.matches("\\d+")) {
+            return parseForPersonDetails(argsMultimap);
+        }
+
+        throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, EditCommand.MESSAGE_USAGE));
+    }
+
+    /**
+     * Parses the old {@code Tag} and new {@code Tag} contained within {@code argMultimap} to return
+     * a EditCommand object that executes a edit for Tag
+     * @throws ParseException if the values mapped as a old or new tag does not conform as a valid tag
+     * @see #parse(String)
+     */
+    private EditCommand parseForTags (ArgumentMultimap argsMultimap) throws ParseException {
+        if (!arePrefixesPresent(argsMultimap, PREFIX_NEW_TAG, PREFIX_OLD_TAG)) {
+            throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, EditCommand.MESSAGE_USAGE));
+        }
+
+        try {
+            Tag oldTag = ParserUtil.parseSingleTag(argsMultimap.getValue(PREFIX_OLD_TAG)).get();
+            Tag newTag = ParserUtil.parseSingleTag(argsMultimap.getValue(PREFIX_NEW_TAG)).get();
+            return new EditCommand(oldTag, newTag);
+        } catch (IllegalValueException ive) {
+            throw new ParseException(ive.getMessage(), ive);
+        }
     }
 
 ```
@@ -355,6 +543,11 @@ public class GMapsCommandParser implements Parser<GMapsCommand> {
             }
         }
 
+        if (address != null && address.toString().equals("")) {
+            throw new ParseException(Address.MESSAGE_ADDRESS_CONSTRAINTS,
+                    new IllegalValueException(Address.MESSAGE_ADDRESS_CONSTRAINTS));
+        }
+
         return new GMapsCommand(index, address);
     }
 
@@ -382,9 +575,8 @@ public class GMapsCommandParser implements Parser<GMapsCommand> {
 ```
 ###### \java\seedu\address\logic\parser\ThemeCommandParser.java
 ``` java
-
 /**
- * Parses input arguments and creates a new GMapsCommand object
+ * Parses input arguments and creates a new ThemeCommand object
  */
 public class ThemeCommandParser implements Parser<ThemeCommand> {
 
@@ -436,8 +628,8 @@ public class ThemeCommandParser implements Parser<ThemeCommand> {
      * Initialises the themes in the address book.
      */
     private void initialiseThemes() {
-        themes.put("dark", "DarkTheme.css");
         themes.put("light", "LightTheme.css");
+        themes.put("dark", "DarkTheme.css");
     }
 
     HashMap<String, String> getThemeMap () {
@@ -448,10 +640,10 @@ public class ThemeCommandParser implements Parser<ThemeCommand> {
 ###### \java\seedu\address\model\Model.java
 ``` java
     /** Show map of the given person **/
-    void showMapOf(ReadOnlyPerson person);
+    void showMapOf(ReadOnlyPerson person, Index index);
 
     /** Show direction to the given person from a given address **/
-    void showDirectionsTo(ReadOnlyPerson target, Address address);
+    void showDirectionsTo(ReadOnlyPerson target, Address address, Index index);
 
 ```
 ###### \java\seedu\address\model\Model.java
@@ -504,18 +696,16 @@ public class ThemeCommandParser implements Parser<ThemeCommand> {
 ###### \java\seedu\address\model\ModelManager.java
 ``` java
     @Override
-    public void showMapOf(ReadOnlyPerson person) {
-        raise(new PersonSelectedEvent(person));
-        raise(new PersonAddressDisplayMapEvent(person));
+    public void showMapOf(ReadOnlyPerson person, Index index) {
+        raise(new PersonAddressDisplayMapEvent(person, index.getZeroBased()));
     }
 
 ```
 ###### \java\seedu\address\model\ModelManager.java
 ``` java
     @Override
-    public void showDirectionsTo(ReadOnlyPerson target, Address address) {
-        raise(new PersonSelectedEvent(target));
-        raise(new PersonAddressDisplayDirectionsEvent(target, address));
+    public void showDirectionsTo(ReadOnlyPerson target, Address address, Index index) {
+        raise(new PersonAddressDisplayDirectionsEvent(target, address, index.getZeroBased()));
     }
 
 ```
@@ -525,8 +715,9 @@ public class ThemeCommandParser implements Parser<ThemeCommand> {
     public synchronized void deleteTag(Tag tag) throws DuplicatePersonException, PersonNotFoundException,
             TagNotFoundException {
         addressBook.removeTag(tag);
-        for (int i = 0; i < addressBook.getPersonList().size(); i++) {
-            ReadOnlyPerson oldPerson = addressBook.getPersonList().get(i);
+        ObservableList<ReadOnlyPerson> personList = addressBook.getPersonList();
+        for (int i = 0; i < personList.size(); i++) {
+            ReadOnlyPerson oldPerson = personList.get(i);
 
             Person newPerson = new Person(oldPerson);
             Set<Tag> newTags = new HashSet<Tag>(newPerson.getTags());
@@ -545,8 +736,9 @@ public class ThemeCommandParser implements Parser<ThemeCommand> {
     public void editTag(Tag oldTag, Tag newTag) throws DuplicatePersonException, PersonNotFoundException,
             TagNotFoundException {
         addressBook.removeTag(oldTag);
-        for (int i = 0; i < addressBook.getPersonList().size(); i++) {
-            ReadOnlyPerson oldPerson = addressBook.getPersonList().get(i);
+        ObservableList<ReadOnlyPerson> personList = addressBook.getPersonList();
+        for (int i = 0; i < personList.size(); i++) {
+            ReadOnlyPerson oldPerson = personList.get(i);
 
             Person newPerson = new Person(oldPerson);
             Set<Tag> newTags = new HashSet<Tag>(newPerson.getTags());
@@ -567,10 +759,154 @@ public class ThemeCommandParser implements Parser<ThemeCommand> {
     }
 
 ```
+###### \java\seedu\address\model\ModelManager.java
+``` java
+    @Override
+    public HashMap<String, String> getThemeMap () {
+        return this.addressBook.getThemeMap();
+    }
+
+    @Override
+    public void setCurrentTheme(String theme) {
+        currentTheme = theme;
+    }
+
+    @Override
+    public String getCurrentTheme() {
+        return currentTheme;
+    }
+```
+###### \java\seedu\address\model\person\Birthday.java
+``` java
+    /**
+     * Formats the unformatted input birthday string into dd/mm/yyyy and
+     * @return the formatted String
+     */
+    public static String formatDate (String unformatted) {
+        if (unformatted.equals("")) {
+            return "";
+        }
+        DateFormat withoutFormat = new SimpleDateFormat("ddmmyyyy");
+        DateFormat withFormat = new SimpleDateFormat("dd/mm/yyyy");
+        Date intermediateDate;
+        try {
+            intermediateDate = withoutFormat.parse(unformatted);
+            String newDateString = withFormat.format(intermediateDate);
+            return newDateString;
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return "";
+    }
+
+    /**
+     * Removes the format from the date attribute
+     * @return the unformatted String as {@code ddmmyyyy}
+     */
+    public String getUnformattedDate () {
+        if (date.equals("")) {
+            return "";
+        }
+        DateFormat withFormat = new SimpleDateFormat("dd/mm/yyyy");
+        DateFormat withoutFormat = new SimpleDateFormat("ddmmyyyy");
+        Date intermediateDate;
+        try {
+            intermediateDate = withFormat.parse(date);
+            String newDateString = withoutFormat.format(intermediateDate);
+            return newDateString;
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return "";
+    }
+
+```
+###### \java\seedu\address\model\tag\Tag.java
+``` java
+/**
+ * Represents a Tag in the address book.
+ * Guarantees: immutable; name is valid as declared in {@link #isValidTagName(String)}
+ */
+public class Tag {
+
+    public static final String MESSAGE_TAG_CONSTRAINTS = "Tags names should be alphanumeric, and should not be blank";
+    public static final String TAG_VALIDATION_REGEX = "\\p{Alnum}+";
+    public static final int TAG_ACCEPTABLE_LENGTH = 25;
+
+    public final String tagName;
+
+    /**
+     * Validates given tag name.
+     *
+     * @throws IllegalValueException if the given tag name string is invalid.
+     */
+    public Tag(String name) throws IllegalValueException {
+        requireNonNull(name);
+        String trimmedName = name.trim();
+        if (!isValidTagName(trimmedName)) {
+            throw new IllegalValueException(MESSAGE_TAG_CONSTRAINTS);
+        }
+        if (!isAcceptableTagLength(trimmedName)) {
+            throw new IllegalValueException(generateExceptionMessageForLongTag(trimmedName));
+        }
+        this.tagName = trimmedName;
+    }
+
+    /**
+     * Returns true if a given string is a valid tag name.
+     */
+    public static boolean isValidTagName(String test) {
+        return test.matches(TAG_VALIDATION_REGEX);
+    }
+
+    /**
+     * Returns true if a valid tag name is too long.
+     */
+    public static boolean isAcceptableTagLength(String test) {
+        return test.length() < TAG_ACCEPTABLE_LENGTH;
+    }
+
+    /**
+     * Generates the exception message when trying to create a tag which is too long
+     */
+    public static String generateExceptionMessageForLongTag(String longTag) {
+        return "The tag: " + longTag + " is too long!\n"
+                + "Consider adding a remark instead?\n"
+                + "Example: remark INDEX r/" + longTag + "\n"
+                + "\n"
+                + RemarkCommand.MESSAGE_USAGE;
+    }
+
+    @Override
+    public boolean equals(Object other) {
+        return other == this // short circuit if same object
+                || (other instanceof Tag // instanceof handles nulls
+                && this.tagName.equals(((Tag) other).tagName)); // state check
+    }
+
+    @Override
+    public int hashCode() {
+        return tagName.hashCode();
+    }
+
+    /**
+     * Format state as text for viewing.
+     */
+    public String toString() {
+        return '[' + tagName + ']';
+    }
+
+}
+```
 ###### \java\seedu\address\ui\BrowserPanel.java
 ``` java
+    private void loadGoogleMap(ReadOnlyPerson person) {
+        loadPage(GOOGLE_MAPS_URL_PREFIX + person.getAddress());
+    }
+
+
     private void loadGoogleMapDirections(ReadOnlyPerson person, Address address) {
-        loadPage("https://www.google.com.sg/maps/dir/" + address.toString() + "/" + person.getAddress());
+        loadPage(GOOGLE_MAPS_DIRECTIONS_URL_PREFIX + address.toString() + "/" + person.getAddress());
     }
 
 ```
@@ -582,13 +918,142 @@ public class ThemeCommandParser implements Parser<ThemeCommand> {
         loadGoogleMap(event.person);
     }
 
-```
-###### \java\seedu\address\ui\BrowserPanel.java
-``` java
     @Subscribe
     private void handlePersonAddressDisplayDirectionsEvent(PersonAddressDisplayDirectionsEvent event) {
         logger.info(LogsCenter.getEventHandlingLogMessage(event));
         loadGoogleMapDirections(event.person, event.address);
+    }
+}
+```
+###### \java\seedu\address\ui\MainWindow.java
+``` java
+    /**
+     * Fills up all the placeholders of this window.
+     */
+    void fillInnerParts() {
+        infoPanel = new InfoPanel();
+        infoPlaceholder.getChildren().add(infoPanel.getRoot());
+
+        personInfoPanel = new PersonInfoPanel();
+        personInfoPlaceholder.getChildren().add(personInfoPanel.getRoot());
+
+        personListPanel = new PersonListPanel(logic.getFilteredPersonList());
+        personListPanelPlaceholder.getChildren().add(personListPanel.getRoot());
+
+        tagListPanel = new TagListPanel(logic.getTagList());
+        tagListPanelPlaceholder.getChildren().add(tagListPanel.getRoot());
+        logic.checkAllMasterListTagsAreBeingUsed();
+
+        ResultDisplay resultDisplay = new ResultDisplay();
+        resultDisplayPlaceholder.getChildren().add(resultDisplay.getRoot());
+
+        StatusBarFooter statusBarFooter = new StatusBarFooter(prefs.getAddressBookFilePath(),
+                logic.getFilteredPersonList().size());
+        statusbarPlaceholder.getChildren().add(statusBarFooter.getRoot());
+
+        CommandBox commandBox = new CommandBox(logic);
+        commandBoxPlaceholder.getChildren().add(commandBox.getRoot());
+    }
+
+    void hide() {
+        primaryStage.hide();
+    }
+
+    private void setTitle(String appTitle) {
+        primaryStage.setTitle(appTitle);
+    }
+
+    /**
+     * Sets the given image as the icon of the main window.
+     * @param iconSource e.g. {@code "/images/help_icon.png"}
+     */
+    private void setIcon(String iconSource) {
+        FxViewUtil.setStageIcon(primaryStage, iconSource);
+    }
+
+    /**
+     * Sets the default size based on user preferences.
+     */
+    private void setWindowDefaultSize(UserPrefs prefs) {
+        primaryStage.setHeight(prefs.getGuiSettings().getWindowHeight());
+        primaryStage.setWidth(prefs.getGuiSettings().getWindowWidth());
+        if (prefs.getGuiSettings().getWindowCoordinates() != null) {
+            primaryStage.setX(prefs.getGuiSettings().getWindowCoordinates().getX());
+            primaryStage.setY(prefs.getGuiSettings().getWindowCoordinates().getY());
+        }
+    }
+
+    private void setWindowMinSize() {
+        primaryStage.setMinHeight(MIN_HEIGHT);
+        primaryStage.setMinWidth(MIN_WIDTH);
+    }
+
+    /**
+     * Returns the current size and the position of the main Window.
+     */
+    GuiSettings getCurrentGuiSetting() {
+        return new GuiSettings(primaryStage.getWidth(), primaryStage.getHeight(),
+                (int) primaryStage.getX(), (int) primaryStage.getY());
+    }
+
+    /**
+     * Opens the help window.
+     */
+    @FXML
+    public void handleHelp() {
+        HelpWindow helpWindow = new HelpWindow();
+        helpWindow.show();
+    }
+
+    /**
+     * Changes the current theme to the given theme.
+     */
+    public void handleChangeTheme(String theme) {
+        if (getRoot().getStylesheets().size() > 1) {
+            getRoot().getStylesheets().remove(1);
+        }
+        getRoot().getStylesheets().add(VIEW_PATH + theme);
+    }
+
+    private void setWindowDefaultTheme(UserPrefs prefs) {
+        getRoot().getStylesheets().add(prefs.getCurrentTheme());
+    }
+
+    String getCurrentTheme() {
+        return getRoot().getStylesheets().get(1);
+    }
+
+    void show() {
+        primaryStage.show();
+    }
+
+    /**
+     * Closes the application.
+     */
+    @FXML
+    private void handleExit() {
+        raise(new ExitAppRequestEvent());
+    }
+
+    public PersonListPanel getPersonListPanel() {
+        return this.personListPanel;
+    }
+
+    void releaseResources() {
+        infoPanel.freeResources();
+    }
+
+    @Subscribe
+    private void handleShowHelpEvent(ShowHelpRequestEvent event) {
+        logger.info(LogsCenter.getEventHandlingLogMessage(event));
+        handleHelp();
+    }
+
+    @Subscribe
+    private void handleChangeThemeEvent(ChangeThemeRequestEvent event) {
+        logger.info(LogsCenter.getEventHandlingLogMessage(event));
+        handleChangeTheme(event.themeToChangeTo);
+        logic.setCurrentTheme(getCurrentTheme());
     }
 }
 ```
@@ -642,7 +1107,7 @@ public class ThemeCommandParser implements Parser<ThemeCommand> {
             loadDefaultPerson();
         }
     }
-
+}
 ```
 ###### \java\seedu\address\ui\TagColorMap.java
 ``` java
@@ -658,6 +1123,9 @@ public class TagColorMap {
     private static int colorIndex = 0;
 
     private HashMap<String, String> tagColors = new HashMap<String, String>();
+
+    private TagColorMap() {
+    }
 
     public static TagColorMap getInstance() {
         if (instance == null) {
@@ -683,174 +1151,10 @@ public class TagColorMap {
 ```
 ###### \resources\view\DarkTheme.css
 ``` css
-.background {
-    -fx-background-color: #383838;
-    background-color: #383838; /* Used in the default.html file */
-}
-
-// affects the tags
-.label {
-    -fx-font-size: 11pt;
-    -fx-font-family: "Segoe UI Semibold";
-    -fx-text-fill: #555555;
-    -fx-opacity: 0.9;
-}
-
-.label-bright {
-    -fx-font-size: 11pt;
-    -fx-font-family: "Segoe UI Semibold";
-    -fx-text-fill: white;
-    -fx-opacity: 1;
-}
-
-.label-header {
-    -fx-font-size: 32pt;
-    -fx-font-family: "Segoe UI Light";
-    -fx-text-fill: white;
-    -fx-opacity: 1;
-}
-
-.text-field {
-    -fx-font-size: 12pt;
-    -fx-font-family: "Segoe UI Semibold";
-}
-
-.tab-pane {
-    -fx-padding: 0 0 0 1;
-}
-
-.tab-pane .tab-header-area {
-    -fx-padding: 0 0 0 0;
-    -fx-min-height: 0;
-    -fx-max-height: 0;
-}
-
-.table-view {
-    -fx-base: #1d1d1d;
-    -fx-control-inner-background: #1d1d1d;
-    -fx-background-color: #1d1d1d;
-    -fx-table-cell-border-color: transparent;
-    -fx-table-header-border-color: transparent;
-    -fx-padding: 5;
-}
-
-.table-view .column-header-background {
-    -fx-background-color: transparent;
-}
-
-.table-view .column-header, .table-view .filler {
-    -fx-size: 35;
-    -fx-border-width: 0 0 1 0;
-    -fx-background-color: transparent;
-    -fx-border-color:
-        transparent
-        transparent
-        derive(-fx-base, 80%)
-        transparent;
-    -fx-border-insets: 0 10 1 0;
-}
-
-.table-view .column-header .label {
-    -fx-font-size: 20pt;
-    -fx-font-family: "Segoe UI Light";
-    -fx-text-fill: white;
-    -fx-alignment: center-left;
-    -fx-opacity: 1;
-}
-
-.table-view:focused .table-row-cell:filled:focused:selected {
-    -fx-background-color: -fx-focus-color;
-}
-
-```
-###### \resources\view\DarkTheme.css
-``` css
 .list-view {
     -fx-background-insets: 0;
     -fx-padding: 0;
     -fx-background-color: #383838;
-}
-
-```
-###### \resources\view\LightTheme.css
-``` css
-.background {
-    -fx-background-color: #FAFAFA;
-    background-color: #FAFAFA; /* Used in the default.html file */
-}
-
-// affects the tags
-.label {
-    -fx-font-size: 11pt;
-    -fx-font-family: "Segoe UI Semibold";
-    -fx-text-fill: #555555;
-    -fx-opacity: 0.9;
-}
-
-.label-bright {
-    -fx-font-size: 11pt;
-    -fx-font-family: "Segoe UI Semibold";
-    -fx-text-fill: #232323;
-    -fx-opacity: 1;
-}
-
-.label-header {
-    -fx-font-size: 32pt;
-    -fx-font-family: "Segoe UI Light";
-    -fx-text-fill: #232323;
-    -fx-opacity: 1;
-}
-
-.text-field {
-    -fx-font-size: 12pt;
-    -fx-font-family: "Segoe UI Semibold";
-}
-
-.tab-pane {
-    -fx-padding: 0 0 0 1;
-}
-
-.tab-pane .tab-header-area {
-    -fx-padding: 0 0 0 0;
-    -fx-min-height: 0;
-    -fx-max-height: 0;
-}
-
-.table-view {
-    -fx-base: #1d1d1d;
-    -fx-control-inner-background: #1d1d1d;
-    -fx-background-color: #1d1d1d;
-    -fx-table-cell-border-color: transparent;
-    -fx-table-header-border-color: transparent;
-    -fx-padding: 5;
-}
-
-.table-view .column-header-background {
-    -fx-background-color: transparent;
-}
-
-.table-view .column-header, .table-view .filler {
-    -fx-size: 35;
-    -fx-border-width: 0 0 1 0;
-    -fx-background-color: transparent;
-    -fx-border-color:
-        transparent
-        transparent
-        derive(-fx-base, 80%)
-        transparent;
-    -fx-border-insets: 0 10 1 0;
-}
-
-.table-view .column-header .label {
-    -fx-font-size: 20pt;
-    -fx-font-family: "Segoe UI Light";
-    -fx-text-fill: #232323;
-    -fx-alignment: center-left;
-    -fx-opacity: 1;
-}
-
-.table-view:focused .table-row-cell:filled:focused:selected {
-    -fx-background-color: -fx-focus-color;
 }
 
 ```
@@ -865,38 +1169,18 @@ public class TagColorMap {
 ```
 ###### \resources\view\MainWindow.fxml
 ``` fxml
-                        <StackPane fx:id="tagListPanelPlaceholder" maxHeight="80.0" minHeight="20.0" prefHeight="40.0"
-                                   prefWidth="549.0" styleClass="pane-with-border">
-                            <padding>
-                                <Insets bottom="5" left="10" right="10" top="5"/>
-                            </padding>
+                        <StackPane fx:id="tagListPanelPlaceholder" alignment="TOP_CENTER" styleClass="pane-with-border">
+                     <padding>
+                        <Insets bottom="10.0" left="10.0" right="10.0" />
+                     </padding>
                         </StackPane>
-                        <StackPane fx:id="personInfoPlaceholder" VBox.vgrow="ALWAYS">
-                            <padding>
-                                <Insets left="10" right="5" top="5"/>
-                            </padding>
-                        </StackPane>
+                        <StackPane fx:id="personInfoPlaceholder" VBox.vgrow="ALWAYS" />
 
                     </VBox>
-                    <VBox minWidth="200" prefWidth="323.0">
-
-                        <StackPane fx:id="commandBoxPlaceholder" minWidth="100" prefWidth="305.0"
-                                   styleClass="pane-with-border">
-                            <padding>
-                                <Insets bottom="5" left="10" right="10" top="5"/>
-                            </padding>
-                        </StackPane>
-                        <StackPane fx:id="resultDisplayPlaceholder" minWidth="100" prefWidth="320.0"
-                                   styleClass="pane-with-border" VBox.vgrow="ALWAYS">
-                            <padding>
-                                <Insets bottom="5" left="10" right="10" top="5"/>
-                            </padding>
-                        </StackPane>
-                    </VBox>
-                </SplitPane>
 ```
 ###### \resources\view\TagListPanel.fxml
 ``` fxml
+
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.FlowPane?>
@@ -909,7 +1193,7 @@ public class TagColorMap {
     <columnConstraints>
       <ColumnConstraints hgrow="SOMETIMES" minWidth="10" prefWidth="150" />
     </columnConstraints>
-    <VBox alignment="CENTER_LEFT" minHeight="105" GridPane.columnIndex="0">
+    <VBox alignment="CENTER_LEFT" GridPane.columnIndex="0">
       <padding>
         <Insets bottom="5" left="15" right="5" top="5" />
       </padding>
