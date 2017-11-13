@@ -139,5 +139,16 @@ include::../UserGuide.adoc[tag=v2.0]
 
 ---
 
+Edited the You Language and consistency
+
+---
+#Start of Extract [from: Developer Guide]#
+
+include::../DeveloperGuide.adoc[tag=you]
+
+#End of Extract#
+
+---
+
 == Project:
 * Worked CP2106 Independent Software Development Project (Orbital)
