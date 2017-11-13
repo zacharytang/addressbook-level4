@@ -91,7 +91,7 @@ public class ModelManager extends ComponentManager implements Model {
         raise(new AddressBookChangedEvent(addressBook));
     }
 
-    //author@@ nbriannl
+    //@@author nbriannl
     /** Raises an event to indicate a tag in the master list of tags is unused*/
     private void indicateMasterTagListHasAnUnusedTag () {
         raise(new MasterTagListHasAnUnusedTagEvent(addressBook.getUnusedTags()));
@@ -131,7 +131,7 @@ public class ModelManager extends ComponentManager implements Model {
     }
     //@@author
 
-    //author@@ nbriannl
+    //@@author nbriannl
     @Override
     public void checkMasterTagListHasAllTagsUsed () {
         if (!addressBook.hasAllTagsInUse()) {

@@ -52,7 +52,7 @@ public class LogicManager extends ComponentManager implements Logic {
         return model.getFilteredPersonList();
     }
 
-    //author@@ nbriannl
+    //@@author nbriannl
     @Override
     public ObservableList<Tag> getTagList() {
         return model.getAddressBook().getTagList();
@@ -68,7 +68,7 @@ public class LogicManager extends ComponentManager implements Logic {
         model.setCurrentTheme(theme);
     }
 
-    //author@@
+    //@@author
     @Override
     public ListElementPointer getHistorySnapshot() {
         return new ListElementPointer(history.getHistory());
