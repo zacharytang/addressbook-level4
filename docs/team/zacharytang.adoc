@@ -7,8 +7,8 @@ ifdef::env-github,env-browser[:outfilesuffix: .adoc]
 UniFy is a desktop Address Book application for University students, particularly those from NUS (National University of Singapore).
 
 The user is able to manage the many people he meets in University, keep track of his friends' Birthdays, view his friend’s timetables, and much more.
-Most of the user interactions are via CLI, while there exists a GUI created with JavaFX. It is written in Java and has
-about 6kLoC.
+Most of the user interactions are via a command line interface, while there exists a graphic user interface created with JavaFX. It is written in Java and has
+about 8kLoC.
 
 The source code is based on the  https://github.com/se-edu/addressbook-level4[AddressBook-Level4] project created by SE-EDU initiative.
 
@@ -16,6 +16,12 @@ The source code is based on the  https://github.com/se-edu/addressbook-level4[Ad
 [https://github.com/CS2103AUG2017-W09-B1/main/blob/master/collated/test/zacharytang.md[Test code]] +
 
 === Enhancement Added: Timetable Features
+
+Covers features relating to the saving of a person's timetables, and displaying of timetable information
+
+**Code implemented**: Pull requests https://github.com/CS2103AUG2017-W09-B1/main/pull/54[#54],
+https://github.com/CS2103AUG2017-W09-B1/main/pull/98[#98],
+https://github.com/CS2103AUG2017-W09-B1/main/pull/129[#129]
 
 ==== External behavior
 
