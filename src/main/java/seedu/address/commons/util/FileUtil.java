@@ -17,12 +17,9 @@ import java.util.Arrays;
  * Writes and reads files
  */
 public class FileUtil {
-
-    private static final String REGEX_VALID_IMAGE = "([^\\s]+(\\.(?i)(jpg|jpeg|png|gif|bmp))$)";
-    private static final String CHARSET = "UTF-8";
-
-
     //@@author April0616
+    public static final String REGEX_VALID_IMAGE = "([^\\s]+(\\.(?i)(jpg|jpeg|png|gif|bmp))$)";
+    private static final String CHARSET = "UTF-8";
     /**
      * Checks whether the file is a valid image file.
      * A valid image file should have extension "jpg", "jpeg", "png", "gif" or "bmp".

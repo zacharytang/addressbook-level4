@@ -3,6 +3,7 @@ package seedu.address.logic.commands;
 import static java.util.Objects.requireNonNull;
 import static seedu.address.commons.core.MessageAlignmentFormatter.FORMAT_ALIGNMENT_TO_EXAMPLE;
 import static seedu.address.commons.core.MessageAlignmentFormatter.FORMAT_ALIGNMENT_TO_PARAMETERS;
+import static seedu.address.commons.util.FileUtil.REGEX_VALID_IMAGE;
 import static seedu.address.commons.util.FileUtil.copyFile;
 import static seedu.address.commons.util.FileUtil.createIfMissing;
 import static seedu.address.commons.util.FileUtil.getFileExtension;
@@ -58,9 +59,11 @@ public class PhotoCommand extends UndoableCommand {
             "Photo Path should be the absolute path of a valid file in your PC. It should be a string started "
                     + "with the name of your disk, "
                     + "followed by several groups of backslash and string, like \"c:\\desktop\\happy.jpg\","
-                    + "and the file should exist.";
+                    + "and the file should exist.\n"
+                    + "The valid photo extensions are 'jpg', 'jpeg', 'png', 'gif' or 'bmp'.\n";
 
-    public static final String REGEX_LOCAL_PHOTOPATH_VALIDATION = "([a-zA-Z]:)?(\\\\[a-zA-Z0-9_.-]+)+\\\\?";
+    public static final String REGEX_LOCAL_PHOTOPATH_VALIDATION =
+            "([a-zA-Z]:)?(\\\\[a-zA-Z0-9_.-]+)+\\\\?" + REGEX_VALID_IMAGE;
 
     public static final String PATH_FILE_SAVED_PARENT_DIRECTORY = "src/main/resources/images/contactPhotos/";
     public static final String PATH_DEFAULT_PHOTO = "src/main/resources/images/defaultPhoto.jpg";
