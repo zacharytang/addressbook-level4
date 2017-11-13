@@ -432,16 +432,15 @@ From 'Arts' to 'Friend'#
 *Result Message:*  +
 [red]#The specified old tag does not exist#
 
-=== PhotoCommand
+=== PhotoCommand (For WINDOWS System only)
 ==== Description/Data
 PhotoCommand is to add the photo to your specified contact.
+This command only works with WINDOWS Operating System in v1.5.
 
 ==== Before Test PhotoCommand
-Windows System: Right click on one picture file, click `Properties`
+Right click on one picture file, click `Properties`
 and copy the file path in the `location:` field.
 It should be an absolute file path in your computer, like "C:\selfie\bg.jpg".
-
-Mac/Linux System: The valid absolute file path.
 
 ==== Steps To Execute And Expected Results
 *Type in:* photo +
