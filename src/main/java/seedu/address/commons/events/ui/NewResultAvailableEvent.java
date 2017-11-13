@@ -10,12 +10,13 @@ public class NewResultAvailableEvent extends BaseEvent {
     public final String message;
     public final boolean isError;
 
-    //@@author CindyTsai1-reused
+    //@@author CindyTsai1
     public NewResultAvailableEvent(String message, boolean isError) {
         this.message = message;
         this.isError = isError;
     }
 
+    //@@author
     @Override
     public String toString() {
         return this.getClass().getSimpleName();

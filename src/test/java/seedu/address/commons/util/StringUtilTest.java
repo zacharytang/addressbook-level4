@@ -79,6 +79,7 @@ public class StringUtilTest {
                 Optional.of("Word parameter cannot be empty"));
     }
 
+    //@@author CindyTsai1
     @Test
     public void containsWordIgnoreCase_nullSentence_throwsNullPointerException() {
         assertExceptionThrown(NullPointerException.class, null, "abc", Optional.empty());
@@ -126,6 +127,7 @@ public class StringUtilTest {
 
     }
 
+    //@@author
     //---------------- Tests for getDetails --------------------------------------
 
     /*

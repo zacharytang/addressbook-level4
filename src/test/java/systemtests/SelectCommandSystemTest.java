@@ -27,9 +27,11 @@ public class SelectCommandSystemTest extends AddressBookSystemTest {
         String command = "   " + SelectCommand.COMMAND_WORD + " " + INDEX_FIRST_PERSON.getOneBased() + "   ";
         assertCommandSuccess(command, INDEX_FIRST_PERSON);
 
+        //@@author CindyTsai1
         /* Case: mixed case command word -> rejected */
         assertCommandSuccess("SeLeCt 1", INDEX_FIRST_PERSON);
 
+        //@@author
         /* Case: select the first card in the person list using alias, command with leading spaces and trailing spaces
          * -> selected
          */
@@ -114,10 +116,12 @@ public class SelectCommandSystemTest extends AddressBookSystemTest {
         assertCommandFailure(SelectCommand.COMMAND_WORD + " " + INDEX_FIRST_PERSON.getOneBased(),
                 MESSAGE_INVALID_PERSON_DISPLAYED_INDEX);
 
+        //@@author CindyTsai1
         /* Case: invalid keyword -> suggested */
         assertCommandFailure("salect", String.format(SuggestCommand.MESSAGE_SUCCESS, "select"));
     }
 
+    //@@author
     /**
      * Executes {@code command} and verifies that the command box displays an empty string, the result display
      * box displays the success message of executing select command with the {@code expectedSelectedCardIndex}
