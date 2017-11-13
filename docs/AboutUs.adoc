@@ -12,7 +12,8 @@ We are a team based in the http://www.comp.nus.edu.sg[School of Computing, Natio
 
 === Fan Yuting
 image::yuting.JPG[width="150", align="left"]
-{empty}[https://github.com/April0616[github]] [<<April0616#, portfolio>>]
+{empty}[https://github.com/April0616[github]]
+{empty}[https://github.com/CS2103AUG2017-W09-B1/main/blob/master/docs/team/April0616.adoc[portfolio]]
 
 Role: Developer +
 Responsibilities: UI
@@ -21,7 +22,8 @@ Responsibilities: UI
 
 === Labayna Neil Brian Narido
 image::nbriannl.jpg[width="150", align="left"]
-{empty}[http://github.com/nbriannl[github]] [<<nbriannl#, portfolio>>]
+{empty}[http://github.com/nbriannl[github]]
+{empty}[https://github.com/CS2103AUG2017-W09-B1/main/blob/master/docs/team/nbriannl.adoc[Portfolio]]
 
 Role: Developer +
 Responsibilities: Model
@@ -30,7 +32,8 @@ Responsibilities: Model
 
 === Tsai Yu Hsuan
 image::cindytsai1.jpg[width="150", align="left"]
-{empty}[http://github.com/CindyTsai1[github]] [<<CindyTsai1#, portfolio>>]
+{empty}[http://github.com/CindyTsai1[github]]
+{empty}[https://github.com/CS2103AUG2017-W09-B1/main/blob/master/docs/team/cindytsai1.adoc[Portfolio]]
 
 Role: Developer +
 Responsibilities: Storage
@@ -39,7 +42,8 @@ Responsibilities: Storage
 
 === Zachary Tang
 image::zacharytang.jpg[width="150", align="left"]
-{empty}[https://github.com/zacharytang[github]] [<<johndoe#, portfolio>>]
+{empty}[https://github.com/zacharytang[github]]
+{empty}[https://github.com/CS2103AUG2017-W09-B1/main/blob/master/docs/team/zacharytang.adoc[Portfolio]]
 
 Role: Developer +
 Responsibilities: Logic

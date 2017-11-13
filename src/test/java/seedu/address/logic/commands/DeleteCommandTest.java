@@ -48,7 +48,6 @@ public class DeleteCommandTest {
 
         assertCommandSuccess(deleteCommand, model, expectedMessage, expectedModel);
     }
-    //@@author
 
     //@@author nbriannl
     @Test
