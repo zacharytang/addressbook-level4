@@ -13,6 +13,37 @@ It is written in Java, and has about 10 kLoC.
 
 *Code contributed*: [https://github.com/CS2103AUG2017-W09-B1/main/blob/master/collated/main/April0616.md[Functional code]] [https://github.com/CS2103AUG2017-W09-B1/main/blob/master/collated/test/April0616.md[Test code]] {give links to collated code files}
 
+=== Enhancement Added: PhotoCommand
+
+==== External behavior
+
+---
+#Start of Extract [from: User Guide]#
+
+include::../UserGuide.adoc[tag=photoCommand]
+
+#End of Extract#
+
+---
+
+==== Justification
+
+PhotoCommand is useful as it can remind the user of what his contacts look like.
+Users can easily assign photos to their contacts by specifying the unique photo path in their computers.
+Also, the display picture of a contact can be easily changed or deleted by the PhotoCommand.
+
+==== Implementation
+
+(Pull requests https://github.com/CS2103AUG2017-W09-B1/main/pull/96[#96], https://github.com/CS2103AUG2017-W09-B1/main/pull/150[#150])
+
+---
+#Start of Extract [from: Developer Guide]#
+
+include::../DeveloperGuide.adoc[tag=photoCommand]
+
+#End of Extract#
+
+---
 
 === Enhancement Added: RemarkCommand
 
