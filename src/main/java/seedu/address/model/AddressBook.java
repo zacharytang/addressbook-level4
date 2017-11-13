@@ -2,8 +2,8 @@ package seedu.address.model;
 
 import static java.util.Objects.requireNonNull;
 import static seedu.address.commons.util.FileUtil.removeAppFile;
-import static seedu.address.logic.commands.PhotoCommand.DEFAULT_PHOTO_PATH;
-import static seedu.address.logic.commands.PhotoCommand.FILE_SAVED_PARENT_PATH;
+import static seedu.address.logic.commands.PhotoCommand.PATH_DEFAULT_PHOTO;
+import static seedu.address.logic.commands.PhotoCommand.PATH_FILE_SAVED_PARENT_DIRECTORY;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -209,14 +209,17 @@ public class AddressBook implements ReadOnlyAddressBook {
 
 
     //@@author April0616
-
+    /**
+     * Sets a list of photo paths to the address book.
+     * @param photoPaths
+     * @throws DuplicatePhotoPathException if an equivalent photo path already exists.
+     */
     public void setPhotoPaths(List<PhotoPath> photoPaths) throws DuplicatePhotoPathException {
         this.photoPaths.setPhotoPaths(photoPaths);
     }
 
     /**
-     * Adds a photopath to the address book.
-     *
+     * Adds a new photo path to the address book.
      * @throws DuplicatePhotoPathException if an equivalent photo path already exists.
      */
     public void addPhotoPath(PhotoPath newPhotoPath) throws DuplicatePhotoPathException {
@@ -225,7 +228,7 @@ public class AddressBook implements ReadOnlyAddressBook {
 
     /**
      * Checks if the master list {@link #photoPaths} has every photo path being used.
-     *  @return true if all photo paths in the master list are being used
+     * @return true if all photo paths in the master list are being used
      */
     public boolean hasAllPhotoPathsInUse () {
         List<PhotoPath> masterList = new ArrayList<>();
@@ -263,6 +266,7 @@ public class AddressBook implements ReadOnlyAddressBook {
         for (PhotoPath unusedPhotoPath : unusedPhotoPathList) {
             removeContactPhoto(unusedPhotoPath);
             this.photoPaths.remove(unusedPhotoPath);
+
             logger.info("Delete photo and its path: " + unusedPhotoPath);
         }
     }
@@ -272,7 +276,7 @@ public class AddressBook implements ReadOnlyAddressBook {
      * address book and delete the empty paths.
      */
     public void updatePhotoPathSavedInMasterList() {
-        final File folder = new File(FILE_SAVED_PARENT_PATH);
+        final File folder = new File(PATH_FILE_SAVED_PARENT_DIRECTORY);
         if (!folder.exists()) {
             return;
         }
@@ -284,7 +288,7 @@ public class AddressBook implements ReadOnlyAddressBook {
 
         for (File photo : folder.listFiles()) {
             try {
-                //covert the photo path string to standard format in the app
+                // covert the photo path string to standard format in the app
                 String photoPathString = photo.getPath().replace("\\", "/");
                 PhotoPath thisPhotoPath = new PhotoPath(photoPathString);
 
@@ -296,7 +300,7 @@ public class AddressBook implements ReadOnlyAddressBook {
             }
         }
 
-        //delete empty path in the master list
+        // delete empty path in the master list
         for (PhotoPath photoPath : this.photoPaths) {
             if (photoPath.value.equals("")) {
                 try {
@@ -313,20 +317,20 @@ public class AddressBook implements ReadOnlyAddressBook {
 
     /**
      * Removes the photo of the specified contact.
-     * @param photoPath
+     * @param photoPath of the photo to be removed
      */
     public void removeContactPhoto(PhotoPath photoPath) {
         removeAppFile(photoPath.value);
     }
 
     /**
-     * Check whether the contact photo is the default photo
+     * Checks whether the contact photo is the default photo
      * @param photoPath of the photo
      * @return true if the photo is the default photo
      */
     public static boolean isDefaultPhoto(PhotoPath photoPath) {
         String photoPathValue = photoPath.value;
-        return photoPathValue.equals(DEFAULT_PHOTO_PATH);
+        return photoPathValue.equals(PATH_DEFAULT_PHOTO);
     }
 
     /**

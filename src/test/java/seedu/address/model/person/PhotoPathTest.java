@@ -36,7 +36,7 @@ public class PhotoPathTest {
     @Ignore
     @Test
     public void equals() throws IllegalValueException {
-        String parentPath = FILE_SAVED_PARENT_PATH;
+        String parentPath = PATH_FILE_SAVED_PARENT_DIRECTORY;
         //PhotoPath validPhotoPath_1 = new PhotoPath(parentPath + "1234.jpg");
         //PhotoPath validPhotoPath_2 = new PhotoPath(parentPath + "5678.jpg");
 

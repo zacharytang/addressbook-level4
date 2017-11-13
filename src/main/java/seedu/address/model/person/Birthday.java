@@ -17,7 +17,7 @@ import seedu.address.commons.exceptions.IllegalValueException;
 public class Birthday {
 
     public static final String MESSAGE_BIRTHDAY_CONSTRAINTS =
-            "Person's birthday should be in the format of DDMMYYYY, and it should not be blank";
+            "Person's birthday should be in the format of DDMMYYYY";
     public static final String MESSAGE_BIRTHDAY_INVALID =
             "This date does not exist.";
 

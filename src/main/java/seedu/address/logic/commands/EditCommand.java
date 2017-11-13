@@ -177,8 +177,10 @@ public class EditCommand extends UndoableCommand {
 
     //@@author April0616
     /**
-     * Creates and returns a {@code Person} with the details of {@code personToEdit}
-     * edited with {@code editPersonDescriptor}.
+     * Creates a new person object with the details of the person to be edited.
+     * Be edited with {@param editPersonDescriptor}.
+     * @param personToEdit the person to be edited
+     * @return the created person object
      */
     private static Person createEditedPerson(ReadOnlyPerson personToEdit,
                                              EditPersonDescriptor editPersonDescriptor) {
@@ -283,18 +285,34 @@ public class EditCommand extends UndoableCommand {
         }
 
         //@@author April0616
+        /**
+         * Sets the details of the gender to edit the person with.
+         * @param gender
+         */
         public void setGender(Gender gender) {
             this.gender = gender;
         }
 
+        /**
+         * Gets the details of the gender to edit the person with.
+         * @return gender if the gender is specified
+         */
         public Optional<Gender> getGender() {
             return Optional.ofNullable(gender);
         }
 
+        /**
+         * Sets the details of the matriculation number to edit the person with.
+         * @param matricNo
+         */
         public void setMatricNo(MatricNo matricNo) {
             this.matricNo = matricNo;
         }
 
+        /**
+         * Gets the details of the matriculation number to edit the person with.
+         * @return matriculation number if it is specified
+         */
         public Optional<MatricNo> getMatricNo() {
             return Optional.ofNullable(matricNo);
         }
