@@ -5,12 +5,12 @@ ifdef::env-github,env-browser[:outfilesuffix: .adoc]
 
 == Purpose
 
-This project portfolio documents the software experience I have in the module
-CS2103/T (Software Engineering).
+This project portfolio documents the software experience I have in the module CS2103/T (Software Engineering).
 
 A section titled 'Documentation Contributions (For CS2101 Use)' contains *additional*
-documentation contribution I would like the evaluators in CS2101 (Effective Communication for Computing Professionals) to take note of.
-It is *not* for CS2103/T.
+documentation contribution I would like the evaluators in CS2101 (Effective Communication for Computing Professionals) to
+take additional note of.
+It is *not* for CS2103/T use.
 
 == Project: UniFy
 UniFy is a desktop Address Book application for University students, particularly those from NUS (National University of Singapore).
@@ -19,7 +19,7 @@ The user is able to manage the many people he meets in University, keep track of
 Most of the user interactions are via Command Line Interface, while there exists a Graphical User Interface created with JavaFX. It is written in Java and has
 about 8kLoC.
 
-The source code is based on the  https://github.com/se-edu/addressbook-level4[AddressBook-Level4] project created by SE-EDU initiative.
+The source code is based on the https://github.com/se-edu/addressbook-level4[AddressBook-Level4] project created by SE-EDU initiative.
 
 *Code contributed*: [https://github.com/CS2103AUG2017-W09-B1/main/blob/master/collated/main/nbriannl.md[Functional code]]
 [https://github.com/CS2103AUG2017-W09-B1/main/blob/master/collated/test/nbriannl.md[Test code]] +
@@ -43,8 +43,7 @@ Deleting a common tag present in multiple contact is tedious, therefore being ab
 as an essential feature by a busy University student seeking efficiency.
 
 For example, a University Student, who wants to delete an irrelevant tag (such as 'ProjectGroupMate', when a project is completed),
-would
-want to delete the tag from every contact containing that tag. It would be very inefficient for him
+would want to delete the tag from every contact containing that tag. It would be very inefficient for him
 to find all his contacts with that tag, and edit each and every contact with a new set of tags, which excludes the
 tag to be deleted.
 
@@ -111,8 +110,8 @@ The target user, the NUS university student, would find himself wanting to meet 
 or for group projects. If the meet up location is at the house of one of his friends, he would be able to use the application
 to easily search for the location since he may have stored the friend's address in the application.
 
-Furthermore, if he is at some location, for example, at school, and would like to find the directions to his friend's house.
-He is able to quickly type a command to get direction to his friend's house from his location.
+Furthermore, if he is at some location, for example, at school, and would like to find the directions to his friend's house,
+he is able to quickly type a command to get directions to his friend's house from his location.
 
 === Enhancement Added: Tag Bar
 
@@ -131,7 +130,7 @@ include::../UserGuide.adoc[tag=tagbar]
 
 Being able to see all tags that exist in the address book has many benefits to the User Experience. +
 
-It is a useful overview of all the distinct groups of people he may know in University, be it friends,
+It is a useful overview of all the distinct groups of people he may want to he know he has in University, be it friends,
 classmates or teaching staff. +
 
 Moreover, users would be able to refer to the bar of tags to easily type in other commands in the application
@@ -154,7 +153,7 @@ include::../UserGuide.adoc[tag=theme]
 
 ==== Justification
 
-Theming adds on to the User Experience by providing variety to the user interface.
+The 2 themes and the Theme Command adds on to the User Experience by providing variety to the user interface.
 
 This enhancement lays on the groundwork for future CSS stylesheets to be added in the application.
 
@@ -169,16 +168,31 @@ include::../UserGuide.adoc[tag=locations]
 
 ---
 
+=== Pull Requests References For The Above Features
+
+* Delete Tag: (Pull requests https://github.com/CS2103AUG2017-W09-B1/main/pull/5[#5], https://github.com/CS2103AUG2017-W09-B1/main/pull/12[#12])
+* Edit Tag: (Pull request https://github.com/CS2103AUG2017-W09-B1/main/pull/69[#69])
+* GMaps Command: (Pull request https://github.com/CS2103AUG2017-W09-B1/main/pull/74[#74])
+* Tag Bar: (Pull requests https://github.com/CS2103AUG2017-W09-B1/main/pull/88[#88], https://github.com/CS2103AUG2017-W09-B1/main/pull/152[#152],)
+* Themes and Theme Command: (Pull request https://github.com/CS2103AUG2017-W09-B1/main/pull/134[#134])
+
 === Other contributions
 
-* Edit Tag (Pull request https://github.com/CS2103AUG2017-W09-B1/main/pull/69[#69])
-* GMaps Command (Pull request https://github.com/CS2103AUG2017-W09-B1/main/pull/74[#74])
-* UI: Added a Tag List Bar (Pull request https://github.com/CS2103AUG2017-W09-B1/main/pull/88[#88])
-* UI: Added Theme Switching and did 2 stylesheets
-(Pull requests https://github.com/CS2103AUG2017-W09-B1/main/pull/134[#134],
-https://github.com/CS2103AUG2017-W09-B1/main/pull/134[#138])
-* Fixed Person Info Panel (Pull request https://github.com/CS2103AUG2017-W09-B1/main/pull/134[#133]) to respond if current
-person being viewed is deleted, modified (via edit or delete tag) or on address book clear.
+* Fixed White Screen Bug (Trivial Fix, shared by peers): (Pull request https://github.com/CS2103AUG2017-W09-B1/main/pull/75[#75])
+* Major Edit Pass for User Guide (Audience-centric Language): (Pull request https://github.com/CS2103AUG2017-W09-B1/main/pull/81[#81])
+* Fix response of Person Overview to GMapsCommand: (Pull request https://github.com/CS2103AUG2017-W09-B1/main/pull/135[#135])
+* Minor UI Adjustments: (Pull request https://github.com/CS2103AUG2017-W09-B1/main/pull/138[#138])
+* Standardized Color Across All Tags in UI Using a Singleton class TagColorMap: (Pull request https://github.com/CS2103AUG2017-W09-B1/main/pull/143[#143])
+* Fixed Person Info Panel (Pull request https://github.com/CS2103AUG2017-W09-B1/main/pull/147[#147])
+* Various Fixes For Final v1.5 Product
+** UI: (Pull requests https://github.com/CS2103AUG2017-W09-B1/main/pull/183[#183], https://github.com/CS2103AUG2017-W09-B1/main/pull/185[#185],
+https://github.com/CS2103AUG2017-W09-B1/main/pull/209[#209], https://github.com/CS2103AUG2017-W09-B1/main/pull/225[#225])
+** Delete Tag: (Pull request: https://github.com/CS2103AUG2017-W09-B1/main/pull/219[#219])
+** Birthday Attribute: (Pull requests: https://github.com/CS2103AUG2017-W09-B1/main/pull/220[#220], https://github.com/CS2103AUG2017-W09-B1/main/pull/234[#234],)
+** Edit Tag: (Pull request: https://github.com/CS2103AUG2017-W09-B1/main/pull/227[#227])
+** Prompt Remark on too long a tag: (Pull request: https://github.com/CS2103AUG2017-W09-B1/main/pull/229[#229])
+** Updated SampleData for Manual Testing: (Pull request: https://github.com/CS2103AUG2017-W09-B1/main/pull/237[#237])
+** GMaps Command: (Pull request https://github.com/CS2103AUG2017-W09-B1/main/pull/239[#239])
 * Modified or added to test to maintain or increase coverage
 (Pull request https://github.com/CS2103AUG2017-W09-B1/main/pull/12[#12])
 
