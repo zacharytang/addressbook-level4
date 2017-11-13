@@ -1,8 +1,8 @@
 package seedu.address.model.photo;
 
 import static java.util.Objects.requireNonNull;
-import static seedu.address.commons.util.FileUtil.hasFileExtension;
 import static seedu.address.commons.util.FileUtil.isInFolder;
+import static seedu.address.commons.util.FileUtil.isValidImageFile;
 
 import seedu.address.commons.exceptions.IllegalValueException;
 
@@ -16,8 +16,8 @@ public class PhotoPath {
     public static final String MESSAGE_APP_PHOTOPATH_CONSTRAINTS =
             "The app photo path should be a string starting with '"
                     + FILE_SAVED_PARENT_PATH
-                    + "', following by the file name, like'photo.jpg'.";
-
+                    + "', following by the file name with a valid extension, like'photo.jpg'.\n"
+                    + "The valid extensions are 'jpg', 'jpeg', 'png', 'gif' or 'bmp'.";
 
     public final String value;
 
@@ -43,10 +43,10 @@ public class PhotoPath {
             //empty photo path
             return true;
         }
-        Boolean hasFileExtension = hasFileExtension(photoPath);
+        Boolean isValidImage = isValidImageFile(photoPath);
         Boolean isInDefaultFolder = isInFolder(photoPath, FILE_SAVED_PARENT_PATH);
 
-        return  isInDefaultFolder && hasFileExtension;
+        return  isInDefaultFolder && isValidImage;
     }
 
     @Override

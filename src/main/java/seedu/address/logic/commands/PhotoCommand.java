@@ -42,6 +42,7 @@ public class PhotoCommand extends UndoableCommand {
     public static final String MESSAGE_USAGE = "| " + COMMAND_WORD + " |"
             + ": Adds a photo to the person identified by the index number used in the last person listing"
             + "by specifying the path of the photo.\n"
+            + "The valid photo extensions are 'jpg', 'jpeg', 'png', 'gif' or 'bmp'.\n"
             + "If the path field is empty, the old photo path is removed for the person.\n"
             + "Parameters: INDEX " + PREFIX_PHOTO + "[PHOTO PATH] \n"
             + FORMAT_ALIGNMENT_TO_PARAMETERS + "(INDEX must be a positive integer)\n"
@@ -160,7 +161,7 @@ public class PhotoCommand extends UndoableCommand {
         model.updateFilteredPersonList(PREDICATE_SHOW_ALL_PERSONS);
 
         EventsCenter.getInstance().post(new PersonSelectedEvent(photoedPerson, targetIndex.getZeroBased()));
-        return new CommandResult(generateSuccessMsg(photoedPerson));
+        return new CommandResult(generateSuccessMsg(personToPhoto));
     }
 
     /**

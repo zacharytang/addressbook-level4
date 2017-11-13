@@ -18,18 +18,19 @@ import java.util.Arrays;
  */
 public class FileUtil {
 
-    public static final String REGEX_DOT = "\\.";
+    private static final String REGEX_VALID_IMAGE = "([^\\s]+(\\.(?i)(jpg|jpeg|png|gif|bmp))$)";
     private static final String CHARSET = "UTF-8";
+
 
     //@@author April0616
     /**
-     * Checks whether the name of the file has extension.
-     * @param filePath of the file
+     * Checks whether the file is a valid image file.
+     * A valid image file should have extension "jpg", "jpeg", "png", "gif" or "bmp".
+     * @param photoPath of the image
      * @return true if it has specified extension
      */
-    public static Boolean hasFileExtension(String filePath) {
-        String[] parts = filePath.split(REGEX_DOT);
-        return parts.length == 2;
+    public static Boolean isValidImageFile(String photoPath) {
+        return photoPath.matches(REGEX_VALID_IMAGE);
     }
 
     /**
