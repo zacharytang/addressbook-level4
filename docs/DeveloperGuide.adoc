@@ -168,7 +168,7 @@ _Figure 3.2.1 : Structure of the UI Component_
 
 The UI consists of a `MainWindow` that is made up of several parts such as `CommandBox`, `ResultDisplay`, `PersonListPanel`, `StatusBarFooter`, and `BrowserPanel`. All these, including the `MainWindow`, inherit from the abstract `UiPart` class.
 
-The `UI` component uses JavaFx UI framework. The layout of these UI parts are defined in matching `.fxml` files that are in the `src/main/resources/view` folder. For example, the layout of the link:{repoURL}/src/main/java/seedu/address/ui/MainWindow.java[`MainWindow`] is specified in link:{repoURL}/src/main/resources/view/MainWindow.fxml[`MainWindow.fxml`]
+The `UI` component uses JavaFx UI framework. The layout of these UI parts are defined in matching `.fxml` files that are in the `src/main/resources/view` folder. For example, the layout of the link:{repoURL}/src/main/java/seedu/address/ui/MainWindow.java[`MainWindow`] is specified in link:{repoURL}/src/main/resources/view/MainWindow.fxml[`MainWindow.fxml`].
 
 The `UI` component,
 
@@ -435,7 +435,7 @@ Execution of a `select` command is similar, except that a `PersonSelectedEvent` 
 **Pros:** It is simple and easy to understand,  easy to iterate through. +
 **Cons:** This does not follow OOP concepts, and cannot be extended to implement new functionalities. +
 **Alternative 3:** Individual lesson timings and information are stored. +
-**Pros:** Building the timetable is not required +
+**Pros:** Building the timetable is not required. +
 **Cons:** Queries are inefficient if a timing has a lesson, needs to iterate through every lesson stored.
 
 ---
@@ -451,12 +451,12 @@ Execution of a `select` command is similar, except that a `PersonSelectedEvent` 
 ---
 
 **Aspect:** Behaviour of app when there is no internet connection +
-**Alternative 1(current choice):** Only store timetable URLs, and query each time app is launched. If no internet, start with empty timetable +
-**Pros:** Storage needed is minimal, as only a single string is stored for each person +
-**Cons:** Startup of app can be slow if there is a large number of persons +
-**Alternative 2:** Store timetable information after retrieval from NUSMods once +
-**Pros:** We only need to retrieve lesson information once per person +
-**Cons:** Storage of entire timetables can be very costly, and storage can be expensive with a large number of contacts
+**Alternative 1(current choice):** Only store timetable URLs, and query each time app is launched. If no internet, start with empty timetable. +
+**Pros:** Storage needed is minimal, as only a single string is stored for each person. +
+**Cons:** Startup of app can be slow if there is a large number of persons. +
+**Alternative 2:** Store timetable information after retrieval from NUSMods once. +
+**Pros:** We only need to retrieve lesson information once per person. +
+**Cons:** Storage of entire timetables can be very costly, and storage can be expensive with a large number of contacts.
 // end::timetable[]
 
 // tag::deletetag[]
@@ -595,7 +595,7 @@ _Figure 4.3.4.2 : How each tag is removed from the Address Book and each Person'
 ==== Design Considerations
 
 **Aspect:** Implementation of Delete Tags +
-**Alternative 1 (current choice):** The existing `delete` command is modified +
+**Alternative 1 (current choice):** The existing `delete` command is modified. +
 **Pros:** The same command word `delete` is used which is an intuitive way to invoke a deletion of some object (person or tag).  +
 **Cons:** The `DeleteCommand` class is no longer responsible for deletion of a person *only* but is now responsible for deleting a tag as well.
 Modifying the command via overriding constructors, adding new attributes and modifying the parse may seem too convoluted a solution.
@@ -792,7 +792,7 @@ private void initTags(ReadOnlyPerson person) {
 **Pros:** This is easy to implement and easy to access from any UI Component. +
 **Cons:** This increases coupling across the code base. Difficult to replace TagColorMap with a stub when doing tests. +
 **Alternative 2:** TagColorMap as a class attribute of MainWindow is used and is passed as a parameter to the constructors of relevant UI components.  +
-**Pros:** This is a naive method and straightforward to implement +
+**Pros:** This is a naive method and straightforward to implement. +
 **Cons:** This requires a large amount of modification of existing code base of the `UI` component.
 
 ---
@@ -1051,11 +1051,11 @@ public class PhotoPath {
 
 ==== Design Considerations
 
-**Aspects:** The way the contact photo saved in users' computers is retrieved +
-**Alternative 1 (current choice):** Users are required to specify the absolute path of the photo +
+**Aspects:** The way the contact photo saved in users' computers is retrieved. +
+**Alternative 1 (current choice):** Users are required to specify the absolute path of the photo. +
 **Pros:** This might be inconvenient as users need additional steps to get the absolute file of the photo. +
 **Cons:** The image file is specified accurately by using the command line. +
-**Alternative 2:** Users are provided a pop-up window to choose the photo +
+**Alternative 2:** Users are provided a pop-up window to choose the photo. +
 **Pros:** It is more convenient for the user to choose the file. +
 **Cons:** This becomes no more a command-line input in this command-line application.
 // end::photoCommand[]
