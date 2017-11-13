@@ -56,6 +56,17 @@ include::../UserGuide.adoc[tag=fontsize]
 
 ---
 
+=== User Guide Contributions: Introduction
+
+---
+#Start of Extract [from: User Guide]#
+
+include::../UserGuide.adoc[tag=intro]
+
+#End of Extract#
+
+---
+
 === Other contributions
 
 * Integration of individual UI enhancement and fixes (Pull request https://github.com/CS2103AUG2017-W09-B1/main/pull/136[#136],
