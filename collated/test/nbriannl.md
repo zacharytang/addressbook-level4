@@ -2,7 +2,7 @@
 ###### \java\seedu\address\logic\commands\AddCommandTest.java
 ``` java
         @Override
-        public void showMapOf(ReadOnlyPerson person) {
+        public void showMapOf(ReadOnlyPerson person, Index index) {
             fail("This method should not be called.");
         }
 
@@ -10,7 +10,7 @@
 ###### \java\seedu\address\logic\commands\AddCommandTest.java
 ``` java
         @Override
-        public void showDirectionsTo(ReadOnlyPerson target, Address address) {
+        public void showDirectionsTo(ReadOnlyPerson target, Address address, Index index) {
             fail("This method should not be called.");
         }
 
@@ -65,7 +65,10 @@
         Set<Tag> tagsToDelete = Stream.of(new Tag("friends")).collect(Collectors.toSet());
         DeleteCommand deleteCommand = prepareCommand(tagsToDelete);
 
-        String expectedMessage = DeleteCommand.MESSAGE_DELETE_TAG_SUCCESS;
+        ArrayList<Tag> arrayTags = new ArrayList<>();
+        arrayTags.addAll(tagsToDelete);
+
+        String expectedMessage = DeleteCommand.generateResultMsgForTag(arrayTags);
 
         ModelManager expectedModel = new ModelManager(model.getAddressBook(), new UserPrefs());
         expectedModel.deleteTag(new Tag("friends"));
@@ -98,7 +101,10 @@
         Set<Tag> tagsToDelete = Stream.of(new Tag("friends")).collect(Collectors.toSet());
         DeleteCommand deleteCommand = prepareCommand(tagsToDelete);
 
-        String expectedMessage = DeleteCommand.MESSAGE_DELETE_TAG_SUCCESS;
+        ArrayList<Tag> arrayTags = new ArrayList<>();
+        arrayTags.addAll(tagsToDelete);
+
+        String expectedMessage = DeleteCommand.generateResultMsgForTag(arrayTags);
 
         Model expectedModel = new ModelManager(model.getAddressBook(), new UserPrefs());
         showFirstPersonOnly(expectedModel);
@@ -195,7 +201,7 @@
         Tag newTag = new Tag("enemy");
         EditCommand editCommand = prepareCommand(oldTag, newTag);
 
-        String expectedMessage = String.format(EditCommand.MESSAGE_EDIT_TAG_SUCCESS, oldTag);
+        String expectedMessage = generateResultMsgForTag(oldTag, newTag);
 
         Model expectedModel = new ModelManager(new AddressBook(model.getAddressBook()), new UserPrefs());
         expectedModel.editTag(oldTag, newTag);
@@ -214,7 +220,7 @@
         Tag newTag = new Tag("enemy");
         EditCommand editCommand = prepareCommand(oldTag, newTag);
 
-        String expectedMessage = String.format(EditCommand.MESSAGE_EDIT_TAG_SUCCESS, oldTag);
+        String expectedMessage = generateResultMsgForTag(oldTag, newTag);
 
         Model expectedModel = new ModelManager(new AddressBook(model.getAddressBook()), new UserPrefs());
         expectedModel.editTag(oldTag, newTag);
@@ -275,7 +281,7 @@ public class GMapsCommandTest {
                 personToFind.getName());
 
         ModelManager expectedModel = new ModelManager(model.getAddressBook(), new UserPrefs());
-        expectedModel.showMapOf(personToFind);
+        expectedModel.showMapOf(personToFind, INDEX_FIRST_PERSON);
 
         assertCommandSuccess(gMapsCommand, model, expectedMessage, expectedModel);
     }
@@ -299,7 +305,7 @@ public class GMapsCommandTest {
                 personToFind.getName());
 
         Model expectedModel = new ModelManager(model.getAddressBook(), new UserPrefs());
-        expectedModel.showMapOf(personToFind);
+        expectedModel.showMapOf(personToFind, INDEX_FIRST_PERSON);
         showFirstPersonOnly(expectedModel);
 
         assertCommandSuccess(gMapsCommand, model, expectedMessage, expectedModel);
@@ -328,7 +334,7 @@ public class GMapsCommandTest {
                 personToFind.getName());
 
         ModelManager expectedModel = new ModelManager(model.getAddressBook(), new UserPrefs());
-        expectedModel.showDirectionsTo(personToFind, address);
+        expectedModel.showDirectionsTo(personToFind, address, INDEX_FIRST_PERSON);
 
         assertCommandSuccess(gMapsCommand, model, expectedMessage, expectedModel);
     }
@@ -345,7 +351,7 @@ public class GMapsCommandTest {
                 personToFind.getName());
 
         ModelManager expectedModel = new ModelManager(model.getAddressBook(), new UserPrefs());
-        expectedModel.showDirectionsTo(personToFind, address);
+        expectedModel.showDirectionsTo(personToFind, address, INDEX_FIRST_PERSON);
         showFirstPersonOnly(expectedModel);
 
         assertCommandSuccess(gMapsCommand, model, expectedMessage, expectedModel);
@@ -425,20 +431,6 @@ public class GMapsCommandTest {
     }
 
 ```
-###### \java\seedu\address\logic\parser\DeleteCommandParserTest.java
-``` java
-    @Test
-    public void parse_invalidArgs_throwsParseException() {
-        assertParseFailure(parser, "a", String.format(MESSAGE_INVALID_COMMAND_FORMAT, DeleteCommand.MESSAGE_USAGE));
-        assertParseFailure(parser, "-1", String.format(MESSAGE_INVALID_COMMAND_FORMAT, DeleteCommand.MESSAGE_USAGE));
-        assertParseFailure(parser, "0", String.format(MESSAGE_INVALID_COMMAND_FORMAT, DeleteCommand.MESSAGE_USAGE));
-        assertParseFailure(parser, "0, -1", String.format(MESSAGE_INVALID_COMMAND_FORMAT, DeleteCommand.MESSAGE_USAGE));
-        assertParseFailure(parser, "-1, -2, -3", String.format(MESSAGE_INVALID_COMMAND_FORMAT,
-                DeleteCommand.MESSAGE_USAGE));
-    }
-
-}
-```
 ###### \java\seedu\address\logic\parser\GMapsCommandParserTest.java
 ``` java
 public class GMapsCommandParserTest {
@@ -476,9 +468,8 @@ public class GMapsCommandParserTest {
     @Test
     public void parse_invalidAddress_failure() {
         // no index specified
-        assertParseFailure(parser, "1 a/ ", Address.MESSAGE_ADDRESS_CONSTRAINTS);
+        assertParseFailure(parser, "1 a/", Address.MESSAGE_ADDRESS_CONSTRAINTS);
     }
-
 
     @Test
     public void parse_validValueWithoutAddress_success() throws Exception {
@@ -499,9 +490,9 @@ public class GMapsCommandParserTest {
     @Before
     public void setUp() throws Exception {
         selectionChangedEventStub = new PersonPanelSelectionChangedEvent(new PersonCard(ALICE, 0));
-        personAddressDisplayMapEventStub = new PersonAddressDisplayMapEvent(new Person(ALICE));
+        personAddressDisplayMapEventStub = new PersonAddressDisplayMapEvent(new Person(ALICE), 0);
         personAddressDisplayDirectionsEventStub = new PersonAddressDisplayDirectionsEvent(new Person(ALICE),
-                new Address("Blk 123 Yishun 61"));
+                new Address("Blk 123 Yishun 61"), 0);
 
         guiRobot.interact(() -> browserPanel = new BrowserPanel());
         uiPartRule.setUiPart(browserPanel);
@@ -525,13 +516,13 @@ public class GMapsCommandParserTest {
 
         postNow(personAddressDisplayMapEventStub);
         URL expectedGMapsUrl = new URL(
-                "https://www.google.com.sg/maps/search/123,%20Jurong%20West%20Ave%206,%20?dg=dbrw&newdg=1");
+                GOOGLE_MAPS_URL_PREFIX + "123,%20Jurong%20West%20Ave%206,%20?dg=dbrw&newdg=1");
         waitUntilBrowserLoaded(browserPanelHandle);
         assertEquals(expectedGMapsUrl, browserPanelHandle.getLoadedUrl());
 
         postNow(personAddressDisplayDirectionsEventStub);
         URL expectedGMapsDirectionsUrl = new URL(
-                "https://www.google.com.sg/maps/dir/Blk%20123%20Yishun%2061/123,"
+                GOOGLE_MAPS_DIRECTIONS_URL_PREFIX + "Blk%20123%20Yishun%2061" + "/" + "123,"
                         + "%20Jurong%20West%20Ave%206,%20#08-111");
         waitUntilBrowserLoaded(browserPanelHandle);
         assertEquals(expectedGMapsDirectionsUrl, browserPanelHandle.getLoadedUrl());

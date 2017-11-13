@@ -1,14 +1,16 @@
 # April0616
 ###### \java\seedu\address\commons\util\FileUtil.java
 ``` java
+    public static final String REGEX_VALID_IMAGE = "([^\\s]+(\\.(?i)(jpg|jpeg|png|gif|bmp))$)";
+    private static final String CHARSET = "UTF-8";
     /**
-     * Checks whether the name of the file has extension.
-     * @param filePath of the file
+     * Checks whether the file is a valid image file.
+     * A valid image file should have extension "jpg", "jpeg", "png", "gif" or "bmp".
+     * @param photoPath of the image
      * @return true if it has specified extension
      */
-    public static Boolean hasFileExtension(String filePath) {
-        String[] parts = filePath.split(REGEX_DOT);
-        return parts.length == 2;
+    public static Boolean isValidImageFile(String photoPath) {
+        return photoPath.matches(REGEX_VALID_IMAGE);
     }
 
     /**
@@ -293,6 +295,7 @@ public class PhotoCommand extends UndoableCommand {
     public static final String MESSAGE_USAGE = "| " + COMMAND_WORD + " |"
             + ": Adds a photo to the person identified by the index number used in the last person listing"
             + "by specifying the path of the photo.\n"
+            + "The valid photo extensions are 'jpg', 'jpeg', 'png', 'gif' or 'bmp'.\n"
             + "If the path field is empty, the old photo path is removed for the person.\n"
             + "Parameters: INDEX " + PREFIX_PHOTO + "[PHOTO PATH] \n"
             + FORMAT_ALIGNMENT_TO_PARAMETERS + "(INDEX must be a positive integer)\n"
@@ -308,9 +311,11 @@ public class PhotoCommand extends UndoableCommand {
             "Photo Path should be the absolute path of a valid file in your PC. It should be a string started "
                     + "with the name of your disk, "
                     + "followed by several groups of backslash and string, like \"c:\\desktop\\happy.jpg\","
-                    + "and the file should exist.";
+                    + "and the file should exist.\n"
+                    + "The valid photo extensions are 'jpg', 'jpeg', 'png', 'gif' or 'bmp'.\n";
 
-    public static final String REGEX_LOCAL_PHOTOPATH_VALIDATION = "([a-zA-Z]:)?(\\\\[a-zA-Z0-9_.-]+)+\\\\?";
+    public static final String REGEX_LOCAL_PHOTOPATH_VALIDATION =
+            "([a-zA-Z]:)?(\\\\[a-zA-Z0-9_.-]+)+\\\\?" + REGEX_VALID_IMAGE;
 
     public static final String PATH_FILE_SAVED_PARENT_DIRECTORY = "src/main/resources/images/contactPhotos/";
     public static final String PATH_DEFAULT_PHOTO = "src/main/resources/images/defaultPhoto.jpg";
@@ -411,7 +416,7 @@ public class PhotoCommand extends UndoableCommand {
         model.updateFilteredPersonList(PREDICATE_SHOW_ALL_PERSONS);
 
         EventsCenter.getInstance().post(new PersonSelectedEvent(photoedPerson, targetIndex.getZeroBased()));
-        return new CommandResult(generateSuccessMsg(photoedPerson));
+        return new CommandResult(generateSuccessMsg(personToPhoto));
     }
 
     /**
@@ -595,6 +600,7 @@ public class RemarkCommand extends UndoableCommand {
         }
         model.updateFilteredPersonList(PREDICATE_SHOW_ALL_PERSONS);
 
+        EventsCenter.getInstance().post(new PersonSelectedEvent(remarkedPerson, targetIndex.getZeroBased()));
         return new CommandResult(generateSuccessMsg(remarkedPerson));
     }
 
@@ -1237,8 +1243,8 @@ public class PhotoPath {
     public static final String MESSAGE_APP_PHOTOPATH_CONSTRAINTS =
             "The app photo path should be a string starting with '"
                     + FILE_SAVED_PARENT_PATH
-                    + "', following by the file name, like'photo.jpg'.";
-
+                    + "', following by the file name with a valid extension, like'photo.jpg'.\n"
+                    + "The valid extensions are 'jpg', 'jpeg', 'png', 'gif' or 'bmp'.";
 
     public final String value;
 
@@ -1264,10 +1270,10 @@ public class PhotoPath {
             //empty photo path
             return true;
         }
-        Boolean hasFileExtension = hasFileExtension(photoPath);
+        Boolean isValidImage = isValidImageFile(photoPath);
         Boolean isInDefaultFolder = isInFolder(photoPath, FILE_SAVED_PARENT_PATH);
 
-        return  isInDefaultFolder && hasFileExtension;
+        return  isInDefaultFolder && isValidImage;
     }
 
     @Override

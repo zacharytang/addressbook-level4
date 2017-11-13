@@ -1,7 +1,66 @@
 # CindyTsai1
+###### \java\seedu\address\commons\events\ui\NewResultAvailableEvent.java
+``` java
+    public NewResultAvailableEvent(String message, boolean isError) {
+        this.message = message;
+        this.isError = isError;
+    }
+
+```
+###### \java\seedu\address\commons\util\StringUtil.java
+``` java
+    /**
+     * Returns true if the {@code sentence} equals the {@code word}.
+     *   Ignores case, but a full word match is required.
+     *   <br>examples:<pre>
+     *       containsWordIgnoreCase("ABc def", "abc def") == true
+     *       containsWordIgnoreCase("ABc def", "abc DEF") == true
+     *       containsWordIgnoreCase("ABc def", "AB") == false //not a full word match
+     *       </pre>
+     * @param sentence cannot be null
+     * @param word cannot be null, cannot be empty, must be a single word
+     */
+    public static boolean containsWordIgnoreCase(String sentence, String word) {
+        requireNonNull(sentence);
+        requireNonNull(word);
+
+        String preppedSentence = sentence.trim();
+        String[] wordsInPreppedSentence = preppedSentence.split("\\s+");
+        String preppedWord = word.trim();
+        String[] wordsInPreppedWord = preppedWord.split("\\s+");
+        checkArgument(!wordsInPreppedWord[0].equals(""), "Word parameter cannot be empty");
+        //checkArgument(preppedWord.split("\\s+").length == 1, "Word parameter should be a single word");
+
+        //check if the names and the word have the same number of words
+        if (wordsInPreppedSentence.length != wordsInPreppedWord.length) {
+            return false;
+        }
+
+        //check if all words in sentence matches all words in word
+        for (int i = 0; i < wordsInPreppedSentence.length; i++) {
+            if (!wordsInPreppedSentence[i].equalsIgnoreCase(wordsInPreppedWord[i])) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+```
+###### \java\seedu\address\logic\commands\EditCommand.java
+``` java
+        public void setBirthday(Birthday birthday) {
+            this.birthday = birthday;
+        }
+
+        public Optional<Birthday> getBirthday() {
+            return Optional.ofNullable(birthday);
+        }
+
+```
 ###### \java\seedu\address\logic\commands\FindCommand.java
 ``` java
-    public static final String MESSAGE_USAGE = COMMAND_WORD + ": Finds all persons whose information contain any of "
+    public static final String MESSAGE_USAGE = "| " + COMMAND_WORD + " |"
+            + ": Finds all persons whose information contain any of "
             + "the specified keywords (case-insensitive) and displays them as a list with index numbers.\n"
             + "Parameters: ["
             + PREFIX_NAME + "NAME] "
@@ -10,17 +69,22 @@
             + "[" + PREFIX_ADDRESS + "ADDRESS] "
             + "[" + PREFIX_BIRTHDAY + "BIRTHDAY] "
             + "[" + PREFIX_TAG + "TAG]...\n"
-            + "Example: " + COMMAND_WORD + " "
-            + PREFIX_NAME + "John Doe "
-            + PREFIX_PHONE + "98765432 "
-            + PREFIX_EMAIL + "johnd@example.com "
-            + PREFIX_ADDRESS + "311, Clementi Ave 2, #02-25 "
-            + PREFIX_BIRTHDAY + "21051994 "
+            + "Example: \n" + COMMAND_WORD + " "
+            + PREFIX_NAME + "ian zach\n"
+            + "Returns any person with name including 'ian' and 'zach'.\n"
+            + COMMAND_WORD + " "
             + PREFIX_TAG + "friends "
-            + PREFIX_TAG + "owesMoney";
+            + PREFIX_TAG + "owesMoney\n"
+            + "Returns all persons in UniFy containing *both* 'JCfriends' and 'computing'.";
 
     public static final String MESSAGE_NOT_FOUND = "At least one field to find must be provided.";
+    public static final String MESSAGE_BIRTHDAYKEYWORD_INVALID = "You should type 0%1$s instead of %1$s.";
+    public static final String MESSAGE_BIRTHDAYKEYWORD_NONEXIST = "Month %1$s does not exist.";
+    public static final String MESSAGE_BIRTHDAYKEYWORD_NONNUMBER = "Keyword input must be in integer.";
     private ArrayList<String> predicate;
+    //to keep track of how many prefixes are input
+    private int count = 0;
+    private String birthdaySearch = new String();
 
     public FindCommand(ArrayList<String> predicate) {
         this.predicate = predicate;
@@ -30,67 +94,154 @@
     public CommandResult execute() {
         List<String> predicateList = new ArrayList<>();
 
+        //to keep track of the number of times a single person matches different fields of keywords
+        HashMap<String, Integer> predicateMap = new HashMap<>();
+
         for (int i = 0; i < predicate.size() - 1; i++) {
             String predicates = predicate.get(i);
 
             if (predicates.equals(PREFIX_NAME.getPrefix())) {
-                ArrayList<String> nameList = findName(predicate.get(i + 1));
-                for (int j = 0; j < nameList.size(); j++) {
-                    if (!predicateList.contains(nameList.get(j))) {
-                        predicateList.add(nameList.get(j));
+                ArrayList<String> personsWithName = findPersonsWithName(predicate.get(i + 1));
+                for (int j = 0; j < personsWithName.size(); j++) {
+                    if (!predicateMap.containsKey(personsWithName.get(j))) {
+                        predicateMap.put(personsWithName.get(j), 1);
+                        predicateList.add(personsWithName.get(j));
+                    } else {
+                        predicateMap.put(personsWithName.get(j), predicateMap.remove(personsWithName.get(j)) + 1);
                     }
                 }
             }
 
             if (predicates.equals(PREFIX_PHONE.getPrefix())) {
-                ArrayList<String> phoneList = findPhone(predicate.get(i + 1));
-                for (int j = 0; j < phoneList.size(); j++) {
-                    if (!predicateList.contains(phoneList.get(j))) {
-                        predicateList.add(phoneList.get(j));
+                ArrayList<String> personsWithPhone = findPersonsWithPhone(predicate.get(i + 1));
+                for (int j = 0; j < personsWithPhone.size(); j++) {
+                    if (!predicateMap.containsKey(personsWithPhone.get(j))) {
+                        predicateMap.put(personsWithPhone.get(j), 1);
+                        predicateList.add(personsWithPhone.get(j));
+                    } else {
+                        predicateMap.put(personsWithPhone.get(j), predicateMap.remove(personsWithPhone.get(j)) + 1);
                     }
                 }
             }
 
             if (predicates.equals(PREFIX_ADDRESS.getPrefix())) {
-                ArrayList<String> addressList = findAddress(predicate.get(i + 1));
-                for (int j = 0; j < addressList.size(); j++) {
-                    if (!predicateList.contains(addressList.get(j))) {
-                        predicateList.add(addressList.get(j));
+                ArrayList<String> personsWithAddress = findPersonsWithAddress(predicate.get(i + 1));
+                for (int j = 0; j < personsWithAddress.size(); j++) {
+                    if (!predicateMap.containsKey(personsWithAddress.get(j))) {
+                        predicateMap.put(personsWithAddress.get(j), 1);
+                        predicateList.add(personsWithAddress.get(j));
+                    } else {
+                        predicateMap.put(personsWithAddress.get(j), predicateMap.remove(personsWithAddress.get(j)) + 1);
                     }
                 }
             }
 
             if (predicates.equals(PREFIX_EMAIL.getPrefix())) {
-                ArrayList<String> emailList = findEmail(predicate.get(i + 1));
-                for (int j = 0; j < emailList.size(); j++) {
-                    if (!predicateList.contains(emailList.get(j))) {
-                        predicateList.add(emailList.get(j));
+                ArrayList<String> personsWithEmail = findPersonsWithEmail(predicate.get(i + 1));
+                for (int j = 0; j < personsWithEmail.size(); j++) {
+                    if (!predicateMap.containsKey(personsWithEmail.get(j))) {
+                        predicateMap.put(personsWithEmail.get(j), 1);
+                        predicateList.add(personsWithEmail.get(j));
+                    } else {
+                        predicateMap.put(personsWithEmail.get(j), predicateMap.remove(personsWithEmail.get(j)) + 1);
                     }
                 }
             }
 
             if (predicates.equals(PREFIX_TAG.getPrefix())) {
-                ArrayList<String> tagList = findTags(predicate.get(i + 1));
-                for (int j = 0; j < tagList.size(); j++) {
-                    if (!predicateList.contains(tagList.get(j))) {
-                        predicateList.add(tagList.get(j));
+                ArrayList<String> personsWithTags = findPersonsWithTags(predicate.get(i + 1));
+                for (int j = 0; j < personsWithTags.size(); j++) {
+                    if (!predicateMap.containsKey(personsWithTags.get(j))) {
+                        predicateMap.put(personsWithTags.get(j), 1);
+                        predicateList.add(personsWithTags.get(j));
+                    } else {
+                        predicateMap.put(personsWithTags.get(j), predicateMap.remove(personsWithTags.get(j)) + 1);
                     }
                 }
             }
 
             if (predicates.equals(PREFIX_BIRTHDAY.getPrefix())) {
-                ArrayList<String> birthdayList = findBirthday(predicate.get(i + 1));
-                for (int j = 0; j < birthdayList.size(); j++) {
-                    if (!predicateList.contains(birthdayList.get(j))) {
-                        predicateList.add(birthdayList.get(j));
+                birthdaySearch = predicate.get(i + 1).trim();
+                ArrayList<String> personsWithBirthday = findPersonsWithBirthday(predicate.get(i + 1));
+                for (int j = 0; j < personsWithBirthday.size(); j++) {
+                    if (!predicateMap.containsKey(personsWithBirthday.get(j))) {
+                        predicateMap.put(personsWithBirthday.get(j), 1);
+                        predicateList.add(personsWithBirthday.get(j));
+                    } else {
+                        predicateMap.put(personsWithBirthday.get(j),
+                                predicateMap.remove(personsWithBirthday.get(j)) + 1);
                     }
                 }
             }
         }
 
-        NameContainsKeywordsPredicate predicates = new NameContainsKeywordsPredicate(predicateList);
+        //to eliminate the persons who did not match all keywords
+        ArrayList<String> predicatesList = new ArrayList<>();
+        for (String word : predicateList) {
+            if (predicateMap.get(word) == count) {
+                predicatesList.add(word);
+            }
+        }
+
+        NameContainsKeywordsPredicate predicates = new NameContainsKeywordsPredicate(predicatesList);
         model.updateFilteredPersonList(predicates);
+
+        //Different display message for birthday
+        if (!birthdaySearch.isEmpty()) {
+            return new CommandResult(getMessageForPersonListShownSummary(
+                    model.getFilteredPersonList().size())
+            + getMessageForMonthSearch(birthdaySearch));
+        }
         return new CommandResult(getMessageForPersonListShownSummary(model.getFilteredPersonList().size()));
+    }
+
+    /**
+     * Constructs a feedback message to summarise an operation that displayed a listing of persons with the same
+     * birthday month.
+     * @param month used to generate Month
+     * @return summary message for the birthday month of persons displayed
+     */
+    public static String getMessageForMonthSearch(String month) {
+        switch (month) {
+        case "01":
+            month = "January";
+            break;
+        case "02":
+            month = "February";
+            break;
+        case "03":
+            month = "March";
+            break;
+        case "04":
+            month = "April";
+            break;
+        case "05":
+            month = "May";
+            break;
+        case "06":
+            month = "June";
+            break;
+        case "07":
+            month = "July";
+            break;
+        case "08":
+            month = "August";
+            break;
+        case "09":
+            month = "September";
+            break;
+        case "10":
+            month = "October";
+            break;
+        case "11":
+            month = "November";
+            break;
+        case "12":
+            month = "December";
+            break;
+        default:
+        }
+        return String.format(Messages.MESSAGE_BIRTHDAY_MONTH_SEARCHED, month);
     }
 
 ```
@@ -100,16 +251,17 @@
      * Search for persons that contain the {@String keyword} in their name
      * @param name
      */
-    public ArrayList<String> findName(String name) {
+    public ArrayList<String> findPersonsWithName(String name) {
         ObservableList<ReadOnlyPerson> personList = model.getAddressBook().getPersonList();
         String[] nameKeyword = name.split(" ");
+        count += nameKeyword.length;
         ArrayList<String> nameList = new ArrayList<>();
         for (ReadOnlyPerson person : personList) {
             for (String keyword : nameKeyword) {
                 String names = person.getName().toString().toLowerCase();
                 keyword = keyword.toLowerCase();
                 if (names.contains(keyword)) {
-                    nameList.add(person.getName().toString(0));
+                    nameList.add(person.getName().toString());
                 }
             }
         }
@@ -120,15 +272,16 @@
      * Search for persons that contain the {@String keyword} in their phone number
      * @param phone
      */
-    public ArrayList<String> findPhone(String phone) {
+    public ArrayList<String> findPersonsWithPhone(String phone) {
         ObservableList<ReadOnlyPerson> personList = model.getAddressBook().getPersonList();
         String[] phoneKeyword = phone.split(" ");
+        count += phoneKeyword.length;
         ArrayList<String> phoneList = new ArrayList<>();
         for (ReadOnlyPerson person : personList) {
             for (String keyword : phoneKeyword) {
                 String phones = person.getPhone().toString();
                 if (phones.contains(keyword)) {
-                    phoneList.add(person.getName().toString(0));
+                    phoneList.add(person.getName().toString());
                 }
             }
         }
@@ -139,16 +292,17 @@
      * Search for persons that contain the {@String keyword} in their email
      * @param email
      */
-    public ArrayList<String> findEmail(String email) {
+    public ArrayList<String> findPersonsWithEmail(String email) {
         ObservableList<ReadOnlyPerson> personList = model.getAddressBook().getPersonList();
         String[] emailKeyword = email.split(" ");
+        count += emailKeyword.length;
         ArrayList<String> emailList = new ArrayList<>();
         for (ReadOnlyPerson person : personList) {
             for (String keyword : emailKeyword) {
                 String emails = person.getEmail().toString().toLowerCase();
                 keyword = keyword.toLowerCase();
                 if (emails.contains(keyword)) {
-                    emailList.add(person.getName().toString(0));
+                    emailList.add(person.getName().toString());
                 }
             }
         }
@@ -159,16 +313,17 @@
      * Search for persons that contain the {@String keyword} in their address
      * @param address
      */
-    public ArrayList<String> findAddress(String address) {
+    public ArrayList<String> findPersonsWithAddress(String address) {
         ObservableList<ReadOnlyPerson> personList = model.getAddressBook().getPersonList();
         String[] addressKeyword = address.split(" ");
+        count += addressKeyword.length;
         ArrayList<String> addressList = new ArrayList<>();
         for (ReadOnlyPerson person : personList) {
             for (String keyword : addressKeyword) {
                 String addresses = person.getAddress().toString().toLowerCase();
                 keyword = keyword.toLowerCase();
                 if (addresses.contains(keyword)) {
-                    addressList.add(person.getName().toString(0));
+                    addressList.add(person.getName().toString());
                 }
             }
         }
@@ -179,19 +334,24 @@
      * Search for persons that contain the {@String keyword} in their tag
      * @param tags
      */
-    public ArrayList<String> findTags(String tags) {
+    public ArrayList<String> findPersonsWithTags(String tags) {
         ObservableList<ReadOnlyPerson> personList = model.getAddressBook().getPersonList();
         String[] tagKeyword = tags.split(" ");
+        count += tagKeyword.length;
         ArrayList<String> tagList = new ArrayList<>();
         for (ReadOnlyPerson person : personList) {
             for (String keyword : tagKeyword) {
+                //Used to keep track if a person's tags matches one keyword multiple times, if yes only record once
+                ArrayList<String> tagsList = new ArrayList<>();
                 for (Tag tagging : person.getTags()) {
+                    //the tag name returned is in the format of [TAGNAME] so extract the name without []
                     String tag1 = tagging.toString().substring(1, tagging.toString().length()).toLowerCase();
                     keyword = keyword.toLowerCase();
-                    if (tag1.contains(keyword)) {
-                        tagList.add(person.getName().toString(0));
+                    if (tag1.contains(keyword) && !tagsList.contains(person.getName().toString())) {
+                        tagsList.add(person.getName().toString());
                     }
                 }
+                tagList.addAll(tagsList);
             }
         }
         return tagList;
@@ -201,15 +361,17 @@
      * Search for persons that contain the {@String keyword} in their birthday
      * @param birthday
      */
-    public ArrayList<String> findBirthday(String birthday) {
+    public ArrayList<String> findPersonsWithBirthday(String birthday) {
         ObservableList<ReadOnlyPerson> personList = model.getAddressBook().getPersonList();
         String[] birthdayKeyword = birthday.split(" ");
+        count += birthdayKeyword.length;
         ArrayList<String> birthdayList = new ArrayList<>();
         for (ReadOnlyPerson person : personList) {
             for (String keyword : birthdayKeyword) {
-                String birthdays = person.getBirthday().toString().substring(2, 4);
+                String birth = person.getBirthday().toString();
+                String birthdays = (!birth.equals("")) ? birth.substring(3, 5) : "";
                 if (birthdays.equals(keyword)) {
-                    birthdayList.add(person.getName().toString(0));
+                    birthdayList.add(person.getName().toString());
                 }
             }
         }
@@ -266,7 +428,8 @@ public class UniqueCommandList {
         commandList.add(EditCommand.COMMAND_SECONDARY_TWO);
         commandList.add(ExitCommand.COMMAND_WORD);
         commandList.add(ExitCommand.COMMAND_ALIAS);
-        commandList.add(ExitCommand.COMMAND_SECONDARY);
+        commandList.add(ExitCommand.COMMAND_SECONDARY_ONE);
+        commandList.add(ExitCommand.COMMAND_SECONDARY_TWO);
         commandList.add(FindCommand.COMMAND_WORD);
         commandList.add(FindCommand.COMMAND_ALIAS);
         commandList.add(FindCommand.COMMAND_SECONDARY);
@@ -287,6 +450,18 @@ public class UniqueCommandList {
         commandList.add(SelectCommand.COMMAND_SECONDARY);
         commandList.add(UndoCommand.COMMAND_WORD);
         commandList.add(UndoCommand.COMMAND_ALIAS);
+        commandList.add(GMapsCommand.COMMAND_WORD);
+        commandList.add(GMapsCommand.COMMAND_ALIAS);
+        commandList.add(GMapsCommand.COMMAND_SECONDARY_ONE);
+        commandList.add(GMapsCommand.COMMAND_SECONDARY_TWO);
+        commandList.add(PhotoCommand.COMMAND_WORD);
+        commandList.add(PhotoCommand.COMMAND_ALIAS);
+        commandList.add(ThemeCommand.COMMAND_WORD);
+        commandList.add(ThemeCommand.COMMAND_ALIAS);
+        commandList.add(ThemeCommand.COMMAND_SECONDARY);
+        commandList.add(TimetableCommand.COMMAND_WORD);
+        commandList.add(TimetableCommand.COMMAND_ALIAS);
+        commandList.add(TimetableCommand.COMMAND_SECONDARY);
         return commandList;
     }
 
@@ -349,7 +524,7 @@ public class UniqueCommandList {
             Timetable timetable = (arePrefixesPresent(argMultimap, PREFIX_TIMETABLE))
                     ? ParserUtil.parseTimetable(argMultimap.getValue(PREFIX_TIMETABLE)).get() : new Timetable("");
             Remark remark = new Remark("");
-            PhotoPath photoPath = new PhotoPath(DEFAULT_PHOTO_PATH);
+            PhotoPath photoPath = new PhotoPath("");
             Set<Tag> tagList = ParserUtil.parseTags(argMultimap.getAllValues(PREFIX_TAG));
             Birthday birthday = (arePrefixesPresent(argMultimap, PREFIX_BIRTHDAY))
                     ? ParserUtil.parseBirthday(argMultimap.getValue(PREFIX_BIRTHDAY)).get() : new Birthday("");
@@ -366,6 +541,10 @@ public class UniqueCommandList {
 ```
 ###### \java\seedu\address\logic\parser\FindCommandParser.java
 ``` java
+/**
+ * Parses input arguments and creates a new FindCommand object
+ */
+public class FindCommandParser implements Parser<FindCommand> {
     /**
      * Parses the given {@code String} of arguments in the context of the FindCommand
      * and returns an FindCommand object for execution.
@@ -377,8 +556,9 @@ public class UniqueCommandList {
                 ArgumentTokenizer.tokenize(args, PREFIX_NAME, PREFIX_PHONE, PREFIX_EMAIL,
                         PREFIX_ADDRESS, PREFIX_TAG, PREFIX_BIRTHDAY);
 
-        if (args.isEmpty() || args.substring(1, 2).equals("g") || args.substring(1, 2).equals("m")
-                || args.substring(1, 3).equals("tt") || !args.substring(2, 3).equals("/")) {
+        if (args.isEmpty() || arePrefixesPresent(argsMultimap, PREFIX_GENDER, PREFIX_TIMETABLE, PREFIX_MATRIC_NO,
+                PREFIX_NEW_TAG, PREFIX_OLD_TAG, PREFIX_PHOTO, PREFIX_REMARK) || !arePrefixesPresent(argsMultimap,
+                PREFIX_TAG, PREFIX_BIRTHDAY, PREFIX_ADDRESS, PREFIX_EMAIL, PREFIX_PHONE, PREFIX_NAME)) {
             throw new ParseException(
                     String.format(MESSAGE_INVALID_COMMAND_FORMAT, FindCommand.MESSAGE_USAGE));
         }
@@ -424,6 +604,24 @@ public class UniqueCommandList {
 
         if (argsMultimap.getValue(PREFIX_BIRTHDAY).isPresent()) {
             birthdayList = argsMultimap.getValue(PREFIX_BIRTHDAY).get();
+
+            /** validity of birthday keyword input check
+             *  keyword input must have a value between 1 to 12
+             *  keyword input must be 2 digits
+             *  keyword input must be in Integers
+             */
+            if (!birthdayList.equals("")) {
+                if (!birthdayList.matches("[0-9]+")) {
+                    throw new ParseException(FindCommand.MESSAGE_BIRTHDAYKEYWORD_NONNUMBER);
+                } else if (Integer.parseInt(birthdayList.trim()) > 12 || Integer.parseInt(birthdayList.trim()) < 1) {
+                    throw new ParseException(String.format(FindCommand.MESSAGE_BIRTHDAYKEYWORD_NONEXIST,
+                            birthdayList.trim()));
+                } else if (birthdayList.trim().length() == 1) {
+                    throw new ParseException(String.format(FindCommand.MESSAGE_BIRTHDAYKEYWORD_INVALID,
+                            birthdayList.trim()));
+                }
+            }
+
             predicate.add(PREFIX_BIRTHDAY.getPrefix());
             predicate.add(birthdayList);
         }
@@ -432,8 +630,16 @@ public class UniqueCommandList {
                 && tagList.isEmpty() && birthdayList.isEmpty()) {
             throw new ParseException(FindCommand.MESSAGE_NOT_FOUND);
         }
-        return new FindCommand(predicate);
 
+        return new FindCommand(predicate);
+    }
+
+    /**
+     * Returns true if none of the prefixes contains empty {@code Optional} values in the given
+     * {@code ArgumentMultimap}.
+     */
+    private static boolean arePrefixesPresent(ArgumentMultimap argumentMultimap, Prefix... prefixes) {
+        return Stream.of(prefixes).anyMatch(prefix -> argumentMultimap.getValue(prefix).isPresent());
     }
 }
 ```
@@ -486,13 +692,15 @@ public class SuggestCommandParser implements Parser<SuggestCommand> {
 public class Birthday {
 
     public static final String MESSAGE_BIRTHDAY_CONSTRAINTS =
-            "Person's birthday should be in the format of DDMMYYYY, and it should not be blank";
+            "Person's birthday should be in the format of DDMMYYYY";
+    public static final String MESSAGE_BIRTHDAY_INVALID =
+            "This date does not exist.";
 
     /*
      * The first character of the address must not be a whitespace,
      * otherwise " " (a blank string) becomes a valid input.
      */
-    public static final String BIRTHDAY_VALIDATION_REGEX = "\\d{2}\\d{2}\\d{4}";
+    public static final String BIRTHDAY_VALIDATION_REGEX = "\\d{8}";
 
     public static final String DATE_FORMAT = "ddMMyyyy";
 
@@ -506,20 +714,27 @@ public class Birthday {
     public Birthday(String birthday) throws IllegalValueException {
         requireNonNull(birthday);
         String trimmedBirthday = birthday.trim();
+
         if (!isValidBirthday(trimmedBirthday)) {
+            if (trimmedBirthday.length() == 8) {
+                throw new IllegalValueException(MESSAGE_BIRTHDAY_INVALID);
+            }
             throw new IllegalValueException(MESSAGE_BIRTHDAY_CONSTRAINTS);
         }
-        this.date = birthday;
+        this.date = formatDate(birthday);
+
     }
 
+```
+###### \java\seedu\address\model\person\Birthday.java
+``` java
     /**
      * Returns true if a given string is a valid person birthday.
      */
     public static boolean isValidBirthday(String test) {
         if (test.equals("")) {
             return true;
-        }
-        if (test.matches(BIRTHDAY_VALIDATION_REGEX)) {
+        } else if (test.matches(BIRTHDAY_VALIDATION_REGEX)) {
             try {
                 DateFormat df = new SimpleDateFormat(DATE_FORMAT);
                 df.setLenient(false);
@@ -552,11 +767,37 @@ public class Birthday {
 
 }
 ```
+###### \java\seedu\address\model\person\Person.java
+``` java
+    public void setBirthday(Birthday birthday) {
+        this.birthday.set(requireNonNull(birthday));
+    }
+
+    @Override
+    public ObjectProperty<Birthday> birthdayProperty() {
+        return birthday;
+    }
+
+    @Override
+    public Birthday getBirthday() {
+        return birthday.get();
+    }
+
+```
 ###### \java\seedu\address\storage\AddressBookStorage.java
 ``` java
     void backupAddressBook(ReadOnlyAddressBook addressBook) throws IOException;
 
 }
+```
+###### \java\seedu\address\storage\StorageManager.java
+``` java
+    @Override
+    public void backupAddressBook(ReadOnlyAddressBook addressBook) throws IOException {
+        addressBookStorage.saveAddressBook(addressBook, addressBookStorage.getAddressBookFilePath() + "_backUp.xml");
+    }
+
+
 ```
 ###### \java\seedu\address\storage\XmlAddressBookStorage.java
 ``` java
@@ -585,6 +826,18 @@ public class Birthday {
 ```
 ###### \java\seedu\address\ui\ResultDisplay.java
 ``` java
+    @Subscribe
+    private void handleNewResultAvailableEvent(NewResultAvailableEvent event) {
+        logger.info(LogsCenter.getEventHandlingLogMessage(event));
+        Platform.runLater(() -> displayed.setValue(event.message));
+
+        if (event.isError) {
+            setErrorStyle();
+        } else {
+            setDefaultStyle();
+        }
+    }
+
     private void setDefaultStyle() {
         resultDisplay.getStyleClass().remove("error");
     }
