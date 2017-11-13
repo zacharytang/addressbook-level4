@@ -461,46 +461,55 @@ Execution of a `select` command is similar, except that a `PersonSelectedEvent` 
 // tag::deletetag[]
 === Delete Tag Mechanism
 
-To delete a tag means to delete a specified tag in all persons who contain that tag, as well as in the master list of tags in the Address Book.
+Deleting a tag means deleting a specified tag in all persons who contain that tag, as well as delete the tag from the master list of tags in the Address Book.
 This is significantly different from deleting a tag for a person via the `edit` command.
-There is a need for this because a user would like to delete a tag that is no longer relevant or is outdated, instead of going editing those with the same tags one by one.
-To delete a particular tag across multiple contacts would be a tedious process, hence, the addition of this feature.
-You will be able to understand how tags are deleted from all persons tagged and how we use the same command word `delete` to both delete person and delete tag.
+There is a need for this because a user would like to delete a tag that is no longer relevant or is outdated.
+To delete a particular tag across multiple contacts, by editing each contact, would be a tedious process, hence, the addition of this feature.
+In this section, you will be able to understand how tags are deleted from all persons tagged and how we use the same command word `delete`
+to both delete person and delete tag.
 
-In general, the ability to delete a tag was implemented via an _augmentation_ of the existing `delete` command.
+In general, the ability to delete a tag was implemented by modifying the existing `delete` command.
 
-This augmentation is achieved via
+This modification involves:
 
 * detection of the type of deletion in the DeleteCommandParser
 * overloading the DeleteCommand constructor
-* executing the respective logic based on which attributes are present/non-null.
+* executing the respective logic based on which attributes in `DeleteCommand` are present/non-null.
+
+As a result of this modification, `delete` can execute a delete on tags, or a delete on persons, depending on the parameters provided.
 
 ==== Detection of the Deletion Type
 
-The current `delete` command (for a person) is in the format `delete INDEX`. Deleting a tag is in the format `delete t/TAG`.
-The same `delete` command is used but the parameters in the command line are different.
+For both types of delete commands, the same `delete` command is used but the parameters in the command line are different.
 
 The two types of commands are distinguished by the `preamble` of the parameter arguments after the word `delete`, when tokenized against the `/t` prefix for tags.
 
-The preamble for `delete "INDEX"` is a *digit* while the preamble for `delete" "t/TAG` is a *space*.
+Preamble for
+
+* `delete INDEX [MORE INDEXES]...` (delete person(s)) : A digit String
+* `delete t/TAG [t/TAG]` (delete tag(s)) :  A *blank* String
+
 The implementation of this parse is shown below:
 
 
 [source,java]
 ----
 public DeleteCommand parse(String args) throws ParseException {
-
     ArgumentMultimap argMultimap = ArgumentTokenizer.tokenize(args, PREFIX_TAG);
     String preamble = argMultimap.getPreamble();
-
     if (preamble.equals("")) {
-        // parsing of tags into a Set<Tag> tagList
-        return new DeleteCommand(tagList); # <1>
-
-    } else if (preamble.matches("-?\\d+")) {
-        // parsing of the index
-        return new DeleteCommand(index); # <2>
+        // there exists 't/'
+        DeleteCommand deleteCommandForTag = parseForTags(argMultimap);
+        if (deleteCommandForTag != null) {
+            return deleteCommandForTag; <1>
+        }
+    } else {
+        DeleteCommand deleteCommandForPerson = parseForPersonIndexes(args, preamble);
+        if (deleteCommandForPerson != null) {
+            return deleteCommandForPerson; <2>
+        }
     }
+
     // ...
 }
 ----
@@ -509,95 +518,278 @@ public DeleteCommand parse(String args) throws ParseException {
 ==== Overloading the DeleteCommand constructor
 
 With reference to the previous code snippet the type of `DeleteCommand` returned during the parse are also different.
+The parameter type of the DeleteCommand is different.
 
-<1> a `new DeleteCommand(tagList)` is returned when deleting one or more tags.
-<2> a `new DeleteCommand(index)` is returned when deleting a person.
+<1> a `deleteCommandForTag` which is a `new DeleteCommand(Set<Tag>)` is returned when deleting one or more tags.
+<2> a `deleteCommandForPerson` which is a `new DeleteCommand(Index)` or a `new DeleteCommand(ArrayList<Index>)` is returned when deleting a person.
 
-The following code shows the respective object construction of both types of DeleteCommand.
+The following code shows the respective object construction of the different types of DeleteCommand.
 
-
-Depending on the constructor method called, *either* the `targetIndex` attribute *or* the `targetTags` will be made null.
+Depending on the constructor method called, *either* the `targetIndexes` attribute *or* the `targetTags` will be made null.
 Which will lead on to the next section about command execution.
 
 [source,java]
 ----
 public class DeleteCommand extends UndoableCommand {
     // ...
-    private final Index targetIndex;
+    private final Index targetIndexes;
 
     private final Set<Tag> targetTags;
 
+    public DeleteCommand(Set<Tag> targetTags) {
+        this.targetIndexes = null;
+        this.targetTags = targetTags;
+    }
+
     public DeleteCommand(Index targetIndex) {
-        this.targetIndex = targetIndex;
+        this.targetIndexes = new ArrayList<>();
+        targetIndexes.add(targetIndex);
         this.targetTags = null;
     }
 
-    public DeleteCommand(Set<Tag> targetTags) {
-        this.targetTags = targetTags;
-        this.targetIndex = null;
+    public DeleteCommand(ArrayList<Index> targetIndexes) {
+        this.targetIndexes = targetIndexes;
+        this.targetTags = null;
     }
+
     // ...
 }
 ----
 
-
-
 ==== Logic Execution depending on which attributes are present.
 
-_If_ `targetIndex` is present, execute the logic for deleting a person, _else_ execute the logic for deleting a tag.
+_If_ `targetIndexes` is present, execute the logic for deleting a person, _else_ execute the logic for deleting a tag.
 
-This trivial implementation is show below.
+This trivial implementation is show below. The distinct command execution of the deleting of tags and the
+delete of person(s) have been abstracted to increase SLAP.
 
 [source,java]
 ----
 public CommandResult executeUndoableCommand() throws CommandException {
+    if (targetTags == null && targetIndexes != null) {
+        return executeCommandForPersons();
 
-    if (targetTags == null && targetIndex != null) {
-        // command logic for deletion for a person
     } else {
-        // command logic for deletion for a tag
+        return executeCommandForTag();
     }
-    // ...
 }
 ----
 
 ==== Command Logic
 
-The following sequence diagrams show how the delete operation for tags work.
+The delete command is undergoes a typical command execution in the `Logic` Component. Refer to Figure 3.3.3.
 
-Not shown in Figure 4.3.2, `listTags` are checked against `listOfExistingTags`, i.e. all tags
+The following sequence diagram shows the interactions with the `Model` Component.
+
+Not shown in Figure 4.3.1, `listTags` are checked against `listOfExistingTags`, i.e. all tags
 to be deleted are checked whether each of them already exist in the address book. If this check fails, an exception is thrown.
 The sequence diagram demonstrates a *successful* deletion, hence this aspect of the logic is omitted for clarity.
 
-image::DeleteCommandForTagSequenceDiagram.png[width="800"]
-_Figure 4.3.1 : Typical command execution_
+image::DeleteCommandForTagSequenceDiagram1.png[width="800"]
+_Figure 4.3.1 : The tags parsed are put into an ArrayList and iterated through for deletion_
 
 image::DeleteCommandForTagSequenceDiagram2.png[width="800"]
-_Figure 4.3.2 : The tags parsed are put into an ArrayList and iterated through for deletion_
-
-image::DeleteCommandForTagSequenceDiagram3.png[width="800"]
-_Figure 4.3.3 : How each tag is removed from the Address Book and each Person's list of tags_
+_Figure 4.3.2 : How each tag is removed from the Address Book and each Person's list of tags_
 
 ==== Design Considerations
 
 **Aspect:** Implementation of Delete Tags +
-**Alternative 1 (current choice):** The existing delete command is augmented. +
+**Alternative 1 (current choice):** Modify the existing `delete` command. +
 **Pros:** The same command word `delete` is used which is an intuitive way to invoke a deletion of some object (person or tag).  +
-**Cons:** The `DeleteCommand` class is no longer responsible for deletion of a person *only* but is now responsible for deleting a tag as well. Augmenting the command via overriding constructors, adding new attributes and modifying the parse may seem too convoluted a solution. This Violates Single Responsibility Principle and Separation of Concerns as `DeleteCommand` now needs to do two different things. Users who are used to the previous version of the command may not appreciate the new change also. +
+**Cons:** The `DeleteCommand` class is no longer responsible for deletion of a person *only* but is now responsible for deleting a tag as well.
+Modifying the command via overriding constructors, adding new attributes and modifying the parse may seem too convoluted a solution.
+This Violates Single Responsibility Principle and Separation of Concerns as `DeleteCommand` now needs to do two different things. Also, users who are used to the previous version of the command may not appreciate the new change, especially if it causes new bugs. +
 **Alternative 2:** A new command `deletetag` is created. +
-**Pros:** The implementation of a new command is simple. This does not involve any major modification of existing parse and command logic. +
-**Cons:** `deletetag t/tag` is not as intuitive a command line especially to new or casual users. Users may try `delete t/tag` out of instinct and we would need to inform or prompt users of the `deletetag` command.
+**Pros:** The implementation of a new command is simple. This does not involve any major modification of the existing parse and command logic. +
+**Cons:** `deletetag t/tag` is not as intuitive in the command line interface especially to new or casual users. Users may try `delete t/tag` out of instinct and we would need to inform or prompt users of the `deletetag` command.
 
 ---
 
 **Aspect:** Execution of delete command +
 **Alternative 1 (current choice):** On the `Logic` level, we iterate through an array of tags and invoke a Model method `deleteTag(Tag tag)` on each tag.  +
-**Pros:** This maintains consistency with the Model API that deals with objects in singular amounts. +
+**Pros:** This maintains consistency with the Model API that deals with objects in singular amounts. _(At the time of coding)_ +
 **Cons:** This requires a loop to delete the tags. +
 **Alternative 2:** On the `Logic` level, we invoke a method `deleteTags(tagSet)` on a Set<Tag>  and implement `deleteTags(Set<Tag> tagSet)` in the Model component. +
 **Pros:** The code will be easier for future contributors to understand. +
 **Cons:** This does not maintain consistency of the API.
+
+(Note: Pull Request #79 Delete multiple persons, chooses Alternative 2 as its design consideration with `deletePersons(ArrayList<ReadOnlyPerson> targets)`)
+
 // end::deletetag[]
+
+// tag::edittag[]
+=== Edit Tag Mechanism
+
+Editing a tag means editing a specified tag (the old tag) in all persons who contain that tag,
+as well as editing the tag from the master list of tags in the Address Book.
+This is significantly different from edit person's tag via the `edit` command.
+There is a need for this because a user would like to edit a tag for multiple people containing that tag.
+To edit a particular tag across multiple contacts, by editing each contact, would be a tedious process, hence, the addition of this feature.
+
+In this section, you will see that the implementation of editing a tag is very similar to deleting a tag.
+
+The existing `edit` command was also modified, to allow `edit` to execute a edit on tags, or a edit on persons,
+depending on the parameters provided.
+
+It differs from `delete` tag in terms of executing the respective logic.
+A boolean value, instead of checking which attributes of `EditCommand` are present/non-null, determine which command logic to execute
+
+
+==== Detection of the Edit Type
+
+The concept of using the preamble, as seen in `DeleteCommandParser`, is also used in `EditCommandParser`.
+
+Preamble for
+
+* `edit INDEX ...` (edit person) : A digit String
+* `edit old/TAG new/TAG` (edit tag) :  A *blank* String
+
+The implementation of this parse is shown below:
+
+[source,java]
+----
+public EditCommand parse(String args) throws ParseException {
+    //...
+
+    if (preamble.matches("")) {
+        return parseForTags(argsMultimap); <1>
+    } else if (preamble.matches("\\d+")) {
+        return parseForPersonDetails(argsMultimap); <2>
+    }
+
+    //...
+}
+----
+
+
+==== Overloading the EditCommand constructor
+
+With reference to the previous code snippet the type of `EditCommand` returned during the parse are also different.
+The parameter type of the DeleteCommand is different.
+
+<1> A `new EditCommand(Tag, Tag)` from the method parseForTags(argsMultimap) is returned
+<2> a `new EditCommand(Index, EditPersonDescriptor) is returned when deleting a person.
+
+The following code shows the respective object construction of the different types of EditCommand.
+
+Depending on the constructor method called, the irrelevant attributes will be made null.
+The boolean variable `isEditForPerson` is true when the edit command is to edit a person, and false if editing a tag.
+
+[source,java]
+----
+public class DeleteCommand extends UndoableCommand {
+    // ...
+    private final boolean isEditForPerson;
+    private final Index index;
+    private final EditPersonDescriptor editPersonDescriptor;
+    private final Tag oldTag;
+    private final Tag newTag;
+
+    public EditCommand(Index index, EditPersonDescriptor editPersonDescriptor) {
+        requireNonNull(index);
+        requireNonNull(editPersonDescriptor);
+
+        this.isEditForPerson = true;
+        this.index = index;
+        this.editPersonDescriptor = new EditPersonDescriptor(editPersonDescriptor);
+        this.oldTag = null;
+        this.newTag = null;
+    }
+
+    public EditCommand(Tag oldTag, Tag newTag) {
+        requireNonNull(oldTag);
+        requireNonNull(newTag);
+
+        this.isEditForPerson = false;
+        this.index = null;
+        this.editPersonDescriptor = null;
+        this.oldTag = oldTag;
+        this.newTag = newTag;
+    }
+
+    // ...
+}
+----
+
+==== Logic Execution depending on which attributes are present.
+
+_If_ `isEditForPerson` is present, execute the logic for editing a person, _else_ execute the logic for editing a tag.
+
+This trivial implementation is show below. The distinct command execution of the editing of tags and the
+editing of person(s) have been abstracted to increase SLAP.
+
+[source,java]
+----
+public CommandResult executeUndoableCommand() throws CommandException {
+    if (isEditForPerson) {
+        return executeCommandForPerson();
+    } else {
+        return executeCommandForTag();
+    }
+}
+----
+
+==== Command Logic
+
+The edit command is undergoes a typical command execution in the `Logic` Component. Refer to Figure 3.3.3.
+
+The following sequence diagram shows the interactions with the `Model` Component.
+
+image::EditCommandForTagSequenceDiagram.png[width="800"]
+_Figure 4.3.4 : How each tag is edit from the Address Book and each Person's list of tags_
+
+==== Design Considerations
+
+**Aspect:** Implementation of Edit Tags.
+
+The design considerations are similar to the to Implementation of Delete Tags. +
+
+Modifying the existing `edit` command was picked over creating a new command `edittag`
+
+---
+// end::edittag[]
+
+// tag::TagColorMap[]
+=== Tag Colouring Mechanism
+Tag labels appear in various `UI` components: `PersonCard`, `TagListPanel` and `PersonInfoPanel`. +
+In order to have the same color across all components, there was a need for the `UI` Components
+to keep track of what colors have been used and which tag was tied to what color. +
+Thus a Singleton class `TagColorMap` was implemented.
+
+image::ClassDiagramTagColorMap.png[width="800"]
+_Figure 4.5 : The class diagram for TagColorMap_
+
+As a result of this singleton class, coloring tags on initialisation is made extremely easy,
+since the TagColorMap provided UI components an easy way to access the color mapping of tags and
+color the tags accordingly in the application, from anywhere in the code base.
+
+The following code is common in `PersonCard.java`, `TagListPanel.java`, `PersonInfoPanel.java`
+as all the these components require rendering tags.
+
+[source,java]
+----
+private void initTags(ReadOnlyPerson person) {
+    person.getTags().forEach(tag -> {
+            Label tagLabel = new Label(tag.tagName);
+            tagLabel.setStyle("-fx-background-color: " + TagColorMap.getInstance().getTagColor(tag.tagName));
+            tags.getChildren().add(tagLabel);
+        }
+    );
+}
+----
+
+==== Design Considerations
+
+**Aspects:** Implementation Coloring of Tag +
+**Alternative 1(current choice):** Use a singleton class TagColorMap to provide colors, and mapping of tags to colors. +
+**Pros:** Easy to implement. Easy to access from any UI Component. +
+**Cons:** Increases coupling across the code base. Difficult to replace TagColorMap with a stub. +
+**Alternative 2:** TagColorMap as a class attribute of MainWindow and pass TagColorMap as a parameter to the constructors of relevant UI components.  +
+**Pros:** Naive method and straightforward to implement +
+**Cons:** Requires a large amount of modification of existing code base.
+
+---
+// end::TagColorMap[]
 
 // tag::remarkCommand[]
 === Remark Command Mechanism

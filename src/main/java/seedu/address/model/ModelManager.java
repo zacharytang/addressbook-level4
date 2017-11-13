@@ -144,8 +144,9 @@ public class ModelManager extends ComponentManager implements Model {
     public synchronized void deleteTag(Tag tag) throws DuplicatePersonException, PersonNotFoundException,
             TagNotFoundException {
         addressBook.removeTag(tag);
-        for (int i = 0; i < addressBook.getPersonList().size(); i++) {
-            ReadOnlyPerson oldPerson = addressBook.getPersonList().get(i);
+        ObservableList<ReadOnlyPerson> personList = addressBook.getPersonList();
+        for (int i = 0; i < personList.size(); i++) {
+            ReadOnlyPerson oldPerson = personList.get(i);
 
             Person newPerson = new Person(oldPerson);
             Set<Tag> newTags = new HashSet<Tag>(newPerson.getTags());
@@ -162,8 +163,9 @@ public class ModelManager extends ComponentManager implements Model {
     public void editTag(Tag oldTag, Tag newTag) throws DuplicatePersonException, PersonNotFoundException,
             TagNotFoundException {
         addressBook.removeTag(oldTag);
-        for (int i = 0; i < addressBook.getPersonList().size(); i++) {
-            ReadOnlyPerson oldPerson = addressBook.getPersonList().get(i);
+        ObservableList<ReadOnlyPerson> personList = addressBook.getPersonList();
+        for (int i = 0; i < personList.size(); i++) {
+            ReadOnlyPerson oldPerson = personList.get(i);
 
             Person newPerson = new Person(oldPerson);
             Set<Tag> newTags = new HashSet<Tag>(newPerson.getTags());
