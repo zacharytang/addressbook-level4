@@ -242,6 +242,7 @@ Use this command to show a list of all persons stored. +
 Format: `list` +
 Alternatives: `l` , `showall`, `viewall`
 
+// tag::find[]
 === Locating persons by filters : `find` _(Since v1.4)_
 ____
 _Display your contacts how you like it. All of them? Just your classmates for a particular module? +
@@ -279,6 +280,7 @@ Returns any person tagged by `friends`, and having phone numbers containing `123
 Returns all persons in UniFy containing *both* 'JCfriends' and 'computing'
 * `find b/12` +
 Returns all persons in UniFy having birthdays in `December`
+// end::find[]
 
 === Editing a person or a tag: `edit`
 ==== Editing a person
@@ -707,6 +709,7 @@ Shows the central locaton among the persons tagged as 'jcfriends'.
 // end::locations[]
 
 
+// tag::sortCommand[]
 === Sorting all persons : `sort` _(Coming in v2.0)_
 // tag::blurb[]
 ____
@@ -753,12 +756,14 @@ Allows the photoCommand to work under Linux and Mac Operating System.
 
 _Here are some features in UniFy that are not in the form of commands, but good to know to aid in your productivity._
 
+// tag::suggest[]
 === Command Suggestion _(Since v1.5)_
 
 Typing a misspelled word for a command will trigger the address book to suggest the correct phrasing for that command
 
-image::command_suggestion.png[width=600]
+image::command_suggestion.png[width=500]
 _Figure 5.1 : Typing the command `delet` will make UniFy reply `Do you mean delete?`_
+// end::suggest[]
 
 // tag::tagbar[]
 === Tag Bar _(Since v1.5)_
