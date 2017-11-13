@@ -816,6 +816,7 @@ photo 1 ph/Q:\haha.jpg +
 ph 1 +
 photo 1 ph/[your file path] +
 photo +
+ph 1 ph/[your file path of a txt file] +
 edit old/At new/Friend +
 edit old/Prof new/ +
 edit old/Arts new/Friend +
