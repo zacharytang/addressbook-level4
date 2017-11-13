@@ -415,6 +415,33 @@ public class ThemeCommand extends UndoableCommand {
     }
 }
 ```
+###### \java\seedu\address\logic\Logic.java
+``` java
+    ObservableList<Tag> getTagList();
+
+    void checkAllMasterListTagsAreBeingUsed ();
+
+    void setCurrentTheme(String theme);
+
+```
+###### \java\seedu\address\logic\LogicManager.java
+``` java
+    @Override
+    public ObservableList<Tag> getTagList() {
+        return model.getAddressBook().getTagList();
+    }
+
+    @Override
+    public void checkAllMasterListTagsAreBeingUsed () {
+        model.checkMasterTagListHasAllTagsUsed();
+    }
+
+    @Override
+    public void setCurrentTheme(String theme) {
+        model.setCurrentTheme(theme);
+    }
+
+```
 ###### \java\seedu\address\logic\parser\DeleteCommandParser.java
 ``` java
     /**
@@ -608,6 +635,38 @@ public class ThemeCommandParser implements Parser<ThemeCommand> {
 ###### \java\seedu\address\model\AddressBook.java
 ``` java
     /**
+     * Checks if the master list {@link #tags} has every tag being used.
+     *  @return true if all tags in the master list is being used by a person
+     */
+    public boolean hasAllTagsInUse () {
+        HashSet<Tag> masterSet = new HashSet<Tag>();
+        for (ReadOnlyPerson person: persons) {
+            masterSet.addAll(person.getTags());
+        }
+        return masterSet.containsAll(tags.toSet());
+    }
+
+    /**
+     *  Gets the tags in the master list {@link #tags} that is not being used
+     *  @return {@code Set<Tag>} of Tags not being used by any person
+     *  @see #hasAllTagsInUse()
+     */
+    public Set<Tag> getUnusedTags () {
+        HashSet<Tag> actualSet = new HashSet<Tag>();
+        for (ReadOnlyPerson person: persons) {
+            actualSet.addAll(person.getTags());
+        }
+        Set<Tag> masterSet = tags.toSet();
+
+        masterSet.removeAll(actualSet);
+        return masterSet;
+    }
+
+
+```
+###### \java\seedu\address\model\AddressBook.java
+``` java
+    /**
      * Removes {@code tag} from this {@code AddressBook}.
      * @throws TagNotFoundException if the {@code tag} is not in this {@code AddressBook}.
      */
@@ -695,6 +754,14 @@ public class ThemeCommandParser implements Parser<ThemeCommand> {
 ```
 ###### \java\seedu\address\model\ModelManager.java
 ``` java
+    /** Raises an event to indicate a tag in the master list of tags is unused*/
+    private void indicateMasterTagListHasAnUnusedTag () {
+        raise(new MasterTagListHasAnUnusedTagEvent(addressBook.getUnusedTags()));
+    }
+
+```
+###### \java\seedu\address\model\ModelManager.java
+``` java
     @Override
     public void showMapOf(ReadOnlyPerson person, Index index) {
         raise(new PersonAddressDisplayMapEvent(person, index.getZeroBased()));
@@ -706,6 +773,16 @@ public class ThemeCommandParser implements Parser<ThemeCommand> {
     @Override
     public void showDirectionsTo(ReadOnlyPerson target, Address address, Index index) {
         raise(new PersonAddressDisplayDirectionsEvent(target, address, index.getZeroBased()));
+    }
+
+```
+###### \java\seedu\address\model\ModelManager.java
+``` java
+    @Override
+    public void checkMasterTagListHasAllTagsUsed () {
+        if (!addressBook.hasAllTagsInUse()) {
+            indicateMasterTagListHasAnUnusedTag();
+        }
     }
 
 ```
@@ -1148,6 +1225,100 @@ public class TagColorMap {
     }
 
 
+```
+###### \java\seedu\address\ui\TagListPanel.java
+``` java
+/**
+ * An UI component that displays all the {@code Tags} in the {@code AddressBook} .
+ */
+public class TagListPanel extends UiPart<Region> {
+
+    private static final String FXML = "TagListPanel.fxml";
+    public final ObservableList<Tag> tagList;
+    private final Logger logger = LogsCenter.getLogger(TagListPanel.class);
+
+    /**
+     * Note: Certain keywords such as "location" and "resources" are reserved keywords in JavaFX.
+     * As a consequence, UI elements' variable names cannot be set to such keywords
+     * or an exception will be thrown by JavaFX during runtime.
+     *
+     * @see <a href="https://github.com/se-edu/addressbook-level4/issues/336">The issue on AddressBook level 4</a>
+     */
+
+
+    @FXML
+    private FlowPane tags;
+
+    public TagListPanel (ObservableList<Tag> tagList) {
+        super(FXML);
+        registerAsAnEventHandler(this);
+        this.tagList = tagList;
+        initTags(tagList);
+        //bindListeners(person);
+    }
+
+    private void updateTagList (ObservableList<Tag> newtagList) {
+        tags.getChildren().clear();
+        initTags(newtagList);
+    }
+
+    /**
+     * Initializes the tags for tag list
+     */
+    private void initTags (ObservableList<Tag> tagList) {
+        Set<Tag> tagSet = tagList.stream().collect(Collectors.toSet());
+        tagSet.forEach(tag -> {
+            Label tagLabel = new Label(tag.tagName);
+            tagLabel.setStyle("-fx-background-color: " + TagColorMap.getInstance().getTagColor(tag.tagName));
+            tags.getChildren().add(tagLabel);
+        }
+        );
+    }
+
+    /**
+     *  Update the Tag List panel which has unused tags
+     */
+    private void updateTagListWithUnusedTag (ObservableList<Tag> tagList, Set<Tag> outdatedTags) {
+        tags.getChildren().clear();
+        Set<Tag> tagSet = tagList.stream().collect(Collectors.toSet());
+
+        initTagsWithUnusedTags(outdatedTags, tagSet);
+    }
+
+    /**
+     * Initializes the tags for a tag list which contains unused tags
+     * and gives a different color to distinguish unused tags
+     */
+    private void initTagsWithUnusedTags (Set<Tag> outdatedTags, Set<Tag> tagSet) {
+        tagSet.forEach(tag -> {
+            if (!outdatedTags.contains(tag)) {
+                Label tagLabel = new Label(tag.tagName);
+                tagLabel.setStyle("-fx-background-color: " + TagColorMap.getInstance().getTagColor(tag.tagName));
+                tags.getChildren().add(tagLabel);
+            }
+        }
+        );
+        outdatedTags.forEach(tag -> {
+            Label tagLabel = new Label(tag.tagName);
+            tagLabel.setStyle("-fx-background-color: Gray  ");
+            tags.getChildren().add(tagLabel);
+        }
+        );
+
+    }
+
+    @Subscribe
+    public void handleAddressBookChangedEvent (AddressBookChangedEvent event) {
+        logger.info(LogsCenter.getEventHandlingLogMessage(event));
+        updateTagList(event.data.getTagList());
+    }
+
+    @Subscribe
+    public void handleMasterTagListHasUnusedTagEvent (MasterTagListHasAnUnusedTagEvent event) {
+        logger.info(LogsCenter.getEventHandlingLogMessage(event));
+        updateTagListWithUnusedTag(tagList, event.outdatedTags);
+    }
+}
 ```
 ###### \resources\view\DarkTheme.css
 ``` css
