@@ -225,7 +225,7 @@ Birthday:  +
 Timetable:  +
 Remark: [CS2103T Prof and Tutor] +
 Photo:  +
-Tags: [Legend][Myth][CS2103T][Man][Prof]] +#
+Tags: [Legend][Myth][CS2103T][Man][Prof]]#
 
 *Type in:* undo +
 *Expected Result:* Success message for undo command. 1 person restored. +
@@ -235,12 +235,21 @@ Tags: [Legend][Myth][CS2103T][Man][Prof]] +#
 *Type in:* delete -1, -2 +
 *Expected Result:* Show Error message +
 *Result Message:*  +
-[red]#Invalid command format!#
+[red]#Invalid command format! +
+      | delete |: Deletes the persons identified using their last displayed indexes used in the last person listing. +
+                     OR the tag specified from all people containing the specific tag +
+      Parameters: INDEX... (must be positive integers) +
+                         OR  t/TAG... (case-sensitive) +
+      Example: delete 1 +
+                     delete 1, 2, 3 +
+                     delete 2 3 4 +
+                     delete t/friend +
+                     delete t/friend t/enemy#
 
 *Type in:* delete 999 +
 *Expected Result:* Show Error message +
 *Result Message:*  +
-[red]#Invalid command format!#
+[red]#The person index provided is invalid#
 
 *Type in:* delete +
 *Expected Result:* Error message suggesting the correct command format +
@@ -423,16 +432,15 @@ From 'Arts' to 'Friend'#
 *Result Message:*  +
 [red]#The specified old tag does not exist#
 
-=== PhotoCommand
+=== PhotoCommand (For WINDOWS System only)
 ==== Description/Data
 PhotoCommand is to add the photo to your specified contact.
+This command only works with WINDOWS Operating System in v1.5.
 
 ==== Before Test PhotoCommand
-Windows System: Right click on one picture file, click `Properties`
+Right click on one picture file, click `Properties`
 and copy the file path in the `location:` field.
 It should be an absolute file path in your computer, like "C:\selfie\bg.jpg".
-
-Mac/Linux System: The valid absolute file path.
 
 ==== Steps To Execute And Expected Results
 *Type in:* photo +
@@ -527,7 +535,7 @@ Remark: [Likes CS2103T] +
 Photo:  +
 Tags: [Legend][Myth][CS2103T][Man][Prof]#
 
-*Type in:* ph 1 ph/[A path of txt file]+
+*Type in:* ph 1 ph/[A path of txt file] +
 *Expected Result:* Message showing there is an error +
 *Result Message:*  +
 Invalid file path! +
@@ -722,7 +730,17 @@ Timetable Command shows the combined timetable of selected persons
 *Type in:* whenfree 1 2 3 +
 *Expected Result:* A combined timetable is shown +
 *Result Message:* +
-[green]#Displayed timetables: [Damith] [Neil Bryan] [Fan Yiting]#
+[green]#Displayed timetables: +
+[Damith] +
+[Neil Bryan] +
+[Fan Yiting]#
+
+*Type in:* whenfree 1, 4 +
+*Expected Result:* A combined timetable is shown +
+*Result Message:* +
+[green]#Displayed timetables: +
+[Damith] +
+[Tai Yu Xuan]#
 
 *Type in:* whenfree 1 +
 *Expected Result:* A combined timetable is shown +
