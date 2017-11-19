@@ -93,6 +93,7 @@ public interface Model {
     /** Returns the theme map **/
     HashMap<String, String> getThemeMap ();
 
+    //@@author nbriannl-reused
     /** Sets the current theme of the app */
     void setCurrentTheme(String theme);
 
