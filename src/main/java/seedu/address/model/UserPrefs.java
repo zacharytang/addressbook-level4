@@ -46,6 +46,7 @@ public class UserPrefs {
         this.addressBookName = addressBookName;
     }
 
+    //@@author nbriannl-reused
     public String getCurrentTheme() {
         if (currentTheme == null) {
             return "/view/LightTheme.css";
@@ -62,6 +63,7 @@ public class UserPrefs {
         setTheme(theme);
     }
 
+    //@@author
     @Override
     public boolean equals(Object other) {
         if (other == this) {

@@ -421,8 +421,6 @@ public class ThemeCommand extends UndoableCommand {
 
     void checkAllMasterListTagsAreBeingUsed ();
 
-    void setCurrentTheme(String theme);
-
 ```
 ###### \java\seedu\address\logic\LogicManager.java
 ``` java
@@ -434,11 +432,6 @@ public class ThemeCommand extends UndoableCommand {
     @Override
     public void checkAllMasterListTagsAreBeingUsed () {
         model.checkMasterTagListHasAllTagsUsed();
-    }
-
-    @Override
-    public void setCurrentTheme(String theme) {
-        model.setCurrentTheme(theme);
     }
 
 ```
@@ -739,12 +732,6 @@ public class ThemeCommandParser implements Parser<ThemeCommand> {
     /** Returns the theme map **/
     HashMap<String, String> getThemeMap ();
 
-    /** Sets the current theme of the app */
-    void setCurrentTheme(String theme);
-
-    /** Returns the current theme in use by the app */
-    String getCurrentTheme();
-
 ```
 ###### \java\seedu\address\model\Model.java
 ``` java
@@ -843,15 +830,6 @@ public class ThemeCommandParser implements Parser<ThemeCommand> {
         return this.addressBook.getThemeMap();
     }
 
-    @Override
-    public void setCurrentTheme(String theme) {
-        currentTheme = theme;
-    }
-
-    @Override
-    public String getCurrentTheme() {
-        return currentTheme;
-    }
 ```
 ###### \java\seedu\address\model\person\Birthday.java
 ``` java
@@ -999,138 +977,6 @@ public class Tag {
     private void handlePersonAddressDisplayDirectionsEvent(PersonAddressDisplayDirectionsEvent event) {
         logger.info(LogsCenter.getEventHandlingLogMessage(event));
         loadGoogleMapDirections(event.person, event.address);
-    }
-}
-```
-###### \java\seedu\address\ui\MainWindow.java
-``` java
-    /**
-     * Fills up all the placeholders of this window.
-     */
-    void fillInnerParts() {
-        infoPanel = new InfoPanel();
-        infoPlaceholder.getChildren().add(infoPanel.getRoot());
-
-        personInfoPanel = new PersonInfoPanel();
-        personInfoPlaceholder.getChildren().add(personInfoPanel.getRoot());
-
-        personListPanel = new PersonListPanel(logic.getFilteredPersonList());
-        personListPanelPlaceholder.getChildren().add(personListPanel.getRoot());
-
-        tagListPanel = new TagListPanel(logic.getTagList());
-        tagListPanelPlaceholder.getChildren().add(tagListPanel.getRoot());
-        logic.checkAllMasterListTagsAreBeingUsed();
-
-        ResultDisplay resultDisplay = new ResultDisplay();
-        resultDisplayPlaceholder.getChildren().add(resultDisplay.getRoot());
-
-        StatusBarFooter statusBarFooter = new StatusBarFooter(prefs.getAddressBookFilePath(),
-                logic.getFilteredPersonList().size());
-        statusbarPlaceholder.getChildren().add(statusBarFooter.getRoot());
-
-        CommandBox commandBox = new CommandBox(logic);
-        commandBoxPlaceholder.getChildren().add(commandBox.getRoot());
-    }
-
-    void hide() {
-        primaryStage.hide();
-    }
-
-    private void setTitle(String appTitle) {
-        primaryStage.setTitle(appTitle);
-    }
-
-    /**
-     * Sets the given image as the icon of the main window.
-     * @param iconSource e.g. {@code "/images/help_icon.png"}
-     */
-    private void setIcon(String iconSource) {
-        FxViewUtil.setStageIcon(primaryStage, iconSource);
-    }
-
-    /**
-     * Sets the default size based on user preferences.
-     */
-    private void setWindowDefaultSize(UserPrefs prefs) {
-        primaryStage.setHeight(prefs.getGuiSettings().getWindowHeight());
-        primaryStage.setWidth(prefs.getGuiSettings().getWindowWidth());
-        if (prefs.getGuiSettings().getWindowCoordinates() != null) {
-            primaryStage.setX(prefs.getGuiSettings().getWindowCoordinates().getX());
-            primaryStage.setY(prefs.getGuiSettings().getWindowCoordinates().getY());
-        }
-    }
-
-    private void setWindowMinSize() {
-        primaryStage.setMinHeight(MIN_HEIGHT);
-        primaryStage.setMinWidth(MIN_WIDTH);
-    }
-
-    /**
-     * Returns the current size and the position of the main Window.
-     */
-    GuiSettings getCurrentGuiSetting() {
-        return new GuiSettings(primaryStage.getWidth(), primaryStage.getHeight(),
-                (int) primaryStage.getX(), (int) primaryStage.getY());
-    }
-
-    /**
-     * Opens the help window.
-     */
-    @FXML
-    public void handleHelp() {
-        HelpWindow helpWindow = new HelpWindow();
-        helpWindow.show();
-    }
-
-    /**
-     * Changes the current theme to the given theme.
-     */
-    public void handleChangeTheme(String theme) {
-        if (getRoot().getStylesheets().size() > 1) {
-            getRoot().getStylesheets().remove(1);
-        }
-        getRoot().getStylesheets().add(VIEW_PATH + theme);
-    }
-
-    private void setWindowDefaultTheme(UserPrefs prefs) {
-        getRoot().getStylesheets().add(prefs.getCurrentTheme());
-    }
-
-    String getCurrentTheme() {
-        return getRoot().getStylesheets().get(1);
-    }
-
-    void show() {
-        primaryStage.show();
-    }
-
-    /**
-     * Closes the application.
-     */
-    @FXML
-    private void handleExit() {
-        raise(new ExitAppRequestEvent());
-    }
-
-    public PersonListPanel getPersonListPanel() {
-        return this.personListPanel;
-    }
-
-    void releaseResources() {
-        infoPanel.freeResources();
-    }
-
-    @Subscribe
-    private void handleShowHelpEvent(ShowHelpRequestEvent event) {
-        logger.info(LogsCenter.getEventHandlingLogMessage(event));
-        handleHelp();
-    }
-
-    @Subscribe
-    private void handleChangeThemeEvent(ChangeThemeRequestEvent event) {
-        logger.info(LogsCenter.getEventHandlingLogMessage(event));
-        handleChangeTheme(event.themeToChangeTo);
-        logic.setCurrentTheme(getCurrentTheme());
     }
 }
 ```

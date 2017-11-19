@@ -209,6 +209,7 @@ public class ModelManager extends ComponentManager implements Model {
         return this.addressBook.getThemeMap();
     }
 
+    //@@author nbriannl-reused
     @Override
     public void setCurrentTheme(String theme) {
         currentTheme = theme;

@@ -64,6 +64,7 @@ public class UiManager extends ComponentManager implements Ui {
         }
     }
 
+    //@@author nbriannl-reused
     @Override
     public void stop() {
         prefs.updateLastUsedGuiSetting(mainWindow.getCurrentGuiSetting());
@@ -72,6 +73,7 @@ public class UiManager extends ComponentManager implements Ui {
         mainWindow.releaseResources();
     }
 
+    //@@author
     private void showFileOperationAlertAndWait(String description, String details, Throwable cause) {
         final String content = details + ":\n" + cause.toString();
         showAlertDialogAndWait(AlertType.ERROR, FILE_OPS_ERROR_DIALOG_STAGE_TITLE, description, content);
@@ -112,6 +114,7 @@ public class UiManager extends ComponentManager implements Ui {
         System.exit(1);
     }
 
+    //@@author nbriannl-reused
     /**
      * Sets the given theme as the main theme used in the main window
      * @param theme eg. {@code "DarkTheme.css}
@@ -120,6 +123,7 @@ public class UiManager extends ComponentManager implements Ui {
         mainWindow.getRoot().getStylesheets().add("/view/" + theme);
     }
 
+    //@@author
     //==================== Event Handling Code ===============================================================
 
     @Subscribe
