@@ -26,31 +26,17 @@ public class PersonCardHandle extends NodeHandle<Node> {
 
     private final Label idLabel;
     private final Label nameLabel;
-    private final Label genderLabel;
-    private final Label matricNoLabel;
-    private final Label addressLabel;
     private final Label phoneLabel;
     private final Label emailLabel;
-    private final Label timetableLabel;
-    private final Label photoPathLabel;
-    private final Label remarkLabel;
     private final List<Label> tagLabels;
-    private final Label birthdayLabel;
 
     public PersonCardHandle(Node cardNode) {
         super(cardNode);
 
         this.idLabel = getChildNode(ID_FIELD_ID);
         this.nameLabel = getChildNode(NAME_FIELD_ID);
-        this.genderLabel = getChildNode(GENDER_FIELD_ID);
-        this.matricNoLabel = getChildNode(MATRIC_NO_FIELD_ID);
-        this.addressLabel = getChildNode(ADDRESS_FIELD_ID);
         this.phoneLabel = getChildNode(PHONE_FIELD_ID);
         this.emailLabel = getChildNode(EMAIL_FIELD_ID);
-        this.timetableLabel = getChildNode(TIMETABLE_FIELD_ID);
-        this.photoPathLabel = getChildNode(PHOTOPATH_FIELD_ID);
-        this.remarkLabel = getChildNode(REMARK_FIELD_ID);
-        this.birthdayLabel = getChildNode(BIRTHDAY_FIELD_ID);
 
         Region tagsContainer = getChildNode(TAGS_FIELD_ID);
         this.tagLabels = tagsContainer
@@ -68,40 +54,12 @@ public class PersonCardHandle extends NodeHandle<Node> {
         return nameLabel.getText();
     }
 
-    public String getGender() {
-        return genderLabel.getText();
-    }
-
-    public String getMatricNo() {
-        return matricNoLabel.getText();
-    }
-
-    public String getAddress() {
-        return addressLabel.getText();
-    }
-
     public String getPhone() {
         return phoneLabel.getText();
     }
 
     public String getEmail() {
         return emailLabel.getText();
-    }
-
-    public String getBirthday() {
-        return birthdayLabel.getText();
-    }
-
-    public String getTimetable() {
-        return timetableLabel.getText();
-    }
-
-    public String getRemark() {
-        return remarkLabel.getText();
-    }
-
-    public String getPhotoPath() {
-        return photoPathLabel.getText();
     }
 
     public List<String> getTags() {

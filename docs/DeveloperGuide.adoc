@@ -57,15 +57,16 @@ Please do not disable them. If you have disabled them, go to `File` > `Settings`
 . Locate the `build.gradle` file and select it. Click `OK`
 . Click `Open as Project`
 . Click `OK` to accept the default settings
-. Open a console and run the command `gradlew processResources` (Mac/Linux: `./gradlew processResources`). It should finish with the `BUILD SUCCESSFUL` message. +
+. Open your console and run the command `gradlew processResources` (Mac/Linux: `./gradlew processResources`). It should finish with the `BUILD SUCCESSFUL` message. +
 This will generate all resources required by the application and tests.
 
 === Verifying the setup
 
-. Run the `seedu.address.MainApp` and try a few commands
+. Run the `seedu.address.MainApp`
+. Try out a few commands
 . link:#testing[Run the tests] to ensure they all pass.
 
-=== Configurations to do before writing code
+=== Doing configurations before writing code
 
 ==== Configuring the coding style
 
@@ -122,9 +123,9 @@ link:#common-classes[*`Commons`*] represents a collection of classes used by mul
 The rest of the App consists of four components.
 
 * link:#ui-component[*`UI`*] : The User Interface (UI) of the App.
-* link:#logic-component[*`Logic`*] : Executes command.
-* link:#model-component[*`Model`*] : Holds the data of the App in-memory.
-* link:#storage-component[*`Storage`*] : Reads data from, and writes data to, the hard disk.
+* link:#logic-component[*`Logic`*] : The execution of command.
+* link:#model-component[*`Model`*] : The storage of the data of the App in-memory.
+* link:#storage-component[*`Storage`*] : The saving and retrieving of data from the hard disk.
 
 Each of the four components
 
@@ -167,7 +168,7 @@ _Figure 3.2.1 : Structure of the UI Component_
 
 The UI consists of a `MainWindow` that is made up of several parts such as `CommandBox`, `ResultDisplay`, `PersonListPanel`, `StatusBarFooter`, and `BrowserPanel`. All these, including the `MainWindow`, inherit from the abstract `UiPart` class.
 
-The `UI` component uses JavaFx UI framework. The layout of these UI parts are defined in matching `.fxml` files that are in the `src/main/resources/view` folder. For example, the layout of the link:{repoURL}/src/main/java/seedu/address/ui/MainWindow.java[`MainWindow`] is specified in link:{repoURL}/src/main/resources/view/MainWindow.fxml[`MainWindow.fxml`]
+The `UI` component uses JavaFx UI framework. The layout of these UI parts are defined in matching `.fxml` files that are in the `src/main/resources/view` folder. For example, the layout of the link:{repoURL}/src/main/java/seedu/address/ui/MainWindow.java[`MainWindow`] is specified in link:{repoURL}/src/main/resources/view/MainWindow.fxml[`MainWindow.fxml`].
 
 The `UI` component,
 
@@ -227,11 +228,11 @@ The `Storage` component,
 This section describes some noteworthy details on how certain features are implemented.
 
 // tag::undoredo[]
-=== Undo/Redo mechanism
+=== Undo/Redo Command mechanism
 
 The undo/redo mechanism is designed to suit the needs of students who might accidentally execute a undesired command. It is facilitated by an `UndoRedoStack`, which resides inside `LogicManager`. It supports undoing and redoing of commands that modifies the state of the address book (e.g. `add`, `edit`). Such commands will inherit from `UndoableCommand`.
 
-`UndoRedoStack` only deals with `UndoableCommands`. Commands that cannot be undone will inherit from `Command` instead. The following diagram shows the inheritance diagram for commands:
+`UndoRedoStack` only deals with `UndoableCommands`. Commands that cannot be undone will inherit from `Command` instead. You will be able to see the inheritance diagram for commands below (_Fig 4.1.1_).
 
 image::LogicCommandClassDiagram.png[width="800"]
 _Figure 4.1.1 : Structure of Commands in the Logic Component. This diagram shows finer details concerning `XYZCommand` and `Command` in Figure 3.3.1_
@@ -319,6 +320,7 @@ The following activity diagram summarize what happens inside the `UndoRedoStack`
 image::UndoRedoActivityDiagram.png[width="200"]
 _Figure 4.1.4 : Activity diagram when a new command is executed_
 
+// tag::you[]
 ==== Design Considerations
 
 **Aspect:** Implementation of `UndoableCommand` +
@@ -353,21 +355,22 @@ _Figure 4.1.4 : Activity diagram when a new command is executed_
 
 **Aspect:** Data structure to support the undo/redo commands +
 **Alternative 1 (current choice):** Separate stack for undo and redo are used. +
-**Pros:** This is asy to understand for new Computer Science undergraduates, who are likely to be the new incoming developers of our project. +
+**Pros:** This is easy to understand for new Computer Science undergraduates, who are likely to be the new incoming developers of our project. +
 **Cons:** Logic is duplicated twice. For example, when a new command is executed, we must remember to update both `HistoryManager` and `UndoRedoStack`. +
 **Alternative 2:** `HistoryManager` is used for undo/redo. +
 **Pros:** We do not need to maintain a separate stack, and just reuse what is already in the codebase. +
 **Cons:** This would require dealing with commands that have already been undone: We must remember to skip these commands. Violates Single Responsibility Principle and Separation of Concerns as `HistoryManager` now needs to do two different things. +
+// end::you[]
 // end::undoredo[]
 
 // tag::timetable[]
 === Timetables Attribute
-
+// tag::you[]
 Users are able to store timetables by supplying a shortened NUSMods URL when adding a person. You will be able to understand how NUSMods URLs are being parsed and how the timetable information is being extracted. This need is especially crucial for NUS students who require friends' timetables in order to find out a time to meet up.
-
+// end::you[]
 ==== Retrieval of Lesson Information
 
-NUSMods URLs are in the format of `.../timetable/ACAD_YEAR/SEM?MODULE_CODE[LESSON_TYPE]=LESSON_NO&...`  We use `TimetableParserUtil : expandUrl` to get an expanded URL from shortened URL provided, then parse the expanded URL accordingly to obtain lesson data.
+NUSMods URLs are in the format of `.../timetable/ACAD_YEAR/SEM?MODULE_CODE[LESSON_TYPE]=LESSON_NO&...`  We use `TimetableParserUtil:expandUrl()` to get an expanded URL from shortened URL provided, then parse the expanded URL accordingly to obtain lesson data.
 Lessons for each module are stored in `ModuleInfoFromUrl`, which is then represented in `TimetableInfoFromUrl`.
 
 https://github.com/nusmodifications/nusmods-api[NUSMods API] is used to retrieve data related to lessons parsed from URLs. JSON objects representing each module is retrieved and
@@ -401,15 +404,30 @@ More specific information for a person's lessons is abstracted further as follow
 The following UML diagram represents the implementation of the classes.
 
 image::TimetableClassDiagram.png[width="800"]
-_Figure 4.2.1 : Timetable class diagram (XYZComponent refers to all other components that `Person` is composed of, the class diagram is not complete)_
+_Figure 4.2.2.1 : Timetable class diagram (XYZComponent refers to all other components that `Person` is composed of, the class diagram is not complete)_
 
 ==== Displaying of Timetables
 
 Displaying of timetables is facilitated using a single `TimetableDisplay` component, which resides above `BrowserPanel`. Both these
 components are contained within `InfoPanel`, which handles specific events to bring either panel to the front.
 
-Upon execution of a `select` or `whenfree` command, an arraylist of `Timetable` to display is passed to `TimetableDisplay`, which
-dynamically fills the JavaFX container `GridPane` with `Panes`, according to the timetables to be displayed.
+Upon execution of a `whenfree` command, the following happens:
+
+. `TimetableCommandParser` parses the input to determine which timetables to display.
+.. If no arguments are passed, empty `ArrayList<Index>` is used.
+.. Otherwise, arguments are parsed into their respective `Index` and stored in an `ArrayList<Index>`.
+. A new `TimetableCommand` is constructed, using the list created by the parser.
+. When `TimetableCommand:execute()` is called, the list of `Index`, is used to obtain the `ReadOnlyPerson` to display,
+and stores it in a `List<ReadOnlyPerson>`.
+. A `TimetableDisplayEvent` is then posted with the list of people to be displayed.
+. The event is then handled by the `InfoPanel`, which creates a new `TimetableDisplay` component and brings it to the front.
+.. Each `Timetable` to be displayed is obtained from the list of people from the `TimetableDisplayEvent` handled.
+.. When `TimetableDisplay` component is created, `fillInitialGrid()` first populates the timetable with empty slots.
+.. After which, each `Timetable` is added to the grid by `fillSingleTimetable()`.
+
+Execution of a `select` command is similar, except that a `PersonSelectedEvent` is handled instead of a `TimetableDisplayEvent`
+
+// tag::you[]
 
 ==== Design Considerations
 
@@ -421,7 +439,7 @@ dynamically fills the JavaFX container `GridPane` with `Panes`, according to the
 **Pros:** It is simple and easy to understand,  easy to iterate through. +
 **Cons:** This does not follow OOP concepts, and cannot be extended to implement new functionalities. +
 **Alternative 3:** Individual lesson timings and information are stored. +
-**Pros:** Building the timetable is not required +
+**Pros:** Building the timetable is not required. +
 **Cons:** Queries are inefficient if a timing has a lesson, needs to iterate through every lesson stored.
 
 ---
@@ -433,51 +451,71 @@ dynamically fills the JavaFX container `GridPane` with `Panes`, according to the
 **Alternative 2:** Both shortened and full-length NUSMods URLs are accepted. +
 **Pros:** This is more user friendly as any type of NUSMods URL is accepted. +
 **Cons:** This is much harder to detect malformed URL as parsing data does not detect errors in lesson tokens in URL. Shortened URL gives 403 response on bad URL.
+
+---
+
+**Aspect:** Behaviour of app when there is no internet connection +
+**Alternative 1(current choice):** Only store timetable URLs, and query each time app is launched. If no internet, start with empty timetable. +
+**Pros:** Storage needed is minimal, as only a single string is stored for each person. +
+**Cons:** Startup of app can be slow if there is a large number of persons. +
+**Alternative 2:** Store timetable information after retrieval from NUSMods once. +
+**Pros:** We only need to retrieve lesson information once per person. +
+**Cons:** Storage of entire timetables can be very costly, and storage can be expensive with a large number of contacts.
+// end::you[]
 // end::timetable[]
 
 // tag::deletetag[]
-=== Delete Tag Mechanism
+=== Delete Command [Tag] Mechanism
 
-To delete a tag means to delete a specified tag in all persons who contain that tag, as well as in the master list of tags in the Address Book.
+Deleting a tag means deleting a specified tag in all persons who contain that tag, as well as deleting the tag from the master list of tags in the Address Book.
 This is significantly different from deleting a tag for a person via the `edit` command.
-There is a need for this because a user would like to delete a tag that is no longer relevant or is outdated, instead of going editing those with the same tags one by one.
-To delete a particular tag across multiple contacts would be a tedious process, hence, the addition of this feature.
-You will be able to understand how tags are deleted from all persons tagged and how we use the same command word `delete` to both delete person and delete tag.
+There is a need for this because a user would like to delete a tag that is no longer relevant or is outdated.
+To delete a particular tag across multiple contacts, by editing each contact, would be a tedious process, hence, the addition of this feature.
 
-In general, the ability to delete a tag was implemented via an _augmentation_ of the existing `delete` command.
+In this section, you will be able to understand how tags are deleted from all persons tagged with that tag, and how we use the same command word `delete`
+to both delete one or more persons or delete one or more tags.
 
-This augmentation is achieved via
+In general, the ability to delete a tag was implemented by modifying the existing `delete` command.
 
-* detection of the type of deletion in the DeleteCommandParser
-* overloading the DeleteCommand constructor
-* executing the respective logic based on which attributes are present/non-null.
+This modification involves:
+
+* Detection of the type of deletion in the DeleteCommandParser
+* Overloading the DeleteCommand constructor
+* Executing the respective logic based on which attributes in `DeleteCommand` are present/non-null.
+
+As a result of this modification, `delete` can execute a delete on tags, or a delete on persons, depending on the parameters provided.
 
 ==== Detection of the Deletion Type
 
-The current `delete` command (for a person) is in the format `delete INDEX`. Deleting a tag is in the format `delete t/TAG`.
-The same `delete` command is used but the parameters in the command line are different.
+For both types of `delete` commands, the same `delete` command word is used but the parameters provided in the command line are different.
 
-The two types of commands are distinguished by the `preamble` of the parameter arguments after the word `delete`, when tokenized against the `/t` prefix for tags.
+The two types of commands are distinguished by the `preamble` of the parameter arguments after the word `delete`, when tokenized against the `t/` prefix for tags.
 
-The preamble for `delete "INDEX"` is a *digit* while the preamble for `delete" "t/TAG` is a *space*.
+Preamble for
+
+* `delete INDEX [MORE INDEXES]...` (Delete Person(s)) : A *digit* String
+* `delete t/TAG [t/TAG]` (Delete Tag(s)) :  A *blank* String
+
 The implementation of this parse is shown below:
-
 
 [source,java]
 ----
 public DeleteCommand parse(String args) throws ParseException {
-
     ArgumentMultimap argMultimap = ArgumentTokenizer.tokenize(args, PREFIX_TAG);
     String preamble = argMultimap.getPreamble();
-
     if (preamble.equals("")) {
-        // parsing of tags into a Set<Tag> tagList
-        return new DeleteCommand(tagList); # <1>
-
-    } else if (preamble.matches("-?\\d+")) {
-        // parsing of the index
-        return new DeleteCommand(index); # <2>
+        // there exists 't/'
+        DeleteCommand deleteCommandForTag = parseForTags(argMultimap);
+        if (deleteCommandForTag != null) {
+            return deleteCommandForTag; <1>
+        }
+    } else {
+        DeleteCommand deleteCommandForPerson = parseForPersonIndexes(args, preamble);
+        if (deleteCommandForPerson != null) {
+            return deleteCommandForPerson; <2>
+        }
     }
+
     // ...
 }
 ----
@@ -485,102 +523,298 @@ public DeleteCommand parse(String args) throws ParseException {
 
 ==== Overloading the DeleteCommand constructor
 
-With reference to the previous code snippet the type of `DeleteCommand` returned during the parse are also different.
+With reference to the previous code snippet the type of `DeleteCommand` returned during the parse is also different.
+They differ by the types of the parameters.
 
-<1> a `new DeleteCommand(tagList)` is returned when deleting one or more tags.
-<2> a `new DeleteCommand(index)` is returned when deleting a person.
+<1> A `deleteCommandForTag` which is a `new DeleteCommand(Set<Tag>)` is returned when deleting one or more tags.
+<2> A `deleteCommandForPerson` which is a `new DeleteCommand(Index)` or a `new DeleteCommand(ArrayList<Index>)` is returned when deleting one or more persons.
 
-The following code shows the respective object construction of both types of DeleteCommand.
+The following code shows the respective object construction of the different types of DeleteCommand.
 
-
-Depending on the constructor method called, *either* the `targetIndex` attribute *or* the `targetTags` will be made null.
-Which will lead on to the next section about command execution.
+Depending on the constructor method called, *either* the `targetIndexes` attribute *or* the `targetTags` will be made null,
+which will lead on to the next section about command execution.
 
 [source,java]
 ----
 public class DeleteCommand extends UndoableCommand {
     // ...
-    private final Index targetIndex;
+    private final Index targetIndexes;
 
     private final Set<Tag> targetTags;
 
+    public DeleteCommand(Set<Tag> targetTags) {
+        this.targetIndexes = null;
+        this.targetTags = targetTags;
+    }
+
     public DeleteCommand(Index targetIndex) {
-        this.targetIndex = targetIndex;
+        this.targetIndexes = new ArrayList<>();
+        targetIndexes.add(targetIndex);
         this.targetTags = null;
     }
 
-    public DeleteCommand(Set<Tag> targetTags) {
-        this.targetTags = targetTags;
-        this.targetIndex = null;
+    public DeleteCommand(ArrayList<Index> targetIndexes) {
+        this.targetIndexes = targetIndexes;
+        this.targetTags = null;
     }
+
     // ...
 }
 ----
 
-
-
 ==== Logic Execution depending on which attributes are present.
 
-_If_ `targetIndex` is present, execute the logic for deleting a person, _else_ execute the logic for deleting a tag.
+_If_ `targetIndexes` is present/non-null, execute the logic for deleting a person, _else_ execute the logic for deleting a tag.
 
-This trivial implementation is show below.
+This trivial implementation is show below. The distinct command execution of the deleting of tags and the
+delete of person(s) have been abstracted to apply SLAP (Single Level of Abstraction Per method).
 
 [source,java]
 ----
 public CommandResult executeUndoableCommand() throws CommandException {
+    if (targetTags == null && targetIndexes != null) {
+        return executeCommandForPersons();
 
-    if (targetTags == null && targetIndex != null) {
-        // command logic for deletion for a person
     } else {
-        // command logic for deletion for a tag
+        return executeCommandForTag();
     }
-    // ...
 }
 ----
 
 ==== Command Logic
 
-The following sequence diagrams show how the delete operation for tags work.
+The delete command undergoes a typical command execution in the `Logic` Component. Refer to Figure 3.3.3.
 
-Not shown in Figure 4.3.2, `listTags` are checked against `listOfExistingTags`, i.e. all tags
+The following sequence diagram shows the interactions with the `Model` Component.
+
+Not shown in Figure 4.3.4.1, `listTags` are checked against `listOfExistingTags`, i.e. all tags
 to be deleted are checked whether each of them already exist in the address book. If this check fails, an exception is thrown.
 The sequence diagram demonstrates a *successful* deletion, hence this aspect of the logic is omitted for clarity.
 
-image::DeleteCommandForTagSequenceDiagram.png[width="800"]
-_Figure 4.3.1 : Typical command execution_
+image::DeleteCommandForTagSequenceDiagram1.png[width="800"]
+_Figure 4.3.4.1 : The tags parsed are put into an ArrayList and iterated through for deletion_
 
 image::DeleteCommandForTagSequenceDiagram2.png[width="800"]
-_Figure 4.3.2 : The tags parsed are put into an ArrayList and iterated through for deletion_
+_Figure 4.3.4.2 : How each tag is removed from the Address Book and each Person's list of tags_
 
-image::DeleteCommandForTagSequenceDiagram3.png[width="800"]
-_Figure 4.3.3 : How each tag is removed from the Address Book and each Person's list of tags_
+
+// tag::you[]
 
 ==== Design Considerations
 
 **Aspect:** Implementation of Delete Tags +
-**Alternative 1 (current choice):** The existing delete command is augmented. +
+**Alternative 1 (current choice):** The existing `delete` command is modified. +
 **Pros:** The same command word `delete` is used which is an intuitive way to invoke a deletion of some object (person or tag).  +
-**Cons:** The `DeleteCommand` class is no longer responsible for deletion of a person *only* but is now responsible for deleting a tag as well. Augmenting the command via overriding constructors, adding new attributes and modifying the parse may seem too convoluted a solution. This Violates Single Responsibility Principle and Separation of Concerns as `DeleteCommand` now needs to do two different things. Users who are used to the previous version of the command may not appreciate the new change also. +
+**Cons:** The `DeleteCommand` class is no longer responsible for deletion of a person *only* but is now responsible for deleting a tag as well.
+Modifying the command via overriding constructors, adding new attributes and modifying the parse may seem too convoluted a solution.
+This Violates Single Responsibility Principle and Separation of Concerns as `DeleteCommand` now needs to do two different things.
+Also, users who are used to the previous version of the command may not appreciate the new change, especially if it causes new bugs. +
 **Alternative 2:** A new command `deletetag` is created. +
-**Pros:** The implementation of a new command is simple. This does not involve any major modification of existing parse and command logic. +
-**Cons:** `deletetag t/tag` is not as intuitive a command line especially to new or casual users. Users may try `delete t/tag` out of instinct and we would need to inform or prompt users of the `deletetag` command.
+**Pros:** The implementation of a new command is simple. This does not involve any major modification of the existing parse and command logic. +
+**Cons:** `deletetag t/tag` is not as intuitive in the command line interface especially to new or casual users. Users may try `delete t/tag` out of instinct and we would need to inform or prompt users of the `deletetag` command.
 
 ---
 
 **Aspect:** Execution of delete command +
 **Alternative 1 (current choice):** On the `Logic` level, we iterate through an array of tags and invoke a Model method `deleteTag(Tag tag)` on each tag.  +
-**Pros:** This maintains consistency with the Model API that deals with objects in singular amounts. +
+**Pros:** This maintains consistency with the Model API that deals with objects in singular amounts. _(At the time of coding. See Note below.)_ +
 **Cons:** This requires a loop to delete the tags. +
 **Alternative 2:** On the `Logic` level, we invoke a method `deleteTags(tagSet)` on a Set<Tag>  and implement `deleteTags(Set<Tag> tagSet)` in the Model component. +
 **Pros:** The code will be easier for future contributors to understand. +
 **Cons:** This does not maintain consistency of the API.
+
+(**Note:** Pull Request #79 Delete multiple persons, chooses Alternative 2 as its design consideration with `deletePersons(ArrayList<ReadOnlyPerson> targets)` implemented
+in the Model Component.)
+// end::you[]
 // end::deletetag[]
+
+// tag::edittag[]
+=== Edit Command [Tag] Mechanism
+
+Editing a tag means editing a specified tag (the old tag) in all persons who contain that tag,
+as well as editing the tag from the master list of tags in the Address Book.
+
+This is significantly different from editing a person's tag via the `edit` command.
+There is a need for this because a user would like to edit a tag for multiple people containing that tag.
+
+To edit a particular tag across multiple contacts, by editing each contact, would be a tedious process, hence, the addition of this feature.
+
+In this section, you will see that the implementation of editing a tag is very similar to deleting a tag.
+
+The existing `edit` command was also modified, to allow `edit` to execute a edit on tags, or a edit on persons,
+depending on the parameters provided.
+
+It differs from `delete` tag in terms of executing the respective logic of person or tag.
+Instead of checking which attributes of `EditCommand` are present/non-null, a boolean variable determine which command logic to execute
+
+
+==== Detection of the Edit Type
+
+The concept of using the preamble, as seen in `DeleteCommandParser`, is also used in `EditCommandParser`.
+
+Preamble for
+
+* `edit INDEX ...` (Edit Person) : A *digit* String
+* `edit old/TAG new/TAG` (Edit Tag) :  A *blank* String
+
+The implementation of this parse is shown below. Similarly, SLAP (Single Level of Abstraction Per method) is applied by
+abstracting the distinct parsing between edit a person and editing a tag:
+
+[source,java]
+----
+public EditCommand parse(String args) throws ParseException {
+    //...
+
+    if (preamble.matches("")) {
+        return parseForTags(argsMultimap); <1>
+    } else if (preamble.matches("\\d+")) {
+        return parseForPersonDetails(argsMultimap); <2>
+    }
+
+    //...
+}
+----
+
+
+==== Overloading the EditCommand constructor
+
+With reference to the previous code snippet the type of `EditCommand` returned during the parse is also different.
+The parameter type of the EditCommand is different.
+
+<1> A `new EditCommand(Tag, Tag)` from the method parseForTags(argsMultimap) is returned.
+<2> A `new EditCommand(Index, EditPersonDescriptor)` from the method parseForPersonDetails(argsMultimap) is returned.
+
+The following code shows the respective object construction of the different types of EditCommand.
+
+Depending on the constructor method called, the irrelevant attributes will be made null.
+The boolean variable `isEditForPerson` is assigned the value `true` when the edit command is for editing a person, and `false` if it is for editing a tag.
+
+[source,java]
+----
+public class EditCommand extends UndoableCommand {
+    // ...
+    private final boolean isEditForPerson;
+    private final Index index;
+    private final EditPersonDescriptor editPersonDescriptor;
+    private final Tag oldTag;
+    private final Tag newTag;
+
+    public EditCommand(Index index, EditPersonDescriptor editPersonDescriptor) {
+        requireNonNull(index);
+        requireNonNull(editPersonDescriptor);
+
+        this.isEditForPerson = true;
+        this.index = index;
+        this.editPersonDescriptor = new EditPersonDescriptor(editPersonDescriptor);
+        this.oldTag = null;
+        this.newTag = null;
+    }
+
+    public EditCommand(Tag oldTag, Tag newTag) {
+        requireNonNull(oldTag);
+        requireNonNull(newTag);
+
+        this.isEditForPerson = false;
+        this.index = null;
+        this.editPersonDescriptor = null;
+        this.oldTag = oldTag;
+        this.newTag = newTag;
+    }
+
+    // ...
+}
+----
+
+==== Logic Execution depending on which attributes are present.
+
+_If_ `isEditForPerson` is present, execute the logic for editing a person, _else_ execute the logic for editing a tag.
+
+This trivial implementation is show below. The distinct command execution of the editing of tags and the
+editing of person(s) have been abstracted to apply SLAP (Single Level of Abstraction Per method).
+
+[source,java]
+----
+public CommandResult executeUndoableCommand() throws CommandException {
+    if (isEditForPerson) {
+        return executeCommandForPerson();
+    } else {
+        return executeCommandForTag();
+    }
+}
+----
+
+==== Command Logic
+
+The edit command undergoes a typical command execution in the `Logic` Component. Refer to Figure 3.3.3.
+
+The following sequence diagram shows the interactions with the `Model` Component.
+
+image::EditCommandForTagSequenceDiagram.png[width="800"]
+
+_Figure 4.4.4.1 : How each tag is edited from the Address Book and each Person's list of tags_
+
+
+==== Design Considerations
+
+**Aspect:** Implementation of Edit Tags.
+
+The design considerations are similar to the to Implementation of Delete Tags. +
+
+Modifying the existing `edit` command was picked over creating a new command `edittag`
+// end::edittag[]
+
+// tag::TagColorMap[]
+=== Tag Colouring Mechanism
+Tag labels appear in various `UI` components: `PersonCard`, `TagListPanel` and `PersonInfoPanel`. +
+// tag::you[]
+In order for a tag to have the same color across all components, there was a need for the `UI` Components
+to keep track of what colors have been used and which color was a tag tied to. +
+You will be able to understand how a Singleton class `TagColorMap` was implemented.
+// end::you[]
+
+image::ClassDiagramTagColorMap.png[width="300"]
+_Figure 4.5.1 : The class diagram for TagColorMap_
+
+As a result of this singleton class, coloring tags on initialisation is made extremely easy,
+since `TagColorMap` provided `UI` components an easy way to access the color mapping of tags and
+color the tags accordingly in the application, from anywhere in the code base.
+
+The following code is common in `PersonCard.java`, `TagListPanel.java`, `PersonInfoPanel.java`
+as all the these components require rendering tags, especially in the `initTags` method shown below.
+
+[source,java]
+----
+private void initTags(ReadOnlyPerson person) {
+    person.getTags().forEach(tag -> {
+            Label tagLabel = new Label(tag.tagName);
+            tagLabel.setStyle("-fx-background-color: " + TagColorMap.getInstance().getTagColor(tag.tagName));
+            tags.getChildren().add(tagLabel);
+        }
+    );
+}
+----
+
+// tag::you[]
+
+==== Design Considerations
+
+**Aspects:** Implementation Coloring of Tag +
+**Alternative 1 (current choice):** A singleton class TagColorMap to provide colors, and mapping of tags to colors is used. +
+**Pros:** This is easy to implement and easy to access from any UI Component. +
+**Cons:** This increases coupling across the code base. Difficult to replace TagColorMap with a stub when doing tests. +
+**Alternative 2:** TagColorMap as a class attribute of MainWindow is used and is passed as a parameter to the constructors of relevant UI components.  +
+**Pros:** This is a naive method and straightforward to implement. +
+**Cons:** This requires a large amount of modification of existing code base of the `UI` component.
+
+---
+// end::you[]
+// end::TagColorMap[]
 
 // tag::remarkCommand[]
 === Remark Command Mechanism
 
-The remark command allows user to modify the remark of a contact, and it supports adding, editing and deleting remarks.
-It is different from adding the tags using `AddCommand` as you should notice that it is used to store the unique information of the contact.
+The remark command allows user to modify the remark of a contact, and it supports adding, editing and deleting remarks. +
+It is different from adding the tags using `AddCommand` as you should notice that it is used to store the unique information of the contact. +
 We are implementing this `Remark Command` because NUS students see a need to add additional information to their contacts as a reminder to themselves, such as `owesMoney` to someone.
 
 
@@ -590,57 +824,60 @@ Generally, the implementation of this command is similar to `EditCommand`.
 
 These main classes are added to implement this enhancement:
 
-* Remark
-* RemarkCommand
-* RemarkCommandParser
+* `Remark`
+* `RemarkCommand`
+* `RemarkCommandParser`
+* ...
 
----
 
 These main classes are significantly edited to implement this enhancement:
 
-* AddressBookParser
-* PersonListCard, PersonCardHandle
-* XmlAdaptedPerson
-* Person
-* EditCommand
-* AddCommand
+* `AddressBookParser`
+* `PersonListCard`
+* `PersonCardHandle`
+* `XmlAdaptedPerson`
+* `Person`
+* `EditCommand`
+* `AddCommand`
+* ...
+
 
 [NOTE]
-Instead of typing the command `remark`, an alternative would be `rm`.
-The alias is added to the `RemarkCommand Class`.
-The added remark will be displayed on the last line of the person card.
-If a person is newly added to the personList by `AddCommand`, its remark field will be an empty string.
+Instead of typing the command `remark`, an alternative would be `rm`. +
+The alias is added to the `RemarkCommand Class`. +
+The added remark will be displayed on the last line of the person card. +
+If a person is newly added to the personList by `AddCommand`, its remark field will be an empty string. +
 In the `EditCommand` class, a new attribute `updatedRemark` is added to the person, and it is independent from `editPersonDescriptor`.
 
 ==== Implementation of Remark Command
 
-**[Step 1]** _Logic:_ Teach the app to accept 'remark' which does nothing
+**[Step 1]** _Logic:_ Teach the app to accept `remark` which does nothing
 
-**[Step 2]** _Logic:_ Teach the app to accept 'remark' arguments
+**[Step 2]** _Logic:_ Teach the app to accept `remark` arguments
 
-**[Step 3]** _Ui:_ Add a placeholder for remark in PersonCard
+**[Step 3]** _Ui:_ Add a placeholder for `remark` in `PersonCard`
 
-**[Step 4]** _Model:_ Add Remark class
+**[Step 4]** _Model:_ Add `Remark` class
 
-**[Step 5]** _Model:_ Modify ReadOnlyPerson to support a Remark field
+**[Step 5]** _Model:_ Modify `ReadOnlyPerson` to support a `Remark` field
 
-**[Step 6]** _Storage:_ Add Remark field to XmlAdaptedPerson class
+**[Step 6]** _Storage:_ Add `Remark` field to `XmlAdaptedPerson` class
 
-**[Step 7]** _Ui:_ Connect Remark field to PersonCard
+**[Step 7]** _Ui:_ Connect `Remark` field to `PersonCard`
 
-**[Step 8]** _Logic:_ Implement RemarkCommand#execute() logic
+**[Step 8]** _Logic:_ Implement `RemarkCommand#execute()` logic
 
 ==== Codes and Diagrams
-The following diagram shows the high-level sequence diagram of the remark command for you:
+The following diagram shows the high-level sequence diagram of the `RemarkCommand` for you:
 
 image::RemarkCommandHighLevelSequenceDiagram.png[width="800"]
-_Figure 4.4.1 : High-level sequence diagram_
+_Figure 4.6.2.1 : High-level sequence diagram_
 
-The RemarkCommand extends Undoable Command, which is an abstract subclass of abstract class Command, so the user can also undo the added remark.
+`RemarkCommand` extends `UndoableCommand`, which is an abstract subclass of abstract class command, so the user can also undo the added remark.
 The class inheritance diagram is shown below:
 
 image::RemarkCommandClassInheritanceDiagram.png[width="800"]
-_Figure 4.4.2 : Class Inheritance Diagram_
+_Figure 4.6.2.2 : Class Inheritance Diagram_
 
 The implementation is shown below.
 
@@ -654,15 +891,15 @@ public class RemarkCommand extends UndoableCommand {
 }
 ----
 
-After the remark command is executed, the new data will be saved to the AddressBook. The logic component sequence diagram is shown below:
+After `RemarkCommand` is executed, the new data will be saved to the AddressBook. The logic component sequence diagram is shown below:
 
 image::RemarkCommandLogicComponentSequenceDiagram.png[width="800"]
-_Figure 4.4.3 : Logic Component Sequence Diagram_
+_Figure 4.6.2.3 : Logic Component Sequence Diagram_
 
-We create a new Remark attribute, and the person class is linked to it. Its model component class diagram is shown below:
+We create a new `Remark` attribute, and the `Person` class is linked to it. Its model component class diagram is shown below:
 
 image::RemarkCommandComponentClassDiagram.png[width="800"]
-_Figure 4.4.4 : Component Class Diagram_
+_Figure 4.6.2.4 : Component Class Diagram_
 
 The implementation is shown below.
 
@@ -673,9 +910,12 @@ public class Person implements ReadOnlyPerson {
     private ObjectProperty<Address> address;
     private ObjectProperty<Timetable> timetable;
     private ObjectProperty<Remark> remark;
+
     // ...
+}
 ----
 
+// tag::you[]
 
 ==== Design Considerations
 
@@ -687,14 +927,156 @@ public class Person implements ReadOnlyPerson {
 **Pros:** This would be able to better reminds the user of the added remark information. Also, the font-size is larger that is easier to read. +
 **Cons:** This does not have the consistent formatting with other fields in the person card. If the remark is too long, it will be poorly displayed as well.
 
+---
+
 **Aspects:** The command nature of Remark +
-**Alternative 1(current choice):** A RemarkCommand is used to add remarks to a contact. +
+**Alternative 1(current choice):** A RemarkCommand to add remarks to a contact is used. +
 **Pros:** It is not the compulsory field when a person is added as most people do not add remarks to a newly added contact. +
 **Cons:** It is an extra command for the user to remember. +
 **Alternative 2:** AddCommand and EditCommand are used for adding and editing of the remark. +
 **Pros:** The command lines are more intuitive for the user. +
 **Cons:** The remark is perceived as a compulsory field of personal information for that contact, but this is not true.
+// end::you[]
 // end::remarkCommand[]
+
+
+// tag::photoCommand[]
+=== Photo Command Mechanism
+// tag::you[]
+The photo command allows users to assign photos to their contacts, and it also supports adding, editing and deleting photos as the remark command.
+You will be able to understand how it accepts the absolute path in the user's computer and copies the original photo to the default folder of the file.
+We are implementing this `PhotoCommand` as NUS students may want to keep themselves reminded of how their contacts look like.
+// end::you[]
+
+---
+
+These classes are added to implement this enhancement:
+
+* `PhotoPath`
+* `PhotoCommand`
+* `PhotoCommandParser`
+* `PhotoPathNotFoundException`
+* `DuplicationPhotoPathException`
+* `UniquePhotoPathList`
+* `XmlAdaptedPhotoPath`
+* ...
+
+These classes are edited to implement this enhancement:
+
+* `AddressBook`
+* `FileUtil`
+* `AddCommand`
+* `EditCommand`
+* `PersonInfoPanel`
+* `XmlAdaptedPerson`
+* `Person`
+* ...
+
+---
+
+
+[NOTE]
+Instead of typing the command `photo`, an alternative would be `ph`. +
+The alias is added to the `PhotoCommand` Class. +
+The added photo will be displayed on the `PersonInfoPanel`. +
+If a `photoPath` is newly added to the photoList by `PhotoCommand`, it will be saved to the default folder and linked to the specified contact. +
+If a `photoPath` is removed from one contact, the link between the photo and the contact will be removed, but the photo file
+are still kept inside the folder until the next time the user starts the application in case the user wants to undo the command. +
+Up to now, the photo command hasn't supported the `RedoCommand`.
+
+==== Implementation of Photo Command
+
+**[Step 1]** _Logic:_ Create the `photoCommandParser` class to parse the input.
+
+**[Step 2]** _Logic:_ Teach the app to accept `photoPath` arguments
+
+**[Step 3]** _Ui:_ Add a Shape `Circle` for displaying the photo in `personInfoPanel`
+
+**[Step 4]** _Model:_ Add `PhotoPath` class
+
+**[Step 5]** _Model:_ Modify `ReadOnlyPerson` to support a `photoPath` field
+
+**[Step 6]** _Storage:_ Add the `photoPath` field to `XmlAdaptedPerson` class
+
+**[Step 7]** _Ui:_ Connect the `photoPath` field to `PersonInfoPanel` class, display the contact photo
+
+**[Step 8]** _Logic:_ Implement `PhotoCommand#execute()` logic
+
+**[Step 9]** _Commons:_ Implement related methods in `FileUtil`
+
+**[Step 10]** _Models:_ Implement how to initialize the `UniquePhotoPathList` and delete unused photo in `AddressBook` class
+
+
+==== Codes and Diagrams
+
+The interactions between multiple objects are complicated, so the following diagram shows the simplified high-level sequence diagram for you:
+
+image::PhotoCommand_highLevelSequenceDiagrams.png[width="800"]
+_Figure 4.7.2.1 : High-level Sequence Diagram_
+
+
+For the logic component part, the `PhotoCommandParser` is created by the `AddressBookParser`, and the `PhotoCommand` is created by the `PhotoCommandParser`.
+The logic component class diagram is shown below:
+
+image::PhotoCommand_logicComponentClassDiagram.png[width="800"]
+_Figure 4.7.2.2 : Logic Component Class Diagram_
+
+Also, the `PhotoCommand` class inherits from the `UndoableCommand` class.
+The implementation is shown below.
+
+[source,java]
+----
+/**
+ * Edits the photo path of the specified person.
+ */
+public class PhotoCommand extends UndoableCommand {
+    //...
+}
+----
+
+As shown in Figure 4.7.2.3, the `AddressBook` consists of one `UniqueTagList`, one `UniquePersonList`, and one `UniquePhotoPathList`.
+The `UniquePhotoPathList` acts as a container for `PhotoPath` objects.
+
+image::PhotoCommand_modelComponentClassDiagram.png[width="800"]
+_Figure 4.7.2.3 : Model Component Class Diagram_
+
+We create a new `PhotoPath` attribute, and the `Person` class is linked to it.
+
+The implementation is shown below.
+
+[source,java]
+----
+/**
+ * Represents the path of a person's photo in the address book.
+ */
+public class PhotoPath {
+
+    public static final String FILE_SAVED_PARENT_PATH = "src/main/resources/images/contactPhotos/";
+    public static final String MESSAGE_APP_PHOTOPATH_CONSTRAINTS =
+            "The app photo path should be a string starting with '"
+                    + FILE_SAVED_PARENT_PATH
+                    + "', following by the file name with a valid extension, like'photo.jpg'.\n"
+                    + "The valid extensions are 'jpg', 'jpeg', 'png', 'gif' or 'bmp'.";
+
+    public final String value;
+
+    //...
+}
+----
+
+// tag::you[]
+
+==== Design Considerations
+
+**Aspects:** The way the contact photo saved in users' computers is retrieved. +
+**Alternative 1 (current choice):** Users are required to specify the absolute path of the photo. +
+**Pros:** This might be inconvenient as users need additional steps to get the absolute file of the photo. +
+**Cons:** The image file is specified accurately by using the command line. +
+**Alternative 2:** Users are provided a pop-up window to choose the photo. +
+**Pros:** It is more convenient for the user to choose the file. +
+**Cons:** This becomes no more a command-line input in this command-line application.
+// end::you[]
+// end::photoCommand[]
 
 // tag::birthday[]
 === Birthday Attribute
@@ -722,7 +1104,7 @@ The following are the main classes edited to implement this:
 The following UML diagram represents the implementation of the classes in the Model component.
 
 image::BirthdayModelComponentClassDiagram.png[width="800"]
-_Figure 4.5.1 : UML diagram for updated Model with Birthday_
+_Figure 4.8.1.1 : UML diagram for updated Model with Birthday_
 
 ==== Validation of Birthdays
 After the birthday is input, it will be checked if the date is valid.
@@ -751,13 +1133,201 @@ public static boolean isValidBirthday(String test) {
 ==== Design Considerations
 
 **Aspect:** Representation of birthdays +
-**Alternative 1 (current choice):** The birthday of the specified contact is displayed as string of numbers. +
+**Alternative 1 (current choice):** The birthday of the specified contact is displayed as string of numbers with `/` separating the day, month and year. +
 **Pros:** This is easy to implement as there is no need to alter the input. +
 **Cons:** It is difficult to recognise the date from the number displayed. +
 **Alternative 2:** The birthday is in the format of 25 Dec 1997. +
 **Pros:** It is simple and easy to understand. +
 **Cons:** It requires extra methods to change the format displayed.
 // end::birthday[]
+
+// tag::find[]
+=== Find Command [Filter] Mechanism
+
+Finding a person by filters means that users will be able to find a person using different fields of information. Currently, UniFy supports users to find a person by name, phone, email, address, tags and birthday month. This allows users to have more flexibility in the way they search for their contacts. +
+Only persons who match all keywords in all fields will be returned. You will be able to understand how the result of the find command is determined.
+
+In general, the ability to find persons by filters was implemented by modifying the existing `find` command.
+
+The modification involves:
+
+* Parsing of user input in the FindCommandParser
+* Searching of different fields for the person list in the FindCommand
+
+==== Parsing of user input
+
+The input will be tokenized against the `n/`, `p/`, `e/`, `a/`, `t/` and `b/` prefixes which are for name, phone, email, address, tags and birthday month respectively. This can be done by the `ArgumentTokenizer` class. +
+The user input will be parsed as an ArrayList with prefixes and keywords separated. If the index of `n/` is 1, the keywords for the name field will be at the index of 2 in the ArrayList. +
+
+The implementation of this parse is shown below:
+
+[source,java]
+----
+if (argsMultimap.getValue(PREFIX_NAME).isPresent()) {
+    nameList = argsMultimap.getValue(PREFIX_NAME).get();
+    predicate.add(PREFIX_NAME.getPrefix());
+    predicate.add(nameList);
+}
+----
+
+Since the field of `b/` only takes in birthday month, a small check is implemented to determine the validity of the keyword input. The birthday month is checked to only contain integer and be within the range of 1 to 12.
+
+The implementation of this check is shown below:
+
+[source,java]
+----
+// checks if birthday month contains non-integers, and returns "Keyword input must be in integer."
+if (!birthdayList.matches("[0-9]+")) {
+    throw new ParseException(FindCommand.MESSAGE_BIRTHDAYKEYWORD_NONNUMBER);
+
+// checks if birthday month in out of bound, and returns "Month %1$s does not exist."
+} else if (Integer.parseInt(birthdayList.trim()) > 12 || Integer.parseInt(birthdayList.trim()) < 1) {
+    throw new ParseException(String.format(FindCommand.MESSAGE_BIRTHDAYKEYWORD_NONEXIST, birthdayList.trim()));
+
+} else if (birthdayList.trim().length() == 1) {
+    throw new ParseException(String.format(FindCommand.MESSAGE_BIRTHDAYKEYWORD_INVALID, birthdayList.trim()));
+}
+----
+
+==== Searching of Persons using several fields of information
+
+The search is done using the following steps.
+
+. The code searches persons matching the keyword in the name field, followed by the rest of the fields.
+. The persons matching the keyword will be added into a HashMap<String, Integer> that stores the name of the person and the number of times the person matches the keywords.
+. The persons are then added to a new ArrayList if the number of times the person matches the keywords equals to the number of keywords input.
+. The ArrayList containing names of persons, having information that matches all keywords in respective fields, will be updated in the filtered list.
+. The find result displayed to users.
+
+The implementation of person's phone being searched is shown below:
+[source,java]
+----
+public ArrayList<String> findPersonsWithPhone(String phone) {
+    // Get the list of persons in UniFy
+    ObservableList<ReadOnlyPerson> personList = model.getAddressBook().getPersonList();
+
+    String[] phoneKeyword = phone.split(" ");
+
+    // Keeping track of the number of keywords input in total
+    count += phoneKeyword.length;
+
+    ArrayList<String> phoneList = new ArrayList<>();
+
+    for (ReadOnlyPerson person : personList) {
+        for (String keyword : phoneKeyword) {
+            String phones = person.getPhone().toString();
+
+            // keyword is a subset of phones (do not have to match fully)
+            if (phones.contains(keyword)) {
+                phoneList.add(person.getName().toString());
+            }
+        }
+    }
+    return phoneList;
+}
+----
+
+The implementation of tracking the number of times a person being matched is shown below:
+[source, java]
+----
+// if phone prefix is input
+if (predicates.equals(PREFIX_PHONE.getPrefix())) {
+
+    // Result from the code above
+    ArrayList<String> personsWithPhone = findPersonsWithPhone(predicate.get(i + 1));
+
+    for (int j = 0; j < personsWithPhone.size(); j++) {
+
+        // if it is the first time this person is being searched, add the person in with time of matches = 1
+        if (!predicateMap.containsKey(personsWithPhone.get(j))) {
+            predicateMap.put(personsWithPhone.get(j), 1);
+            predicateList.add(personsWithPhone.get(j));
+
+        // if the person is searched before, increase the time of matches by 1
+        } else {
+            predicateMap.put(personsWithPhone.get(j), predicateMap.remove(personsWithPhone.get(j)) + 1);
+        }
+    }
+}
+----
+
+==== Command Logic
+
+The following is the logic component class diagram for `FindCommand`
+
+image::FindCommandLogicComponentSequenceDiagram.png[width="800"]
+_Figure 4.9.3.1 : FindCommand Logic Component Class Diagram_
+
+==== Design Considerations
+
+**Aspect:** Implementation of find command +
+**Alternative 1 (current choice):** Only the persons matching all keywords are returned. +
+**Pros:** This aligns with the purpose of implementing this enhancement to allow users to refine and limit their search by inputting more keywords in different fields. +
+**Cons:** It is harder to implement as we need to keep track of how many times a person is being matched. +
+**Alternative 2:** All persons matching one or more keywords are returned. +
+**Pros:** It is simple to implement. +
+**Cons:** By typing more keywords in different fields, more persons matching one of the keywords will be returned which defeats the purpose of having this enhancement.
+// end::find[]
+
+// tag::suggest[]
+=== Suggest Command Mechanism
+
+This feature will conduct spelling check if the command input does not match any of the existing commands. It will prompt an error message suggesting the correct spelling of the command word. You will be able to understand how the code determines the correct spelling. +
+This is implemented because there is many commands to remember in UniFy and we suspect users might have typos during their usage.
+
+In general, the ability of this command was implemented by adding a SuggestCommand class.
+
+==== Implementation of Suggest Command
+
+`SuggestCommand` class calls the `UniqueCommandList` class to determine the possible correct spellings and to retrieve the list of command words existing in the address book.
+
+We have identified a few spelling mistakes that our users might make.
+
+* Two alphabets swapping positions
+* One extra alphabet added
+* One alphabet lacking
+* One alphabet mistyped
+
+The implementation of the determination of possible spellings is shown below:
+[source, java]
+----
+public static TreeSet<String> getPossibleCommandList(String command) {
+    possibleCommandList = new TreeSet<>();
+
+    // Swapping i with i+1
+    for (int i = 1; i < command.length() - 1; i++) {
+        possibleCommandList.add(command.substring(0, i) + command.charAt(i + 1) + command.charAt(i) + command.substring(i + 2));
+    }
+
+    // deleting one char, skipping i
+    for (int i = 0; i < command.length(); i++) {
+        possibleCommandList.add(command.substring(0, i) + command.substring(i + 1));
+    }
+
+    // inserting one char
+    for (int i = 0; i < command.length() + 1; i++) {
+        for (char j = 'a'; j <= 'z'; j++) {
+            possibleCommandList.add(command.substring(0, i) + j + command.substring(i));
+            // replacing one char
+            if (i < command.length()) {
+                possibleCommandList.add(command.substring(0, i) + j + command.substring(i + 1));
+            }
+        }
+    }
+    return possibleCommandList;
+}
+----
+
+==== Design Considerations
+
+**Aspect:** Implementation of suggest command +
+**Alternative 1 (current choice):** An error message suggesting the correct spelling for the command word is returned. +
+**Pros:** This is easier to implement without modification of other command classes. +
+**Cons:** This would still require the user to correct his spelling error by himself. +
+**Alternative 2:** The suggested command is conducted then prompt to ask if the user is intending to conduct such an action. +
+**Pros:** This does not require the user to retype to correct his spelling error. +
+**Cons:** This is harder to implement and if the user do not intent to conduct the suggested command action, the user has to do an extra step to undo the command, which might be inconvenient.
+// end::suggest[]
 
 === Logging
 
@@ -769,10 +1339,12 @@ We are using `java.util.logging` package for logging. The `LogsCenter` class is 
 
 *Logging Levels*
 
+// tag::you[]
 * `SEVERE` : Critical problem detected which may possibly cause the termination of the application
 * `WARNING` : Problems detected that does not affect the usage of app, but requires to continue with caution
 * `INFO` : Information showing the noteworthy actions by the App
 * `FINE` : Details that is not usually noteworthy but may be useful in debugging e.g. print the actual list instead of just its size
+// end::you[]
 
 === Configuration
 
@@ -787,12 +1359,12 @@ We chose asciidoc over Markdown because asciidoc, although a bit more complex th
 
 === Editing Documentation
 
-See <<UsingGradle#rendering-asciidoc-files, UsingGradle.adoc>> to learn how to render `.adoc` files locally to preview the end result of your edits.
+You can see <<UsingGradle#rendering-asciidoc-files, UsingGradle.adoc>> to learn how to render `.adoc` files locally to preview the end result of your edits.
 Alternatively, you can download the AsciiDoc plugin for IntelliJ, which allows you to preview the changes you have made to your `.adoc` files in real-time.
 
 === Publishing Documentation
 
-See <<UsingTravis#deploying-github-pages, UsingTravis.adoc>> to learn how to deploy GitHub Pages using Travis.
+You can see <<UsingTravis#deploying-github-pages, UsingTravis.adoc>> to learn how to deploy GitHub Pages using Travis.
 
 === Converting Documentation to PDF format
 
@@ -859,7 +1431,7 @@ e.g. `seedu.address.logic.LogicManagerTest`
 
 == Dev Ops
 
-=== Build Automation
+=== Building Automation
 
 See <<UsingGradle#, UsingGradle.adoc>> to learn how to use Gradle for build automation.
 
@@ -881,106 +1453,6 @@ Here are the steps to create a new release.
 A project often depends on third-party libraries. For example, Address Book depends on the http://wiki.fasterxml.com/JacksonHome[Jackson library] for XML parsing. Managing these _dependencies_ can be automated using Gradle. For example, Gradle can download the dependencies automatically, which is better than these alternatives. +
 a. Include those libraries in the repo (this bloats the repo size) +
 b. Require developers to download those libraries manually (this creates extra work for developers)
-
-[appendix]
-== User Stories
-
-Priorities: High (must have) - `* * \*`, Medium (nice to have) - `* \*`, Low (unlikely to have) - `*`
-
-[width="59%",cols="22%,<23%,<25%,<30%",options="header",]
-|=======================================================================
-|Priority |As a ... |I want to ... |So that I can...
-|`* * *` |new user |see usage instructions |refer to instructions when I forget how to use the App
-
-|`* * *` |user |add a new person |
-
-|`* * *` |user |edit a person | correct any outdated information
-
-|`* * *` |user |delete a person |remove entries that I no longer need
-
-|`* * *` |user |clear the entire address book |remove all entries without tedious single deletions
-
-|`* * *` |user |see a history of commands |retrieve a command to execute again or see past actions
-
-|`* * *` |user |list all the people in the address book  |see all the contacts I have
-
-|`* * *` |user |select a person from a list by the index  |easily select a person from a list I have just seen
-
-|`* * *` |user |find a person by name |locate details of persons without having to go through the entire list
-
-|`* * *` |user with many contacts| sort contacts by name | locate a contact easily
-
-|`* * *` |user |undo my previous action |reverse what I did previously
-
-|`* * *` |user |redo my previous action |reverse what an undo command
-
-|`* * *` |user |exit the program |
-
-|`* * *` |user |add remarks to a contact |see more details
-
-|`* * *` |user who has many friends |view different groups of my friends by their tags |manage my large list of contacts well
-
-|`* * *` |user |view an link:#attribute[attribute] called 'matriculation no.' & 'gender' |see more details of my friends
-
-|`* * *` |user |view an link:#attribute[attribute] called 'birthday' |see the birthdays of my friends
-
-|`* * *` |user who likes to celebrates my friends' birthdays |view different groups of my friends by the month |better plan their celebrations
-
-|`* * *` |user |use multiple synonyms of a command word (example 'list', 'find', 'search') to execute a command | the application will be more intuitive for me
-
-|`* * *` |user |be link:#suggested[suggested] a correct command if I type a command incorrectly |not need to always check help to see the list of commands
-
-|`* * *` |user |see the total number of contacts | have a sense of the size of the address book
-
-|`* *` |user |see the total number of contacts for a given tag |easily keep track of how many contacts in a specific group/type
-
-|`* *` |user |delete multiple contacts at the same time |not have to key in the delete command multiple times
-
-|`* *` |user |be informed who I deleted |confirm if I have deleted the correct person
-
-|`* *` |user who likes using social media platform |extract the contact data from social media automatically |not need to type and save them manually
-
-|`* *` |impatient user |type my commands in shorthand form |execute commands quickly and be more productive
-
-|`* *` |user |see the tags in different colors |identify what tags and contacts i have faster
-
-|`* *` |user |remove a specific tag that exists in some/all my contacts |remove a tag label that is no longer needed
-
-|`* *` |user |edit a specific tag name for all contacts with this tag |update a specific tag common to multiple contacts easily
-
-|`* *` |user |search my contacts using different filters simultaneously, such as tags, keyword, birthday month and gender | find the person faster
-
-|`* *` |forgetful user |save and see the photos of my contacts |recognise them when I click their names
-
-|`* *` |user |access the Google Maps service for a given address |quickly find the directions or the map locations of a contact
-
-|`* *` |user |see who lives near me |find out who I can conveniently meet nearby
-
-|`* *` |user who has a limited disk space |delete the contacts who I haven't viewed for a certain time |manage the large number of people I meet in University
-
-|`* *` |user |be able to see all the existing tag icons in the UI |see at a glance how many type of groups of people/tags there are
-
-|`* *` |user |click one of the tag icons in the UI and see all the contacts under this tag| easily access tag groups of people
-
-|`* *` |user |access my address book using a password | ensure my data is secured
-
-|`* *` |user |have temporary tags for semester-based project groups |can delete my contacts after one semester
-
-|`* *` |user who likes different styles | change the theme(color) of the UI |
-
-|`*` |student with many friends |save my friends' timetables |know when my friends are free to meet up
-
-|`*` |student with many friends |combine my friends' timetables by selecting the contacts one by one or by tags| know when is the common time slot for everyone to meet up
-
-|`*` |near-sighted user | change the font size of the Address Book |
-
-|`*` |student who has many outdoor activities | have a day mode and night mode in the address book| have the application more visible on the screen outdoors
-
-|`*` |user with many friends |find the centre location of a certain group of addresses |find a place that is convenient for everyone to meet up
-
-
-|=======================================================================
-
 
 [appendix]
 == Use Cases

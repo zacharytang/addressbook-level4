@@ -1,5 +1,8 @@
 package seedu.address.logic.commands;
 
+import static seedu.address.commons.core.MessageAlignmentFormatter.FORMAT_ALIGNMENT_TO_EXAMPLE;
+import static seedu.address.commons.core.MessageAlignmentFormatter.FORMAT_ALIGNMENT_TO_GMAPS;
+
 import java.util.List;
 import java.util.Objects;
 
@@ -20,15 +23,17 @@ public class GMapsCommand extends Command {
     public static final String COMMAND_SECONDARY_ONE = "map";
     public static final String COMMAND_SECONDARY_TWO = "maps";
 
-    public static final String MESSAGE_USAGE = COMMAND_WORD
+    public static final String MESSAGE_USAGE = "| " + COMMAND_WORD + " |"
             + ": Opens a Google Maps view of a person’s address.\n"
-            + " If you specify an address, you can find directions from the address to that person's address.\n"
+            + FORMAT_ALIGNMENT_TO_GMAPS
+            + " If an address is specified, shows the directions from the address to that person's address.\n"
             + "Format: " + COMMAND_WORD + " INDEX [a/ADDRESS]\n"
             + "Example: " + COMMAND_WORD + " 1 \n"
-            + "         " + COMMAND_WORD + " 1 a/Blk 123, Yishun 75";
+            + FORMAT_ALIGNMENT_TO_EXAMPLE + COMMAND_WORD + " 1 a/Blk 123, Yishun 75";
 
-    public static final String MESSAGE_SELECT_PERSON_SUCCESS = "Showing Map View of %1$s 's address";
+    public static final String MESSAGE_SELECT_PERSON_SUCCESS = "Showing Map View of %1$s's address";
     public static final String MESSAGE_DIRECTIONS_TO_PERSON_SUCCESS = "Showing directions to %1$s";
+    public static final String MESSAGE_PERSON_HAS_NO_ADDRESS = "%1$s has no address!";
 
     private final Index targetIndex;
     private final Address targetAddress;
@@ -47,17 +52,17 @@ public class GMapsCommand extends Command {
         }
 
         ReadOnlyPerson personToShowMap = lastShownList.get(targetIndex.getZeroBased());
-
-        if (targetAddress != null) {
-            model.showDirectionsTo(personToShowMap, targetAddress);
-            return new CommandResult(String.format(MESSAGE_DIRECTIONS_TO_PERSON_SUCCESS, personToShowMap.getName()));
-        } else {
-            model.showMapOf(personToShowMap);
-            return new CommandResult(String.format(MESSAGE_SELECT_PERSON_SUCCESS, personToShowMap.getName()));
+        if (personToShowMap.getAddress().toString().equals("")) {
+            throw new CommandException(String.format(MESSAGE_PERSON_HAS_NO_ADDRESS, personToShowMap.getName()));
         }
 
-
-
+        if (targetAddress != null) {
+            model.showDirectionsTo(personToShowMap, targetAddress, targetIndex);
+            return new CommandResult(String.format(MESSAGE_DIRECTIONS_TO_PERSON_SUCCESS, personToShowMap.getName()));
+        } else {
+            model.showMapOf(personToShowMap, targetIndex);
+            return new CommandResult(String.format(MESSAGE_SELECT_PERSON_SUCCESS, personToShowMap.getName()));
+        }
     }
 
     @Override

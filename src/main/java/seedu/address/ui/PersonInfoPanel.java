@@ -16,11 +16,12 @@ import javafx.scene.shape.Circle;
 import seedu.address.MainApp;
 import seedu.address.commons.core.LogsCenter;
 import seedu.address.commons.events.model.AddressBookChangedEvent;
+import seedu.address.commons.events.model.PersonAddressDisplayDirectionsEvent;
+import seedu.address.commons.events.model.PersonAddressDisplayMapEvent;
 import seedu.address.commons.events.ui.PersonHasBeenDeletedEvent;
 import seedu.address.commons.events.ui.PersonHasBeenModifiedEvent;
 import seedu.address.commons.events.ui.PersonPanelSelectionChangedEvent;
 import seedu.address.commons.events.ui.PersonSelectedEvent;
-import seedu.address.logic.commands.PhotoCommand;
 import seedu.address.model.person.ReadOnlyPerson;
 
 //@@author April0616
@@ -59,7 +60,9 @@ public class PersonInfoPanel extends UiPart<Region> {
     @FXML
     private FlowPane tags;
 
-
+    /**
+     * Initializes the person information panel.
+     */
     public PersonInfoPanel() {
         super(FXML);
         this.person = null;
@@ -145,7 +148,7 @@ public class PersonInfoPanel extends UiPart<Region> {
 
     //@@author April0616
     /**
-     * Set the default contact photo.
+     * Sets the default contact photo.
      */
     public void setDefaultContactPhoto() {
         Image defaultImage = new Image(MainApp.class.getResourceAsStream(DEFAULT_PHOTO_PATH));
@@ -153,37 +156,66 @@ public class PersonInfoPanel extends UiPart<Region> {
     }
 
     /**
-     * Load the photo of the specified person.
+     * Loads the photo of the specified person.
      * @param person
      */
     public void loadPhoto(ReadOnlyPerson person) {
         String prefix = "src/main/resources";
         //String photoPath = person.getPhotoPath().value.substring(prefix.length());
-        String photoPath = person.getPhotoPath().value;
+        String photoPathString = person.getPhotoPath().value;
         Image image;
 
-        logger.info("Is default path? : " + photoPath.equals(PhotoCommand.DEFAULT_PHOTO_PATH));
-
-        if (photoPath.equals(PhotoCommand.DEFAULT_PHOTO_PATH)) {  //default male and female photos
-            if (person.getGender().toString().equals("Male")) {
-                photoPath = "/images/default_male.jpg";
-            } else if (person.getGender().toString().equals("Female")) {
-                photoPath = "/images/default_female.jpg";
-            } else {
-                photoPath = "/images/defaultPhoto.jpg";
-            }
-            image = new Image(MainApp.class.getResourceAsStream(photoPath));
-
+        if (photoPathString.equals("")) {  //default male and female photos
+            image = getDefaultPhotoByGender();
         } else {
-            File contactImg = new File(photoPath);
-            String url = contactImg.toURI().toString();
-            image = new Image(url);
+            File contactImg = new File(photoPathString);
+            if (contactImg.exists() && !contactImg.isDirectory()) {
+                String url = contactImg.toURI().toString();
+                image = new Image(url);
+            } else {
+                image = getDefaultPhotoByGender();
+            }
         }
 
         photoCircle.setFill(new ImagePattern(image));
     }
 
+    /**
+     * Gets the default photo by gender. If the gender is not specifed, then return the default photo without gender.
+     * @return Image of the according default photo
+     */
+    private Image getDefaultPhotoByGender() {
+        String photoPathString = "";
+
+        if (person.getGender().toString().equals("Male")) {
+            photoPathString = "/images/default_male.jpg";
+        } else if (person.getGender().toString().equals("Female")) {
+            photoPathString = "/images/default_female.jpg";
+        } else {
+            photoPathString = "/images/defaultPhoto.jpg";
+        }
+        return new Image(MainApp.class.getResourceAsStream(photoPathString));
+    }
+
     //@@author zacharytang
+    @Subscribe
+    private void handlePersonAddressDisplayMapEvent(PersonAddressDisplayMapEvent event) {
+        logger.info(LogsCenter.getEventHandlingLogMessage(event));
+        loadPerson(event.person);
+    }
+
+    @Subscribe
+    private void handlePersonAddressDisplayDirectionsEvent(PersonAddressDisplayDirectionsEvent event) {
+        logger.info(LogsCenter.getEventHandlingLogMessage(event));
+        loadPerson(event.person);
+    }
+
+    @Subscribe
+    private void handlePersonPanelSelectionChangeEvent(PersonPanelSelectionChangedEvent event) {
+        logger.info(LogsCenter.getEventHandlingLogMessage(event));
+        loadPerson(event.getNewSelection().person);
+    }
+
     @Subscribe
     private void handlePersonSelectedEvent(PersonSelectedEvent event) {
         logger.info(LogsCenter.getEventHandlingLogMessage(event));
@@ -217,12 +249,5 @@ public class PersonInfoPanel extends UiPart<Region> {
             clearBind();
             loadDefaultPerson();
         }
-    }
-
-    //@@author
-    @Subscribe
-    private void handlePersonPanelSelectionChangeEvent(PersonPanelSelectionChangedEvent event) {
-        logger.info(LogsCenter.getEventHandlingLogMessage(event));
-        loadPerson(event.getNewSelection().person);
     }
 }

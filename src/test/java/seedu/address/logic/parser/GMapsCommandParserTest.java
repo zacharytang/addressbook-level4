@@ -46,9 +46,8 @@ public class GMapsCommandParserTest {
     @Test
     public void parse_invalidAddress_failure() {
         // no index specified
-        assertParseFailure(parser, "1 a/ ", Address.MESSAGE_ADDRESS_CONSTRAINTS);
+        assertParseFailure(parser, "1 a/", Address.MESSAGE_ADDRESS_CONSTRAINTS);
     }
-
 
     @Test
     public void parse_validValueWithoutAddress_success() throws Exception {

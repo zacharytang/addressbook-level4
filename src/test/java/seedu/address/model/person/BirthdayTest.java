@@ -11,7 +11,6 @@ public class BirthdayTest {
     @Test
     public void isValidBirthday() {
         // invalid birthdays
-        assertFalse(Birthday.isValidBirthday("")); // empty string
         assertFalse(Birthday.isValidBirthday(" ")); // spaces only
         assertFalse(Birthday.isValidBirthday("1324")); // less than 8 digits
         assertFalse(Birthday.isValidBirthday("dgd")); // non-numeric
@@ -20,7 +19,8 @@ public class BirthdayTest {
         assertFalse(Birthday.isValidBirthday("99999999")); //invalid dates
         assertFalse(Birthday.isValidBirthday("00000000")); //invalid dates
 
-        // valid birthdays
+        // valid birthdays/ empty when optional
+        assertTrue(Birthday.isValidBirthday("")); // empty string
         assertTrue(Birthday.isValidBirthday("23051997"));
     }
 }

@@ -1,5 +1,8 @@
 package seedu.address.logic.commands;
 
+import static seedu.address.commons.core.MessageAlignmentFormatter.FORMAT_ALIGNMENT_TO_DELETE;
+import static seedu.address.commons.core.MessageAlignmentFormatter.FORMAT_ALIGNMENT_TO_EXAMPLE;
+import static seedu.address.commons.core.MessageAlignmentFormatter.FORMAT_ALIGNMENT_TO_PARAMETERS;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_TAG;
 
 import java.util.ArrayList;
@@ -25,16 +28,16 @@ public class DeleteCommand extends UndoableCommand {
     public static final String COMMAND_ALIAS = "d";
     public static final String COMMAND_SECONDARY = "remove";
 
-    public static final String MESSAGE_USAGE = COMMAND_WORD
-            + ": Deletes persons identified using their last displayed indexes used in the last person listing.\n"
-            + "  OR the tag specified from all people containing the specific tag\n"
-            + "Parameters: INDEX (must be positive integers)\n"
-            + "        OR  " + PREFIX_TAG + "TAG (case-sensitive)\n "
+    public static final String MESSAGE_USAGE = "| " + COMMAND_WORD + " |"
+            + ": Deletes the persons identified using their last displayed indexes used in the last person listing.\n"
+            + FORMAT_ALIGNMENT_TO_DELETE + "OR the tag specified from all people containing the specific tag\n"
+            + "Parameters: INDEX... (must be positive integers)\n"
+            + FORMAT_ALIGNMENT_TO_PARAMETERS + "OR  " + PREFIX_TAG + "TAG... (case-sensitive)\n"
             + "Example: " + COMMAND_WORD + " 1\n"
-            + "         " + COMMAND_WORD + " 1, 2, 3\n"
-            + "         " + COMMAND_WORD + " 2 3 4\n"
-            + "         " + COMMAND_WORD + " " + PREFIX_TAG + "friend\n"
-            + "         " + COMMAND_WORD + " " + PREFIX_TAG + "friend " + PREFIX_TAG + "enemy";
+            + FORMAT_ALIGNMENT_TO_EXAMPLE + COMMAND_WORD + " 1, 2, 3\n"
+            + FORMAT_ALIGNMENT_TO_EXAMPLE + COMMAND_WORD + " 2 3 4\n"
+            + FORMAT_ALIGNMENT_TO_EXAMPLE + COMMAND_WORD + " " + PREFIX_TAG + "friend\n"
+            + FORMAT_ALIGNMENT_TO_EXAMPLE + COMMAND_WORD + " " + PREFIX_TAG + "friend " + PREFIX_TAG + "enemy";
 
     public static final String MESSAGE_DELETE_TAG_SUCCESS = "Deleted Tags";
 
@@ -42,39 +45,52 @@ public class DeleteCommand extends UndoableCommand {
 
     private final Set<Tag> targetTags;
 
-    public DeleteCommand(Index targetIndex) {
-        this.targetIndexes = new ArrayList<>();
-        targetIndexes.add(targetIndex);
-        this.targetTags = null;
-    }
-
-    //@@author April0616
-    public DeleteCommand(ArrayList<Index> targetIndexes) {
-        this.targetIndexes = targetIndexes;
-        this.targetTags = null;
-    }
-
-
     //@@author nbriannl
     public DeleteCommand(Set<Tag> targetTags) {
         this.targetIndexes = null;
         this.targetTags = targetTags;
     }
 
-    //@@author nbriannl
-    @Override
-    public CommandResult executeUndoableCommand() throws CommandException {
-        // this code block is command execution for delete [indexes]
-        if (targetTags == null && targetIndexes != null) {
-            return getCommandResultForPerson();
+    //@@author April0616
+    /**
+     * Creates a delete command which aims to delete one person.
+     * @param targetIndex of the specified person
+     */
+    public DeleteCommand(Index targetIndex) {
+        this.targetIndexes = new ArrayList<>();
+        targetIndexes.add(targetIndex);
+        this.targetTags = null;
+    }
 
-        } else { // this code block is command execution for delete t/[tag...]
-            return getCommandResultForTag();
+    /**
+     * Creates a delete command which aims to delete multiple persons.
+     * @param targetIndexes is the list of all the indexes of the specified persons.
+     */
+    public DeleteCommand(ArrayList<Index> targetIndexes) {
+        this.targetIndexes = targetIndexes;
+        this.targetTags = null;
+    }
+
+    @Override
+    /**
+     * Executes the delete commands for persons or tags.
+     * @return the CommandResult of the delete command
+     * @throws CommandException if the invalid persons or tags are provided
+     */
+    public CommandResult executeUndoableCommand() throws CommandException {
+        if (targetTags == null && targetIndexes != null) {
+            return executeCommandForPersons();
+
+        } else {
+            return executeCommandForTag();
         }
     }
 
-    //@@author April0616
-    private CommandResult getCommandResultForPerson() throws CommandException {
+    /**
+     * Executes Delete Command for persons.
+     * @throws CommandException when the person index provided is invalid
+     */
+    private CommandResult executeCommandForPersons() throws CommandException {
         List<ReadOnlyPerson> lastShownList = model.getFilteredPersonList();
         ArrayList<ReadOnlyPerson> deletePersonList = new ArrayList<>();
 
@@ -82,6 +98,7 @@ public class DeleteCommand extends UndoableCommand {
             if (index.getZeroBased() >= lastShownList.size()) {
                 throw new CommandException(Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX);
             }
+
             ReadOnlyPerson personToDelete = lastShownList.get(index.getZeroBased());
             deletePersonList.add(personToDelete);
         }
@@ -92,12 +109,14 @@ public class DeleteCommand extends UndoableCommand {
             assert false : "One of the target persons is missing";
         }
 
-        //return new CommandResult(String.format(MESSAGE_DELETE_PERSON_SUCCESS));
-        return new CommandResult(generateResultMsg(deletePersonList));
+        return new CommandResult(generateSuccessfulResultMsgForPerson(deletePersonList));
     }
 
     //@@author nbriannl
-    private CommandResult getCommandResultForTag () throws CommandException {
+    /**
+     * Command execution of {@code DeleteCommand} for a {@code Tag}
+     */
+    private CommandResult executeCommandForTag () throws CommandException {
         ArrayList<Tag> arrayTags = new ArrayList<Tag>(targetTags);
         List<Tag> listOfExistingTags = model.getAddressBook().getTagList();
 
@@ -117,35 +136,74 @@ public class DeleteCommand extends UndoableCommand {
             }
         }
 
-        return new CommandResult(MESSAGE_DELETE_TAG_SUCCESS);
+        return new CommandResult(generateResultMsgForTag(arrayTags));
     }
 
     //@@author April0616
     /**
-     * Generate the command result of the deletePersonList.
-     * @param deletePersonList
-     * @return commandResult string
+     * Generates the successful command result of the deletePersonList.
+     * @param deletePersonList of the deleted persons
+     * @return the string of the command result message
      */
-    public static String generateResultMsg(ArrayList<ReadOnlyPerson> deletePersonList) {
+    public static String generateSuccessfulResultMsgForPerson(ArrayList<ReadOnlyPerson> deletePersonList) {
         int numOfPersons = deletePersonList.size();
-        StringBuilder formatBuilder = new StringBuilder();
 
+        StringBuilder formatBuilder = new StringBuilder();
         if (numOfPersons == 1) {
             formatBuilder.append("Deleted Person :\n");
         } else {
             formatBuilder.append("Deleted Persons :\n");
         }
 
+        // List the names of the persons deleted
+        formatBuilder.append("[ ");
+        for (int i = 0; i < deletePersonList.size(); i++) {
+            formatBuilder.append((i + 1) + ". " + deletePersonList.get(i).getName() + " ");
+        }
+        formatBuilder.append("]\n");
+
+        // List the details of the persons deleted
+        formatBuilder.append("Details: \n");
         for (ReadOnlyPerson p : deletePersonList) {
             formatBuilder.append("[");
             formatBuilder.append(p.getAsText());
             formatBuilder.append("]");
             formatBuilder.append("\n");
         }
+
+        String resultMsg = formatBuilder.toString();
+        return resultMsg;
+    }
+
+    //@@author nbriannl
+    /**
+     * Generates the command result String for Delete Command when deleting tags
+     */
+    public static String generateResultMsgForTag(ArrayList<Tag> arrayTags) {
+        int numOfTag = arrayTags.size();
+        StringBuilder formatBuilder = new StringBuilder();
+
+        if (numOfTag == 1) {
+            formatBuilder.append("Deleted Tag :\n");
+        } else {
+            formatBuilder.append("Deleted Tags :\n");
+        }
+
+        formatBuilder.append("[ ");
+
+        for (int i = 0; i < arrayTags.size(); i++) {
+            if (i == 0) {
+                formatBuilder.append(arrayTags.get(i).tagName);
+            } else {
+                formatBuilder.append(", " + arrayTags.get(i).tagName);
+            }
+        }
+
+        formatBuilder.append(" ]\n");
+
         String resultMsg = formatBuilder.toString();
 
         return resultMsg;
-
     }
 
     //@@author April0616

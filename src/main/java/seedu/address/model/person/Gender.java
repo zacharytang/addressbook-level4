@@ -7,43 +7,63 @@ import seedu.address.commons.exceptions.IllegalValueException;
 //@@author April0616
 /**
  * Represents a Person's gender in the address book.
- * Guarantees: immutable; is valid as declared in {@link #isValidGender(String)}
+ * Guarantees: immutable; is valid as declared in {@link #isValidInput(String)}
  */
 public class Gender {
 
     public static final String MESSAGE_GENDER_CONSTRAINTS =
-            "Person gender should be a string of either 'Male', 'Female' or 'M', 'F'";
-    public static final String GENDER_VALIDATION_WORD1 = "Male";
-    public static final String GENDER_VALIDATION_WORD2 = "Female";
+            "Person gender should be a case-insensitive string of either 'male', 'female', or 'm', 'f'";
+
+    public static final String VALID_MALE_FIRST_WORD = "male";
+    public static final String VALID_MALE_SECOND_WORD = "m";
+    public static final String VALID_FEMALE_FIRST_WORD = "female";
+    public static final String VALID_FEMALE_SECOND_WORD = "f";
+    public static final String VALID_GENDER_UNSPECIFIED = "";
 
     public final String value;
 
     /**
-     * Validates given gender.
-     * If gender string is 'Male' or 'Female', it remains the same.
-     * Converts 'M' into 'Male', 'F' into 'Female'.
-     *
-     * @throws IllegalValueException if given gender string is invalid.
+     * Validates given gender and sets person's gender accordingly.
+     * Accepts input (case-insensitive): male, female, m, f
+     * @throws IllegalValueException if the given gender string is invalid.
      */
     public Gender(String gender) throws IllegalValueException {
         requireNonNull(gender);
         String trimmedGender = gender.trim();
-        if (trimmedGender.equals("M")) {
-            trimmedGender = "Male";
-        } else if (trimmedGender.equals("F")) {
-            trimmedGender = "Female";
-        }
-        if (!isValidGender(trimmedGender)) {
+
+        if (!isValidInput(trimmedGender)) {
             throw new IllegalValueException(MESSAGE_GENDER_CONSTRAINTS);
         }
-        this.value = trimmedGender;
+
+        String ignoredCaseGender = trimmedGender.toLowerCase();
+        value = setGenderByInput(ignoredCaseGender);
+    }
+
+    private String setGenderByInput(String ignoredCaseGender) {
+        String genderValue = "";
+        if (ignoredCaseGender.equals(VALID_MALE_FIRST_WORD)
+                || ignoredCaseGender.equals(VALID_MALE_SECOND_WORD)) {
+            genderValue = "Male";
+        } else if (ignoredCaseGender.equals(VALID_FEMALE_FIRST_WORD)
+                || ignoredCaseGender.equals(VALID_FEMALE_SECOND_WORD)) {
+            genderValue = "Female";
+        } else {
+            genderValue = "";
+        }
+        return genderValue;
     }
 
     /**
-     * Returns if a given string is a valid person gender.
+     * Checks whether the input gender is valid.
+     * @return true if a given input string is a valid person gender, false otherwise.
      */
-    public static boolean isValidGender(String test) {
-        return test.equals(GENDER_VALIDATION_WORD1) || test.equals(GENDER_VALIDATION_WORD2) || test.equals("");
+    public static boolean isValidInput(String inputGender) {
+        String ignoredCaseInput = inputGender.toLowerCase();
+        return ignoredCaseInput.equals(VALID_MALE_FIRST_WORD)
+                || ignoredCaseInput.equals(VALID_MALE_SECOND_WORD)
+                || ignoredCaseInput.equals(VALID_FEMALE_FIRST_WORD)
+                || ignoredCaseInput.equals(VALID_FEMALE_SECOND_WORD)
+                || ignoredCaseInput.equals(VALID_GENDER_UNSPECIFIED);
     }
 
     @Override

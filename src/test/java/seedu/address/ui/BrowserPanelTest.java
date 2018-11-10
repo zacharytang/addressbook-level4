@@ -6,6 +6,8 @@ import static org.junit.Assert.assertNotEquals;
 import static seedu.address.testutil.EventsUtil.postNow;
 import static seedu.address.testutil.TypicalPersons.ALICE;
 import static seedu.address.ui.BrowserPanel.DEFAULT_PAGE;
+import static seedu.address.ui.BrowserPanel.GOOGLE_MAPS_DIRECTIONS_URL_PREFIX;
+import static seedu.address.ui.BrowserPanel.GOOGLE_MAPS_URL_PREFIX;
 import static seedu.address.ui.BrowserPanel.GOOGLE_SEARCH_URL_PREFIX;
 import static seedu.address.ui.BrowserPanel.GOOGLE_SEARCH_URL_SUFFIX;
 import static seedu.address.ui.UiPart.FXML_FILE_FOLDER;
@@ -35,9 +37,9 @@ public class BrowserPanelTest extends GuiUnitTest {
     @Before
     public void setUp() throws Exception {
         selectionChangedEventStub = new PersonPanelSelectionChangedEvent(new PersonCard(ALICE, 0));
-        personAddressDisplayMapEventStub = new PersonAddressDisplayMapEvent(new Person(ALICE));
+        personAddressDisplayMapEventStub = new PersonAddressDisplayMapEvent(new Person(ALICE), 0);
         personAddressDisplayDirectionsEventStub = new PersonAddressDisplayDirectionsEvent(new Person(ALICE),
-                new Address("Blk 123 Yishun 61"));
+                new Address("Blk 123 Yishun 61"), 0);
 
         guiRobot.interact(() -> browserPanel = new BrowserPanel());
         uiPartRule.setUiPart(browserPanel);
@@ -61,13 +63,13 @@ public class BrowserPanelTest extends GuiUnitTest {
 
         postNow(personAddressDisplayMapEventStub);
         URL expectedGMapsUrl = new URL(
-                "https://www.google.com.sg/maps/search/123,%20Jurong%20West%20Ave%206,%20?dg=dbrw&newdg=1");
+                GOOGLE_MAPS_URL_PREFIX + "123,%20Jurong%20West%20Ave%206,%20?dg=dbrw&newdg=1");
         waitUntilBrowserLoaded(browserPanelHandle);
         assertEquals(expectedGMapsUrl, browserPanelHandle.getLoadedUrl());
 
         postNow(personAddressDisplayDirectionsEventStub);
         URL expectedGMapsDirectionsUrl = new URL(
-                "https://www.google.com.sg/maps/dir/Blk%20123%20Yishun%2061/123,"
+                GOOGLE_MAPS_DIRECTIONS_URL_PREFIX + "Blk%20123%20Yishun%2061" + "/" + "123,"
                         + "%20Jurong%20West%20Ave%206,%20#08-111");
         waitUntilBrowserLoaded(browserPanelHandle);
         assertEquals(expectedGMapsDirectionsUrl, browserPanelHandle.getLoadedUrl());

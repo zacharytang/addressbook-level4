@@ -9,7 +9,6 @@ import static seedu.address.logic.commands.CommandTestUtil.EMAIL_DESC_AMY;
 import static seedu.address.logic.commands.CommandTestUtil.EMAIL_DESC_BOB;
 import static seedu.address.logic.commands.CommandTestUtil.GENDER_DESC_AMY;
 import static seedu.address.logic.commands.CommandTestUtil.GENDER_DESC_BOB;
-import static seedu.address.logic.commands.CommandTestUtil.INVALID_ADDRESS_DESC;
 import static seedu.address.logic.commands.CommandTestUtil.INVALID_BIRTHDAY_DESC;
 import static seedu.address.logic.commands.CommandTestUtil.INVALID_EMAIL_DESC;
 import static seedu.address.logic.commands.CommandTestUtil.INVALID_GENDER_DESC;
@@ -52,7 +51,6 @@ import static seedu.address.logic.parser.CommandParserTestUtil.assertParseSucces
 import org.junit.Test;
 
 import seedu.address.logic.commands.AddCommand;
-import seedu.address.model.person.Address;
 import seedu.address.model.person.Birthday;
 import seedu.address.model.person.Email;
 import seedu.address.model.person.Gender;
@@ -151,42 +149,17 @@ public class AddCommandParserTest {
                 + MATRIC_NO_DESC_BOB + PHONE_DESC_BOB + EMAIL_DESC_BOB + ADDRESS_DESC_BOB
                 + BIRTHDAY_DESC_BOB + TIMETABLE_DESC_BOB, expectedMessage);
 
-        // missing gender prefix
-        assertParseFailure(parser, AddCommand.COMMAND_WORD + NAME_DESC_BOB + VALID_GENDER_BOB
-                + MATRIC_NO_DESC_BOB + PHONE_DESC_BOB + EMAIL_DESC_BOB + ADDRESS_DESC_BOB
-                + BIRTHDAY_DESC_BOB + TIMETABLE_DESC_BOB, expectedMessage);
-
-        // missing matricNo prefix
-        assertParseFailure(parser, AddCommand.COMMAND_WORD + NAME_DESC_BOB + GENDER_DESC_BOB
-                + VALID_MATRIC_NO_BOB + PHONE_DESC_BOB + EMAIL_DESC_BOB + ADDRESS_DESC_BOB
-                + BIRTHDAY_DESC_BOB + TIMETABLE_DESC_BOB, expectedMessage);
-
-        // missing phone prefix
-        assertParseFailure(parser, AddCommand.COMMAND_WORD + NAME_DESC_BOB + GENDER_DESC_BOB
-                + MATRIC_NO_DESC_BOB + VALID_PHONE_BOB + EMAIL_DESC_BOB + ADDRESS_DESC_BOB
-                + BIRTHDAY_DESC_BOB + TIMETABLE_DESC_BOB, expectedMessage);
-
-        // missing email prefix
-        assertParseFailure(parser, AddCommand.COMMAND_WORD + NAME_DESC_BOB + GENDER_DESC_BOB
-                + MATRIC_NO_DESC_BOB + PHONE_DESC_BOB + VALID_EMAIL_BOB + ADDRESS_DESC_BOB
-                + BIRTHDAY_DESC_BOB + TIMETABLE_DESC_BOB, expectedMessage);
-
-        // missing address prefix
-        assertParseFailure(parser, AddCommand.COMMAND_WORD + NAME_DESC_BOB + GENDER_DESC_BOB
-                + MATRIC_NO_DESC_BOB + PHONE_DESC_BOB + EMAIL_DESC_BOB + VALID_ADDRESS_BOB
-                + BIRTHDAY_DESC_BOB + TIMETABLE_DESC_BOB, expectedMessage);
-
-        //@@author zacharytang
-        // missing timetable prefix
-        assertParseFailure(parser, AddCommand.COMMAND_WORD + NAME_DESC_BOB + GENDER_DESC_BOB
+        //@@author zacharytang-unused
+        // missing timetable prefix (timetable prefix is now an optional field)
+        /*assertParseFailure(parser, AddCommand.COMMAND_WORD + NAME_DESC_BOB + GENDER_DESC_BOB
                 + MATRIC_NO_DESC_BOB + PHONE_DESC_BOB + EMAIL_DESC_BOB + ADDRESS_DESC_BOB
                 + BIRTHDAY_DESC_BOB + VALID_TIMETABLE_BOB, expectedMessage);
 
-        //@@author CindyTsai1
-        // missing birthday prefix
+        //@@author CindyTsai1-unused
+        // missing birthday prefix (birthday prefix is now an optional field
         assertParseFailure(parser, AddCommand.COMMAND_WORD + NAME_DESC_BOB + GENDER_DESC_BOB
                 + MATRIC_NO_DESC_BOB + PHONE_DESC_BOB + EMAIL_DESC_BOB + ADDRESS_DESC_BOB
-                + VALID_BIRTHDAY_BOB + TIMETABLE_DESC_BOB, expectedMessage);
+                + VALID_BIRTHDAY_BOB + TIMETABLE_DESC_BOB, expectedMessage);*/
 
         //@@author
         // all prefixes missing
@@ -227,12 +200,6 @@ public class AddCommandParserTest {
                         + BIRTHDAY_DESC_BOB + TIMETABLE_DESC_BOB + TAG_DESC_HUSBAND + TAG_DESC_FRIEND,
                 Email.MESSAGE_EMAIL_CONSTRAINTS);
 
-        // invalid address
-        assertParseFailure(parser, AddCommand.COMMAND_WORD + NAME_DESC_BOB + GENDER_DESC_BOB
-                        + MATRIC_NO_DESC_BOB + PHONE_DESC_BOB + EMAIL_DESC_BOB + INVALID_ADDRESS_DESC
-                        + BIRTHDAY_DESC_BOB + TIMETABLE_DESC_BOB + TAG_DESC_HUSBAND + TAG_DESC_FRIEND,
-                Address.MESSAGE_ADDRESS_CONSTRAINTS);
-
         //@@author zacharytang
         // invalid timetable
         assertParseFailure(parser, AddCommand.COMMAND_WORD + NAME_DESC_BOB + GENDER_DESC_BOB
@@ -257,7 +224,7 @@ public class AddCommandParserTest {
         //@@author
         // two invalid values, only first invalid value reported
         assertParseFailure(parser, AddCommand.COMMAND_WORD + INVALID_NAME_DESC + GENDER_DESC_BOB
-                + MATRIC_NO_DESC_BOB + PHONE_DESC_BOB + EMAIL_DESC_BOB
-                + INVALID_ADDRESS_DESC + BIRTHDAY_DESC_BOB + TIMETABLE_DESC_BOB, Name.MESSAGE_NAME_CONSTRAINTS);
+                + MATRIC_NO_DESC_BOB + PHONE_DESC_BOB + INVALID_EMAIL_DESC
+                + ADDRESS_DESC_BOB + BIRTHDAY_DESC_BOB + TIMETABLE_DESC_BOB, Name.MESSAGE_NAME_CONSTRAINTS);
     }
 }

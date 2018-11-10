@@ -13,77 +13,69 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.shape.Circle?>
 <?import javafx.scene.text.Font?>
+<AnchorPane styleClass="person-info-panel" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1">
 
-<!-- @@author April0616 -->
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="250.0"
-            prefWidth="550.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1">
-
-    <HBox prefHeight="250.0" prefWidth="448.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0"
-          AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+    <HBox prefHeight="250.0" prefWidth="448.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
         <VBox prefHeight="250.0" prefWidth="198.0">
             <AnchorPane prefHeight="216.0" prefWidth="210.0" VBox.vgrow="ALWAYS">
                 <ImageView fitHeight="210.0" fitWidth="221.0" pickOnBounds="true" preserveRatio="true">
                     <image>
-                        <Image url="@../images/personInfoBg.jpg"/>
+                        <Image url="@../images/personInfoBg.jpg" />
                     </image>
                 </ImageView>
-                <Circle fx:id="photoCircle" fill="WHITE" layoutX="111.0" layoutY="100.0" radius="86.0"
-                        stroke="floralwhite" strokeType="INSIDE" strokeWidth="10"/>
+                <Circle fx:id="photoCircle" fill="WHITE" layoutX="111.0" layoutY="100.0" radius="86.0" stroke="floralwhite" strokeType="INSIDE" strokeWidth="10" />
                 <VBox.margin>
-                    <Insets/>
+                    <Insets />
                 </VBox.margin>
             </AnchorPane>
         </VBox>
-        <VBox alignment="TOP_LEFT" prefHeight="250.0" prefWidth="237.0" AnchorPane.bottomAnchor="0.0"
-              AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" HBox.hgrow="ALWAYS">
+        <VBox alignment="TOP_LEFT" prefHeight="250.0" prefWidth="574.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" HBox.hgrow="ALWAYS">
             <StackPane alignment="TOP_LEFT" prefHeight="20.0" prefWidth="304.0" VBox.vgrow="NEVER">
-                <Label fx:id="name" prefHeight="35.0" prefWidth="300.0" styleClass="display_big_label" text="\$name">
+                <Label fx:id="name" minHeight="-Infinity" minWidth="-Infinity" prefHeight="35.0" prefWidth="391.0" styleClass="display_big_label" text="\$name">
                     <font>
-                        <Font size="24.0"/>
+                        <Font size="24.0" />
                     </font>
                 </Label>
                 <VBox.margin>
-                    <Insets left="15.0" top="20.0"/>
+                    <Insets left="15.0" top="20.0" />
                 </VBox.margin>
             </StackPane>
-            <FlowPane fx:id="tags" columnHalignment="CENTER" minHeight="20.0" minWidth="100.0" prefHeight="15.0"
-                      prefWidth="207.0" VBox.vgrow="ALWAYS">
+            <FlowPane fx:id="tags" columnHalignment="CENTER">
                 <VBox.margin>
-                    <Insets bottom="0.0" left="15.0" right="10.0" top="0.0"/>
+                    <Insets bottom="5.0" left="15.0" right="10.0" />
                 </VBox.margin>
             </FlowPane>
             <HBox prefHeight="100.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
-                <VBox prefHeight="150.0" prefWidth="10.0" HBox.hgrow="ALWAYS">
-                    <Label styleClass="display_small_label" text="Gender"/>
-                    <Label styleClass="display_small_label" text="Matric No"/>
-                    <Label styleClass="display_small_label" text="Phone"/>
-                    <Label styleClass="display_small_label" text="Address"/>
-                    <Label styleClass="display_small_label" text="Email"/>
-                    <Label styleClass="display_small_label" text="Birthday"/>
-                    <Label styleClass="display_small_label" text="Remark"/>
+                <VBox prefHeight="160.0" prefWidth="9.0" HBox.hgrow="NEVER">
+                    <Label minHeight="-Infinity" minWidth="-Infinity" prefHeight="20.0" prefWidth="80.0" styleClass="display_small_label" text="Gender" />
+                    <Label minHeight="-Infinity" minWidth="-Infinity" prefHeight="20.0" prefWidth="80.0" styleClass="display_small_label" text="Matric No" />
+                    <Label minHeight="-Infinity" minWidth="-Infinity" prefHeight="20.0" prefWidth="80.0" styleClass="display_small_label" text="Phone" />
+                    <Label minHeight="-Infinity" minWidth="-Infinity" prefHeight="20.0" prefWidth="80.0" styleClass="display_small_label" text="Email" />
+                    <Label minHeight="-Infinity" minWidth="-Infinity" prefHeight="20.0" prefWidth="80.0" styleClass="display_small_label" text="Birthday" />
+                    <Label minHeight="-Infinity" minWidth="-Infinity" prefHeight="54.0" prefWidth="80.0" styleClass="display_small_label" text="Address" />
+                    <Label minHeight="-Infinity" minWidth="-Infinity" prefHeight="20.0" prefWidth="80.0" styleClass="display_small_label" text="Remark" />
                 </VBox>
                 <VBox prefHeight="200.0" prefWidth="100.0" HBox.hgrow="ALWAYS">
-                    <Label fx:id="gender" prefHeight="17.0" prefWidth="196.0" styleClass="display_small_value"
-                           text="\$gender" VBox.vgrow="ALWAYS"/>
-                    <Label fx:id="matricNo" prefHeight="17.0" prefWidth="199.0" styleClass="display_small_value"
-                           text="\$matricNo"/>
-                    <Label fx:id="phone" prefHeight="17.0" prefWidth="193.0" styleClass="display_small_value"
-                           text="\$phone"/>
-                    <Label fx:id="address" prefHeight="17.0" prefWidth="196.0" styleClass="display_small_value"
-                           text="\$address"/>
-                    <Label fx:id="email" prefHeight="17.0" prefWidth="188.0" styleClass="display_small_value"
-                           text="\$email"/>
-                    <Label fx:id="birthday" prefHeight="17.0" prefWidth="214.0" styleClass="display_small_value"
-                           text="\$birthday"/>
-                    <Label fx:id="remark" prefHeight="17.0" prefWidth="186.0" styleClass="display_small_value"
-                           text="\$remark"/>
+                    <Label fx:id="gender" minHeight="-Infinity" minWidth="-Infinity" prefHeight="20.0" prefWidth="326.0" styleClass="display_small_value" text="\$gender" VBox.vgrow="ALWAYS" />
+                    <Label fx:id="matricNo" minHeight="-Infinity" minWidth="-Infinity" prefHeight="20.0" prefWidth="326.0" styleClass="display_small_value" text="\$matricNo" />
+                    <Label fx:id="phone" minHeight="-Infinity" minWidth="-Infinity" prefHeight="20.0" prefWidth="326.0" styleClass="display_small_value" text="\$phone" />
+                    <Label fx:id="email" minHeight="-Infinity" minWidth="-Infinity" prefHeight="20.0" prefWidth="326.0" styleClass="display_small_value" text="\$email" />
+                    <Label fx:id="birthday" minHeight="-Infinity" minWidth="-Infinity" prefHeight="20.0" prefWidth="326.0" styleClass="display_small_value" text="\$birthday" />
+                    <Label fx:id="address" minHeight="-Infinity" minWidth="-Infinity" prefHeight="54.0" prefWidth="326.0" styleClass="display_small_value" text="\$address" wrapText="true">
+                    <VBox.margin>
+                        <Insets />
+                    </VBox.margin></Label>
+                    <Label fx:id="remark" styleClass="display_small_value" text="\$remark" wrapText="true">
+                    <VBox.margin>
+                        <Insets />
+                    </VBox.margin></Label>
                 </VBox>
                 <VBox.margin>
-                    <Insets bottom="10.0" left="15.0"/>
+                    <Insets bottom="10.0" left="15.0" />
                 </VBox.margin>
             </HBox>
             <HBox.margin>
-                <Insets/>
+                <Insets />
             </HBox.margin>
         </VBox>
     </HBox>

@@ -4,7 +4,7 @@ ifdef::env-github,env-browser[:outfilesuffix: .adoc]
 :imagesDir: images
 :stylesDir: stylesheets
 
-UniFy - Level 2.0 was developed by the 'https://github.com/orgs/CS2103AUG2017-W09-B1/teams/developers/members' team. +
+UniFy was developed by team W09-B1 +
 
 We are a team based in the http://www.comp.nus.edu.sg[School of Computing, National University of Singapore].
 
@@ -12,7 +12,8 @@ We are a team based in the http://www.comp.nus.edu.sg[School of Computing, Natio
 
 === Fan Yuting
 image::yuting.JPG[width="150", align="left"]
-{empty}[https://github.com/April0616[github]] [<<April0616#, portfolio>>]
+{empty}[https://github.com/April0616[github]]
+{empty}[https://cs2103aug2017-w09-b1.github.io/main/team/April0616.html[portfolio]]
 
 Role: Developer +
 Responsibilities: UI
@@ -21,7 +22,8 @@ Responsibilities: UI
 
 === Labayna Neil Brian Narido
 image::nbriannl.jpg[width="150", align="left"]
-{empty}[http://github.com/nbriannl[github]] [<<nbriannl#, portfolio>>]
+{empty}[http://github.com/nbriannl[github]]
+{empty}[https://cs2103aug2017-w09-b1.github.io/main/team/nbriannl.html[Portfolio]]
 
 Role: Developer +
 Responsibilities: Model
@@ -30,7 +32,8 @@ Responsibilities: Model
 
 === Tsai Yu Hsuan
 image::cindytsai1.jpg[width="150", align="left"]
-{empty}[http://github.com/CindyTsai1[github]] [<<CindyTsai1#, portfolio>>]
+{empty}[http://github.com/CindyTsai1[github]]
+{empty}[https://cs2103aug2017-w09-b1.github.io/main/team/cindytsai1.html[Portfolio]]
 
 Role: Developer +
 Responsibilities: Storage
@@ -39,7 +42,8 @@ Responsibilities: Storage
 
 === Zachary Tang
 image::zacharytang.jpg[width="150", align="left"]
-{empty}[https://github.com/zacharytang[github]] [<<johndoe#, portfolio>>]
+{empty}[https://github.com/zacharytang[github]]
+{empty}[https://cs2103aug2017-w09-b1.github.io/main/team/zacharytang.html[Portfolio]]
 
 Role: Developer +
 Responsibilities: Logic

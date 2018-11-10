@@ -4,6 +4,7 @@ import java.util.Set;
 
 import javafx.beans.property.ObjectProperty;
 import seedu.address.model.person.timetable.Timetable;
+import seedu.address.model.photo.PhotoPath;
 import seedu.address.model.tag.Tag;
 import seedu.address.model.tag.UniqueTagList;
 
@@ -76,9 +77,8 @@ public interface ReadOnlyPerson {
                 .append((getTimetable().toString().equals("http://modsn.us/5tN3z")) ? "" : getTimetable())
                 .append("\nRemark: ")
                 .append(getRemark())
-                .append("\nPhoto Path:")
-                .append((getPhotoPath().toString().equals("src/main/resources/images/defaultPhoto.jpg"))
-                        ? "" : getPhotoPath())
+                .append("\nPhoto: ")
+                .append(getPhotoPath())
                 .append("\nTags: ");
         getTags().forEach(builder::append);
         return builder.toString();

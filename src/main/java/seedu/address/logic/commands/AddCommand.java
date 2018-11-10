@@ -11,6 +11,8 @@ import static seedu.address.logic.parser.CliSyntax.PREFIX_PHONE;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_TAG;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_TIMETABLE;
 
+import seedu.address.commons.core.EventsCenter;
+import seedu.address.commons.events.ui.PersonSelectedEvent;
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.model.person.Person;
 import seedu.address.model.person.ReadOnlyPerson;
@@ -25,7 +27,8 @@ public class AddCommand extends UndoableCommand {
     public static final String COMMAND_ALIAS = "a";
     public static final String COMMAND_SECONDARY = "insert";
 
-    public static final String MESSAGE_USAGE = COMMAND_WORD + ": Adds a person to the address book. "
+    public static final String MESSAGE_USAGE = "| " + COMMAND_WORD + " |"
+            + ": Adds a person to the address book.\n"
             + "Parameters: "
             + PREFIX_NAME + "NAME "
             + "[" + PREFIX_GENDER + "GENDER] "
@@ -65,6 +68,8 @@ public class AddCommand extends UndoableCommand {
         requireNonNull(model);
         try {
             model.addPerson(toAdd);
+            EventsCenter.getInstance().post(new PersonSelectedEvent(toAdd, model.getAddressBook().getPersonList()
+                    .size() - 1));
             return new CommandResult(String.format(MESSAGE_SUCCESS, toAdd));
         } catch (DuplicatePersonException e) {
             throw new CommandException(MESSAGE_DUPLICATE_PERSON);

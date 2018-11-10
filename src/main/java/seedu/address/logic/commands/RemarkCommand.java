@@ -1,13 +1,18 @@
 package seedu.address.logic.commands;
 
 import static java.util.Objects.requireNonNull;
+import static seedu.address.commons.core.MessageAlignmentFormatter.FORMAT_ALIGNMENT_TO_EXAMPLE;
+import static seedu.address.commons.core.MessageAlignmentFormatter.FORMAT_ALIGNMENT_TO_PARAMETERS;
+import static seedu.address.commons.core.MessageAlignmentFormatter.FORMAT_ALIGNMENT_TO_REMARK;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_REMARK;
 import static seedu.address.model.Model.PREDICATE_SHOW_ALL_PERSONS;
 
 import java.util.List;
 
+import seedu.address.commons.core.EventsCenter;
 import seedu.address.commons.core.Messages;
 import seedu.address.commons.core.index.Index;
+import seedu.address.commons.events.ui.PersonSelectedEvent;
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.model.person.Person;
 import seedu.address.model.person.ReadOnlyPerson;
@@ -17,26 +22,23 @@ import seedu.address.model.person.exceptions.PersonNotFoundException;
 
 //@@author April0616
 /**
- * Edits the remark of a person to the address book.
+ * Edits the remark of the specified person.
  */
 public class RemarkCommand extends UndoableCommand {
 
     public static final String COMMAND_WORD = "remark";
     public static final String COMMAND_ALIAS = "rm";
 
-    public static final String MESSAGE_USAGE = COMMAND_WORD
-            + ": If remarks the person identified by the index number used in the last person listing,"
-            + " add the remark to the person.\n"
-            + "If the remark field is empty, the remark is removed for the person.\n"
-            + "Accept multiple remarks at the same time.\n"
-            + "Parameters: INDEX (must be a positive integer) "
-            + PREFIX_REMARK + "[REMARK1] " + PREFIX_REMARK + "[REMARK2]\n"
-            + "Example: (add remark) " + COMMAND_WORD + " 1 " + PREFIX_REMARK + "Likes to drink coffee\n"
-            + "Example: (add remarks) " + COMMAND_WORD + " 1 " + PREFIX_REMARK + "Likes to drink coffee "
+    public static final String MESSAGE_USAGE = "| " + COMMAND_WORD + " |"
+            + ": Adds one or more remarks the person identified by the index number used in the last person listing.\n"
+            + FORMAT_ALIGNMENT_TO_REMARK + "If the remark field is empty, the remark is removed for the person.\n"
+            + "Parameters: INDEX " + PREFIX_REMARK + "[REMARK1] " + PREFIX_REMARK + "[REMARK2] ...\n"
+            + FORMAT_ALIGNMENT_TO_PARAMETERS + "(INDEX must be a positive integer)\n"
+            + "Example: (add a remark) " + COMMAND_WORD + " 1 " + PREFIX_REMARK + "Likes to drink coffee\n"
+            + FORMAT_ALIGNMENT_TO_EXAMPLE
+            + "(add multiple remarks) " + COMMAND_WORD + " 1 " + PREFIX_REMARK + "Likes to drink coffee "
             + PREFIX_REMARK + "CAP5.0\n"
-            + "Example: (delete remarks) " + COMMAND_WORD
-            + " 2 "
-            + PREFIX_REMARK + "\n";
+            + FORMAT_ALIGNMENT_TO_EXAMPLE + "(delete remarks) " + COMMAND_WORD + " 2 " + PREFIX_REMARK + "\n";
 
     public static final String MESSAGE_ADD_REMARK_SUCCESS = "Added Remark(s) to Person: %1$s";
     public static final String MESSAGE_DELETE_REMARK_SUCCESS = "Removed Remark(s) from Person: %1$s";
@@ -46,6 +48,7 @@ public class RemarkCommand extends UndoableCommand {
     private final Remark remark;
 
     /**
+     * Initializes the remark command.
      * @param targetIndex of the person in the list to edit the remark
      * @param remark of the person
      */
@@ -80,13 +83,14 @@ public class RemarkCommand extends UndoableCommand {
         }
         model.updateFilteredPersonList(PREDICATE_SHOW_ALL_PERSONS);
 
+        EventsCenter.getInstance().post(new PersonSelectedEvent(remarkedPerson, targetIndex.getZeroBased()));
         return new CommandResult(generateSuccessMsg(remarkedPerson));
     }
 
     /**
-     * Generates the successful Message accordingly.
-     * @param personToRemark
-     * @return successful message for adding remark if the remark string is not empty.
+     * Generates the successful message for adding remarks and deleting remarks.
+     * @param personToRemark the person to be remarked
+     * @return the successful message for adding remark if the remark string is not empty.
      */
     private String generateSuccessMsg(ReadOnlyPerson personToRemark) {
         if (remark.toString().isEmpty()) {
@@ -99,9 +103,9 @@ public class RemarkCommand extends UndoableCommand {
     /**
      * Creates and returns a {@code Person} with the details of {@code personToRemark}
      * remarked with {@code remarkPersonDescriptor}.
+     * @return the person object with the new remark
      */
-    public static Person createRemarkedPerson(ReadOnlyPerson personToRemark,
-                                                 Remark remark) {
+    public static Person createRemarkedPerson(ReadOnlyPerson personToRemark, Remark remark) {
         assert personToRemark != null;
 
         Person remarkPerson = new Person(personToRemark.getName(), personToRemark.getGender(),

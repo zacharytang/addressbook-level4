@@ -23,14 +23,15 @@ public interface Logic {
     /** Returns an unmodifiable view of the filtered list of persons */
     ObservableList<ReadOnlyPerson> getFilteredPersonList();
 
-    //author@@ nbriannl
+    //@@author nbriannl
     ObservableList<Tag> getTagList();
 
     void checkAllMasterListTagsAreBeingUsed ();
 
+    //@@author nbriannl-reused
     void setCurrentTheme(String theme);
 
-    //author@@
+    //@@author
     /** Returns the list of input entered by the user, encapsulated in a {@code ListElementPointer} object */
     ListElementPointer getHistorySnapshot();
 }

@@ -1,5 +1,5 @@
 # zacharytang
-###### /java/seedu/address/commons/events/ui/PersonSelectedEvent.java
+###### \java\seedu\address\commons\events\ui\PersonSelectedEvent.java
 ``` java
 /**
  * Represents a person being selected
@@ -7,9 +7,11 @@
 public class PersonSelectedEvent extends BaseEvent {
 
     public final ReadOnlyPerson person;
+    public final int index;
 
-    public PersonSelectedEvent(ReadOnlyPerson person) {
+    public PersonSelectedEvent(ReadOnlyPerson person, int index) {
         this.person = person;
+        this.index = index;
     }
 
     @Override
@@ -18,7 +20,7 @@ public class PersonSelectedEvent extends BaseEvent {
     }
 }
 ```
-###### /java/seedu/address/commons/events/ui/TimetableDisplayEvent.java
+###### \java\seedu\address\commons\events\ui\TimetableDisplayEvent.java
 ``` java
 /**
  * Represents a request to display timetables in the UI
@@ -47,7 +49,18 @@ public class TimetableDisplayEvent extends BaseEvent {
     }
 }
 ```
-###### /java/seedu/address/commons/util/timetable/Lesson.java
+###### \java\seedu\address\commons\exceptions\NoInternetConnectionException.java
+``` java
+/**
+ * Signals that there is no internet connection for reading from web APIs
+ */
+public class NoInternetConnectionException extends Exception {
+    public NoInternetConnectionException(String message) {
+        super(message);
+    }
+}
+```
+###### \java\seedu\address\commons\util\timetable\Lesson.java
 ``` java
 /**
  * Represents a lesson that a module has
@@ -96,7 +109,7 @@ public class Lesson {
     }
 }
 ```
-###### /java/seedu/address/commons/util/timetable/ModuleInfoFromUrl.java
+###### \java\seedu\address\commons\util\timetable\ModuleInfoFromUrl.java
 ``` java
 /**
  * Represents lesson for a specific module parsed from a NUSMods url
@@ -142,7 +155,7 @@ public class ModuleInfoFromUrl {
     }
 }
 ```
-###### /java/seedu/address/commons/util/timetable/TimetableInfoFromUrl.java
+###### \java\seedu\address\commons\util\timetable\TimetableInfoFromUrl.java
 ``` java
 /**
  * Represents all timetable information parsed from a NUSMods url
@@ -184,7 +197,7 @@ public class TimetableInfoFromUrl {
     }
 }
 ```
-###### /java/seedu/address/commons/util/timetable/TimetableParserUtil.java
+###### \java\seedu\address\commons\util\timetable\TimetableParserUtil.java
 ``` java
 /**
  * Helper class that contains utilities to parse NUSMods urls.
@@ -221,6 +234,9 @@ public class TimetableParserUtil {
             return parseLongUrl(newUrl);
         } catch (IOException e) {
             throw new ParseException("Url cannot be accessed");
+        } catch (NoInternetConnectionException nice) {
+            // No internet connection, return empty timetable
+            return new TimetableInfo();
         }
     }
 
@@ -238,6 +254,7 @@ public class TimetableParserUtil {
         String[] modInfo = toParse.split(SPLIT_QUESTION_MARK);
 
         if (modInfo.length != 2) {
+            // No lesson info in url, return empty timetable
             return new TimetableInfo();
         }
 
@@ -245,7 +262,12 @@ public class TimetableParserUtil {
 
         TimetableInfoFromUrl timetableInfo = parseModuleInfo(modInfo[INDEX_CLASS_INFO]);
 
-        return constructTimetable(acadYear, semester, timetableInfo);
+        try {
+            return constructTimetable(acadYear, semester, timetableInfo);
+        } catch (JsonMappingException e) {
+            // Cannot retrieve info from NUSMODS API, return empty timetable
+            return new TimetableInfo();
+        }
     }
 
     /**
@@ -267,6 +289,7 @@ public class TimetableParserUtil {
             String classType = classInfo.split(SPLIT_LEFT_SQAURE_BRACKET)[1].split(SPLIT_RIGHT_SQUARE_BRACKET)[0];
             String classNo = classInfo.split(SPLIT_EQUALS_SIGN)[1];
 
+            // Add lesson to existing module information
             ModuleInfoFromUrl moduleInfo = modules.getModuleInfo(moduleCode);
             moduleInfo.addLesson(classType, classNo);
             modules.addModuleInfo(moduleInfo);
@@ -281,11 +304,12 @@ public class TimetableParserUtil {
      * @return list of all lessons a module has
      */
     private static ArrayList<Lesson> getLessonInfoFromApi(String acadYear, String semester, String modCode)
-            throws ParseException {
+            throws ParseException, JsonMappingException {
         String uri = "http://api.nusmods.com/" + acadYear + "/" + semester + "/modules/" + modCode + ".json";
         ObjectMapper mapper = new ObjectMapper();
 
         try {
+            // Grab lesson info from API and store as map
             URL url = new URL(uri);
             @SuppressWarnings("unchecked")
             Map<String, Object> mappedJson = mapper.readValue(url, HashMap.class);
@@ -293,6 +317,7 @@ public class TimetableParserUtil {
             ArrayList<HashMap<String, String>> lessonInfo = (ArrayList<HashMap<String, String>>)
                     mappedJson.get("Timetable");
 
+            // Parse info from API and creates arraylist of all lessons
             ArrayList<Lesson> lessons = new ArrayList<>();
             for (HashMap<String, String> lesson : lessonInfo) {
                 Lesson lessonToAdd = new Lesson(lesson.get("ClassNo"), lesson.get("LessonType"),
@@ -302,7 +327,7 @@ public class TimetableParserUtil {
             }
 
             return lessons;
-        } catch (Exception e) {
+        } catch (IOException exception) {
             throw new ParseException("Cannot retrieve module information");
         }
     }
@@ -310,11 +335,14 @@ public class TimetableParserUtil {
     /**
      * Takes a shortened URL and returns the full length URL as a string
      */
-    private static String expandUrl(String shortenedUrl) throws IOException, ParseException {
+    private static String expandUrl(String shortenedUrl)
+            throws IOException, ParseException, NoInternetConnectionException {
         URL url = new URL(shortenedUrl);
         // open connection
         HttpURLConnection httpUrlConnection = (HttpURLConnection) url.openConnection(Proxy.NO_PROXY);
 
+        // Handle nusmods domain not being available
+        httpUrlConnection.setReadTimeout(500);
         // stop following browser redirect
         httpUrlConnection.setInstanceFollowRedirects(false);
 
@@ -322,7 +350,9 @@ public class TimetableParserUtil {
         String expandedUrl = httpUrlConnection.getHeaderField("Location");
         httpUrlConnection.disconnect();
 
-        if (expandedUrl.equals("http://modsn.us")) {
+        if (expandedUrl == null) {
+            throw new NoInternetConnectionException("No internet connection, starting with empty timetables");
+        } else if (expandedUrl.equals("http://modsn.us")) {
             throw new ParseException(MESSAGE_INVALID_SHORT_URL);
         }
 
@@ -336,13 +366,14 @@ public class TimetableParserUtil {
      * @param timetableInfo Class information parsed from url, stored by module code
      */
     private static TimetableInfo constructTimetable(String acadYear, String semester,
-                                                    TimetableInfoFromUrl timetableInfo) throws IllegalValueException {
+                                                    TimetableInfoFromUrl timetableInfo)
+            throws IllegalValueException, JsonMappingException {
         TimetableInfo timetable = new TimetableInfo();
 
         ArrayList<ModuleInfoFromUrl> lessonInfoByModules = timetableInfo.getModuleInfoList();
 
         for (ModuleInfoFromUrl moduleInfoFromTimetable : lessonInfoByModules) {
-            constructTimetableForModule(acadYear, semester, timetable, moduleInfoFromTimetable);
+            addModuleToTimetable(acadYear, semester, timetable, moduleInfoFromTimetable);
         }
 
         return timetable;
@@ -356,14 +387,15 @@ public class TimetableParserUtil {
      * @param timetable timetable to be updated
      * @param moduleInfo lessons for a module parsed from url
      */
-    private static void constructTimetableForModule(String acadYear, String semester, TimetableInfo timetable,
-                                                    ModuleInfoFromUrl moduleInfo) throws IllegalValueException {
+    private static void addModuleToTimetable(String acadYear, String semester, TimetableInfo timetable,
+                                             ModuleInfoFromUrl moduleInfo)
+            throws IllegalValueException, JsonMappingException {
         ArrayList<Lesson> lessons = getLessonInfoFromApi(acadYear, semester, moduleInfo.getModCode());
         HashMap<String, String> lessonsForModule = moduleInfo.getLessonInfo();
 
         for (String classType : lessonsForModule.keySet()) {
+            // Get all class type/number pairs and add to timetable
             String classNo = lessonsForModule.get(classType);
-
             addLessonToTimetable(timetable, lessons, classType, classNo);
         }
     }
@@ -483,7 +515,7 @@ public class TimetableParserUtil {
     }
 }
 ```
-###### /java/seedu/address/logic/commands/TimetableCommand.java
+###### \java\seedu\address\logic\commands\TimetableCommand.java
 ``` java
 /**
  * Selects persons identified using their last displayed indexes and displays a combined timetable
@@ -495,12 +527,12 @@ public class TimetableCommand extends Command {
     public static final String COMMAND_ALIAS = "wf";
     public static final String COMMAND_SECONDARY = "timetable";
 
-    public static final String MESSAGE_USAGE = COMMAND_WORD
-            + ": Displays a combined timetable of persons, identified using their last displayed indexes\n"
+    public static final String MESSAGE_USAGE =  "| " + COMMAND_WORD + " |"
+            + ": Displays a combined timetable of persons, identified using their last displayed indexes.\n"
             + "Parameters: INDEX (must be positive integers)\n"
             + "Example: " + COMMAND_WORD + " 1\n"
-            + "         " + COMMAND_WORD + " 1, 2, 3\n"
-            + "         " + COMMAND_WORD + " 2 4";
+            + FORMAT_ALIGNMENT_TO_EXAMPLE + COMMAND_WORD + " 1, 2, 3\n"
+            + FORMAT_ALIGNMENT_TO_EXAMPLE + COMMAND_WORD + " 2 4";
 
     public static final String MESSAGE_DISPLAY_SUCCESS = "Displayed timetables: ";
 
@@ -514,14 +546,21 @@ public class TimetableCommand extends Command {
     public CommandResult execute() throws CommandException {
 
         List<ReadOnlyPerson> lastShownList = model.getFilteredPersonList();
-        List<ReadOnlyPerson> personsToDisplay = new ArrayList<>();
+        List<ReadOnlyPerson> personsToDisplay;
 
-        for (Index index : targetIndexes) {
-            if (index.getZeroBased() >= lastShownList.size()) {
-                throw new CommandException(Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX);
+        // If no indexes passed, display all persons listed
+        if (targetIndexes.size() == 0) {
+            personsToDisplay = model.getFilteredPersonList();
+        } else {
+            personsToDisplay = new ArrayList<>();
+
+            for (Index index : targetIndexes) {
+                if (index.getZeroBased() >= lastShownList.size()) {
+                    throw new CommandException(Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX);
+                }
+                ReadOnlyPerson personSelected = lastShownList.get(index.getZeroBased());
+                personsToDisplay.add(personSelected);
             }
-            ReadOnlyPerson personSelected = lastShownList.get(index.getZeroBased());
-            personsToDisplay.add(personSelected);
         }
 
         EventsCenter.getInstance().post(new TimetableDisplayEvent(personsToDisplay));
@@ -539,14 +578,14 @@ public class TimetableCommand extends Command {
         for (ReadOnlyPerson person : personList) {
             msg.append("[");
             msg.append(person.getName().toString());
-            msg.append("] ");
+            msg.append("]\n");
         }
 
         return msg.toString();
     }
 }
 ```
-###### /java/seedu/address/logic/parser/TimetableCommandParser.java
+###### \java\seedu\address\logic\parser\TimetableCommandParser.java
 ``` java
 
 /**
@@ -554,13 +593,15 @@ public class TimetableCommand extends Command {
  */
 public class TimetableCommandParser implements Parser<TimetableCommand> {
 
-    public static final String DISPLAY_ONE_PERSON_VALIDATION_REGEX = "-?\\d+";
+    private static final String DISPLAY_ONE_PERSON_VALIDATION_REGEX = "-?\\d+";
 
-    public static final String DISPLAY_MULTIPLE_PERSON_COMMA_VALIDATION_REGEX =
+    private static final String DISPLAY_MULTIPLE_PERSON_COMMA_VALIDATION_REGEX =
             "((-?\\d([\\s+]*)\\,([\\s+]*)(?=-?\\d))|-?\\d)+";
 
-    public static final String DISPLAY_MULTIPLE_PERSON_WHITESPACE_VALIDATION_REGEX =
+    private static final String DISPLAY_MULTIPLE_PERSON_WHITESPACE_VALIDATION_REGEX =
             "(((-?\\d)([\\s]+)(?=-?\\d))|-?\\d)+";
+
+    private static final String DISPLAY_ALL_LISTED_STRING = "";
 
     /**
      * Parses the given {@code String} of arguments in the context of the TimetableCommand
@@ -572,7 +613,12 @@ public class TimetableCommandParser implements Parser<TimetableCommand> {
 
         String preamble = ArgumentTokenizer.tokenize(args).getPreamble();
 
-        if (preamble.matches(DISPLAY_ONE_PERSON_VALIDATION_REGEX)) {
+        if (preamble.equals(DISPLAY_ALL_LISTED_STRING)) {
+            // No arguments passed, display all listed users
+            ArrayList<Index> indexList = new ArrayList<>();
+            return new TimetableCommand(indexList);
+        } else if (preamble.matches(DISPLAY_ONE_PERSON_VALIDATION_REGEX)) {
+            // Only one argument passed
             try {
                 ArrayList<Index> indexList = new ArrayList<>();
                 Index index = ParserUtil.parseIndex(args);
@@ -584,6 +630,7 @@ public class TimetableCommandParser implements Parser<TimetableCommand> {
                         String.format(MESSAGE_INVALID_COMMAND_FORMAT, TimetableCommand.MESSAGE_USAGE));
             }
         } else if (preamble.matches(DISPLAY_MULTIPLE_PERSON_COMMA_VALIDATION_REGEX)) {
+            // Multiple arguments passed in, separated by commas
             try {
                 ArrayList<Index> indexesList = ParserUtil.parseIndexes(args, ",");
                 return new TimetableCommand(indexesList);
@@ -592,6 +639,7 @@ public class TimetableCommandParser implements Parser<TimetableCommand> {
                         String.format(MESSAGE_INVALID_COMMAND_FORMAT, TimetableCommand.MESSAGE_USAGE));
             }
         } else if (preamble.matches(DISPLAY_MULTIPLE_PERSON_WHITESPACE_VALIDATION_REGEX)) {
+            // Multiple arguments passed in, separated by spaces
             try {
                 ArrayList<Index> indexesList = ParserUtil.parseIndexes(args, " ");
                 return new TimetableCommand(indexesList);
@@ -606,7 +654,7 @@ public class TimetableCommandParser implements Parser<TimetableCommand> {
     }
 }
 ```
-###### /java/seedu/address/model/person/timetable/Timetable.java
+###### \java\seedu\address\model\person\timetable\Timetable.java
 ``` java
 /**
  * Represents a person's timetable in the address book
@@ -627,6 +675,7 @@ public class Timetable {
     public static final String MESSAGE_TIMETABLE_URL_CONSTRAINTS =
             "Timetable URLs should be a valid shortened NUSMods URL";
     public static final String MESSAGE_INVALID_SHORT_URL = "Invalid shortened URL provided";
+    public static final String EMPTY_TIMETABLE_STRING = "";
 
     public static final String[] ARRAY_DAYS = {
         "Monday",
@@ -658,12 +707,18 @@ public class Timetable {
     public Timetable(String url) throws IllegalValueException {
         requireNonNull(url);
         String trimmedUrl = url.trim();
-        if (trimmedUrl == "") {
-            trimmedUrl = "http://modsn.us/5tN3z";
+
+        // If no url provided, returns an empty timetable
+        if (trimmedUrl.equals(EMPTY_TIMETABLE_STRING)) {
+            this.value = EMPTY_TIMETABLE_STRING;
+            this.timetable = new TimetableInfo();
+            return;
         }
+
         if (!isValidUrl(trimmedUrl)) {
             throw new IllegalValueException(MESSAGE_TIMETABLE_URL_CONSTRAINTS);
         }
+
         this.value = trimmedUrl;
         this.timetable = parseUrl(trimmedUrl);
     }
@@ -709,7 +764,7 @@ public class Timetable {
 
 }
 ```
-###### /java/seedu/address/model/person/timetable/TimetableDay.java
+###### \java\seedu\address\model\person\timetable\TimetableDay.java
 ``` java
 /**
  * Represents a single day in a timetable
@@ -767,7 +822,7 @@ public class TimetableDay {
     }
 }
 ```
-###### /java/seedu/address/model/person/timetable/TimetableInfo.java
+###### \java\seedu\address\model\person\timetable\TimetableInfo.java
 ``` java
 /**
  * Fully represents all information about a person's timetable slots
@@ -834,7 +889,7 @@ public class TimetableInfo {
     }
 }
 ```
-###### /java/seedu/address/model/person/timetable/TimetableSlot.java
+###### \java\seedu\address\model\person\timetable\TimetableSlot.java
 ``` java
 /**
  * Represents a single slot in a timetable
@@ -863,7 +918,7 @@ public class TimetableSlot {
     }
 }
 ```
-###### /java/seedu/address/model/person/timetable/TimetableWeek.java
+###### \java\seedu\address\model\person\timetable\TimetableWeek.java
 ``` java
 /**
  * Represents a full timetable for a week
@@ -913,71 +968,7 @@ public class TimetableWeek {
     }
 }
 ```
-###### /java/seedu/address/ui/CombinedTimetableDisplay.java
-``` java
-/**
- * Display for the combined timetable command
- */
-public class CombinedTimetableDisplay extends UiPart<Region> {
-
-    public static final String FXML = "CombinedTimetableDisplay.fxml";
-
-    private final Logger logger = LogsCenter.getLogger(this.getClass());
-
-    private TimetableDisplay timetableDisplay;
-
-    @FXML
-    private Label names;
-
-    @FXML
-    private AnchorPane timetablePlaceholder;
-
-    public CombinedTimetableDisplay() {
-        super(FXML);
-
-        timetableDisplay = new TimetableDisplay(null);
-        timetablePlaceholder.getChildren().add(timetableDisplay.getRoot());
-
-        registerAsAnEventHandler(this);
-    }
-
-    /**
-     * Refreshes the timetable display upon command
-     */
-    private void loadPersons(List<ReadOnlyPerson> persons) {
-        names.setText(generateNamesString(persons));
-
-        timetablePlaceholder.getChildren().removeAll();
-
-        ArrayList<Timetable> timetables = new ArrayList<>();
-        for (ReadOnlyPerson person : persons) {
-            timetables.add(person.getTimetable());
-        }
-        timetableDisplay = new TimetableDisplay(timetables);
-        timetablePlaceholder.getChildren().add(timetableDisplay.getRoot());
-    }
-
-    /**
-     * Creates a string to display all names for the combined timetable displayed
-     */
-    private String generateNamesString(List<ReadOnlyPerson> persons) {
-        StringBuilder names = new StringBuilder();
-        for (ReadOnlyPerson person : persons) {
-            names.append("[");
-            names.append(person.getName().toString());
-            names.append("] ");
-        }
-        return names.toString();
-    }
-
-    @Subscribe
-    private void handleTimetableDisplayEvent(TimetableDisplayEvent event) {
-        logger.info(LogsCenter.getEventHandlingLogMessage(event));
-        loadPersons(event.personsToDisplay);
-    }
-}
-```
-###### /java/seedu/address/ui/InfoPanel.java
+###### \java\seedu\address\ui\InfoPanel.java
 ``` java
 /**
  * Container for both browser panel and person information panel
@@ -1015,20 +1006,6 @@ public class InfoPanel extends UiPart<Region> {
     }
 
     @Subscribe
-    public void handlePersonSelectedEvent(PersonSelectedEvent event) {
-        logger.info(LogsCenter.getEventHandlingLogMessage(event));
-
-        timetablePlaceholder.getChildren().removeAll();
-
-        ArrayList<Timetable> timetableToDisplay = new ArrayList<>();
-        timetableToDisplay.add(event.person.getTimetable());
-        timetableDisplay = new TimetableDisplay(timetableToDisplay);
-        timetablePlaceholder.getChildren().add(timetableDisplay.getRoot());
-
-        timetablePlaceholder.toFront();
-    }
-
-    @Subscribe
     public void handlePersonPanelSelectionChangeEvent(PersonPanelSelectionChangedEvent event) {
         logger.info(LogsCenter.getEventHandlingLogMessage(event));
 
@@ -1036,6 +1013,20 @@ public class InfoPanel extends UiPart<Region> {
 
         ArrayList<Timetable> timetableToDisplay = new ArrayList<>();
         timetableToDisplay.add(event.getNewSelection().person.getTimetable());
+        timetableDisplay = new TimetableDisplay(timetableToDisplay);
+        timetablePlaceholder.getChildren().add(timetableDisplay.getRoot());
+
+        timetablePlaceholder.toFront();
+    }
+
+    @Subscribe
+    public void handlePersonSelectedEvent(PersonSelectedEvent event) {
+        logger.info(LogsCenter.getEventHandlingLogMessage(event));
+
+        timetablePlaceholder.getChildren().removeAll();
+
+        ArrayList<Timetable> timetableToDisplay = new ArrayList<>();
+        timetableToDisplay.add(event.person.getTimetable());
         timetableDisplay = new TimetableDisplay(timetableToDisplay);
         timetablePlaceholder.getChildren().add(timetableDisplay.getRoot());
 
@@ -1072,104 +1063,16 @@ public class InfoPanel extends UiPart<Region> {
     }
 }
 ```
-###### /java/seedu/address/ui/PersonInfoOverview.java
-``` java
-/**
- * A UI component that displays a person's data on the main panel
- */
-public class PersonInfoOverview extends UiPart<Region> {
-
-    private static final String FXML = "PersonInfoOverview.fxml";
-    private ReadOnlyPerson person;
-
-    private final Logger logger = LogsCenter.getLogger(this.getClass());
-
-    private TimetableDisplay timetableDisplay;
-
-    @FXML
-    private Label name;
-    @FXML
-    private Label gender;
-    @FXML
-    private Label matricNo;
-    @FXML
-    private Label phone;
-    @FXML
-    private Label address;
-    @FXML
-    private Label email;
-    @FXML
-    private Label birthday;
-    @FXML
-    private Label remark;
-    @FXML
-    private AnchorPane contactPhotoPane;
-    @FXML
-    private ImageView contactPhoto;
-
-    @FXML
-    private AnchorPane timetablePlaceholder;
-
-    public PersonInfoOverview() {
-        super(FXML);
-
-        this.person = null;
-        loadDefaultPerson();
-
-        contactPhoto.fitWidthProperty().bind(contactPhotoPane.widthProperty());
-        contactPhoto.fitHeightProperty().bind(contactPhotoPane.heightProperty());
-        registerAsAnEventHandler(this);
-    }
-
-    /**
-     * Loads the default person when the app is first started
-     */
-    private void loadDefaultPerson() {
-        name.setText("No person selected");
-        gender.setText("");
-        matricNo.setText("");
-        phone.setText("");
-        address.setText("");
-        email.setText("");
-        birthday.setText("");
-        remark.setText("");
-
-        setDefaultContactPhoto();
-
-        timetableDisplay = new TimetableDisplay(null);
-        timetablePlaceholder.getChildren().add(timetableDisplay.getRoot());
-    }
-
-    /**
-     * Updates info with person selected
-     */
-    private void loadPerson(ReadOnlyPerson person) {
-        this.person = person;
-
-        name.textProperty().bind(Bindings.convert(person.nameProperty()));
-        gender.textProperty().bind(Bindings.convert(person.genderProperty()));
-        matricNo.textProperty().bind(Bindings.convert(person.matricNoProperty()));
-        phone.textProperty().bind(Bindings.convert(person.phoneProperty()));
-        address.textProperty().bind(Bindings.convert(person.addressProperty()));
-        email.textProperty().bind(Bindings.convert(person.emailProperty()));
-        birthday.textProperty().bind(Bindings.convert(person.birthdayProperty()));
-        remark.textProperty().bind(Bindings.convert(person.remarkProperty()));
-
-        loadPhoto(person);
-
-        timetablePlaceholder.getChildren().removeAll();
-
-        ArrayList<Timetable> timetableToDisplay = new ArrayList<>();
-        timetableToDisplay.add(person.getTimetable());
-        timetableDisplay = new TimetableDisplay(timetableToDisplay);
-        timetablePlaceholder.getChildren().add(timetableDisplay.getRoot());
-    }
-
-```
-###### /java/seedu/address/ui/PersonInfoOverview.java
+###### \java\seedu\address\ui\PersonInfoPanel.java
 ``` java
     @Subscribe
-    private void handlePersonSelectedEvent(PersonSelectedEvent event) {
+    private void handlePersonAddressDisplayMapEvent(PersonAddressDisplayMapEvent event) {
+        logger.info(LogsCenter.getEventHandlingLogMessage(event));
+        loadPerson(event.person);
+    }
+
+    @Subscribe
+    private void handlePersonAddressDisplayDirectionsEvent(PersonAddressDisplayDirectionsEvent event) {
         logger.info(LogsCenter.getEventHandlingLogMessage(event));
         loadPerson(event.person);
     }
@@ -1179,10 +1082,7 @@ public class PersonInfoOverview extends UiPart<Region> {
         logger.info(LogsCenter.getEventHandlingLogMessage(event));
         loadPerson(event.getNewSelection().person);
     }
-}
-```
-###### /java/seedu/address/ui/PersonInfoPanel.java
-``` java
+
     @Subscribe
     private void handlePersonSelectedEvent(PersonSelectedEvent event) {
         logger.info(LogsCenter.getEventHandlingLogMessage(event));
@@ -1190,7 +1090,7 @@ public class PersonInfoOverview extends UiPart<Region> {
     }
 
 ```
-###### /java/seedu/address/ui/TimetableDisplay.java
+###### \java\seedu\address\ui\TimetableDisplay.java
 ``` java
 /**
  * Display for timetables in the UI
@@ -1231,6 +1131,7 @@ public class TimetableDisplay extends UiPart<Region> {
      * Populates the initialized grid with lessons according to timetables passed
      */
     private void fillTimetables() {
+        // If null passed into constructor, display empty timetable
         if (timetables == null) {
             return;
         }
@@ -1298,63 +1199,18 @@ public class TimetableDisplay extends UiPart<Region> {
     }
 }
 ```
-###### /resources/view/CombinedTimetableDisplay.fxml
-``` fxml
-
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.SplitPane?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.ColumnConstraints?>
-<?import javafx.scene.layout.GridPane?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.RowConstraints?>
-<?import javafx.scene.layout.StackPane?>
-
-<StackPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8"
-           xmlns:fx="http://javafx.com/fxml/1">
-    <SplitPane dividerPositions="0.2" orientation="VERTICAL" prefHeight="400.0" prefWidth="600.0"
-               AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
-               AnchorPane.topAnchor="0.0">
-        <AnchorPane styleClass="combined-timetable-label">
-            <GridPane layoutX="151.0" layoutY="26.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0"
-                      AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                <columnConstraints>
-                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="300" minWidth="300.0" prefWidth="300"/>
-                    <ColumnConstraints hgrow="SOMETIMES"/>
-                </columnConstraints>
-                <rowConstraints>
-                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
-                </rowConstraints>
-                <HBox alignment="CENTER_RIGHT">
-                    <Label alignment="CENTER" styleClass="combined-timetable-main-label" text="Timetables Displayed: ">
-                        <HBox.margin>
-                            <Insets right="2.5"/>
-                        </HBox.margin>
-                    </Label>
-                </HBox>
-                <HBox alignment="CENTER_LEFT" GridPane.columnIndex="1">
-                    <Label fx:id="names" styleClass="combined-timetable-names" text="Label">
-                        <HBox.margin>
-                            <Insets left="2.5"/>
-                        </HBox.margin>
-                    </Label>
-                </HBox>
-            </GridPane>
-        </AnchorPane>
-        <AnchorPane fx:id="timetablePlaceholder" minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0"/>
-    </SplitPane>
-</StackPane>
-```
-###### /resources/view/DarkTheme.css
+###### \resources\view\DarkTheme.css
 ``` css
 .split-pane:horizontal .split-pane-divider {
-    -fx-background-color: #383838;
+    -fx-background-color: derive(#383838, 50%);
+    -fx-background-insets: 3;
     -fx-border-color: transparent transparent transparent transparent;
 }
 
+// horizontal divider above timetable
 .split-pane:vertical .split-pane-divider {
-    -fx-background-color: #383838;
+    -fx-background-color: derive(#383838, 50%);
+    -fx-background-insets: 3;
     -fx-border-color: transparent transparent transparent transparent;
 }
 
@@ -1377,7 +1233,7 @@ public class TimetableDisplay extends UiPart<Region> {
 }
 
 ```
-###### /resources/view/DarkTheme.css
+###### \resources\view\DarkTheme.css
 ``` css
 .display_big_label {
     -fx-font-family: "Segoe UI";
@@ -1471,7 +1327,7 @@ public class TimetableDisplay extends UiPart<Region> {
 }
 
 ```
-###### /resources/view/InfoPanel.fxml
+###### \resources\view\InfoPanel.fxml
 ``` fxml
 <?import javafx.scene.layout.StackPane?>
 <StackPane prefHeight="700.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
@@ -1479,15 +1335,18 @@ public class TimetableDisplay extends UiPart<Region> {
     <StackPane fx:id="timetablePlaceholder" prefHeight="150.0" prefWidth="200.0" />
 </StackPane>
 ```
-###### /resources/view/LightTheme.css
+###### \resources\view\LightTheme.css
 ``` css
 .split-pane:horizontal .split-pane-divider {
-    -fx-background-color: #FAFAFA;
+    -fx-background-color: #E0E0E0;
+    -fx-background-insets: 3;
     -fx-border-color: transparent transparent transparent transparent;
 }
 
+// horizontal divider above timetable
 .split-pane:vertical .split-pane-divider {
-    -fx-background-color: #FAFAFA;
+    -fx-background-color: #E0E0E0;
+    -fx-background-insets: 3;
     -fx-border-color: transparent transparent transparent transparent;
 }
 
@@ -1510,7 +1369,7 @@ public class TimetableDisplay extends UiPart<Region> {
 }
 
 ```
-###### /resources/view/LightTheme.css
+###### \resources\view\LightTheme.css
 ``` css
 .display_big_label {
     -fx-font-family: "Segoe UI";
@@ -1603,77 +1462,20 @@ public class TimetableDisplay extends UiPart<Region> {
 }
 
 ```
-###### /resources/view/MainWindow.fxml
+###### \resources\view\MainWindow.fxml
 ``` fxml
                 <StackPane fx:id="infoPlaceholder" styleClass="pane-with-border">
                     <padding>
-                        <Insets bottom="10" left="10" right="10" top="10"/>
+                        <Insets bottom="10" left="10" right="10" top="10" />
                     </padding>
                 </StackPane>
             </SplitPane>
         </AnchorPane>
     </HBox>
-    <StackPane fx:id="statusbarPlaceholder" VBox.vgrow="NEVER"/>
+    <StackPane fx:id="statusbarPlaceholder" VBox.vgrow="NEVER" />
 </VBox>
 ```
-###### /resources/view/PersonInfoOverview.fxml
-``` fxml
-<StackPane styleClass="info-panel" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
-    <!--Edit dividerPositions below to adjust vertical divider position between the person info and the timetable area -->
-    <SplitPane dividerPositions="0.3" orientation="VERTICAL">
-        <AnchorPane>
-            <!--Edit dividerPositions below to adjust the divider position between the person photo and the person details-->
-            <SplitPane dividerPositions="0.48333333333333334" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                <AnchorPane fx:id="contactPhotoPane" minHeight="0.0" minWidth="0.0" styleClass="info-name-cell">
-               <children>
-                  <ImageView fx:id="contactPhoto" layoutX="1.0" layoutY="-1.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-
-                  </ImageView>
-               </children></AnchorPane>
-
-                <AnchorPane minHeight="0.0" minWidth="0.0" styleClass="info-cell">
-                    <VBox alignment="CENTER_LEFT" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                        <HBox alignment="CENTER_LEFT" spacing="5">
-                            <Label styleClass="display_small_label" text="Name:" />
-                            <Label fx:id="name" styleClass="display_small_value" text="\$name" />
-                        </HBox>
-                        <HBox alignment="CENTER_LEFT" spacing="5">
-                            <Label styleClass="display_small_label" text="Gender:" />
-                            <Label fx:id="gender" styleClass="display_small_value" text="\$gender" />
-                        </HBox>
-                        <HBox alignment="CENTER_LEFT" spacing="5">
-                            <Label styleClass="display_small_label" text="Matriculation No:" />
-                            <Label fx:id="matricNo" styleClass="display_small_value" text="\$matricNo" />
-                        </HBox>
-                        <HBox alignment="CENTER_LEFT" spacing="5">
-                            <Label styleClass="display_small_label" text="Phone No:" />
-                            <Label fx:id="phone" styleClass="display_small_value" text="\$phone" />
-                        </HBox>
-                        <HBox alignment="CENTER_LEFT" spacing="5">
-                            <Label styleClass="display_small_label" text="Address:" />
-                            <Label fx:id="address" styleClass="display_small_value" text="\$address" wrapText="true"/>
-                        </HBox>
-                        <HBox alignment="CENTER_LEFT" spacing="5">
-                            <Label styleClass="display_small_label" text="Email:" />
-                            <Label fx:id="email" styleClass="display_small_value" text="\$email" />
-                        </HBox>
-                        <HBox alignment="CENTER_LEFT" spacing="5">
-                            <Label styleClass="display_small_label" text="Birthday:" />
-                            <Label fx:id="birthday" styleClass="display_small_value" text="\$birthday" />
-                        </HBox>
-                        <HBox alignment="CENTER_LEFT" spacing="5">
-                            <Label styleClass="display_small_label" text="Remark:" />
-                            <Label fx:id="remark" styleClass="display_small_value" text="\$remark" wrapText="true"/>
-                        </HBox>
-                    </VBox>
-                </AnchorPane>
-            </SplitPane>
-        </AnchorPane>
-        <AnchorPane fx:id="timetablePlaceholder" />
-    </SplitPane>
-</StackPane>
-```
-###### /resources/view/TimetableDisplay.fxml
+###### \resources\view\TimetableDisplay.fxml
 ``` fxml
 
 <StackPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">

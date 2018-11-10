@@ -17,7 +17,7 @@ import seedu.address.model.person.Remark;
 //@@author April0616
 
 public class RemarkCommandParserTest {
-    private static final String REMARK_EMPTY = " " + PREFIX_REMARK + " ";
+    private static final String REMARK_EMPTY = " " + PREFIX_REMARK;
     private RemarkCommandParser parser = new RemarkCommandParser();
 
     @Test

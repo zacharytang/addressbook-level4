@@ -2,7 +2,6 @@ package systemtests;
 
 import static seedu.address.testutil.TypicalPersons.KEYWORD_MATCHING_MEIER;
 
-import org.junit.Ignore;
 import org.junit.Test;
 
 import seedu.address.commons.core.index.Index;
@@ -15,7 +14,6 @@ import seedu.address.model.ModelManager;
 
 public class ClearCommandSystemTest extends AddressBookSystemTest {
 
-    @Ignore
     @Test
     public void clear() {
         final Model defaultModel = getModel();
@@ -76,6 +74,7 @@ public class ClearCommandSystemTest extends AddressBookSystemTest {
         assertCommandSuccess(ClearCommand.COMMAND_SECONDARY);
         assertSelectedCardUnchanged();
 
+        //@@author CindyTsai1
         /* Case: mixed case command word -> cleared */
         assertCommandSuccess("ClEaR");
         assertSelectedCardUnchanged();
@@ -84,6 +83,7 @@ public class ClearCommandSystemTest extends AddressBookSystemTest {
         assertCommandFailure("claer", String.format(SuggestCommand.MESSAGE_SUCCESS, "clear"));
     }
 
+    //@@author
     /**
      * Executes {@code command} and verifies that the command box displays an empty string, the result display
      * box displays {@code ClearCommand#MESSAGE_SUCCESS} and the model related components equal to an empty model.

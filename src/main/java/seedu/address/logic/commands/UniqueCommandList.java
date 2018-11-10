@@ -28,7 +28,8 @@ public class UniqueCommandList {
         commandList.add(EditCommand.COMMAND_SECONDARY_TWO);
         commandList.add(ExitCommand.COMMAND_WORD);
         commandList.add(ExitCommand.COMMAND_ALIAS);
-        commandList.add(ExitCommand.COMMAND_SECONDARY);
+        commandList.add(ExitCommand.COMMAND_SECONDARY_ONE);
+        commandList.add(ExitCommand.COMMAND_SECONDARY_TWO);
         commandList.add(FindCommand.COMMAND_WORD);
         commandList.add(FindCommand.COMMAND_ALIAS);
         commandList.add(FindCommand.COMMAND_SECONDARY);
@@ -49,6 +50,18 @@ public class UniqueCommandList {
         commandList.add(SelectCommand.COMMAND_SECONDARY);
         commandList.add(UndoCommand.COMMAND_WORD);
         commandList.add(UndoCommand.COMMAND_ALIAS);
+        commandList.add(GMapsCommand.COMMAND_WORD);
+        commandList.add(GMapsCommand.COMMAND_ALIAS);
+        commandList.add(GMapsCommand.COMMAND_SECONDARY_ONE);
+        commandList.add(GMapsCommand.COMMAND_SECONDARY_TWO);
+        commandList.add(PhotoCommand.COMMAND_WORD);
+        commandList.add(PhotoCommand.COMMAND_ALIAS);
+        commandList.add(ThemeCommand.COMMAND_WORD);
+        commandList.add(ThemeCommand.COMMAND_ALIAS);
+        commandList.add(ThemeCommand.COMMAND_SECONDARY);
+        commandList.add(TimetableCommand.COMMAND_WORD);
+        commandList.add(TimetableCommand.COMMAND_ALIAS);
+        commandList.add(TimetableCommand.COMMAND_SECONDARY);
         return commandList;
     }
 

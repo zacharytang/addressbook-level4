@@ -7,7 +7,6 @@ import static seedu.address.testutil.TypicalIndexes.INDEX_FIRST_PERSON;
 import static seedu.address.testutil.TypicalPersons.KEYWORD_MATCHING_MEIER;
 import static seedu.address.testutil.TypicalPersons.getTypicalPersons;
 
-import org.junit.Ignore;
 import org.junit.Test;
 
 import seedu.address.commons.core.index.Index;
@@ -19,7 +18,7 @@ import seedu.address.logic.commands.UndoCommand;
 import seedu.address.model.Model;
 
 public class SelectCommandSystemTest extends AddressBookSystemTest {
-    @Ignore
+
     @Test
     public void select() {
         /* Case: select the first card in the person list, command with leading spaces and trailing spaces
@@ -28,9 +27,11 @@ public class SelectCommandSystemTest extends AddressBookSystemTest {
         String command = "   " + SelectCommand.COMMAND_WORD + " " + INDEX_FIRST_PERSON.getOneBased() + "   ";
         assertCommandSuccess(command, INDEX_FIRST_PERSON);
 
+        //@@author CindyTsai1
         /* Case: mixed case command word -> rejected */
         assertCommandSuccess("SeLeCt 1", INDEX_FIRST_PERSON);
 
+        //@@author
         /* Case: select the first card in the person list using alias, command with leading spaces and trailing spaces
          * -> selected
          */
@@ -115,10 +116,12 @@ public class SelectCommandSystemTest extends AddressBookSystemTest {
         assertCommandFailure(SelectCommand.COMMAND_WORD + " " + INDEX_FIRST_PERSON.getOneBased(),
                 MESSAGE_INVALID_PERSON_DISPLAYED_INDEX);
 
+        //@@author CindyTsai1
         /* Case: invalid keyword -> suggested */
         assertCommandFailure("salect", String.format(SuggestCommand.MESSAGE_SUCCESS, "select"));
     }
 
+    //@@author
     /**
      * Executes {@code command} and verifies that the command box displays an empty string, the result display
      * box displays the success message of executing select command with the {@code expectedSelectedCardIndex}

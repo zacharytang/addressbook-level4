@@ -54,6 +54,7 @@ public class TimetableDisplay extends UiPart<Region> {
      * Populates the initialized grid with lessons according to timetables passed
      */
     private void fillTimetables() {
+        // If null passed into constructor, display empty timetable
         if (timetables == null) {
             return;
         }

@@ -1,6 +1,8 @@
 package seedu.address.logic.commands;
 
 import static java.util.Objects.requireNonNull;
+import static seedu.address.commons.core.MessageAlignmentFormatter.FORMAT_ALIGNMENT_TO_EDIT;
+import static seedu.address.commons.core.MessageAlignmentFormatter.FORMAT_ALIGNMENT_TO_PARAMETERS;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_ADDRESS;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_BIRTHDAY;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_EMAIL;
@@ -18,8 +20,10 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
+import seedu.address.commons.core.EventsCenter;
 import seedu.address.commons.core.Messages;
 import seedu.address.commons.core.index.Index;
+import seedu.address.commons.events.ui.PersonSelectedEvent;
 import seedu.address.commons.util.CollectionUtil;
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.model.person.Address;
@@ -30,12 +34,12 @@ import seedu.address.model.person.MatricNo;
 import seedu.address.model.person.Name;
 import seedu.address.model.person.Person;
 import seedu.address.model.person.Phone;
-import seedu.address.model.person.PhotoPath;
 import seedu.address.model.person.ReadOnlyPerson;
 import seedu.address.model.person.Remark;
 import seedu.address.model.person.exceptions.DuplicatePersonException;
 import seedu.address.model.person.exceptions.PersonNotFoundException;
 import seedu.address.model.person.timetable.Timetable;
+import seedu.address.model.photo.PhotoPath;
 import seedu.address.model.tag.Tag;
 import seedu.address.model.tag.exceptions.TagNotFoundException;
 
@@ -49,26 +53,27 @@ public class EditCommand extends UndoableCommand {
     public static final String COMMAND_SECONDARY_ONE = "modify";
     public static final String COMMAND_SECONDARY_TWO = "change";
 
-    public static final String MESSAGE_USAGE = COMMAND_WORD + ": Edits the details of the person identified "
-            + "by the index number used in the last person listing. "
-            + "Existing values will be overwritten by the input values.\n"
+    public static final String MESSAGE_USAGE = "| " + COMMAND_WORD + " |"
+            + ": Edits the details of the person identified by the index number used in the last person listing.\n"
+            + FORMAT_ALIGNMENT_TO_EDIT +  "Existing values will be overwritten by the input values.\n"
             + "Parameters: INDEX (must be a positive integer) "
             + "[" + PREFIX_NAME + "NAME] "
             + "[" + PREFIX_GENDER + "GENDER] "
             + "[" + PREFIX_MATRIC_NO + "MATRIC NO.] "
             + "[" + PREFIX_PHONE + "PHONE] "
             + "[" + PREFIX_EMAIL + "EMAIL] "
-            + "[" + PREFIX_ADDRESS + "ADDRESS] "
-            + "[" + PREFIX_TIMETABLE + "TIMETABLE_URL] "
-            + "[" + PREFIX_TAG + "TAG]...\n"
-            + "[" + PREFIX_BIRTHDAY + "BIRTHDAY] "
+            + "[" + PREFIX_ADDRESS + "ADDRESS]\n"
+            + FORMAT_ALIGNMENT_TO_PARAMETERS + "[" + PREFIX_TIMETABLE + "TIMETABLE_URL] "
+            + "[" + PREFIX_TAG + "TAG]... "
+            + "[" + PREFIX_BIRTHDAY + "BIRTHDAY]\n"
             + "Example: " + COMMAND_WORD + " 1 "
             + PREFIX_PHONE + "91234567 "
             + PREFIX_EMAIL + "johndoe@example.com\n"
-            + "OR "
-            + "Edit the specified tag in all contacts containing this tag with a new specified tag "
-            + "Parameters: " + PREFIX_OLD_TAG + "TAG " + PREFIX_NEW_TAG + "TAG"
-            + "Example: " + COMMAND_WORD + "old/CS1020 new/CS2010";
+            + "OR\n"
+            + "| " + COMMAND_WORD + " |"
+            + ": Edits the specified tag in all contacts containing this tag with a new specified tag.\n"
+            + "Parameters: " + PREFIX_OLD_TAG + "TAG " + PREFIX_NEW_TAG + "TAG\n"
+            + "Example: " + COMMAND_WORD + " " + PREFIX_OLD_TAG + "CS1020 " + PREFIX_NEW_TAG + "CS2010";
 
     public static final String MESSAGE_EDIT_PERSON_SUCCESS = "Edited Person: %1$s";
     public static final String MESSAGE_NOT_EDITED = "At least one field to edit must be provided.";
@@ -119,45 +124,63 @@ public class EditCommand extends UndoableCommand {
     @Override
     public CommandResult executeUndoableCommand() throws CommandException {
         if (isEditForPerson) {
-            List<ReadOnlyPerson> lastShownList = model.getFilteredPersonList();
-
-            if (index.getZeroBased() >= lastShownList.size()) {
-                throw new CommandException(Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX);
-            }
-
-            ReadOnlyPerson personToEdit = lastShownList.get(index.getZeroBased());
-            Person editedPerson = createEditedPerson(personToEdit, editPersonDescriptor);
-
-            try {
-                model.updatePerson(personToEdit, editedPerson);
-            } catch (DuplicatePersonException dpe) {
-                throw new CommandException(MESSAGE_DUPLICATE_PERSON);
-            } catch (PersonNotFoundException pnfe) {
-                throw new AssertionError("The target person cannot be missing");
-            }
-            model.updateFilteredPersonList(PREDICATE_SHOW_ALL_PERSONS);
-            return new CommandResult(String.format(MESSAGE_EDIT_PERSON_SUCCESS, editedPerson));
+            return executeCommandForPerson();
         } else {
-
-            try {
-                model.editTag(oldTag, newTag);
-            } catch (DuplicatePersonException dpe) {
-                throw new AssertionError("Updating the tags on one person cannot possibly make the person"
-                        + " identical to another person.");
-            } catch (PersonNotFoundException pnfe) {
-                throw new AssertionError("The target person cannot be missing");
-            } catch (TagNotFoundException tgne) {
-                throw new CommandException(MESSAGE_NONEXISTENT_TAG);
-            }
-            model.updateFilteredPersonList(PREDICATE_SHOW_ALL_PERSONS);
-            return new CommandResult(String.format(MESSAGE_EDIT_TAG_SUCCESS, oldTag));
+            return executeCommandForTag();
         }
+    }
+
+    //@@author nbriannl
+    /**
+     * Command execution of {@code EditCommand} for a {@code Tag}
+     */
+    private CommandResult executeCommandForTag () throws CommandException {
+        try {
+            model.editTag(oldTag, newTag);
+        } catch (DuplicatePersonException dpe) {
+            throw new AssertionError("Updating the tags on one person cannot possibly make the person"
+                    + " identical to another person.");
+        } catch (PersonNotFoundException pnfe) {
+            throw new AssertionError("The target person cannot be missing");
+        } catch (TagNotFoundException tgne) {
+            throw new CommandException(MESSAGE_NONEXISTENT_TAG);
+        }
+        model.updateFilteredPersonList(PREDICATE_SHOW_ALL_PERSONS);
+        return new CommandResult(generateResultMsgForTag(oldTag, newTag));
+    }
+
+    //@@author
+    /**
+     * Command execution of {@code EditCommand} for a {@code Tag}
+     */
+    private CommandResult executeCommandForPerson () throws CommandException {
+        List<ReadOnlyPerson> lastShownList = model.getFilteredPersonList();
+
+        if (index.getZeroBased() >= lastShownList.size()) {
+            throw new CommandException(Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX);
+        }
+
+        ReadOnlyPerson personToEdit = lastShownList.get(index.getZeroBased());
+        Person editedPerson = createEditedPerson(personToEdit, editPersonDescriptor);
+
+        try {
+            model.updatePerson(personToEdit, editedPerson);
+        } catch (DuplicatePersonException dpe) {
+            throw new CommandException(MESSAGE_DUPLICATE_PERSON);
+        } catch (PersonNotFoundException pnfe) {
+            throw new AssertionError("The target person cannot be missing");
+        }
+        model.updateFilteredPersonList(PREDICATE_SHOW_ALL_PERSONS);
+        EventsCenter.getInstance().post(new PersonSelectedEvent(editedPerson, index.getZeroBased()));
+        return new CommandResult(String.format(MESSAGE_EDIT_PERSON_SUCCESS, editedPerson));
     }
 
     //@@author April0616
     /**
-     * Creates and returns a {@code Person} with the details of {@code personToEdit}
-     * edited with {@code editPersonDescriptor}.
+     * Creates a new person object with the details of the person to be edited.
+     * Be edited with {@param editPersonDescriptor}.
+     * @param personToEdit the person to be edited
+     * @return the created person object
      */
     private static Person createEditedPerson(ReadOnlyPerson personToEdit,
                                              EditPersonDescriptor editPersonDescriptor) {
@@ -178,6 +201,14 @@ public class EditCommand extends UndoableCommand {
         return new Person(updatedName, updatedGender, updatedMatricNo,
                 updatedPhone, updatedEmail, updatedAddress,
                 updatedTimetable, updatedRemark, updatedPhotoPath, updatedTags, updateBirthday);
+    }
+
+    //@@author nbriannl
+    /**
+     * Generates the command result String for Edit Command when editing tags
+     */
+    public static String generateResultMsgForTag(Tag oldTag, Tag newTag) {
+        return "Edited Tag:\n" + "From '" + oldTag.tagName + "' to '" + newTag.tagName + "'";
     }
 
     //@@author nbriannl
@@ -254,18 +285,34 @@ public class EditCommand extends UndoableCommand {
         }
 
         //@@author April0616
+        /**
+         * Sets the details of the gender to edit the person with.
+         * @param gender
+         */
         public void setGender(Gender gender) {
             this.gender = gender;
         }
 
+        /**
+         * Gets the details of the gender to edit the person with.
+         * @return gender if the gender is specified
+         */
         public Optional<Gender> getGender() {
             return Optional.ofNullable(gender);
         }
 
+        /**
+         * Sets the details of the matriculation number to edit the person with.
+         * @param matricNo
+         */
         public void setMatricNo(MatricNo matricNo) {
             this.matricNo = matricNo;
         }
 
+        /**
+         * Gets the details of the matriculation number to edit the person with.
+         * @return matriculation number if it is specified
+         */
         public Optional<MatricNo> getMatricNo() {
             return Optional.ofNullable(matricNo);
         }
@@ -311,6 +358,7 @@ public class EditCommand extends UndoableCommand {
             return Optional.ofNullable(tags);
         }
 
+        //@@author CindyTsai1
         public void setBirthday(Birthday birthday) {
             this.birthday = birthday;
         }
@@ -319,6 +367,7 @@ public class EditCommand extends UndoableCommand {
             return Optional.ofNullable(birthday);
         }
 
+        //@@author
         @Override
         public boolean equals(Object other) {
             // short circuit if same object

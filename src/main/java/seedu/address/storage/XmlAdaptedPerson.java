@@ -16,10 +16,10 @@ import seedu.address.model.person.MatricNo;
 import seedu.address.model.person.Name;
 import seedu.address.model.person.Person;
 import seedu.address.model.person.Phone;
-import seedu.address.model.person.PhotoPath;
 import seedu.address.model.person.ReadOnlyPerson;
 import seedu.address.model.person.Remark;
 import seedu.address.model.person.timetable.Timetable;
+import seedu.address.model.photo.PhotoPath;
 import seedu.address.model.tag.Tag;
 
 /**
@@ -73,7 +73,7 @@ public class XmlAdaptedPerson {
         remark = source.getRemark().value;
         photoPath = source.getPhotoPath().value;
         tagged = new ArrayList<>();
-        birthday = source.getBirthday().date;
+        birthday = source.getBirthday().getUnformattedDate();
         for (Tag tag : source.getTags()) {
             tagged.add(new XmlAdaptedTag(tag));
         }

@@ -12,15 +12,15 @@ import seedu.address.commons.exceptions.IllegalValueException;
 public class MatricNo {
 
     public static final String MESSAGE_MATRIC_NO_CONSTRAINTS =
-            "Person matric number should be a 9-character string starting with 'A or a' and ending with a letter";
+            "Person's matriculation number should be a 9-character string starting with 'A' or 'a', "
+                    + "followed by 7 digits, and ending with a letter.";
     public static final String MATRIC_NO_VALIDATION_REGEX = "([Aa])(\\d{7})([a-zA-Z])";
 
     public final String value;
 
     /**
-     * Validates given matricNo.
-     *
-     * @throws IllegalValueException if given matricNo string is invalid.
+     * Initializes matricNo objeccts and validates given matricNo.
+     * @throws IllegalValueException if the given matricNo string is invalid.
      */
     public MatricNo(String matricNo) throws IllegalValueException {
         requireNonNull(matricNo);
@@ -35,7 +35,6 @@ public class MatricNo {
      * Returns if a given string is a valid person matricNo.
      */
     public static boolean isValidMatricNo(String test) {
-        //return test.matches(MATRIC_NO_VALIDATION_REGEX) && test.length() == 9;
         return test.matches(MATRIC_NO_VALIDATION_REGEX) || test.equals("");
     }
 

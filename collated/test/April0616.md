@@ -1,12 +1,17 @@
 # April0616
-###### /java/seedu/address/logic/commands/AddCommandTest.java
+###### \java\seedu\address\logic\commands\AddCommandTest.java
 ``` java
         @Override
         public void deletePersons(ArrayList<ReadOnlyPerson> targets) throws PersonNotFoundException {
             fail("This method should not be called.");
         }
+
+        @Override
+        public void addPhotoPath(PhotoPath photoPath) throws DuplicatePhotoPathException {
+            fail("This method should not be called.");
+        }
 ```
-###### /java/seedu/address/logic/commands/DeleteCommandTest.java
+###### \java\seedu\address\logic\commands\DeleteCommandTest.java
 ``` java
     @Test
     public void execute_validIndexUnfilteredList_success() throws Exception {
@@ -16,15 +21,16 @@
         ArrayList<ReadOnlyPerson> deletePersonList = new ArrayList<>();
         deletePersonList.add(personToDelete);
 
-        String expectedMessage = deleteCommand.generateResultMsg(deletePersonList);
+        String expectedMessage = deleteCommand.generateSuccessfulResultMsgForPerson(deletePersonList);
 
         ModelManager expectedModel = new ModelManager(model.getAddressBook(), new UserPrefs());
         expectedModel.deletePerson(personToDelete);
 
         assertCommandSuccess(deleteCommand, model, expectedMessage, expectedModel);
     }
+
 ```
-###### /java/seedu/address/logic/commands/DeleteCommandTest.java
+###### \java\seedu\address\logic\commands\DeleteCommandTest.java
 ``` java
     @Test
     public void execute_validIndexFilteredList_success() throws Exception {
@@ -36,7 +42,7 @@
         ArrayList<ReadOnlyPerson> deletePersonList = new ArrayList<>();
         deletePersonList.add(personToDelete);
 
-        String expectedMessage = deleteCommand.generateResultMsg(deletePersonList);
+        String expectedMessage = deleteCommand.generateSuccessfulResultMsgForPerson(deletePersonList);
 
         Model expectedModel = new ModelManager(model.getAddressBook(), new UserPrefs());
         expectedModel.deletePerson(personToDelete);
@@ -46,7 +52,7 @@
     }
 
 ```
-###### /java/seedu/address/logic/commands/PhotoCommandTest.java
+###### \java\seedu\address\logic\commands\PhotoCommandTest.java
 ``` java
 public class PhotoCommandTest {
 
@@ -65,6 +71,8 @@ public class PhotoCommandTest {
         assertFalse(PhotoCommand.isValidLocalPhotoPath("c:\\\\photo.jpg")); // too many backslashes
         assertFalse(PhotoCommand.isValidLocalPhotoPath("c:\\")); // no file name
         assertFalse(PhotoCommand.isValidLocalPhotoPath("c:\\")); // no file name
+        assertFalse(PhotoCommand.isValidLocalPhotoPath("d:\\my_photo.txt"));  // invalid extension
+        assertFalse(PhotoCommand.isValidLocalPhotoPath("d:\\my_photo.pdf"));  // invalid extension
 
         // valid photo path
         assertTrue(PhotoCommand.isValidLocalPhotoPath("c:\\desktop\\baby.jpg"));
@@ -72,10 +80,31 @@ public class PhotoCommandTest {
         assertTrue(PhotoCommand.isValidLocalPhotoPath("d:\\my_photo.jpg"));  // underscore
     }
 
-    @Test
-    public void equals() throws FileNotFoundException, IllegalValueException {
-        PhotoCommand addFirstPersonPhotoPath = new PhotoCommand(INDEX_FIRST_PERSON, VALID_PHOTOPATH_AMY);
-        PhotoCommand addSecondPersonPhotoPath = new PhotoCommand(INDEX_SECOND_PERSON, VALID_PHOTOPATH_BOB);
+
+
+    /**
+     * This test cannot run on Travis CI.
+     */
+    @Ignore
+    private void equals() throws FileNotFoundException, IllegalValueException {
+        //File amyFile = new File(VALID_PHOTONAME_AMY);
+        File amyFile = new File("photo.jpg");
+        //File bobFile = new File(VALID_PHOTONAME_BOB);
+        File bobFile = new File("selfie.jpg");
+        try {
+            amyFile.createNewFile();
+            bobFile.createNewFile();
+        } catch (IOException ioe) {
+            System.err.println("Cannot create temporary files!");
+        }
+
+        String amyPath = amyFile.getAbsolutePath();
+        String bobPath = bobFile.getAbsolutePath();
+        //TestUtil.createTempFile(VALID_PHOTOPATH_AMY);
+        //TestUtil.createTempFile(VALID_PHOTOPATH_BOB);
+
+        PhotoCommand addFirstPersonPhotoPath = new PhotoCommand(INDEX_FIRST_PERSON, amyPath);
+        PhotoCommand addSecondPersonPhotoPath = new PhotoCommand(INDEX_SECOND_PERSON, bobPath);
 
         // same object -> returns true
         assertTrue(addFirstPersonPhotoPath.equals(addFirstPersonPhotoPath));
@@ -93,10 +122,15 @@ public class PhotoCommandTest {
 
         // different objects -> returns false
         assertFalse(addFirstPersonPhotoPath.equals(addSecondPersonPhotoPath));
+
+        //TestUtil.removeFileAndItsParentsTillRoot(VALID_PHOTOPATH_BOB);
+        //TestUtil.removeFileAndItsParentsTillRoot(VALID_PHOTOPATH_AMY);
+        amyFile.delete();
+        bobFile.delete();
     }
 }
 ```
-###### /java/seedu/address/logic/commands/RemarkCommandTest.java
+###### \java\seedu\address\logic\commands\RemarkCommandTest.java
 ``` java
 /**
  * Contains integration tests (interaction with the Model) and unit tests for RemarkCommand.
@@ -162,7 +196,7 @@ public class RemarkCommandTest {
     }
 
     /**
-     * Edit filtered list where index is larger than size of filtered list,
+     * Edits filtered list where index is larger than size of filtered list,
      * but smaller than size of address book
      */
     @Test
@@ -208,7 +242,7 @@ public class RemarkCommandTest {
     }
 }
 ```
-###### /java/seedu/address/logic/parser/AddressBookParserTest.java
+###### \java\seedu\address\logic\parser\AddressBookParserTest.java
 ``` java
     @Test
     public void parseCommand_remark() throws Exception {
@@ -219,7 +253,7 @@ public class RemarkCommandTest {
     }
 
 ```
-###### /java/seedu/address/logic/parser/AddressBookParserTest.java
+###### \java\seedu\address\logic\parser\AddressBookParserTest.java
 ``` java
     @Test
     public void parseCommand_photo() throws Exception {
@@ -242,7 +276,7 @@ public class RemarkCommandTest {
         removeAppFile(newCommandAppPath);
     }
 ```
-###### /java/seedu/address/logic/parser/DeleteCommandParserTest.java
+###### \java\seedu\address\logic\parser\DeleteCommandParserTest.java
 ``` java
     @Test
     public void parse_validArgsOnePerson_returnsDeleteCommand() {
@@ -252,7 +286,7 @@ public class RemarkCommandTest {
     }
 
 ```
-###### /java/seedu/address/logic/parser/DeleteCommandParserTest.java
+###### \java\seedu\address\logic\parser\DeleteCommandParserTest.java
 ``` java
     @Test
     public void parse_validArgsMultiplePersons_returnsDeleteCommand() {
@@ -265,7 +299,7 @@ public class RemarkCommandTest {
 
 
 ```
-###### /java/seedu/address/logic/parser/DeleteCommandParserTest.java
+###### \java\seedu\address\logic\parser\DeleteCommandParserTest.java
 ``` java
     @Test
     public void parse_validArgsMultiplePersonsNoWhiteSpace_returnsDeleteCommand() {
@@ -276,7 +310,7 @@ public class RemarkCommandTest {
     }
 
 ```
-###### /java/seedu/address/logic/parser/DeleteCommandParserTest.java
+###### \java\seedu\address\logic\parser\DeleteCommandParserTest.java
 ``` java
     @Test
     public void parse_validArgsMultiplePersonsDuplicatedIndexes_returnsDeleteCommand() {
@@ -286,7 +320,7 @@ public class RemarkCommandTest {
         assertParseSuccess(parser, "1, 1, 3, 3", new DeleteCommand(deletePersonList));
     }
 ```
-###### /java/seedu/address/logic/parser/DeleteCommandParserTest.java
+###### \java\seedu\address\logic\parser\DeleteCommandParserTest.java
 ``` java
     @Test
     public void parse_validArgsMultiplePersonsManyWhiteSpaces_returnsDeleteCommand() {
@@ -297,7 +331,7 @@ public class RemarkCommandTest {
         assertParseSuccess(parser, "  1  ,  2  , 3 ", new DeleteCommand(deletePersonList));
     }
 ```
-###### /java/seedu/address/logic/parser/DeleteCommandParserTest.java
+###### \java\seedu\address\logic\parser\DeleteCommandParserTest.java
 ``` java
     @Test
     public void parse_validArgsMultiplePersonsSplitByWhiteSpace_returnsDeleteCommand() {
@@ -309,7 +343,7 @@ public class RemarkCommandTest {
         assertParseSuccess(parser, "  1 2 3 ", new DeleteCommand(deletePersonList));
     }
 ```
-###### /java/seedu/address/logic/parser/DeleteCommandParserTest.java
+###### \java\seedu\address\logic\parser\DeleteCommandParserTest.java
 ``` java
     @Test
     public void parse_invalidArgsMultiplePersonsManyWhiteSpacesLessComma_returnsDeleteCommand() {
@@ -322,7 +356,7 @@ public class RemarkCommandTest {
     }
 
 ```
-###### /java/seedu/address/logic/parser/ParserUtilTest.java
+###### \java\seedu\address\logic\parser\ParserUtilTest.java
 ``` java
     @Test
     public void parseGender_null_throwsNullPointerException() throws Exception {
@@ -374,11 +408,11 @@ public class RemarkCommandTest {
         assertEquals(expectedMatricNo, actualMatricNo.get());
     }
 ```
-###### /java/seedu/address/logic/parser/RemarkCommandParserTest.java
+###### \java\seedu\address\logic\parser\RemarkCommandParserTest.java
 ``` java
 
 public class RemarkCommandParserTest {
-    private static final String REMARK_EMPTY = " " + PREFIX_REMARK + " ";
+    private static final String REMARK_EMPTY = " " + PREFIX_REMARK;
     private RemarkCommandParser parser = new RemarkCommandParser();
 
     @Test
@@ -403,34 +437,75 @@ public class RemarkCommandParserTest {
     }
 }
 ```
-###### /java/seedu/address/model/person/GenderTest.java
+###### \java\seedu\address\model\AddressBookTest.java
+``` java
+    /**
+     * A stub ReadOnlyAddressBook whose persons and tags lists can violate interface constraints.
+     */
+    private static class AddressBookStub implements ReadOnlyAddressBook {
+        private final ObservableList<ReadOnlyPerson> persons = FXCollections.observableArrayList();
+        private final ObservableList<Tag> tags = FXCollections.observableArrayList();
+        private final ObservableList<PhotoPath> photoPaths = FXCollections.observableArrayList();
+
+        AddressBookStub(Collection<? extends ReadOnlyPerson> persons, Collection<? extends Tag> tags) {
+            this.persons.setAll(persons);
+            this.tags.setAll(tags);
+        }
+
+        @Override
+        public ObservableList<ReadOnlyPerson> getPersonList() {
+            return persons;
+        }
+
+        @Override
+        public ObservableList<Tag> getTagList() {
+            return tags;
+        }
+
+        @Override
+        public ObservableList<PhotoPath> getPhotoPathList() {
+            return photoPaths;
+        }
+    }
+
+}
+```
+###### \java\seedu\address\model\person\GenderTest.java
 ``` java
 public class GenderTest {
 
     @Test
     public void isValidGender() {
+
         // invalid Gender
-        assertFalse(Gender.isValidGender("")); // empty string
-        assertFalse(Gender.isValidGender(" ")); // spaces only
-        assertFalse(Gender.isValidGender("^")); // only non-alphanumeric characters
-        assertFalse(Gender.isValidGender("peter*")); // contains non-alphanumeric characters
-        assertFalse(Gender.isValidGender("apple")); // unrelated description
-        assertFalse(Gender.isValidGender("male")); // first letter not uppercase
+        assertFalse(Gender.isValidInput(" ")); // spaces only
+        assertFalse(Gender.isValidInput("^")); // only non-alphanumeric characters
+        assertFalse(Gender.isValidInput("peter*")); // contains non-alphanumeric characters
+        assertFalse(Gender.isValidInput("apple")); // unrelated description
+        assertFalse(Gender.isValidInput("fmale")); // wrong input
 
         // valid Gender
-        assertTrue(Gender.isValidGender("Male")); // GENDER_VALIDATION_WORD1
-        assertTrue(Gender.isValidGender("Female")); // GENDER_VALIDATION_WORD2
+        assertTrue(Gender.isValidInput("")); // empty string when unspecified
+        assertTrue(Gender.isValidInput("m"));
+        assertTrue(Gender.isValidInput("f"));
+        assertTrue(Gender.isValidInput("male"));
+        assertTrue(Gender.isValidInput("female"));
+        assertTrue(Gender.isValidInput("MALE"));
+        assertTrue(Gender.isValidInput("FEMALE"));
+        assertTrue(Gender.isValidInput("mAlE"));
+        assertTrue(Gender.isValidInput("FemALE"));
+        assertTrue(Gender.isValidInput("Male"));
+        assertTrue(Gender.isValidInput("Female"));
     }
 }
 ```
-###### /java/seedu/address/model/person/MatricNoTest.java
+###### \java\seedu\address\model\person\MatricNoTest.java
 ``` java
 public class MatricNoTest {
 
     @Test
     public void isValidMatricNo() {
         // invalid MatricNo numbers
-        assertFalse(MatricNo.isValidMatricNo("")); // empty string
         assertFalse(MatricNo.isValidMatricNo(" ")); // spaces only
         assertFalse(MatricNo.isValidMatricNo("A016253K")); // not exactly 9-digit
         assertFalse(MatricNo.isValidMatricNo("40162533J")); // not start with 'A' but a number
@@ -439,7 +514,8 @@ public class MatricNoTest {
         assertFalse(MatricNo.isValidMatricNo("A014 2333H")); // spaces within digits
         assertFalse(MatricNo.isValidMatricNo("A01423332")); // not end with a letter
 
-        // valid MatricNo numbers
+        // valid MatricNo numbers/ empty when optional
+        assertTrue(MatricNo.isValidMatricNo("")); // empty string
         assertTrue(MatricNo.isValidMatricNo("A0172631H"));
         assertTrue(MatricNo.isValidMatricNo("A0112331K"));
         assertTrue(MatricNo.isValidMatricNo("a0172631h")); //case-insensitive
@@ -448,7 +524,7 @@ public class MatricNoTest {
     }
 }
 ```
-###### /java/seedu/address/model/person/PhotoPathTest.java
+###### \java\seedu\address\model\person\PhotoPathTest.java
 ``` java
 public class PhotoPathTest {
 
@@ -456,16 +532,21 @@ public class PhotoPathTest {
     public void isValidPhotoPath() {
 
         // empty
-        assertFalse(PhotoPath.isValidPhotoPath(""));
+        assertTrue(PhotoPath.isValidPhotoPath(""));
         assertFalse(PhotoPath.isValidPhotoPath(" "));
 
-        // / missing parts： not start with 'docs/images/contactPhotos/'
+        // missing parts: not start with 'docs/images/contactPhotos/'
         assertFalse(PhotoPath.isValidPhotoPath("photo.jpg"));
         assertFalse(PhotoPath.isValidPhotoPath("c:photo.jpg"));
         assertFalse(PhotoPath.isValidPhotoPath("d:photo.jpg"));
         assertFalse(PhotoPath.isValidPhotoPath("c:\\\\photo.jpg"));
         assertFalse(PhotoPath.isValidPhotoPath("c:\\"));
         assertFalse(PhotoPath.isValidPhotoPath("c:\\"));
+
+        // invalid file extension
+        assertFalse(PhotoPath.isValidPhotoPath("src/main/resources/images/contactPhotos/photo.txt"));
+        assertFalse(PhotoPath.isValidPhotoPath("src/main/resources/images/contactPhotos/selfie.pdf"));
+        assertFalse(PhotoPath.isValidPhotoPath("src/main/resources/images/contactPhotos/selfie2.doc"));
 
         // valid photo path
         //assertTrue(PhotoPath.isValidPhotoPath("src/main/resources/images/help_icon.png"));  //default photo path
@@ -478,7 +559,7 @@ public class PhotoPathTest {
     @Ignore
     @Test
     public void equals() throws IllegalValueException {
-        String parentPath = FILE_SAVED_PARENT_PATH;
+        String parentPath = PATH_FILE_SAVED_PARENT_DIRECTORY;
         //PhotoPath validPhotoPath_1 = new PhotoPath(parentPath + "1234.jpg");
         //PhotoPath validPhotoPath_2 = new PhotoPath(parentPath + "5678.jpg");
 
@@ -501,7 +582,7 @@ public class PhotoPathTest {
     */
 }
 ```
-###### /java/seedu/address/model/person/RemarkTest.java
+###### \java\seedu\address\model\person\RemarkTest.java
 ``` java
 public class RemarkTest {
 
@@ -528,65 +609,7 @@ public class RemarkTest {
     }
 }
 ```
-###### /java/seedu/address/testutil/TestUtil.java
-``` java
-    /**
-     * Remove the temporary test files and parents if they exist till the root of disk C.
-     * @param path
-     * @throws IOException
-     */
-    public static void removeFileAndItsParentsTillRoot(Path path) throws IOException {
-        if (path.toString().matches("[a-zA-Z]+[:]+[\\\\]") || path == null) {
-            return;
-        } else if (Files.isRegularFile(path)) {
-            Files.deleteIfExists(path);
-
-        }
-
-        if (Files.isDirectory(path)) {
-            try {
-                Files.delete(path);
-            } catch (DirectoryNotEmptyException e) {
-                return;
-            }
-        }
-        //use recursion here
-        removeFileAndItsParentsTillRoot(path.getParent());
-    }
-
-    /**
-     * If the file in the specific path in the app directory exists, delete the file in the path
-     * @param path
-     */
-    public static void removeAppFile(String path) {
-        File fileToDelete = new File(path);
-        if (fileToDelete.exists()) {
-            fileToDelete.delete();
-        }
-    }
-
-    /**
-     * Creates a temporary folder and a photo file for parseCommand_photo() test, i.e.,
-     * "C:\\family\\photo.jpg"
-     * @return the path string of the temporary file
-     */
-    public static String createTempFile() {
-        final String photoPath = "C:\\family\\photo.jpg";
-        File testFile = new File(photoPath);
-
-        //create new test file
-        testFile.getParentFile().mkdirs();
-        try {
-            testFile.createNewFile();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        return photoPath;
-    }
-}
-```
-###### /java/systemtests/AddCommandSystemTest.java
+###### \java\systemtests\AddCommandSystemTest.java
 ``` java
         /* Case: add a person with all fields same as another person in the address book except gender -> added */
         toAdd = new PersonBuilder().withName(VALID_NAME_AMY).withGender(VALID_GENDER_BOB)
@@ -598,7 +621,7 @@ public class RemarkTest {
         assertCommandSuccess(command, toAdd);
 
 ```
-###### /java/systemtests/AddCommandSystemTest.java
+###### \java\systemtests\AddCommandSystemTest.java
 ``` java
         /* Case: add a person with all fields same as another person in the address book except matricNo -> added */
         toAdd = new PersonBuilder().withName(VALID_NAME_AMY).withGender(VALID_GENDER_AMY)
@@ -609,19 +632,7 @@ public class RemarkTest {
                 + EMAIL_DESC_AMY + ADDRESS_DESC_AMY + BIRTHDAY_DESC_AMY + TIMETABLE_DESC_AMY + TAG_DESC_FRIEND;
         assertCommandSuccess(command, toAdd);
 ```
-###### /java/systemtests/AddCommandSystemTest.java
-``` java
-        /* Case: missing gender -> rejected */
-        command = AddCommand.COMMAND_WORD + NAME_DESC_AMY + MATRIC_NO_DESC_AMY + PHONE_DESC_AMY + EMAIL_DESC_AMY
-                + ADDRESS_DESC_AMY + BIRTHDAY_DESC_AMY + TIMETABLE_DESC_AMY;
-        assertCommandFailure(command, String.format(MESSAGE_INVALID_COMMAND_FORMAT, AddCommand.MESSAGE_USAGE));
-
-        /* Case: missing matricNo -> rejected */
-        command = AddCommand.COMMAND_WORD + NAME_DESC_AMY + GENDER_DESC_AMY + PHONE_DESC_AMY + EMAIL_DESC_AMY
-                + ADDRESS_DESC_AMY + BIRTHDAY_DESC_AMY + TIMETABLE_DESC_AMY;
-        assertCommandFailure(command, String.format(MESSAGE_INVALID_COMMAND_FORMAT, AddCommand.MESSAGE_USAGE));
-```
-###### /java/systemtests/AddCommandSystemTest.java
+###### \java\systemtests\AddCommandSystemTest.java
 ``` java
         /* Case: invalid gender -> rejected */
         command = AddCommand.COMMAND_WORD + NAME_DESC_AMY + INVALID_GENDER_DESC + MATRIC_NO_DESC_AMY + PHONE_DESC_AMY
@@ -633,7 +644,7 @@ public class RemarkTest {
                 + EMAIL_DESC_AMY + ADDRESS_DESC_AMY + BIRTHDAY_DESC_AMY + TIMETABLE_DESC_AMY;
         assertCommandFailure(command, MatricNo.MESSAGE_MATRIC_NO_CONSTRAINTS);
 ```
-###### /java/systemtests/DeleteCommandSystemTest.java
+###### \java\systemtests\DeleteCommandSystemTest.java
 ``` java
     /**
      * Deletes the person at {@code toDelete} by creating a default {@code DeleteCommand} using {@code toDelete} and
@@ -647,7 +658,7 @@ public class RemarkTest {
         ArrayList<ReadOnlyPerson> deletePersonList = new ArrayList<>();
         deletePersonList.add(deletedPerson);
 
-        String expectedResultMessage = DeleteCommand.generateResultMsg(deletePersonList);
+        String expectedResultMessage = DeleteCommand.generateSuccessfulResultMsgForPerson(deletePersonList);
 
         assertCommandSuccess(
                 DeleteCommand.COMMAND_WORD + " " + toDelete.getOneBased(), expectedModel, expectedResultMessage);

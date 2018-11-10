@@ -16,7 +16,7 @@ import seedu.address.commons.events.model.AddressBookChangedEvent;
 import seedu.address.commons.events.model.MasterTagListHasAnUnusedTagEvent;
 import seedu.address.model.tag.Tag;
 
-//author@@ nbriannl
+//@@author nbriannl
 /**
  * An UI component that displays all the {@code Tags} in the {@code AddressBook} .
  */

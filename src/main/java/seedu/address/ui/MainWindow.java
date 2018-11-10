@@ -75,6 +75,9 @@ public class MainWindow extends UiPart<Region> {
     @FXML
     private StackPane statusbarPlaceholder;
 
+    /**
+     * Initializes the main window by the parameters provided.
+     */
     public MainWindow(Stage primaryStage, Config config, UserPrefs prefs, Logic logic) {
         super(FXML);
 
@@ -97,6 +100,9 @@ public class MainWindow extends UiPart<Region> {
         registerAsAnEventHandler(this);
     }
 
+    /**
+     * Gets the primary stage of the main window.
+     */
     public Stage getPrimaryStage() {
         return primaryStage;
     }
@@ -104,6 +110,7 @@ public class MainWindow extends UiPart<Region> {
     private void setAccelerators() {
         setAccelerator(helpMenuItem, KeyCombination.valueOf("F1"));
     }
+    //@@author
 
     /**
      * Sets the accelerator of a MenuItem.
@@ -135,7 +142,6 @@ public class MainWindow extends UiPart<Region> {
         });
     }
 
-    //author@@ nbriannl
     /**
      * Fills up all the placeholders of this window.
      */
@@ -214,6 +220,7 @@ public class MainWindow extends UiPart<Region> {
         helpWindow.show();
     }
 
+    //@@author nbriannl-reused
     /**
      * Changes the current theme to the given theme.
      */
@@ -224,14 +231,17 @@ public class MainWindow extends UiPart<Region> {
         getRoot().getStylesheets().add(VIEW_PATH + theme);
     }
 
+    //@@author
     private void setWindowDefaultTheme(UserPrefs prefs) {
         getRoot().getStylesheets().add(prefs.getCurrentTheme());
     }
 
+    //@@author nbriannl-reused
     String getCurrentTheme() {
         return getRoot().getStylesheets().get(1);
     }
 
+    //@@author
     void show() {
         primaryStage.show();
     }
@@ -258,6 +268,7 @@ public class MainWindow extends UiPart<Region> {
         handleHelp();
     }
 
+    //@@author nbriannl-reused
     @Subscribe
     private void handleChangeThemeEvent(ChangeThemeRequestEvent event) {
         logger.info(LogsCenter.getEventHandlingLogMessage(event));

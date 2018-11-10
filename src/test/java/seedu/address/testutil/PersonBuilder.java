@@ -11,10 +11,10 @@ import seedu.address.model.person.MatricNo;
 import seedu.address.model.person.Name;
 import seedu.address.model.person.Person;
 import seedu.address.model.person.Phone;
-import seedu.address.model.person.PhotoPath;
 import seedu.address.model.person.ReadOnlyPerson;
 import seedu.address.model.person.Remark;
 import seedu.address.model.person.timetable.Timetable;
+import seedu.address.model.photo.PhotoPath;
 import seedu.address.model.tag.Tag;
 import seedu.address.model.util.SampleDataUtil;
 
@@ -47,7 +47,7 @@ public class PersonBuilder {
             Address defaultAddress = new Address(DEFAULT_ADDRESS);
             Timetable defaultTimetable = new Timetable(DEFAULT_TIMETABLE_URL);
             Remark defaultRemark = new Remark(DEFAULT_REMARK);
-            PhotoPath defaultPhotoPath = new PhotoPath(DEFAULT_PHOTOPATH);
+            PhotoPath defaultPhotoPath = new PhotoPath("");
             Set<Tag> defaultTags = SampleDataUtil.getTagSet(DEFAULT_TAGS);
             Birthday defaultBirthday = new Birthday(DEFAULT_BIRTHDAY);
             this.person = new Person(defaultName, defaultGender, defaultMatricNo, defaultPhone, defaultEmail,

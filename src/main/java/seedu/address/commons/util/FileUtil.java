@@ -17,12 +17,21 @@ import java.util.Arrays;
  * Writes and reads files
  */
 public class FileUtil {
-
+    //@@author April0616
+    public static final String REGEX_VALID_IMAGE = "([^\\s]+(\\.(?i)(jpg|jpeg|png|gif|bmp))$)";
     private static final String CHARSET = "UTF-8";
+    /**
+     * Checks whether the file is a valid image file.
+     * A valid image file should have extension "jpg", "jpeg", "png", "gif" or "bmp".
+     * @param photoPath of the image
+     * @return true if it has specified extension
+     */
+    public static Boolean isValidImageFile(String photoPath) {
+        return photoPath.matches(REGEX_VALID_IMAGE);
+    }
 
     /**
-     * Get the extension of the file path by split the path string by regex "."
-     *
+     * Gets the extension of the file path by split the path string by regex "."
      * @param filePath
      * @return extension string
      */
@@ -31,10 +40,18 @@ public class FileUtil {
     }
 
     /**
-     * Copy all the content from the file in original path to the one in destination path.
-     *
-     * @param oriPath
-     * @param destPath
+     * Checks whether the specified file is in the specified folder.
+     * @param filePath of the file to be checked
+     * @param folderPath of the folder
+     * @return true if the file is in the folder
+     */
+    public static Boolean isInFolder(String filePath, String folderPath) {
+        return filePath.startsWith(folderPath);
+    }
+    /**
+     * Copies all the contents from the file in original path to the one in destination path.
+     * @param oriPath of the file to be copied
+     * @param destPath of the file to be pasted
      * @return true if the file is successfully copied to the specified place.
      */
     public static boolean copyFile(String oriPath, String destPath) throws IOException {
@@ -64,8 +81,8 @@ public class FileUtil {
     }
 
     /**
-     * If the file in the specific path in the app directory exists, delete the file in the path
-     * @param path
+     * Removes the file in the app if it exists.
+     * @param path of the file to be deleted
      */
     public static void removeAppFile(String path) {
         File fileToDelete = new File(path);
@@ -75,32 +92,32 @@ public class FileUtil {
     }
 
     /**
-     * Compares whether two files in the specified paths have the same content.
-     * @param firstPath
-     * @param secondPath
-     * @return true if they have the same content
-     * @throws IOException
+     * Checks whether two files have the same content.
+     * @param firstPath path of one file
+     * @param secondPath path of another file
+     * @return true if they have the same content, false otherwise
+     * @throws IOException if an I/O error occurs reading from the stream
      */
     public static boolean haveSameContent(String firstPath, String secondPath) {
         Path p1 = Paths.get(firstPath);
         Path p2 = Paths.get(secondPath);
 
         byte[] firstFileBytes = new byte[0];
-
         try {
             firstFileBytes = Files.readAllBytes(p1);
         } catch (IOException e) {
-            e.printStackTrace();
+            assert false : "An I/O error occurs reading from the stream.";
         }
 
         byte[] secondFileBytes = new byte[0];
         try {
             secondFileBytes = Files.readAllBytes(p2);
         } catch (IOException e) {
-            e.printStackTrace();
+            assert false : "An I/O error occurs reading from the stream.";
         }
         return Arrays.equals(firstFileBytes, secondFileBytes);
     }
+    //@@author
 
     public static boolean isFileExists(File file) {
         return file.exists() && file.isFile();

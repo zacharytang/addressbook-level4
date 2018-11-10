@@ -34,7 +34,7 @@ public class ResultDisplay extends UiPart<Region> {
         registerAsAnEventHandler(this);
     }
 
-    //@@author CindyTsai1-reused
+    //@@author CindyTsai1
     @Subscribe
     private void handleNewResultAvailableEvent(NewResultAvailableEvent event) {
         logger.info(LogsCenter.getEventHandlingLogMessage(event));
@@ -47,7 +47,6 @@ public class ResultDisplay extends UiPart<Region> {
         }
     }
 
-    //@@author CindyTsai1
     private void setDefaultStyle() {
         resultDisplay.getStyleClass().remove("error");
     }

@@ -16,6 +16,9 @@ public class TagColorMap {
 
     private HashMap<String, String> tagColors = new HashMap<String, String>();
 
+    private TagColorMap() {
+    }
+
     public static TagColorMap getInstance() {
         if (instance == null) {
             instance = new TagColorMap();

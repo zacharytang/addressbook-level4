@@ -54,20 +54,6 @@ public class InfoPanel extends UiPart<Region> {
     }
 
     @Subscribe
-    public void handlePersonSelectedEvent(PersonSelectedEvent event) {
-        logger.info(LogsCenter.getEventHandlingLogMessage(event));
-
-        timetablePlaceholder.getChildren().removeAll();
-
-        ArrayList<Timetable> timetableToDisplay = new ArrayList<>();
-        timetableToDisplay.add(event.person.getTimetable());
-        timetableDisplay = new TimetableDisplay(timetableToDisplay);
-        timetablePlaceholder.getChildren().add(timetableDisplay.getRoot());
-
-        timetablePlaceholder.toFront();
-    }
-
-    @Subscribe
     public void handlePersonPanelSelectionChangeEvent(PersonPanelSelectionChangedEvent event) {
         logger.info(LogsCenter.getEventHandlingLogMessage(event));
 
@@ -75,6 +61,20 @@ public class InfoPanel extends UiPart<Region> {
 
         ArrayList<Timetable> timetableToDisplay = new ArrayList<>();
         timetableToDisplay.add(event.getNewSelection().person.getTimetable());
+        timetableDisplay = new TimetableDisplay(timetableToDisplay);
+        timetablePlaceholder.getChildren().add(timetableDisplay.getRoot());
+
+        timetablePlaceholder.toFront();
+    }
+
+    @Subscribe
+    public void handlePersonSelectedEvent(PersonSelectedEvent event) {
+        logger.info(LogsCenter.getEventHandlingLogMessage(event));
+
+        timetablePlaceholder.getChildren().removeAll();
+
+        ArrayList<Timetable> timetableToDisplay = new ArrayList<>();
+        timetableToDisplay.add(event.person.getTimetable());
         timetableDisplay = new TimetableDisplay(timetableToDisplay);
         timetablePlaceholder.getChildren().add(timetableDisplay.getRoot());
 

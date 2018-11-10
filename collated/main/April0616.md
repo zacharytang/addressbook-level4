@@ -1,16 +1,147 @@
 # April0616
-###### /java/seedu/address/logic/commands/DeleteCommand.java
+###### \java\seedu\address\commons\util\FileUtil.java
 ``` java
+    public static final String REGEX_VALID_IMAGE = "([^\\s]+(\\.(?i)(jpg|jpeg|png|gif|bmp))$)";
+    private static final String CHARSET = "UTF-8";
+    /**
+     * Checks whether the file is a valid image file.
+     * A valid image file should have extension "jpg", "jpeg", "png", "gif" or "bmp".
+     * @param photoPath of the image
+     * @return true if it has specified extension
+     */
+    public static Boolean isValidImageFile(String photoPath) {
+        return photoPath.matches(REGEX_VALID_IMAGE);
+    }
+
+    /**
+     * Gets the extension of the file path by split the path string by regex "."
+     * @param filePath
+     * @return extension string
+     */
+    public static String getFileExtension(String filePath) {
+        return "." + filePath.split("\\.")[1];
+    }
+
+    /**
+     * Checks whether the specified file is in the specified folder.
+     * @param filePath of the file to be checked
+     * @param folderPath of the folder
+     * @return true if the file is in the folder
+     */
+    public static Boolean isInFolder(String filePath, String folderPath) {
+        return filePath.startsWith(folderPath);
+    }
+    /**
+     * Copies all the contents from the file in original path to the one in destination path.
+     * @param oriPath of the file to be copied
+     * @param destPath of the file to be pasted
+     * @return true if the file is successfully copied to the specified place.
+     */
+    public static boolean copyFile(String oriPath, String destPath) throws IOException {
+
+        //create a buffer to store content
+        byte[] buffer = new byte[1024];
+
+        //bufferedInputStream
+        FileInputStream fis = new FileInputStream(oriPath);
+        BufferedInputStream bis = new BufferedInputStream(fis);
+
+        //bufferedOutputStream
+        FileOutputStream fos = new FileOutputStream(destPath);
+        BufferedOutputStream bos = new BufferedOutputStream(fos);
+
+        int numBytes = bis.read(buffer);
+        while (numBytes > 0) {
+            bos.write(buffer, 0, numBytes);
+            numBytes = bis.read(buffer);
+        }
+
+        //close input,output stream
+        bis.close();
+        bos.close();
+
+        return true;
+    }
+
+    /**
+     * Removes the file in the app if it exists.
+     * @param path of the file to be deleted
+     */
+    public static void removeAppFile(String path) {
+        File fileToDelete = new File(path);
+        if (fileToDelete.exists()) {
+            fileToDelete.delete();
+        }
+    }
+
+    /**
+     * Checks whether two files have the same content.
+     * @param firstPath path of one file
+     * @param secondPath path of another file
+     * @return true if they have the same content, false otherwise
+     * @throws IOException if an I/O error occurs reading from the stream
+     */
+    public static boolean haveSameContent(String firstPath, String secondPath) {
+        Path p1 = Paths.get(firstPath);
+        Path p2 = Paths.get(secondPath);
+
+        byte[] firstFileBytes = new byte[0];
+        try {
+            firstFileBytes = Files.readAllBytes(p1);
+        } catch (IOException e) {
+            assert false : "An I/O error occurs reading from the stream.";
+        }
+
+        byte[] secondFileBytes = new byte[0];
+        try {
+            secondFileBytes = Files.readAllBytes(p2);
+        } catch (IOException e) {
+            assert false : "An I/O error occurs reading from the stream.";
+        }
+        return Arrays.equals(firstFileBytes, secondFileBytes);
+    }
+```
+###### \java\seedu\address\logic\commands\DeleteCommand.java
+``` java
+    /**
+     * Creates a delete command which aims to delete one person.
+     * @param targetIndex of the specified person
+     */
+    public DeleteCommand(Index targetIndex) {
+        this.targetIndexes = new ArrayList<>();
+        targetIndexes.add(targetIndex);
+        this.targetTags = null;
+    }
+
+    /**
+     * Creates a delete command which aims to delete multiple persons.
+     * @param targetIndexes is the list of all the indexes of the specified persons.
+     */
     public DeleteCommand(ArrayList<Index> targetIndexes) {
         this.targetIndexes = targetIndexes;
         this.targetTags = null;
     }
 
+    @Override
+    /**
+     * Executes the delete commands for persons or tags.
+     * @return the CommandResult of the delete command
+     * @throws CommandException if the invalid persons or tags are provided
+     */
+    public CommandResult executeUndoableCommand() throws CommandException {
+        if (targetTags == null && targetIndexes != null) {
+            return executeCommandForPersons();
 
-```
-###### /java/seedu/address/logic/commands/DeleteCommand.java
-``` java
-    private CommandResult getCommandResultForPerson() throws CommandException {
+        } else {
+            return executeCommandForTag();
+        }
+    }
+
+    /**
+     * Executes Delete Command for persons.
+     * @throws CommandException when the person index provided is invalid
+     */
+    private CommandResult executeCommandForPersons() throws CommandException {
         List<ReadOnlyPerson> lastShownList = model.getFilteredPersonList();
         ArrayList<ReadOnlyPerson> deletePersonList = new ArrayList<>();
 
@@ -18,6 +149,7 @@
             if (index.getZeroBased() >= lastShownList.size()) {
                 throw new CommandException(Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX);
             }
+
             ReadOnlyPerson personToDelete = lastShownList.get(index.getZeroBased());
             deletePersonList.add(personToDelete);
         }
@@ -28,42 +160,49 @@
             assert false : "One of the target persons is missing";
         }
 
-        //return new CommandResult(String.format(MESSAGE_DELETE_PERSON_SUCCESS));
-        return new CommandResult(generateResultMsg(deletePersonList));
+        return new CommandResult(generateSuccessfulResultMsgForPerson(deletePersonList));
     }
 
 ```
-###### /java/seedu/address/logic/commands/DeleteCommand.java
+###### \java\seedu\address\logic\commands\DeleteCommand.java
 ``` java
     /**
-     * Generate the command result of the deletePersonList.
-     * @param deletePersonList
-     * @return commandResult string
+     * Generates the successful command result of the deletePersonList.
+     * @param deletePersonList of the deleted persons
+     * @return the string of the command result message
      */
-    public static String generateResultMsg(ArrayList<ReadOnlyPerson> deletePersonList) {
+    public static String generateSuccessfulResultMsgForPerson(ArrayList<ReadOnlyPerson> deletePersonList) {
         int numOfPersons = deletePersonList.size();
-        StringBuilder formatBuilder = new StringBuilder();
 
+        StringBuilder formatBuilder = new StringBuilder();
         if (numOfPersons == 1) {
             formatBuilder.append("Deleted Person :\n");
         } else {
             formatBuilder.append("Deleted Persons :\n");
         }
 
+        // List the names of the persons deleted
+        formatBuilder.append("[ ");
+        for (int i = 0; i < deletePersonList.size(); i++) {
+            formatBuilder.append((i + 1) + ". " + deletePersonList.get(i).getName() + " ");
+        }
+        formatBuilder.append("]\n");
+
+        // List the details of the persons deleted
+        formatBuilder.append("Details: \n");
         for (ReadOnlyPerson p : deletePersonList) {
             formatBuilder.append("[");
             formatBuilder.append(p.getAsText());
             formatBuilder.append("]");
             formatBuilder.append("\n");
         }
+
         String resultMsg = formatBuilder.toString();
-
         return resultMsg;
-
     }
 
 ```
-###### /java/seedu/address/logic/commands/DeleteCommand.java
+###### \java\seedu\address\logic\commands\DeleteCommand.java
 ``` java
     @Override
     public boolean equals(Object other) {
@@ -79,11 +218,13 @@
     }
 }
 ```
-###### /java/seedu/address/logic/commands/EditCommand.java
+###### \java\seedu\address\logic\commands\EditCommand.java
 ``` java
     /**
-     * Creates and returns a {@code Person} with the details of {@code personToEdit}
-     * edited with {@code editPersonDescriptor}.
+     * Creates a new person object with the details of the person to be edited.
+     * Be edited with {@param editPersonDescriptor}.
+     * @param personToEdit the person to be edited
+     * @return the created person object
      */
     private static Person createEditedPerson(ReadOnlyPerson personToEdit,
                                              EditPersonDescriptor editPersonDescriptor) {
@@ -107,64 +248,84 @@
     }
 
 ```
-###### /java/seedu/address/logic/commands/EditCommand.java
+###### \java\seedu\address\logic\commands\EditCommand.java
 ``` java
+        /**
+         * Sets the details of the gender to edit the person with.
+         * @param gender
+         */
         public void setGender(Gender gender) {
             this.gender = gender;
         }
 
+        /**
+         * Gets the details of the gender to edit the person with.
+         * @return gender if the gender is specified
+         */
         public Optional<Gender> getGender() {
             return Optional.ofNullable(gender);
         }
 
+        /**
+         * Sets the details of the matriculation number to edit the person with.
+         * @param matricNo
+         */
         public void setMatricNo(MatricNo matricNo) {
             this.matricNo = matricNo;
         }
 
+        /**
+         * Gets the details of the matriculation number to edit the person with.
+         * @return matriculation number if it is specified
+         */
         public Optional<MatricNo> getMatricNo() {
             return Optional.ofNullable(matricNo);
         }
 ```
-###### /java/seedu/address/logic/commands/PhotoCommand.java
+###### \java\seedu\address\logic\commands\PhotoCommand.java
 ``` java
 /**
- * Edits the photo path of a person to the address book.
+ * Edits the photo path of the specified person.
  */
 public class PhotoCommand extends UndoableCommand {
 
     public static final String COMMAND_WORD = "photo";
     public static final String COMMAND_ALIAS = "ph";
 
-    public static final String MESSAGE_USAGE = COMMAND_WORD
-            + ": If adds photo path to the person identified by the index number used in the last person listing,"
-            + " add the photo path to the person.\n"
-            + "If the photo path field is empty, the old photo path is removed for the person.\n"
-            + "Parameters: INDEX (must be a positive integer) "
-            + PREFIX_PHOTO + "[PHOTO PATH] \n"
-            + "Example: (add photo path) " + COMMAND_WORD + " 1 " + PREFIX_PHOTO
+    public static final String MESSAGE_USAGE = "| " + COMMAND_WORD + " |"
+            + ": Adds a photo to the person identified by the index number used in the last person listing"
+            + "by specifying the path of the photo.\n"
+            + "The valid photo extensions are 'jpg', 'jpeg', 'png', 'gif' or 'bmp'.\n"
+            + "If the path field is empty, the old photo path is removed for the person.\n"
+            + "Parameters: INDEX " + PREFIX_PHOTO + "[PHOTO PATH] \n"
+            + FORMAT_ALIGNMENT_TO_PARAMETERS + "(INDEX must be a positive integer)\n"
+            + "Example: (add photo)  " + COMMAND_WORD + " 1 " + PREFIX_PHOTO
             + "C:\\Users\\User\\Desktop\\photo.jpg\n"
-            + "Example: (delete photo path) " + COMMAND_WORD
-            + " 2 "
-            + PREFIX_PHOTO + "\n";
-
+            + FORMAT_ALIGNMENT_TO_EXAMPLE + "(delete photo) " + COMMAND_WORD + " 2 " + PREFIX_PHOTO + "\n";
     public static final String MESSAGE_ADD_PHOTO_SUCCESS =
             "Successfully saved photo and added the photo path to Person: %1$s";
     public static final String MESSAGE_DELETE_PHOTO_SUCCESS = "Removed photo path from Person: %1$s";
-    public static final String MESSAGE_DUPLICATE_PERSON = "This person already exists in the address book.";
-
-    public static final String LOCAL_PHOTOPATH_VALIDATION_REGEX = "([a-zA-Z]:)?(\\\\[a-zA-Z0-9_.-]+)+\\\\?";
+    public static final String MESSAGE_NO_PHOTO_TO_DELETE = "No photo path to remove from Person: %1$s";
+    public static final String MESSAGE_DUPLICATE_PERSONS = "This person already exists in the address book.";
     public static final String MESSAGE_LOCAL_PHOTOPATH_CONSTRAINTS =
-            "Photo Path should be the absolute path of a valid file in your PC. It should be a string started with the name of "
-                    + "your disk, followed by several groups of backslash and string, like \"c:\\desktop\\happy.jpg\","
-                    + "and the file should exist.";
-    public static final String FILE_SAVED_PARENT_PATH = "src/main/resources/images/contactPhotos/";
-    public static final String DEFAULT_PHOTO_PATH = "src/main/resources/images/defaultPhoto.jpg";
+            "Photo Path should be the absolute path of a valid file in your PC. It should be a string started "
+                    + "with the name of your disk, "
+                    + "followed by several groups of backslash and string, like \"c:\\desktop\\happy.jpg\","
+                    + "and the file should exist.\n"
+                    + "The valid photo extensions are 'jpg', 'jpeg', 'png', 'gif' or 'bmp'.\n";
 
-    private final Index targetIndex;
-    private final String localPhotoPath;
+    public static final String REGEX_LOCAL_PHOTOPATH_VALIDATION =
+            "([a-zA-Z]:)?(\\\\[a-zA-Z0-9_.-]+)+\\\\?" + REGEX_VALID_IMAGE;
+
+    public static final String PATH_FILE_SAVED_PARENT_DIRECTORY = "src/main/resources/images/contactPhotos/";
+    public static final String PATH_DEFAULT_PHOTO = "src/main/resources/images/defaultPhoto.jpg";
+
+    private Index targetIndex;
+    private String localPhotoPath;
     private PhotoPath photoPath;
 
     /**
+     * Initializes the PhotoCommand and decides its behaviour.
      * @param targetIndex of the person in the list to edit the photo path
      * @param localPhotoPath path of the photo store in the computer
      */
@@ -174,38 +335,58 @@ public class PhotoCommand extends UndoableCommand {
 
         String trimmedPhotoPath = localPhotoPath.trim();
 
-        if (trimmedPhotoPath.equals("")) { //not specified yet
-            this.localPhotoPath = "";
-            this.targetIndex = targetIndex;
-            this.photoPath = new PhotoPath(DEFAULT_PHOTO_PATH);
-
+        if (isEmptyPhotoPath(trimmedPhotoPath)) {
+            setDeletePhotoCommandParameters(targetIndex);
         } else if (isValidLocalPhotoPath(trimmedPhotoPath)) {
-
-            File targetFile = new File(trimmedPhotoPath);
-            if (!FileUtil.isFileExists(targetFile)) {
-                throw new FileNotFoundException(MESSAGE_LOCAL_PHOTOPATH_CONSTRAINTS);
-            }
-
-            this.localPhotoPath = trimmedPhotoPath;
-            String extension = getFileExtension(this.localPhotoPath);
-            String savePath = FILE_SAVED_PARENT_PATH + getSavedFileName(extension);
-
-            createAppPhotoFile(savePath);
-
-            try {
-                copyFile(this.localPhotoPath, savePath);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
-            this.targetIndex = targetIndex;
-            this.photoPath = new PhotoPath(savePath);
-
+            setEditPhotoCommandParametersAndFile(targetIndex, trimmedPhotoPath);
         } else {
             throw new IllegalValueException(MESSAGE_LOCAL_PHOTOPATH_CONSTRAINTS);
         }
     }
+    private void setEditPhotoCommandParametersAndFile(Index targetIndex, String photoPath)
+            throws FileNotFoundException, IllegalValueException {
+        // copy the photo
+        String savePath = copyLocalPhotoToApp(photoPath);
 
+        // set up parameters
+        this.targetIndex = targetIndex;
+        localPhotoPath = photoPath;
+        this.photoPath = new PhotoPath(savePath);
+    }
+
+    /**
+     * Copies the photo specified in the local photo path to the app.
+     * The copied photo is saved in the default folder in the app.
+     * @param localPhotoPath of the photo
+     * @return the photo path string of the copied photo
+     * @throws FileNotFoundException if the photo is not found in the user's computer
+     */
+    private String copyLocalPhotoToApp(String localPhotoPath) throws FileNotFoundException {
+        File targetFile = new File(localPhotoPath);
+        String extension = getFileExtension(localPhotoPath);
+        String savePath = PATH_FILE_SAVED_PARENT_DIRECTORY + getSavedFileName(extension);
+
+        if (!isFileExists(targetFile)) {
+            throw new FileNotFoundException(MESSAGE_LOCAL_PHOTOPATH_CONSTRAINTS);
+        }
+
+        createAppPhotoFile(savePath);
+
+        try {
+            copyFile(localPhotoPath, savePath);
+        } catch (IOException e) {
+            assert false : "Cannot copy the file!";
+        }
+
+        return savePath;
+    }
+
+
+    private void setDeletePhotoCommandParameters(Index targetIndex) throws IllegalValueException {
+        this.targetIndex = targetIndex;
+        localPhotoPath = "";
+        photoPath = new PhotoPath("");
+    }
 
     @Override
     public CommandResult executeUndoableCommand() throws CommandException {
@@ -217,44 +398,48 @@ public class PhotoCommand extends UndoableCommand {
         }
 
         ReadOnlyPerson personToPhoto = lastShownList.get(targetIndex.getZeroBased());
-
-        //if the command is 'ph/' or the contact has one original photo, then delete it.
-        String originAppPhotoPath = personToPhoto.getPhotoPath().value;
-
-        if (!(originAppPhotoPath.equals(DEFAULT_PHOTO_PATH))) {
-            removeAppFile(originAppPhotoPath);
-        }
-
         Person photoedPerson = createPhotoedPerson(personToPhoto, photoPath);
+
+        try {
+            model.addPhotoPath(photoPath);
+        } catch (DuplicatePhotoPathException e) {
+            assert false : "Duplicated photo path!";
+        }
 
         try {
             model.updatePerson(personToPhoto, photoedPerson);
         } catch (DuplicatePersonException dpe) {
-            throw new CommandException(MESSAGE_DUPLICATE_PERSON);
+            throw new CommandException(MESSAGE_DUPLICATE_PERSONS);
         } catch (PersonNotFoundException pnfe) {
             throw new AssertionError("The target person cannot be missing");
         }
         model.updateFilteredPersonList(PREDICATE_SHOW_ALL_PERSONS);
 
-        EventsCenter.getInstance().post(new PersonSelectedEvent(photoedPerson));
-        return new CommandResult(generateSuccessMsg(photoedPerson));
+        EventsCenter.getInstance().post(new PersonSelectedEvent(photoedPerson, targetIndex.getZeroBased()));
+        return new CommandResult(generateSuccessMsg(personToPhoto));
     }
 
-
     /**
-     * Returns if a given string is a valid local photo path.
+     * Returns true if the given string is an empty photo path.
      */
-    public static boolean isValidLocalPhotoPath(String test) {
-        return test.matches(LOCAL_PHOTOPATH_VALIDATION_REGEX);
+    public static boolean isEmptyPhotoPath(String photoPathString) {
+        return photoPathString.equals("");
     }
 
+    /**
+     * Returns true if the given string is a valid local photo path.
+     */
+    public static boolean isValidLocalPhotoPath(String photoPathString) {
+        return photoPathString.matches(REGEX_LOCAL_PHOTOPATH_VALIDATION);
+    }
 
     /**
-     * Get a unique file name for the picture of the person by combining the time this method executes and
-     * its original file extension.
-     * @return a unique file name and its extension
+     * Generates the unique name of the copied photo.
+     * The name is generated by combining the time {@code num} this method executes and
+     * its original {@code fileExtension}.
+     * @return the name of the copied photo.
      */
-    public String getSavedFileName(String fileExtension) {
+    private String getSavedFileName(String fileExtension) {
         Date date = new Date();
         Long num = date.getTime();
         return num.toString() + fileExtension;
@@ -264,7 +449,7 @@ public class PhotoCommand extends UndoableCommand {
     /**
      * Creates and returns a {@code Person} with the details of {@code personToPhoto}.
      */
-    public static Person createPhotoedPerson(ReadOnlyPerson personToPhoto,
+    private static Person createPhotoedPerson(ReadOnlyPerson personToPhoto,
                                               PhotoPath photoPath) {
         assert personToPhoto != null;
 
@@ -277,50 +462,54 @@ public class PhotoCommand extends UndoableCommand {
     }
 
     /**
-     * Create the empty app photo file if it doesn't exist.
+     * Creates an empty app photo file if it doesn't exist.
      * @param path of the app photo
-     * @throws IOException
+     * @throws IOException if the file or directory cannot be created.
      */
     public void createAppPhotoFile(String path) {
         File photoFile = new File(path);
         try {
             createIfMissing(photoFile);
         } catch (IOException e) {
-            e.printStackTrace();
+            assert false : "The file or directory cannot be created.";
         }
     }
 
     /**
-     * Generate the Successful Message accordingly.
+     * Generates the successful message accordingly.
      * @param personToPhoto
-     * @return successful message for adding photo if the photo path string is not empty.
+     * @return the successful message for adding photo if the photo path string is not empty.
      */
     private String generateSuccessMsg(ReadOnlyPerson personToPhoto) {
-        if (photoPath.toString().equals(DEFAULT_PHOTO_PATH)) {
-            return String.format(MESSAGE_DELETE_PHOTO_SUCCESS, personToPhoto);
+        if (photoPath.toString().equals("")) {
+            if (personToPhoto.getPhotoPath().value.equals("")) {
+                return String.format(MESSAGE_NO_PHOTO_TO_DELETE, personToPhoto);
+            } else {
+                return String.format(MESSAGE_DELETE_PHOTO_SUCCESS, personToPhoto);
+            }
         } else {
             return String.format(MESSAGE_ADD_PHOTO_SUCCESS, personToPhoto);
         }
     }
 
     /**
-     * Get the local photo path of the file.
-     * @return local photo path string
+     * Gets the local photo path of the file.
+     * @return the string of local photo path
      */
     public String getLocalPhotoPath() {
         return this.localPhotoPath;
     }
 
     /**
-     * Get the photo path of the file stored in app.
-     * @return app photo path string
+     * Gets the photo path of the file stored in app.
+     * @return the string of app photo path
      */
     public String getAppPhotoPath() {
         return this.photoPath.value;
     }
 
     /**
-     * Get the index of the person
+     * Gets the index of the person.
      * @return the target index of the person
      */
     public Index getIndex() {
@@ -347,29 +536,26 @@ public class PhotoCommand extends UndoableCommand {
 }
 
 ```
-###### /java/seedu/address/logic/commands/RemarkCommand.java
+###### \java\seedu\address\logic\commands\RemarkCommand.java
 ``` java
 /**
- * Edits the remark of a person to the address book.
+ * Edits the remark of the specified person.
  */
 public class RemarkCommand extends UndoableCommand {
 
     public static final String COMMAND_WORD = "remark";
     public static final String COMMAND_ALIAS = "rm";
 
-    public static final String MESSAGE_USAGE = COMMAND_WORD
-            + ": If remarks the person identified by the index number used in the last person listing,"
-            + " add the remark to the person.\n"
-            + "If the remark field is empty, the remark is removed for the person.\n"
-            + "Accept multiple remarks at the same time.\n"
-            + "Parameters: INDEX (must be a positive integer) "
-            + PREFIX_REMARK + "[REMARK1] " + PREFIX_REMARK + "[REMARK2]\n"
-            + "Example: (add remark) " + COMMAND_WORD + " 1 " + PREFIX_REMARK + "Likes to drink coffee\n"
-            + "Example: (add remarks) " + COMMAND_WORD + " 1 " + PREFIX_REMARK + "Likes to drink coffee "
+    public static final String MESSAGE_USAGE = "| " + COMMAND_WORD + " |"
+            + ": Adds one or more remarks the person identified by the index number used in the last person listing.\n"
+            + FORMAT_ALIGNMENT_TO_REMARK + "If the remark field is empty, the remark is removed for the person.\n"
+            + "Parameters: INDEX " + PREFIX_REMARK + "[REMARK1] " + PREFIX_REMARK + "[REMARK2] ...\n"
+            + FORMAT_ALIGNMENT_TO_PARAMETERS + "(INDEX must be a positive integer)\n"
+            + "Example: (add a remark) " + COMMAND_WORD + " 1 " + PREFIX_REMARK + "Likes to drink coffee\n"
+            + FORMAT_ALIGNMENT_TO_EXAMPLE
+            + "(add multiple remarks) " + COMMAND_WORD + " 1 " + PREFIX_REMARK + "Likes to drink coffee "
             + PREFIX_REMARK + "CAP5.0\n"
-            + "Example: (delete remarks) " + COMMAND_WORD
-            + " 2 "
-            + PREFIX_REMARK + "\n";
+            + FORMAT_ALIGNMENT_TO_EXAMPLE + "(delete remarks) " + COMMAND_WORD + " 2 " + PREFIX_REMARK + "\n";
 
     public static final String MESSAGE_ADD_REMARK_SUCCESS = "Added Remark(s) to Person: %1$s";
     public static final String MESSAGE_DELETE_REMARK_SUCCESS = "Removed Remark(s) from Person: %1$s";
@@ -379,6 +565,7 @@ public class RemarkCommand extends UndoableCommand {
     private final Remark remark;
 
     /**
+     * Initializes the remark command.
      * @param targetIndex of the person in the list to edit the remark
      * @param remark of the person
      */
@@ -413,13 +600,14 @@ public class RemarkCommand extends UndoableCommand {
         }
         model.updateFilteredPersonList(PREDICATE_SHOW_ALL_PERSONS);
 
+        EventsCenter.getInstance().post(new PersonSelectedEvent(remarkedPerson, targetIndex.getZeroBased()));
         return new CommandResult(generateSuccessMsg(remarkedPerson));
     }
 
     /**
-     * Generates the successful Message accordingly.
-     * @param personToRemark
-     * @return successful message for adding remark if the remark string is not empty.
+     * Generates the successful message for adding remarks and deleting remarks.
+     * @param personToRemark the person to be remarked
+     * @return the successful message for adding remark if the remark string is not empty.
      */
     private String generateSuccessMsg(ReadOnlyPerson personToRemark) {
         if (remark.toString().isEmpty()) {
@@ -432,9 +620,9 @@ public class RemarkCommand extends UndoableCommand {
     /**
      * Creates and returns a {@code Person} with the details of {@code personToRemark}
      * remarked with {@code remarkPersonDescriptor}.
+     * @return the person object with the new remark
      */
-    public static Person createRemarkedPerson(ReadOnlyPerson personToRemark,
-                                                 Remark remark) {
+    public static Person createRemarkedPerson(ReadOnlyPerson personToRemark, Remark remark) {
         assert personToRemark != null;
 
         Person remarkPerson = new Person(personToRemark.getName(), personToRemark.getGender(),
@@ -464,33 +652,27 @@ public class RemarkCommand extends UndoableCommand {
     }
 }
 ```
-###### /java/seedu/address/logic/parser/DeleteCommandParser.java
+###### \java\seedu\address\logic\parser\DeleteCommandParser.java
 ``` java
-    public static final String DELETE_ONE_PERSON_VALIDATION_REGEX = "-?\\d+";
+    public static final String VALID_REGEX_DELETE_ONE_PERSON = "-?\\d+";
 
     public static final String DELETE_MULTIPLE_PERSON_COMMA_VALIDATION_REGEX =
-            "((-?\\d([\\s+]*)\\,([\\s+]*)(?=-?\\d))|-?\\d)+";
+            "(-?\\d\\s*?,\\s*?-?\\d?)+";
 
     public static final String DELETE_MULTIPLE_PERSON_WHITESPACE_VALIDATION_REGEX =
-            "(((-?\\d)([\\s]+)(?=-?\\d))|-?\\d)+";
-
-
+            "(-?\\d\\s*?-?\\d?)+";
+```
+###### \java\seedu\address\logic\parser\DeleteCommandParser.java
+``` java
     /**
-     * Parses the given {@code String} of arguments in the context of the DeleteCommand
-     * and returns an DeleteCommand object for execution.
-     * @throws ParseException if the user input does not conform the expected format
+     * Parses the indexes contained within {@code argMultimap} to return
+     * a DeleteCommand object that executes a delete for Persons.
+     * @throws ParseException if the values mapped as the persons do not conform as valid person indexes
+     * @see #parse(String)
      */
-    public DeleteCommand parse(String args) throws ParseException {
-
-        ArgumentMultimap argMultimap = ArgumentTokenizer.tokenize(args, PREFIX_TAG);
-        String preamble = argMultimap.getPreamble();
-
-        if (preamble.equals("")) { // code block for delete for a tag
-            DeleteCommand tagList = getDeleteCommandForTags(argMultimap);
-            if (tagList != null) {
-                return tagList;
-            }
-        } else if (preamble.matches(DELETE_ONE_PERSON_VALIDATION_REGEX)) { // code block for delete for a person
+    private DeleteCommand parseForPersonIndexes (String args, String preamble) throws ParseException {
+        if (preamble.matches(VALID_REGEX_DELETE_ONE_PERSON)) {
+            // code block for delete for a person
             try {
                 Index index = ParserUtil.parseIndex(args);
                 return new DeleteCommand(index);
@@ -517,17 +699,15 @@ public class RemarkCommand extends UndoableCommand {
                         String.format(MESSAGE_INVALID_COMMAND_FORMAT, DeleteCommand.MESSAGE_USAGE));
             }
         }
-
-        throw new ParseException(
-                String.format(MESSAGE_INVALID_COMMAND_FORMAT, DeleteCommand.MESSAGE_USAGE));
+        throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, DeleteCommand.MESSAGE_USAGE));
     }
 
 ```
-###### /java/seedu/address/logic/parser/ParserUtil.java
+###### \java\seedu\address\logic\parser\ParserUtil.java
 ``` java
     /**
      * Parses {@code oneBasedIndexes} separated with commas into a {@Code ArrayList<Index>} and returns it.
-     * Leading and trailing whitespaces will be trimmed.
+     * Leading and trailing whitespaces are trimmed.
      * @param splitString is the sign used to separate indexes, can be either comma or whitespace(s)
      * @throws IllegalValueException if one of the specified indexes is invalid (not non-zero unsigned integer).
      *
@@ -536,11 +716,10 @@ public class RemarkCommand extends UndoableCommand {
             throws IllegalValueException {
         String trimmedIndexes = oneBasedIndexes.trim();
         String[] indexes;
-
-        if (splitString.equals(",")) {
+        if (splitString.equals(REGEX_COMMA)) {
             indexes = trimmedIndexes.split(splitString);
         } else {
-            indexes = trimmedIndexes.split(" +");
+            indexes = trimmedIndexes.split(REGEX_MULTIPLE_WHITESPACE);
         }
 
         ArrayList<Index> deletePersons = new ArrayList<>();
@@ -560,11 +739,11 @@ public class RemarkCommand extends UndoableCommand {
         return deletePersons;
     }
 ```
-###### /java/seedu/address/logic/parser/ParserUtil.java
+###### \java\seedu\address\logic\parser\ParserUtil.java
 ``` java
     /**
      * Parses a {@code Optional<String> gender} into an {@code Optional<Gender>} if {@code gender} is present.
-     * See header comment of this class regarding the use of {@code Optional} parameters.
+     * @See header comment of this class regarding the use of {@code Optional} parameters.
      */
     public static Optional<Gender> parseGender(Optional<String> gender) throws IllegalValueException {
         requireNonNull(gender);
@@ -573,14 +752,14 @@ public class RemarkCommand extends UndoableCommand {
 
     /**
      * Parses a {@code Optional<String> matricNo} into an {@code Optional<MatricNo>} if {@code matricNo} is present.
-     * See header comment of this class regarding the use of {@code Optional} parameters.
+     * @See header comment of this class regarding the use of {@code Optional} parameters.
      */
     public static Optional<MatricNo> parseMatricNo(Optional<String> matricNo) throws IllegalValueException {
         requireNonNull(matricNo);
         return matricNo.isPresent() ? Optional.of(new MatricNo(matricNo.get())) : Optional.empty();
     }
 ```
-###### /java/seedu/address/logic/parser/PhotoCommandParser.java
+###### \java\seedu\address\logic\parser\PhotoCommandParser.java
 ``` java
 /**
  * Parses input arguments and creates a new PhotoCommand object
@@ -620,7 +799,7 @@ public class PhotoCommandParser implements Parser<PhotoCommand> {
     }
 }
 ```
-###### /java/seedu/address/logic/parser/RemarkCommandParser.java
+###### \java\seedu\address\logic\parser\RemarkCommandParser.java
 ``` java
 /**
  * Parses input arguments and creates a new RemarkCommand object
@@ -670,24 +849,130 @@ public class RemarkCommandParser implements Parser<RemarkCommand> {
 
 }
 ```
-###### /java/seedu/address/model/AddressBook.java
+###### \java\seedu\address\model\AddressBook.java
 ``` java
     /**
+     * Sets a list of photo paths to the address book.
+     * @param photoPaths
+     * @throws DuplicatePhotoPathException if an equivalent photo path already exists.
+     */
+    public void setPhotoPaths(List<PhotoPath> photoPaths) throws DuplicatePhotoPathException {
+        this.photoPaths.setPhotoPaths(photoPaths);
+    }
+
+    /**
+     * Adds a new photo path to the address book.
+     * @throws DuplicatePhotoPathException if an equivalent photo path already exists.
+     */
+    public void addPhotoPath(PhotoPath newPhotoPath) throws DuplicatePhotoPathException {
+        photoPaths.add(newPhotoPath);
+    }
+
+    /**
+     * Checks if the master list {@link #photoPaths} has every photo path being used.
+     * @return true if all photo paths in the master list are being used
+     */
+    public boolean hasAllPhotoPathsInUse () {
+        List<PhotoPath> masterList = new ArrayList<>();
+        for (ReadOnlyPerson person: persons) {
+            masterList.add(person.getPhotoPath());
+        }
+        return masterList.containsAll(photoPaths.toList());
+    }
+
+    /**
+     *  Gets the unused photo paths in the master list {@link #photoPaths}
+     *  @return {@code List<PhotoPath>} of photo paths not being used by any person
+     *  @see #hasAllPhotoPathsInUse()
+     */
+    public List<PhotoPath> getUnusedPhotoPaths () {
+        List<PhotoPath> actualList = new ArrayList<>();
+        for (ReadOnlyPerson person: persons) {
+            PhotoPath thisPhotoPath = person.getPhotoPath();
+            if (!thisPhotoPath.value.equals("")) {
+                actualList.add(thisPhotoPath);
+            }
+        }
+        List<PhotoPath> masterList = photoPaths.toList();
+
+        masterList.removeAll(actualList);
+        return masterList;
+    }
+
+    /**
+     * Removes all the unused photos specified by the unused photo paths
+     * @see #getUnusedPhotoPaths()
+     */
+    public void removeAllUnusedPhotosAndPaths() throws PhotoPathNotFoundException {
+        List<PhotoPath> unusedPhotoPathList = getUnusedPhotoPaths();
+        for (PhotoPath unusedPhotoPath : unusedPhotoPathList) {
+            removeContactPhoto(unusedPhotoPath);
+            this.photoPaths.remove(unusedPhotoPath);
+
+            logger.info("Delete photo and its path: " + unusedPhotoPath);
+        }
+    }
+
+    /**
+     * Updates the master list of photo paths saved in the default folder of this
+     * address book and delete the empty paths.
+     */
+    public void updatePhotoPathSavedInMasterList() {
+        final File folder = new File(PATH_FILE_SAVED_PARENT_DIRECTORY);
+        if (!folder.exists()) {
+            return;
+        }
+
+        if (!folder.isDirectory() || folder.listFiles() == null) {
+            assert false : "Does not exist a default folder to save photos or it has no files!";
+            return;
+        }
+
+        for (File photo : folder.listFiles()) {
+            try {
+                // covert the photo path string to standard format in the app
+                String photoPathString = photo.getPath().replace("\\", "/");
+                PhotoPath thisPhotoPath = new PhotoPath(photoPathString);
+
+                if (!this.photoPaths.contains(thisPhotoPath)) {
+                    this.photoPaths.add(thisPhotoPath);
+                }
+            } catch (IllegalValueException e) {
+                assert false : "The string of the photo path has wrong format!";
+            }
+        }
+
+        // delete empty path in the master list
+        for (PhotoPath photoPath : this.photoPaths) {
+            if (photoPath.value.equals("")) {
+                try {
+                    this.photoPaths.remove(photoPath);
+                } catch (PhotoPathNotFoundException e) {
+                    assert false : "This photo path cannot be found: " + photoPath;
+                }
+            }
+            if (this.photoPaths.size() == 0) {
+                break;
+            }
+        }
+    }
+
+    /**
      * Removes the photo of the specified contact.
-     * @param photoPath
+     * @param photoPath of the photo to be removed
      */
     public void removeContactPhoto(PhotoPath photoPath) {
         removeAppFile(photoPath.value);
     }
 
     /**
-     * Check whether the contact photo is the default photo
+     * Checks whether the contact photo is the default photo
      * @param photoPath of the photo
      * @return true if the photo is the default photo
      */
     public static boolean isDefaultPhoto(PhotoPath photoPath) {
         String photoPathValue = photoPath.value;
-        return photoPathValue.equals(DEFAULT_PHOTO_PATH);
+        return photoPathValue.equals(PATH_DEFAULT_PHOTO);
     }
 
     /**
@@ -695,11 +980,6 @@ public class RemarkCommandParser implements Parser<RemarkCommand> {
      * @throws PersonNotFoundException if the {@code key} is not in this {@code AddressBook}.
      */
     public boolean removePerson(ReadOnlyPerson key) throws PersonNotFoundException {
-        /*PhotoPath photoPath = key.getPhotoPath();
-        if (!isDefaultPhoto(photoPath)) {
-            removeContactPhoto(photoPath);
-        }*/
-
         if (persons.remove(key)) {
             EventsCenter.getInstance().post(new PersonHasBeenDeletedEvent(key));
             return true;
@@ -719,15 +999,46 @@ public class RemarkCommandParser implements Parser<RemarkCommand> {
         return true;
     }
 ```
-###### /java/seedu/address/model/Model.java
+###### \java\seedu\address\model\Model.java
 ``` java
     /** Deletes the given person. */
     void deletePerson(ReadOnlyPerson target) throws PersonNotFoundException;
 
     /** Deletes the given list of persons. */
     void deletePersons(ArrayList<ReadOnlyPerson> targets) throws PersonNotFoundException;
+
+    /** Adds the given photo path */
+    void addPhotoPath(PhotoPath photoPath) throws DuplicatePhotoPathException;
+
 ```
-###### /java/seedu/address/model/ModelManager.java
+###### \java\seedu\address\model\ModelManager.java
+``` java
+    /**
+     * Initializes a ModelManager with the given addressBook and userPrefs.
+     */
+    public ModelManager(ReadOnlyAddressBook addressBook, UserPrefs userPrefs) {
+        super();
+        requireAllNonNull(addressBook, userPrefs);
+
+        logger.fine("Initializing with address book: " + addressBook + " and user prefs " + userPrefs);
+
+        this.addressBook = new AddressBook(addressBook);
+
+        logger.fine("Updating all photopaths...");
+        this.addressBook.updatePhotoPathSavedInMasterList();
+
+        logger.fine("Deleting all unused photos...");
+        try {
+            this.addressBook.removeAllUnusedPhotosAndPaths();
+        } catch (PhotoPathNotFoundException e) {
+            assert false : "Some of the photopaths cannot be found!";
+        }
+
+        filteredPersons = new FilteredList<>(this.addressBook.getPersonList());
+        currentTheme = userPrefs.getCurrentTheme();
+    }
+```
+###### \java\seedu\address\model\ModelManager.java
 ``` java
     @Override
     public synchronized void deletePerson(ReadOnlyPerson target) throws PersonNotFoundException {
@@ -736,9 +1047,6 @@ public class RemarkCommandParser implements Parser<RemarkCommand> {
         checkMasterTagListHasAllTagsUsed();
     }
 
-```
-###### /java/seedu/address/model/ModelManager.java
-``` java
     @Override
     public synchronized void deletePersons(ArrayList<ReadOnlyPerson> targets) throws PersonNotFoundException {
         addressBook.removePersons(targets);
@@ -746,56 +1054,73 @@ public class RemarkCommandParser implements Parser<RemarkCommand> {
         checkMasterTagListHasAllTagsUsed();
     }
 
-    //author@@ nbriannl
     @Override
-    public void checkMasterTagListHasAllTagsUsed () {
-        if (!addressBook.hasAllTagsInUse()) {
-            indicateMasterTagListHasAnUnusedTag();
-        }
+    public void addPhotoPath(PhotoPath photoPath) throws DuplicatePhotoPathException {
+        addressBook.addPhotoPath(photoPath);
+        indicateAddressBookChanged();
     }
-
 ```
-###### /java/seedu/address/model/person/Gender.java
+###### \java\seedu\address\model\person\Gender.java
 ``` java
 /**
  * Represents a Person's gender in the address book.
- * Guarantees: immutable; is valid as declared in {@link #isValidGender(String)}
+ * Guarantees: immutable; is valid as declared in {@link #isValidInput(String)}
  */
 public class Gender {
 
     public static final String MESSAGE_GENDER_CONSTRAINTS =
-            "Person gender should be a string of either 'Male', 'Female' or 'M', 'F'";
-    public static final String GENDER_VALIDATION_WORD1 = "Male";
-    public static final String GENDER_VALIDATION_WORD2 = "Female";
+            "Person gender should be a case-insensitive string of either 'male', 'female', or 'm', 'f'";
+
+    public static final String VALID_MALE_FIRST_WORD = "male";
+    public static final String VALID_MALE_SECOND_WORD = "m";
+    public static final String VALID_FEMALE_FIRST_WORD = "female";
+    public static final String VALID_FEMALE_SECOND_WORD = "f";
+    public static final String VALID_GENDER_UNSPECIFIED = "";
 
     public final String value;
 
     /**
-     * Validates given gender.
-     * If gender string is 'Male' or 'Female', it remains the same.
-     * Converts 'M' into 'Male', 'F' into 'Female'.
-     *
-     * @throws IllegalValueException if given gender string is invalid.
+     * Validates given gender and sets person's gender accordingly.
+     * Accepts input (case-insensitive): male, female, m, f
+     * @throws IllegalValueException if the given gender string is invalid.
      */
     public Gender(String gender) throws IllegalValueException {
         requireNonNull(gender);
         String trimmedGender = gender.trim();
-        if (trimmedGender.equals("M")) {
-            trimmedGender = "Male";
-        } else if (trimmedGender.equals("F")) {
-            trimmedGender = "Female";
-        }
-        if (!isValidGender(trimmedGender)) {
+
+        if (!isValidInput(trimmedGender)) {
             throw new IllegalValueException(MESSAGE_GENDER_CONSTRAINTS);
         }
-        this.value = trimmedGender;
+
+        String ignoredCaseGender = trimmedGender.toLowerCase();
+        value = setGenderByInput(ignoredCaseGender);
+    }
+
+    private String setGenderByInput(String ignoredCaseGender) {
+        String genderValue = "";
+        if (ignoredCaseGender.equals(VALID_MALE_FIRST_WORD)
+                || ignoredCaseGender.equals(VALID_MALE_SECOND_WORD)) {
+            genderValue = "Male";
+        } else if (ignoredCaseGender.equals(VALID_FEMALE_FIRST_WORD)
+                || ignoredCaseGender.equals(VALID_FEMALE_SECOND_WORD)) {
+            genderValue = "Female";
+        } else {
+            genderValue = "";
+        }
+        return genderValue;
     }
 
     /**
-     * Returns if a given string is a valid person gender.
+     * Checks whether the input gender is valid.
+     * @return true if a given input string is a valid person gender, false otherwise.
      */
-    public static boolean isValidGender(String test) {
-        return test.equals(GENDER_VALIDATION_WORD1) || test.equals(GENDER_VALIDATION_WORD2) || test.equals("");
+    public static boolean isValidInput(String inputGender) {
+        String ignoredCaseInput = inputGender.toLowerCase();
+        return ignoredCaseInput.equals(VALID_MALE_FIRST_WORD)
+                || ignoredCaseInput.equals(VALID_MALE_SECOND_WORD)
+                || ignoredCaseInput.equals(VALID_FEMALE_FIRST_WORD)
+                || ignoredCaseInput.equals(VALID_FEMALE_SECOND_WORD)
+                || ignoredCaseInput.equals(VALID_GENDER_UNSPECIFIED);
     }
 
     @Override
@@ -817,7 +1142,7 @@ public class Gender {
 
 }
 ```
-###### /java/seedu/address/model/person/MatricNo.java
+###### \java\seedu\address\model\person\MatricNo.java
 ``` java
 /**
  * Represents a Person's Matriculation Number in the address book.
@@ -826,15 +1151,15 @@ public class Gender {
 public class MatricNo {
 
     public static final String MESSAGE_MATRIC_NO_CONSTRAINTS =
-            "Person matric number should be a 9-character string starting with 'A or a' and ending with a letter";
+            "Person's matriculation number should be a 9-character string starting with 'A' or 'a', "
+                    + "followed by 7 digits, and ending with a letter.";
     public static final String MATRIC_NO_VALIDATION_REGEX = "([Aa])(\\d{7})([a-zA-Z])";
 
     public final String value;
 
     /**
-     * Validates given matricNo.
-     *
-     * @throws IllegalValueException if given matricNo string is invalid.
+     * Initializes matricNo objeccts and validates given matricNo.
+     * @throws IllegalValueException if the given matricNo string is invalid.
      */
     public MatricNo(String matricNo) throws IllegalValueException {
         requireNonNull(matricNo);
@@ -849,7 +1174,6 @@ public class MatricNo {
      * Returns if a given string is a valid person matricNo.
      */
     public static boolean isValidMatricNo(String test) {
-        //return test.matches(MATRIC_NO_VALIDATION_REGEX) && test.length() == 9;
         return test.matches(MATRIC_NO_VALIDATION_REGEX) || test.equals("");
     }
 
@@ -876,68 +1200,12 @@ public class MatricNo {
 
 }
 ```
-###### /java/seedu/address/model/person/PhotoPath.java
-``` java
-/**
- * Represents the path of a person's photo in the address book.
- */
-public class PhotoPath {
-
-    public static final String MESSAGE_APP_PHOTOPATH_CONSTRAINTS =
-            "The app photo path should be a string starting with 'docs/images/contactPhotos/',"
-                    + "following by the file name, like'photo.jpg'.";
-    public static final String FILE_SAVED_PARENT_PATH = "src/main/resources/images/contactPhotos/";
-
-    public final String value;  //photo path
-
-    public PhotoPath(String photoPath) throws IllegalValueException {
-        requireNonNull(photoPath);
-
-        if (!isValidPhotoPath(photoPath)) {
-            throw new IllegalValueException(MESSAGE_APP_PHOTOPATH_CONSTRAINTS);
-        }
-        this.value = photoPath;
-    }
-
-    /**
-     * Returns if a given string is a valid photo path.
-     */
-    public static boolean isValidPhotoPath(String test) {
-        if (test.equals(DEFAULT_PHOTO_PATH)) {
-            return true;
-        }
-        String[] parts = test.split("\\.");
-        Boolean isFileSpecified = (parts.length == 2);
-        return test.startsWith(FILE_SAVED_PARENT_PATH) && isFileSpecified;
-    }
-
-    @Override
-    public String toString() {
-        return value;
-    }
-
-    @Override
-    public boolean equals(Object other) {
-        return other == this // short circuit if same object
-                || (other instanceof PhotoPath // instanceof handles nulls
-                && this.value.equals(((PhotoPath) other).value)); // state check
-    }
-
-    @Override
-    public int hashCode() {
-        return value.hashCode();
-    }
-}
-```
-###### /java/seedu/address/model/person/Remark.java
+###### \java\seedu\address\model\person\Remark.java
 ``` java
 /**
  * Represents the remark of a person in the address book.
  */
 public class Remark {
-
-    public static final String MESSAGE_REMARK_CONSTRAINTS =
-            "Person remarks can take any values, including blank";
 
     public final String value;
 
@@ -964,7 +1232,154 @@ public class Remark {
     }
 }
 ```
-###### /java/seedu/address/ui/MainWindow.java
+###### \java\seedu\address\model\photo\PhotoPath.java
+``` java
+/**
+ * Represents the path of a person's photo in the address book.
+ */
+public class PhotoPath {
+
+    public static final String FILE_SAVED_PARENT_PATH = "src/main/resources/images/contactPhotos/";
+    public static final String MESSAGE_APP_PHOTOPATH_CONSTRAINTS =
+            "The app photo path should be a string starting with '"
+                    + FILE_SAVED_PARENT_PATH
+                    + "', following by the file name with a valid extension, like'photo.jpg'.\n"
+                    + "The valid extensions are 'jpg', 'jpeg', 'png', 'gif' or 'bmp'.";
+
+    public final String value;
+
+    /**
+     * Initializes the photo path object and validates the given photo path string.
+     * @param photoPath string of the specified photo path
+     * @throws IllegalValueException if the given string is invalid
+     */
+    public PhotoPath(String photoPath) throws IllegalValueException {
+        requireNonNull(photoPath);
+
+        if (!isValidPhotoPath(photoPath)) {
+            throw new IllegalValueException(MESSAGE_APP_PHOTOPATH_CONSTRAINTS);
+        }
+        this.value = photoPath;
+    }
+
+    /**
+     * Returns if a given string is a valid photo path.
+     */
+    public static boolean isValidPhotoPath(String photoPath) {
+        if (photoPath.equals("")) {
+            //empty photo path
+            return true;
+        }
+        Boolean isValidImage = isValidImageFile(photoPath);
+        Boolean isInDefaultFolder = isInFolder(photoPath, FILE_SAVED_PARENT_PATH);
+
+        return  isInDefaultFolder && isValidImage;
+    }
+
+    @Override
+    public String toString() {
+        return value;
+    }
+
+    @Override
+    public boolean equals(Object other) {
+        return other == this // short circuit if same object
+                || (other instanceof PhotoPath // instanceof handles nulls
+                && this.value.equals(((PhotoPath) other).value)); // state check
+    }
+
+    @Override
+    public int hashCode() {
+        return value.hashCode();
+    }
+}
+```
+###### \java\seedu\address\storage\XmlAdaptedPhotoPath.java
+``` java
+/**
+ * It's the JAXB-friendly adapted version of the photo path.
+ */
+public class XmlAdaptedPhotoPath {
+
+    @XmlValue
+    private String photoPathName;
+
+    /**
+     * Constructs an XmlAdaptedTag.
+     * This is the no-arg constructor that is required by JAXB.
+     */
+    public XmlAdaptedPhotoPath() {}
+
+    /**
+     * Converts a given PhotoPath into this class for JAXB use.
+     *
+     * @param source future changes to this will not affect the created
+     */
+    public XmlAdaptedPhotoPath(PhotoPath source) {
+        photoPathName = source.value;
+    }
+
+    /**
+     * Converts this jaxb-friendly adapted PhotoPath object into the model's PhotoPath object.
+     *
+     * @throws IllegalValueException if there were any data constraints violated in the adapted person
+     */
+    public PhotoPath toModelType() throws IllegalValueException {
+        return new PhotoPath(photoPathName);
+    }
+
+}
+```
+###### \java\seedu\address\storage\XmlSerializableAddressBook.java
+``` java
+/**
+ * An Immutable AddressBook that is serializable to XML format
+ */
+@XmlRootElement(name = "addressbook")
+public class XmlSerializableAddressBook implements ReadOnlyAddressBook {
+
+    @XmlElement
+    private List<XmlAdaptedPerson> persons;
+    @XmlElement
+    private List<XmlAdaptedTag> tags;
+    @XmlElement
+    private List<XmlAdaptedPhotoPath> photoPaths;
+    /**
+     * Creates an empty XmlSerializableAddressBook.
+     * This empty constructor is required for marshalling.
+     */
+    public XmlSerializableAddressBook() {
+        persons = new ArrayList<>();
+        tags = new ArrayList<>();
+        photoPaths = new ArrayList<>();
+    }
+
+    /**
+     * Conversion
+     */
+    public XmlSerializableAddressBook(ReadOnlyAddressBook src) {
+        this();
+        persons.addAll(src.getPersonList().stream().map(XmlAdaptedPerson::new).collect(Collectors.toList()));
+        tags.addAll(src.getTagList().stream().map(XmlAdaptedTag::new).collect(Collectors.toList()));
+        photoPaths.addAll(src.getPhotoPathList().stream().map(XmlAdaptedPhotoPath::new).collect(Collectors.toList()));
+    }
+
+    @Override
+    public ObservableList<PhotoPath> getPhotoPathList() {
+        final ObservableList<PhotoPath> photoPaths = this.photoPaths.stream().map(p -> {
+            try {
+                return p.toModelType();
+            } catch (IllegalValueException e) {
+                e.printStackTrace();
+                //TODO: better error handling
+                return null;
+            }
+        }).collect(Collectors.toCollection(FXCollections::observableArrayList));
+        return FXCollections.unmodifiableObservableList(photoPaths);
+    }
+
+```
+###### \java\seedu\address\ui\MainWindow.java
 ``` java
 /**
  * The Main Window. Provides the basic application layout containing
@@ -1016,6 +1431,9 @@ public class MainWindow extends UiPart<Region> {
     @FXML
     private StackPane statusbarPlaceholder;
 
+    /**
+     * Initializes the main window by the parameters provided.
+     */
     public MainWindow(Stage primaryStage, Config config, UserPrefs prefs, Logic logic) {
         super(FXML);
 
@@ -1038,6 +1456,9 @@ public class MainWindow extends UiPart<Region> {
         registerAsAnEventHandler(this);
     }
 
+    /**
+     * Gets the primary stage of the main window.
+     */
     public Stage getPrimaryStage() {
         return primaryStage;
     }
@@ -1045,199 +1466,8 @@ public class MainWindow extends UiPart<Region> {
     private void setAccelerators() {
         setAccelerator(helpMenuItem, KeyCombination.valueOf("F1"));
     }
-
-    /**
-     * Sets the accelerator of a MenuItem.
-     * @param keyCombination the KeyCombination value of the accelerator
-     */
-    private void setAccelerator(MenuItem menuItem, KeyCombination keyCombination) {
-        menuItem.setAccelerator(keyCombination);
-
-        /*
-         * TODO: the code below can be removed once the bug reported here
-         * https://bugs.openjdk.java.net/browse/JDK-8131666
-         * is fixed in later version of SDK.
-         *
-         * According to the bug report, TextInputControl (TextField, TextArea) will
-         * consume function-key events. Because CommandBox contains a TextField, and
-         * ResultDisplay contains a TextArea, thus some accelerators (e.g F1) will
-         * not work when the focus is in them because the key event is consumed by
-         * the TextInputControl(s).
-         *
-         * For now, we add following event filter to capture such key events and open
-         * help window purposely so to support accelerators even when focus is
-         * in CommandBox or ResultDisplay.
-         */
-        getRoot().addEventFilter(KeyEvent.KEY_PRESSED, event -> {
-            if (event.getTarget() instanceof TextInputControl && keyCombination.match(event)) {
-                menuItem.getOnAction().handle(new ActionEvent());
-                event.consume();
-            }
-        });
-    }
-
-    //author@@ nbriannl
-    /**
-     * Fills up all the placeholders of this window.
-     */
-    void fillInnerParts() {
-        infoPanel = new InfoPanel();
-        infoPlaceholder.getChildren().add(infoPanel.getRoot());
-
-        personInfoPanel = new PersonInfoPanel();
-        personInfoPlaceholder.getChildren().add(personInfoPanel.getRoot());
-
-        personListPanel = new PersonListPanel(logic.getFilteredPersonList());
-        personListPanelPlaceholder.getChildren().add(personListPanel.getRoot());
-
-        tagListPanel = new TagListPanel(logic.getTagList());
-        tagListPanelPlaceholder.getChildren().add(tagListPanel.getRoot());
-        logic.checkAllMasterListTagsAreBeingUsed();
-
-        ResultDisplay resultDisplay = new ResultDisplay();
-        resultDisplayPlaceholder.getChildren().add(resultDisplay.getRoot());
-
-        StatusBarFooter statusBarFooter = new StatusBarFooter(prefs.getAddressBookFilePath(),
-                logic.getFilteredPersonList().size());
-        statusbarPlaceholder.getChildren().add(statusBarFooter.getRoot());
-
-        CommandBox commandBox = new CommandBox(logic);
-        commandBoxPlaceholder.getChildren().add(commandBox.getRoot());
-    }
-
-    void hide() {
-        primaryStage.hide();
-    }
-
-    private void setTitle(String appTitle) {
-        primaryStage.setTitle(appTitle);
-    }
-
-    /**
-     * Sets the given image as the icon of the main window.
-     * @param iconSource e.g. {@code "/images/help_icon.png"}
-     */
-    private void setIcon(String iconSource) {
-        FxViewUtil.setStageIcon(primaryStage, iconSource);
-    }
-
-    /**
-     * Sets the default size based on user preferences.
-     */
-    private void setWindowDefaultSize(UserPrefs prefs) {
-        primaryStage.setHeight(prefs.getGuiSettings().getWindowHeight());
-        primaryStage.setWidth(prefs.getGuiSettings().getWindowWidth());
-        if (prefs.getGuiSettings().getWindowCoordinates() != null) {
-            primaryStage.setX(prefs.getGuiSettings().getWindowCoordinates().getX());
-            primaryStage.setY(prefs.getGuiSettings().getWindowCoordinates().getY());
-        }
-    }
-
-    private void setWindowMinSize() {
-        primaryStage.setMinHeight(MIN_HEIGHT);
-        primaryStage.setMinWidth(MIN_WIDTH);
-    }
-
-    /**
-     * Returns the current size and the position of the main Window.
-     */
-    GuiSettings getCurrentGuiSetting() {
-        return new GuiSettings(primaryStage.getWidth(), primaryStage.getHeight(),
-                (int) primaryStage.getX(), (int) primaryStage.getY());
-    }
-
-    /**
-     * Opens the help window.
-     */
-    @FXML
-    public void handleHelp() {
-        HelpWindow helpWindow = new HelpWindow();
-        helpWindow.show();
-    }
-
-    /**
-     * Changes the current theme to the given theme.
-     */
-    public void handleChangeTheme(String theme) {
-        if (getRoot().getStylesheets().size() > 1) {
-            getRoot().getStylesheets().remove(1);
-        }
-        getRoot().getStylesheets().add(VIEW_PATH + theme);
-    }
-
-    private void setWindowDefaultTheme(UserPrefs prefs) {
-        getRoot().getStylesheets().add(prefs.getCurrentTheme());
-    }
-
-    String getCurrentTheme() {
-        return getRoot().getStylesheets().get(1);
-    }
-
-    void show() {
-        primaryStage.show();
-    }
-
-    /**
-     * Closes the application.
-     */
-    @FXML
-    private void handleExit() {
-        raise(new ExitAppRequestEvent());
-    }
-
-    public PersonListPanel getPersonListPanel() {
-        return this.personListPanel;
-    }
-
-    void releaseResources() {
-        infoPanel.freeResources();
-    }
-
-    @Subscribe
-    private void handleShowHelpEvent(ShowHelpRequestEvent event) {
-        logger.info(LogsCenter.getEventHandlingLogMessage(event));
-        handleHelp();
-    }
-
-    @Subscribe
-    private void handleChangeThemeEvent(ChangeThemeRequestEvent event) {
-        logger.info(LogsCenter.getEventHandlingLogMessage(event));
-        handleChangeTheme(event.themeToChangeTo);
-        logic.setCurrentTheme(getCurrentTheme());
-    }
-}
 ```
-###### /java/seedu/address/ui/PersonInfoOverview.java
-``` java
-    /**
-     * Set the default contact photo to the default person.
-     */
-    public void setDefaultContactPhoto() {
-        String defaultPhotoPath = "src/main/resources/images/help_icon.png";
-        File defaultPhoto = new File(defaultPhotoPath);
-        URI defaultPhotoUri = defaultPhoto.toURI();
-        Image defaultImage = new Image(defaultPhotoUri.toString());
-        centerImage(defaultImage);
-        contactPhoto.setImage(defaultImage);
-    }
-
-    /**
-     * Load the photo of the specified person.
-     * @param person
-     */
-    public void loadPhoto(ReadOnlyPerson person) {
-        String photoPath = person.getPhotoPath().value;
-        File photo = new File(photoPath);
-        URI photoUri = photo.toURI();
-        Image image = new Image(photoUri.toString());
-
-        contactPhoto.setPreserveRatio(true);
-        centerImage(image);
-        contactPhoto.setImage(image);
-    }
-
-```
-###### /java/seedu/address/ui/PersonInfoPanel.java
+###### \java\seedu\address\ui\PersonInfoPanel.java
 ``` java
 
 /**
@@ -1274,7 +1504,9 @@ public class PersonInfoPanel extends UiPart<Region> {
     @FXML
     private FlowPane tags;
 
-
+    /**
+     * Initializes the person information panel.
+     */
     public PersonInfoPanel() {
         super(FXML);
         this.person = null;
@@ -1299,7 +1531,7 @@ public class PersonInfoPanel extends UiPart<Region> {
 
         setDefaultContactPhoto();
         currentlyViewedPerson = null;
-        logger.info("Currently Viewing: Default Person" );
+        logger.info("Currently Viewing: Default Person");
     }
 
     /**
@@ -1326,14 +1558,14 @@ public class PersonInfoPanel extends UiPart<Region> {
         loadPhoto(person);
 
         currentlyViewedPerson = person;
-        logger.info("Currently Viewing: " + currentlyViewedPerson.getName() );
+        logger.info("Currently Viewing: " + currentlyViewedPerson.getName());
     }
 
 ```
-###### /java/seedu/address/ui/PersonInfoPanel.java
+###### \java\seedu\address\ui\PersonInfoPanel.java
 ``` java
     /**
-     * Set the default contact photo.
+     * Sets the default contact photo.
      */
     public void setDefaultContactPhoto() {
         Image defaultImage = new Image(MainApp.class.getResourceAsStream(DEFAULT_PHOTO_PATH));
@@ -1341,34 +1573,49 @@ public class PersonInfoPanel extends UiPart<Region> {
     }
 
     /**
-     * Load the photo of the specified person.
+     * Loads the photo of the specified person.
      * @param person
      */
     public void loadPhoto(ReadOnlyPerson person) {
         String prefix = "src/main/resources";
         //String photoPath = person.getPhotoPath().value.substring(prefix.length());
-        String photoPath = person.getPhotoPath().value;
+        String photoPathString = person.getPhotoPath().value;
         Image image;
 
-        if (photoPath.equals(PhotoCommand.DEFAULT_PHOTO_PATH)) {  //default male and female photos
-            if (person.getGender().toString().equals("Male")) {
-                photoPath = prefix + "/images/default_male.jpg";
-            } else if (person.getGender().toString().equals("Female")) {
-                photoPath = prefix + "/images/default_female.jpg";
+        if (photoPathString.equals("")) {  //default male and female photos
+            image = getDefaultPhotoByGender();
+        } else {
+            File contactImg = new File(photoPathString);
+            if (contactImg.exists() && !contactImg.isDirectory()) {
+                String url = contactImg.toURI().toString();
+                image = new Image(url);
             } else {
-                photoPath = prefix + "/images/defaultPhoto.jpg";
+                image = getDefaultPhotoByGender();
             }
         }
 
-        File contactImg = new File(photoPath);
-        String url = contactImg.toURI().toString();
-        image = new Image(url);
         photoCircle.setFill(new ImagePattern(image));
+    }
 
+    /**
+     * Gets the default photo by gender. If the gender is not specifed, then return the default photo without gender.
+     * @return Image of the according default photo
+     */
+    private Image getDefaultPhotoByGender() {
+        String photoPathString = "";
+
+        if (person.getGender().toString().equals("Male")) {
+            photoPathString = "/images/default_male.jpg";
+        } else if (person.getGender().toString().equals("Female")) {
+            photoPathString = "/images/default_female.jpg";
+        } else {
+            photoPathString = "/images/defaultPhoto.jpg";
+        }
+        return new Image(MainApp.class.getResourceAsStream(photoPathString));
     }
 
 ```
-###### /java/seedu/address/ui/TagColorMap.java
+###### \java\seedu\address\ui\TagColorMap.java
 ``` java
     /**
      * Updates the color index to pick a new color for the new tag.
@@ -1382,31 +1629,64 @@ public class PersonInfoPanel extends UiPart<Region> {
     }
 }
 ```
-###### /resources/view/MainWindow.fxml
+###### \resources\view\MainWindow.fxml
 ``` fxml
-<VBox xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1">
+
+<?import java.net.URL?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<VBox xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1">
     <stylesheets>
-        <URL value="@Extensions.css"/>
+        <URL value="@Extensions.css" />
     </stylesheets>
     <MenuBar fx:id="menuBar" maxHeight="22.0" prefHeight="22.0" prefWidth="2000.0" VBox.vgrow="NEVER">
         <Menu mnemonicParsing="false" text="File">
-            <MenuItem mnemonicParsing="false" onAction="#handleExit" text="Exit"/>
+            <MenuItem mnemonicParsing="false" onAction="#handleExit" text="Exit" />
         </Menu>
         <Menu mnemonicParsing="false" text="Help">
-            <MenuItem fx:id="helpMenuItem" mnemonicParsing="false" onAction="#handleHelp" text="Help"/>
+            <MenuItem fx:id="helpMenuItem" mnemonicParsing="false" onAction="#handleHelp" text="Help" />
         </Menu>
     </MenuBar>
-    <HBox prefWidth="1020.0">
-        <VBox fx:id="personList" minWidth="200" prefWidth="250.0">
-            <StackPane fx:id="personListPanelPlaceholder" prefWidth="145.0" VBox.vgrow="ALWAYS"/>
+    <HBox>
+        <VBox fx:id="personList">
+            <StackPane fx:id="personListPanelPlaceholder" minWidth="255.0" VBox.vgrow="ALWAYS" />
         </VBox>
         <AnchorPane>
 
-            <SplitPane dividerPositions="0.2" orientation="VERTICAL" prefWidth="2000" AnchorPane.bottomAnchor="0.0"
-                       AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <SplitPane dividerPositions="0.26582278481012656" orientation="VERTICAL" prefWidth="2000.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+
+                <SplitPane id="splitPane" fx:id="splitPane" dividerPositions="0.4269269269269269" maxHeight="628.0" minHeight="230.0" prefHeight="600.0" prefWidth="1990.0">
+                    <VBox maxWidth="1000.0" minHeight="81.0" minWidth="430.0" prefHeight="81.0" prefWidth="843.0" SplitPane.resizableWithParent="true">
+                        <padding>
+                            <Insets bottom="10" left="10" right="10" top="10" />
+                        </padding>
 
 ```
-###### /resources/view/PersonInfoPanel.fxml
+###### \resources\view\MainWindow.fxml
+``` fxml
+                    <VBox minWidth="200" prefWidth="323.0">
+
+                        <StackPane fx:id="commandBoxPlaceholder" minWidth="100" prefWidth="305.0" styleClass="pane-with-border">
+                            <padding>
+                                <Insets bottom="5" left="10" right="10" top="5" />
+                            </padding>
+                        </StackPane>
+                        <StackPane fx:id="resultDisplayPlaceholder" minWidth="100" prefWidth="320.0" styleClass="pane-with-border" VBox.vgrow="ALWAYS">
+                            <padding>
+                                <Insets bottom="5" left="10" right="10" top="5" />
+                            </padding>
+                        </StackPane>
+                    </VBox>
+                </SplitPane>
+```
+###### \resources\view\PersonInfoPanel.fxml
 ``` fxml
 
 <?import javafx.geometry.Insets?>
@@ -1420,79 +1700,69 @@ public class PersonInfoPanel extends UiPart<Region> {
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.shape.Circle?>
 <?import javafx.scene.text.Font?>
+<AnchorPane styleClass="person-info-panel" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1">
 
-```
-###### /resources/view/PersonInfoPanel.fxml
-``` fxml
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="250.0"
-            prefWidth="550.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1">
-
-    <HBox prefHeight="250.0" prefWidth="448.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0"
-          AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+    <HBox prefHeight="250.0" prefWidth="448.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
         <VBox prefHeight="250.0" prefWidth="198.0">
             <AnchorPane prefHeight="216.0" prefWidth="210.0" VBox.vgrow="ALWAYS">
                 <ImageView fitHeight="210.0" fitWidth="221.0" pickOnBounds="true" preserveRatio="true">
                     <image>
-                        <Image url="@../images/personInfoBg.jpg"/>
+                        <Image url="@../images/personInfoBg.jpg" />
                     </image>
                 </ImageView>
-                <Circle fx:id="photoCircle" fill="WHITE" layoutX="111.0" layoutY="100.0" radius="86.0"
-                        stroke="floralwhite" strokeType="INSIDE" strokeWidth="10"/>
+                <Circle fx:id="photoCircle" fill="WHITE" layoutX="111.0" layoutY="100.0" radius="86.0" stroke="floralwhite" strokeType="INSIDE" strokeWidth="10" />
                 <VBox.margin>
-                    <Insets/>
+                    <Insets />
                 </VBox.margin>
             </AnchorPane>
         </VBox>
-        <VBox alignment="TOP_LEFT" prefHeight="250.0" prefWidth="237.0" AnchorPane.bottomAnchor="0.0"
-              AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" HBox.hgrow="ALWAYS">
+        <VBox alignment="TOP_LEFT" prefHeight="250.0" prefWidth="574.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" HBox.hgrow="ALWAYS">
             <StackPane alignment="TOP_LEFT" prefHeight="20.0" prefWidth="304.0" VBox.vgrow="NEVER">
-                <Label fx:id="name" prefHeight="35.0" prefWidth="300.0" styleClass="display_big_label" text="\$name">
+                <Label fx:id="name" minHeight="-Infinity" minWidth="-Infinity" prefHeight="35.0" prefWidth="391.0" styleClass="display_big_label" text="\$name">
                     <font>
-                        <Font size="24.0"/>
+                        <Font size="24.0" />
                     </font>
                 </Label>
                 <VBox.margin>
-                    <Insets left="15.0" top="20.0"/>
+                    <Insets left="15.0" top="20.0" />
                 </VBox.margin>
             </StackPane>
-            <FlowPane fx:id="tags" columnHalignment="CENTER" minHeight="20.0" minWidth="100.0" prefHeight="15.0"
-                      prefWidth="207.0" VBox.vgrow="ALWAYS">
+            <FlowPane fx:id="tags" columnHalignment="CENTER">
                 <VBox.margin>
-                    <Insets bottom="0.0" left="15.0" right="10.0" top="0.0"/>
+                    <Insets bottom="5.0" left="15.0" right="10.0" />
                 </VBox.margin>
             </FlowPane>
             <HBox prefHeight="100.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
-                <VBox prefHeight="150.0" prefWidth="10.0" HBox.hgrow="ALWAYS">
-                    <Label styleClass="display_small_label" text="Gender"/>
-                    <Label styleClass="display_small_label" text="Matric No"/>
-                    <Label styleClass="display_small_label" text="Phone"/>
-                    <Label styleClass="display_small_label" text="Address"/>
-                    <Label styleClass="display_small_label" text="Email"/>
-                    <Label styleClass="display_small_label" text="Birthday"/>
-                    <Label styleClass="display_small_label" text="Remark"/>
+                <VBox prefHeight="160.0" prefWidth="9.0" HBox.hgrow="NEVER">
+                    <Label minHeight="-Infinity" minWidth="-Infinity" prefHeight="20.0" prefWidth="80.0" styleClass="display_small_label" text="Gender" />
+                    <Label minHeight="-Infinity" minWidth="-Infinity" prefHeight="20.0" prefWidth="80.0" styleClass="display_small_label" text="Matric No" />
+                    <Label minHeight="-Infinity" minWidth="-Infinity" prefHeight="20.0" prefWidth="80.0" styleClass="display_small_label" text="Phone" />
+                    <Label minHeight="-Infinity" minWidth="-Infinity" prefHeight="20.0" prefWidth="80.0" styleClass="display_small_label" text="Email" />
+                    <Label minHeight="-Infinity" minWidth="-Infinity" prefHeight="20.0" prefWidth="80.0" styleClass="display_small_label" text="Birthday" />
+                    <Label minHeight="-Infinity" minWidth="-Infinity" prefHeight="54.0" prefWidth="80.0" styleClass="display_small_label" text="Address" />
+                    <Label minHeight="-Infinity" minWidth="-Infinity" prefHeight="20.0" prefWidth="80.0" styleClass="display_small_label" text="Remark" />
                 </VBox>
                 <VBox prefHeight="200.0" prefWidth="100.0" HBox.hgrow="ALWAYS">
-                    <Label fx:id="gender" prefHeight="17.0" prefWidth="196.0" styleClass="display_small_value"
-                           text="\$gender" VBox.vgrow="ALWAYS"/>
-                    <Label fx:id="matricNo" prefHeight="17.0" prefWidth="199.0" styleClass="display_small_value"
-                           text="\$matricNo"/>
-                    <Label fx:id="phone" prefHeight="17.0" prefWidth="193.0" styleClass="display_small_value"
-                           text="\$phone"/>
-                    <Label fx:id="address" prefHeight="17.0" prefWidth="196.0" styleClass="display_small_value"
-                           text="\$address"/>
-                    <Label fx:id="email" prefHeight="17.0" prefWidth="188.0" styleClass="display_small_value"
-                           text="\$email"/>
-                    <Label fx:id="birthday" prefHeight="17.0" prefWidth="214.0" styleClass="display_small_value"
-                           text="\$birthday"/>
-                    <Label fx:id="remark" prefHeight="17.0" prefWidth="186.0" styleClass="display_small_value"
-                           text="\$remark"/>
+                    <Label fx:id="gender" minHeight="-Infinity" minWidth="-Infinity" prefHeight="20.0" prefWidth="326.0" styleClass="display_small_value" text="\$gender" VBox.vgrow="ALWAYS" />
+                    <Label fx:id="matricNo" minHeight="-Infinity" minWidth="-Infinity" prefHeight="20.0" prefWidth="326.0" styleClass="display_small_value" text="\$matricNo" />
+                    <Label fx:id="phone" minHeight="-Infinity" minWidth="-Infinity" prefHeight="20.0" prefWidth="326.0" styleClass="display_small_value" text="\$phone" />
+                    <Label fx:id="email" minHeight="-Infinity" minWidth="-Infinity" prefHeight="20.0" prefWidth="326.0" styleClass="display_small_value" text="\$email" />
+                    <Label fx:id="birthday" minHeight="-Infinity" minWidth="-Infinity" prefHeight="20.0" prefWidth="326.0" styleClass="display_small_value" text="\$birthday" />
+                    <Label fx:id="address" minHeight="-Infinity" minWidth="-Infinity" prefHeight="54.0" prefWidth="326.0" styleClass="display_small_value" text="\$address" wrapText="true">
+                    <VBox.margin>
+                        <Insets />
+                    </VBox.margin></Label>
+                    <Label fx:id="remark" styleClass="display_small_value" text="\$remark" wrapText="true">
+                    <VBox.margin>
+                        <Insets />
+                    </VBox.margin></Label>
                 </VBox>
                 <VBox.margin>
-                    <Insets bottom="10.0" left="15.0"/>
+                    <Insets bottom="10.0" left="15.0" />
                 </VBox.margin>
             </HBox>
             <HBox.margin>
-                <Insets/>
+                <Insets />
             </HBox.margin>
         </VBox>
     </HBox>
